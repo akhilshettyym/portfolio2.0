@@ -43,3 +43,47 @@ html {
 .animate-spin-slow {
   animation: spin-slow 8s linear infinite;
 }
+
+.marquee,
+.marquee2 {
+  display: flex;
+  width: max-content;
+  gap: 2.5rem;
+  align-items: center;
+  will-change: transform;
+}
+
+.left {
+  animation: scroll-left 18s linear infinite;
+}
+
+.right {
+  animation: scroll-right 18s linear infinite;
+}
+
+.marquee2.left,
+.marquee2.right {
+  animation-duration: 28s;
+}
+
+.paused {
+  animation-play-state: paused !important;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

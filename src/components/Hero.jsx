@@ -140,8 +140,9 @@ export default function Hero() {
         let lastMove = 0;
 
         const handleMouseMove = (e) => {
-            mouse.x = e.clientX * DPR;
-            mouse.y = (window.innerHeight - e.clientY) * DPR;
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = (e.clientX - rect.left) * DPR;
+            mouse.y = (rect.bottom - e.clientY) * DPR;
             lastMove = performance.now();
         };
 
@@ -271,8 +272,8 @@ export default function Hero() {
             </div>
 
 
-            <div className="absolute right-10 top-[32%] z-10 flex flex-col items-end">
-                <div className="text-white flex flex-col items-end w-[260px]">
+            <div className="absolute right-10 top-[42%] z-10 flex flex-col items-end">
+                <div className="text-white flex flex-col items-end w-65">
                     <div className="relative h-12 overflow-hidden mb-2 w-full">
                         <div
                             className={`flex flex-col will-change-transform ${isResetting ? "" : "transition-transform duration-700 ease-in-out"

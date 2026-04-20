@@ -1,114 +1,142 @@
 "use client";
 
+function TerminalFrame({ title, command, lines = [] }) {
+    return (
+        <div className="relative h-full min-h-88 overflow-hidden border-r border-white/20 bg-[#030507] flex flex-col">
+
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.08),transparent_35%),radial-gradient(circle_at_50%_80%,rgba(34,197,94,0.12),transparent_38%),radial-gradient(circle_at_0%_50%,rgba(59,130,246,0.10),transparent_28%)]" />
+            <div className="absolute inset-0 opacity-[0.08] bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.8)_0px,rgba(255,255,255,0.8)_1px,transparent_1px,transparent_3px)]" />
+            <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:18px_18px]" />
+
+            <div className="relative z-10 border-b border-white/10 bg-black/60 px-3 pt-2 pb-1">
+
+                <div className="flex items-center gap-2 mb-1 mt-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+                </div>
+
+                <div className="font-mono text-[10px] p-2 sm:text-xs tracking-[0.22em] text-white/45">
+                    {title}
+                </div>
+            </div>
+
+            <div className="relative z-10 h-[calc(100%-3.2rem)] flex">
+
+                <div className="w-[70%] p-3 sm:p-4 font-mono text-[10px] sm:text-xs text-white/70 leading-relaxed">
+
+                    <div className="text-white/35">{command}</div>
+
+                    <div className="mt-3 space-y-1">
+                        {lines.map((line, idx) => (
+                            <div key={idx} className="text-white/55">{line}</div>
+                        ))}
+                    </div>
+
+                    <div className="mt-3 text-emerald-300/80">
+                        [ OK ] system stable <span className="animate-pulse">▍</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className="pointer-events-none absolute left-2 top-2 h-4 w-4 border-l border-t border-white/20" />
+            <div className="pointer-events-none absolute right-2 top-2 h-4 w-4 border-r border-t border-white/20" />
+            <div className="pointer-events-none absolute left-2 bottom-2 h-4 w-4 border-l border-b border-white/20" />
+            <div className="pointer-events-none absolute right-2 bottom-2 h-4 w-4 border-r border-b border-white/20" />
+        </div>
+    );
+}
+
 export default function AboutConsole() {
     return (
-        <div className="w-full max-w-full overflow-x-hidden box-border px-3 sm:px-4">
+        <div className="w-full max-w-full overflow-x-hidden box-border p-5 px-3 sm:px-4">
 
-            {/* Top Labels */}
-            <div className="flex justify-between text-[10px] sm:text-xs tracking-[0.25em] text-white/50 mb-5">
-                <span>/ FEATURED POST</span>
-                <span>/ FEATURED VIDEO</span>
+             <div className="mb-6 relative">
+                 <div className="border-t border-white/10" />
+                 <div className="absolute -top-3 left-0 w-full flex justify-between text-white font-mono text-sm sm:text-base">
+                     <span>+</span>
+                     <span>+</span>
+                     <span>+</span>
+                     <span>+</span>
+                 </div>
+             </div>
+
+            <div className="mb-5 flex justify-between text-[10px] tracking-[0.25em] text-white/50 sm:text-xs">
+                <span>/ ENGINEERING PROFILE</span>
+                <span>/ SYSTEM ARCHITECTURE</span>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-white/20 mb-6" />
+            <div className="mb-6 border-t border-white/20" />
 
-            {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="grid grid-cols-4 border border-white/30">
 
-                {/* LEFT */}
-                <div className="flex flex-col gap-5 min-w-0">
+                <TerminalFrame
+                    title="terminal://profile.core"
+                    command="$ load profile --full"
+                    lines={[
+                        "4+ years full-stack engineering experience",
+                        "specialized in MERN architecture",
+                        "designing scalable backend systems",
+                        "Dockerized development workflows",
+                        "Kubernetes-based orchestration & deployment"
+                    ]}
+                />
 
-                    <div className="border border-white/30 p-4 sm:p-6 min-w-0">
+                <div className="min-w-0 border-r border-white/20 p-4 sm:p-6 flex flex-col justify-center">
 
-                        {/* Header */}
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="text-[10px] sm:text-xs tracking-[0.2em] text-white/50 whitespace-nowrap">
-                                [ FIG. 1 ]
+                    <h3 className="text-base font-semibold text-white sm:text-xl">
+                        Full-stack engineer building scalable production systems
+                    </h3>
+
+                    <p className="mt-2 text-xs text-white/70 sm:text-sm">
+                        Computer Science graduate with 4+ years of experience in MERN stack development, system design, and DevOps practices. Focused on building performant, maintainable, and scalable applications with modern engineering standards.
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {"FULLSTACK MERN NODE REACT DEVOPS KUBERNETES DOCKER SYSTEM-DESIGN".split(" ").map((t) => (
+                            <span key={t} className="border border-white/20 px-2 py-1 text-[10px] text-white/60 sm:text-xs">
+                                {t}
                             </span>
-                            <div className="flex-1 border-t border-white/20" />
-                        </div>
-
-                        {/* Media */}
-                        <div className="w-full aspect-video bg-white/5 border border-white/10 rounded-sm flex items-center justify-center overflow-hidden">
-                            <p className="text-white/30 text-xs sm:text-sm text-center px-2">
-                                Featured Post Image
-                            </p>
-                        </div>
-
-                        {/* Text */}
-                        <h3 className="mt-4 text-base sm:text-xl font-semibold leading-snug text-white break-words">
-                            Provision a production-ready dev stack from your terminal
-                        </h3>
-
-                        <p className="mt-2 text-xs sm:text-sm text-white/70 leading-relaxed break-words">
-                            Provision hosting, databases, auth, analytics, AI and other dev tools from the Stripe CLI. Stripe Projects creates real resources in your own environment.
-                        </p>
-
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 border border-white/20 text-white/60">
-                                DEVELOPER PRODUCTIVITY
-                            </span>
-                            <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 border border-white/20 text-white/60">
-                                ENGINEERING
-                            </span>
-                            <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 border border-white/20 text-white/60">
-                                AI
-                            </span>
-                        </div>
+                        ))}
                     </div>
-
-                    <button className="w-full border border-white/30 py-2.5 sm:py-3 text-xs sm:text-sm rounded-full hover:bg-white hover:text-black transition">
-                        More posts
-                    </button>
                 </div>
 
-                {/* RIGHT */}
-                <div className="flex flex-col gap-5 min-w-0">
+                <TerminalFrame
+                    title="terminal://system.deploy"
+                    command="$ run deployment.pipeline"
+                    lines={[
+                        "building microservices architecture",
+                        "containerizing application services",
+                        "configuring CI/CD pipelines",
+                        "deploying to Kubernetes cluster",
+                        "monitoring production health & scaling"
+                    ]}
+                />
 
-                    <div className="border border-white/30 p-4 sm:p-6 min-w-0">
+                <div className="min-w-0 p-4 sm:p-6 flex flex-col justify-center">
 
-                        {/* Header */}
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="text-[10px] sm:text-xs tracking-[0.2em] text-white/50 whitespace-nowrap">
-                                [ FIG. 2 ]
+                    <h3 className="text-base font-semibold text-white sm:text-xl">
+                        Cloud-native commerce & service platform
+                    </h3>
+
+                    <p className="mt-2 text-xs text-white/70 sm:text-sm">
+                        A distributed MERN-based system designed for high availability and modular scaling. Includes secure authentication, REST APIs, containerized services, and Kubernetes-driven deployment strategy.
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {"MERN API-ARCHITECTURE DOCKER KUBERNETES MICROSERVICES AUTH-SYSTEM".split(" ").map((t) => (
+                            <span key={t} className="border border-white/20 px-2 py-1 text-[10px] text-white/60 sm:text-xs">
+                                {t}
                             </span>
-                            <div className="flex-1 border-t border-white/20" />
-                        </div>
-
-                        {/* Media */}
-                        <div className="w-full aspect-video bg-white/5 border border-white/10 rounded-sm flex items-center justify-center overflow-hidden">
-                            <p className="text-white/30 text-xs sm:text-sm text-center px-2">
-                                Featured Video Image
-                            </p>
-                        </div>
-
-                        {/* Text */}
-                        <h3 className="mt-4 text-base sm:text-xl font-semibold leading-snug text-white break-words">
-                            How Noiré streamlines talent acquisition for startups
-                        </h3>
-
-                        <p className="mt-2 text-xs sm:text-sm text-white/70 leading-relaxed break-words">
-                            In this interview from the Dublin Build Day, Eoln Lawless discusses bridging the gap between early-stage founders and talent.
-                        </p>
-
-                        {/* Tag */}
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 border border-white/20 text-white/60">
-                                VIDEO
-                            </span>
-                        </div>
+                        ))}
                     </div>
-
-                    <button className="w-full border border-white/30 py-2.5 sm:py-3 text-xs sm:text-sm rounded-full hover:bg-white hover:text-black transition">
-                        Move videos
-                    </button>
                 </div>
+
             </div>
 
-            {/* Bottom Divider */}
-            <div className="border-t border-white/20 mt-6 mb-6" />
+            <div className="mt-6 border-t border-white/20" />
         </div>
     );
 }

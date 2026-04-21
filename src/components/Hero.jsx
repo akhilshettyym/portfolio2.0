@@ -139,6 +139,7 @@ export default function Hero() {
 
         let lastMove = 0;
 
+
         const handleMouseMove = (e) => {
             const rect = renderer.domElement.getBoundingClientRect();
             mouse.x = (e.clientX - rect.left) * DPR;

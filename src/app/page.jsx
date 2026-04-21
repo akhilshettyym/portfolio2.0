@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import DevTicker from "@/components/DevTicker";
 import EducationLog from "@/components/EducationLog";
-// import Test from "@/components/Test";
+import TechStack from "@/components/TechStack";
 
 export default function Home() {
     return (
@@ -9,7 +9,7 @@ export default function Home() {
             <Hero />
             <DevTicker />
             <EducationLog />
-            {/* <Test /> */}
+            <TechStack />
         </div>
     )
 }

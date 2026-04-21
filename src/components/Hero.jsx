@@ -244,7 +244,6 @@ export default function Hero() {
 
 
     return (
-        // <div className="relative w-full h-screen overflow-hidden">
         <div className="relative w-full min-h-screen overflow-x-hidden">
             <div ref={mountRef} className="absolute inset-0" />
 
@@ -296,7 +295,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="relative w-full px-4 sm:px-10 z-10 mt-[65vh]">
+            <div className="relative w-full sm: z-10 mt-[65vh]">
                 <AboutConsole />
             </div>
         </div>

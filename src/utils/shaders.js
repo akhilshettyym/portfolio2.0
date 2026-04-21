@@ -80,9 +80,11 @@ varying vec2 vUv;
 
 vec3 motionColor(float intensity) {
 
-    vec3 calm = vec3(0.2, 0.6, 1.0);
-    vec3 mid = vec3(0.7, 0.3, 1.0);
-    vec3 high = vec3(1.0, 0.5, 0.2);
+    vec3 calm = vec3(0.0, 0.4, 0.8);
+
+    vec3 mid = vec3(0.0, 0.85, 0.75);
+
+    vec3 high = vec3(0.6, 1.0, 0.95);
 
     float t1 = smoothstep(0.0, 0.3, intensity);
     float t2 = smoothstep(0.3, 0.8, intensity);
@@ -98,7 +100,7 @@ void main() {
     vec4 sim = texture2D(textureA, vUv);
     vec4 base = texture2D(textureB, vUv);
 
-    vec2 distortion = sim.zw * 0.22;
+    vec2 distortion = sim.zw * 0.3;
     vec2 uv = vUv + distortion;
 
     vec4 text =
@@ -123,7 +125,7 @@ void main() {
 
     vec3 rippleCol = motionColor(intensity);
 
-    color += rippleCol * intensity * 0.45;
+    color += rippleCol * intensity * 0.5;
 
     gl_FragColor = vec4(color, 1.0);
 }

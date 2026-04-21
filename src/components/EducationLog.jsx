@@ -103,7 +103,8 @@ export default function EducationLog() {
     }, []);
 
     return (
-        <div ref={ref} className="w-full px-2 xl:px-6 font-mono text-sm pt-5">
+        <div className="pt-10 pr-10 pl-10">
+            <div ref={ref} className="w-full font-mono text-sm">
             <div className="mb-6 relative">
                 <div className="border-t border-white/10" />
                 <div className="absolute -top-3 left-0 w-full flex justify-between text-white/60">
@@ -111,7 +112,7 @@ export default function EducationLog() {
                 </div>
             </div>
 
-            <div className="mb-5 text-[10px] tracking-[0.25em] text-white/40"> / EDUCATION LOG </div>
+            <div className="mb-5 text-[12px] tracking-[0.25em] text-white/40"> / EDUCATION LOG </div>
 
             <div className="mb-6 border-t border-white/20" />
 
@@ -120,6 +121,7 @@ export default function EducationLog() {
                     <EducationRow key={e.id} e={e} start={start} index={i} />
                 ))}
             </div>
+        </div>
         </div>
     );
 }

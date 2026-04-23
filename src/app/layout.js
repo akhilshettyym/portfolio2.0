@@ -21,9 +21,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
-      <body className="bg-black text-white overflow-x-hidden">
-        <Navbar />
-        <main>{children}</main>
+      <body className="bg-white text-black overflow-x-hidden">
+
+        <div className="fixed top-0 left-0 w-full z-50">
+          <Navbar />
+        </div>
+
+        <main className="pt-20"> {children} </main>
       </body>
     </html>
   );

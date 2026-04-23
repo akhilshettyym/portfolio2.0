@@ -6,10 +6,10 @@ import TechStack from "@/components/TechStack";
 export default function Home() {
     return (
         <div>
-            <Hero />
-            <DevTicker />
-            <EducationLog />
-            <TechStack />
+            {/* <Hero /> */}
+            {/* <DevTicker /> */}
+            {/* <EducationLog /> */}
+            {/* <TechStack /> */}
         </div>
     )
 }

@@ -88,44 +88,33 @@ export default function TechStack() {
     if (!mounted) return null;
 
     return (
-        <div className="p-10">
-            <div className="mb-2 relative">
-                <div className="border-t border-white/10" />
-                <div className="absolute -top-3 left-0 w-full flex justify-between text-white font-mono text-sm sm:text-base">
-                    <span> + </span> <span> + </span> <span> + </span> <span> + </span>
-                </div>
-            </div>
+        <div className="bg-white">
 
-            <section className="relative w-full overflow-hidden px-6 py-4 text-white flex justify-center">
-
+            <section className="relative w-full overflow-hidden px-6 py-4 text-black flex justify-center">
                 <div className="relative mx-auto w-full max-w-8xl">
-                    <div className="war-room relative overflow-hidden rounded-3xl border border-cyan-400/15 bg-[#050914]/90 p-4 md:p-4 backdrop-blur-xl">
+                    <div className="relative overflow-hidden border border-black/20 bg-white p-2">
 
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(34,211,238,0.12),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent_30%)]" />
-                        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(34,211,238,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.16)_1px,transparent_1px)] bg-size-[72px_72px]" />
+                        <div className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(0,0,0,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.2)_1px,transparent_1px)] bg-size-[72px_72px]" />
 
-                        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                            <div className="scan-sweep">
-                                <div className="scan-halo" />
-                                <div className="scan-core" />
-                                <div className="scan-trail" />
-                            </div>
+                        <div className="pointer-events-none absolute inset-0 overflow-hidden z-50">
+                            <div className="scan-line" />
                         </div>
 
-                        <div className="relative z-10 mb-2 flex items-center justify-between gap-4 border-b border-white/8 pb-1.5">
+                        <div className="relative z-10 mb-2 flex items-center justify-between gap-4 border-b border-black/10 pb-1.5">
                             <div>
-                                <div className="mt-1 flex items-center gap-2.5">
-                                    <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(74,222,128,0.9)]" />
-                                    <p className="text-[10px] uppercase tracking-[0.45em] text-white/40">
-                                        Tech Stack
+                                <div className="flex items-center gap-2.5">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                                    <p className="text-[10px] uppercase tracking-[0.45em] text-black/50">
+                                        Tech Stack SKILLS
                                     </p>
-                                    <span className="text-xs text-white/70">
+                                    <span className="text-xs text-black/60">
                                         Sweep online · tracking modules
                                     </span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2 rounded-full border border-cyan-400/20 bg-black/40 px-3 py-1 text-[10px] uppercase tracking-[0.35em] text-cyan-200/80 backdrop-blur-md">
-                                <span className="h-2 w-2 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.9)]" />
+
+                            <div className="flex items-center gap-2 border border-black/20 px-3 py-1 text-[10px] uppercase tracking-[0.35em] text-black/70">
+                                <span className="h-2 w-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]" />
                                 live scan
                             </div>
                         </div>
@@ -138,34 +127,38 @@ export default function TechStack() {
                                 return (
                                     <div
                                         key={`${tech.name}-${i}`}
-                                        className={`min-h-28 min-w-27.5 rounded-xl border bg-white/4 p-3 transition-all duration-300 ${isActive ? isAlert ? "border-rose-400/30 shadow-[0_0_18px_rgba(244,63,94,0.18)]"
-                                            : "border-cyan-300/35 shadow-[0_0_18px_rgba(34,211,238,0.18)]"
-                                            : "border-white/10"
-                                            }`}>
+                                        className={`min-h-28 min-w-27.5 rounded-xl border bg-white p-3 transition-all duration-300 ${isActive ? isAlert
+                                            ? "border-black shadow-[0_0_12px_rgba(244,63,94,0.25)]"
+                                            : "border-black shadow-[0_0_12px_rgba(0,0,0,0.25)]"
+                                            : "border-black/20"}`}>
                                         <div className="flex h-full flex-col justify-between">
 
                                             <div className="flex justify-between">
-                                                <span className="text-[9px] uppercase tracking-widest text-white/40">
+                                                <span className="text-[9px] uppercase tracking-widest text-black/40">
                                                     {isActive ? (isAlert ? "alert" : "lock") : "idle"}
                                                 </span>
-                                                <div className={`h-2 w-2 rounded-full ${isActive ? isAlert
-                                                    ? "bg-rose-400"
-                                                    : "bg-cyan-300"
-                                                    : "bg-white/20"
-                                                    }`} />
+
+                                                <div
+                                                    className={`h-2 w-2 rounded-full ${isActive ? isAlert
+                                                        ? "bg-rose-500"
+                                                        : "bg-emerald-500"
+                                                        : "bg-black/20"
+                                                        }`} />
                                             </div>
 
                                             <div className="flex flex-1 items-center justify-center">
-                                                <img src={tech.src} alt={tech.name} className={`h-10 w-10 transition ${isActive ? "scale-110" : "opacity-80"}`} />
+                                                <img src={tech.src} alt={tech.name} className={`h-10 w-10 transition ${isActive ? "scale-110" : "opacity-70"
+                                                    }`} />
                                             </div>
-                                            <div className="text-center text-sm text-white/80"> {tech.name} </div>
+
+                                            <div className="text-center text-sm text-black/80"> {tech.name} </div>
                                         </div>
                                     </div>
                                 );
                             })}
                         </div>
 
-                        <div className="relative z-10 mt-3 flex items-center justify-between border-t border-white/8 pt-2 text-[10px] uppercase tracking-[0.35em] text-white/35">
+                        <div className="relative z-10 mt-3 flex items-center justify-between border-t border-black/10 pt-2 text-[10px] uppercase tracking-[0.35em] text-black/40">
                             <span> Vector acquisition stable </span>
                             <span> scan matrix secured </span>
                         </div>

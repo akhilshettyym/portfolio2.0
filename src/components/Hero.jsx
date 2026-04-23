@@ -11,233 +11,195 @@ import {
 
 export default function Hero() {
     const mountRef = useRef(null);
-    const threeRef = useRef({});
 
     useEffect(() => {
-        let isMounted = true;
+        if (!mountRef.current) return;
 
-        async function init() {
-            if (!mountRef.current) return;
+        const container = mountRef.current;
 
-            // 🔥 LOAD CUSTOM FONT
-            const font = new FontFace(
-                "AkhilFont",
-                "url(/fonts/Arehalfsenough.ttf)"
-            );
+        const scene = new THREE.Scene();
+        const simScene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-            await font.load();
-            document.fonts.add(font);
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true,
+        });
 
-            if (!isMounted) return;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(0x000000, 0);
 
-            const container = mountRef.current;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-            const scene = new THREE.Scene();
-            const simScene = new THREE.Scene();
-            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const text = "AKHIL SHETTY";
+        const fontSize = 60;
 
-            const renderer = new THREE.WebGLRenderer({
-                antialias: true,
-                alpha: false,
-            });
+        ctx.font = `900 ${fontSize}px Arial`;
 
-            const DPR = Math.min(window.devicePixelRatio, 2);
+        const textWidth = ctx.measureText(text).width;
+        const paddingX = 50;
+        const paddingY = 50;
 
-            const getSize = () => {
-                const rect = container.getBoundingClientRect();
-                return {
-                    width: rect.width,
-                    height: rect.height,
-                };
-            };
+        const width = textWidth + paddingX;
+        const height = fontSize + paddingY;
 
-            let { width, height } = getSize();
+        canvas.width = width;
+        canvas.height = height;
 
-            renderer.setPixelRatio(DPR);
-            renderer.setSize(width, height);
-            renderer.setClearColor(0xffffff, 1);
+        function drawText() {
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, width, height);
 
-            container.appendChild(renderer.domElement);
+            ctx.fillStyle = "#000000";
+            ctx.font = `1000 ${fontSize}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
 
-            const mouse = new THREE.Vector2(-10, -10);
-            let frame = 0;
-
-            let simWidth = width * DPR;
-            let simHeight = height * DPR;
-
-            const options = {
-                format: THREE.RGBAFormat,
-                type: THREE.FloatType,
-                minFilter: THREE.LinearFilter,
-                magFilter: THREE.LinearFilter,
-                stencilBuffer: false,
-                depthBuffer: false,
-            };
-
-            let rtA = new THREE.WebGLRenderTarget(simWidth, simHeight, options);
-            let rtB = new THREE.WebGLRenderTarget(simWidth, simHeight, options);
-
-            const simMaterial = new THREE.ShaderMaterial({
-                uniforms: {
-                    textureA: { value: null },
-                    mouse: { value: mouse },
-                    resolution: { value: new THREE.Vector2(simWidth, simHeight) },
-                    time: { value: 0 },
-                    frame: { value: 0 },
-                },
-                vertexShader: simulationVertexShader,
-                fragmentShader: simulationFragmentShader,
-            });
-
-            const renderMaterial = new THREE.ShaderMaterial({
-                uniforms: {
-                    textureA: { value: null },
-                    textureB: { value: null },
-                },
-                vertexShader: renderVertexShader,
-                fragmentShader: renderFragmentShader,
-            });
-
-            const plane = new THREE.PlaneGeometry(2, 2);
-            const simQuad = new THREE.Mesh(plane, simMaterial);
-            const renderQuad = new THREE.Mesh(plane, renderMaterial);
-
-            simScene.add(simQuad);
-            scene.add(renderQuad);
-
-            // 🎨 CANVAS TEXT
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-
-            function drawText(w, h) {
-                canvas.width = w;
-                canvas.height = h;
-
-                ctx.fillStyle = "#ffffff";
-                ctx.fillRect(0, 0, w, h);
-
-                const fontSize = Math.round(w * 0.12);
-
-                ctx.fillStyle = "#111111";
-                ctx.font = `800 ${fontSize}px AkhilFont`;
-
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-
-                ctx.fillText(
-                    "AKHIL SHETTY",
-                    w / 2.4,
-                    h * 0.75
-                );
-            }
-
-            drawText(simWidth, simHeight);
-            const textTexture = new THREE.CanvasTexture(canvas);
-
-            let lastMove = 0;
-
-            const handleMouseMove = (e) => {
-                const rect = renderer.domElement.getBoundingClientRect();
-
-                mouse.x = (e.clientX - rect.left) * DPR;
-                mouse.y = (rect.bottom - e.clientY) * DPR;
-
-                lastMove = performance.now();
-            };
-
-            renderer.domElement.addEventListener("mousemove", handleMouseMove);
-
-            const handleResize = () => {
-                const size = getSize();
-                width = size.width;
-                height = size.height;
-
-                simWidth = width * DPR;
-                simHeight = height * DPR;
-
-                renderer.setSize(width, height);
-
-                rtA.setSize(simWidth, simHeight);
-                rtB.setSize(simWidth, simHeight);
-
-                simMaterial.uniforms.resolution.value.set(simWidth, simHeight);
-
-                drawText(simWidth, simHeight);
-                textTexture.needsUpdate = true;
-            };
-
-            window.addEventListener("resize", handleResize);
-
-            let raf;
-
-            const animate = () => {
-                simMaterial.uniforms.frame.value = frame++;
-
-                if (performance.now() - lastMove > 80) {
-                    mouse.set(-10, -10);
-                }
-
-                simMaterial.uniforms.textureA.value = rtA.texture;
-
-                renderer.setRenderTarget(rtB);
-                renderer.render(simScene, camera);
-
-                renderMaterial.uniforms.textureA.value = rtB.texture;
-                renderMaterial.uniforms.textureB.value = textTexture;
-
-                renderer.setRenderTarget(null);
-                renderer.render(scene, camera);
-
-                [rtA, rtB] = [rtB, rtA];
-
-                raf = requestAnimationFrame(animate);
-            };
-
-            animate();
-
-            threeRef.current = {
-                renderer,
-                rtA,
-                rtB,
-                simMaterial,
-                renderMaterial,
-                plane,
-                textTexture,
-                handleResize,
-                handleMouseMove,
-                raf,
-            };
-
-            return () => {
-                cancelAnimationFrame(raf);
-
-                renderer.dispose();
-                rtA.dispose();
-                rtB.dispose();
-                simMaterial.dispose();
-                renderMaterial.dispose();
-                plane.dispose();
-                textTexture.dispose();
-
-                window.removeEventListener("resize", handleResize);
-                renderer.domElement.removeEventListener("mousemove", handleMouseMove);
-
-                if (container && renderer.domElement) {
-                    container.removeChild(renderer.domElement);
-                }
-            };
+            ctx.fillText(text, width / 2, height / 2);
         }
 
-        init();
+        drawText();
+
+        const textTexture = new THREE.CanvasTexture(canvas);
+
+        renderer.setSize(width, height);
+        container.appendChild(renderer.domElement);
+
+        const options = {
+            format: THREE.RGBAFormat,
+            type: THREE.FloatType,
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter,
+        };
+
+        let rtA = new THREE.WebGLRenderTarget(width, height, options);
+        let rtB = new THREE.WebGLRenderTarget(width, height, options);
+
+        const mouse = new THREE.Vector2(-10, -10);
+        const prevMouse = new THREE.Vector2(-10, -10);
+        const velocity = new THREE.Vector2(0, 0);
+
+        let lastMoveTime = performance.now();
+
+        const handleMouseMove = (e) => {
+            const rect = renderer.domElement.getBoundingClientRect();
+
+            const x = e.clientX - rect.left;
+            const y = rect.bottom - e.clientY;
+
+            mouse.set(x, y);
+
+            velocity.x = x - prevMouse.x;
+            velocity.y = y - prevMouse.y;
+
+            prevMouse.set(x, y);
+
+            lastMoveTime = performance.now();
+        };
+
+        renderer.domElement.addEventListener("mousemove", handleMouseMove);
+
+        const simMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                textureA: { value: null },
+                mouse: { value: mouse },
+                velocity: { value: velocity },
+                resolution: { value: new THREE.Vector2(width, height) },
+                frame: { value: 0 },
+
+                decay: { value: 0.90 },
+                strength: { value: 1.4 },
+            },
+            vertexShader: simulationVertexShader,
+            fragmentShader: simulationFragmentShader,
+        });
+
+        const renderMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                textureA: { value: null },
+                textureB: { value: textTexture },
+            },
+            vertexShader: renderVertexShader,
+            fragmentShader: `
+                uniform sampler2D textureA;
+                uniform sampler2D textureB;
+                varying vec2 vUv;
+
+                void main() {
+                    vec4 sim = texture2D(textureA, vUv);
+                    vec4 text = texture2D(textureB, vUv);
+                    vec2 uv = vUv + sim.zw * 0.35;
+                    vec4 finalText = texture2D(textureB, uv);
+                    float mask = step(0.5, 1.0 - finalText.r);
+                    vec3 color = vec3(0.0);
+                    gl_FragColor = vec4(color, mask);
+                }
+            `,
+            transparent: true,
+        });
+
+        const plane = new THREE.PlaneGeometry(2, 2);
+
+        simScene.add(new THREE.Mesh(plane, simMaterial));
+        scene.add(new THREE.Mesh(plane, renderMaterial));
+
+        let frame = 0;
+        let raf;
+
+        const animate = () => {
+            frame++;
+
+            const now = performance.now();
+
+            if (now - lastMoveTime > 120) {
+                velocity.multiplyScalar(0.85);
+                mouse.set(-10, -10);
+            } else {
+                velocity.multiplyScalar(0.92);
+            }
+
+            simMaterial.uniforms.frame.value = frame;
+            simMaterial.uniforms.textureA.value = rtA.texture;
+
+            renderer.setRenderTarget(rtB);
+            renderer.render(simScene, camera);
+
+            renderMaterial.uniforms.textureA.value = rtB.texture;
+
+            renderer.setRenderTarget(null);
+            renderer.render(scene, camera);
+
+            [rtA, rtB] = [rtB, rtA];
+
+            raf = requestAnimationFrame(animate);
+        };
+
+        animate();
+
 
         return () => {
-            isMounted = false;
+            cancelAnimationFrame(raf);
+
+            renderer.dispose();
+            rtA.dispose();
+            rtB.dispose();
+            simMaterial.dispose();
+            renderMaterial.dispose();
+            plane.dispose();
+            textTexture.dispose();
+
+            renderer.domElement.removeEventListener("mousemove", handleMouseMove);
+
+            if (container && renderer.domElement) {
+                container.removeChild(renderer.domElement);
+            }
         };
     }, []);
 
     return (
-        <div className="w-full h-screen flex items-center justify-center bg-white">
-            <div ref={mountRef} className="w-300 h-35 border-2 border-black overflow-hidden" />
+        <div className="inline-block">
+            <div ref={mountRef} />
         </div>
     );
 }

@@ -65,20 +65,21 @@ html {
   }
 }
 
-@keyframes navbarDrop {
-    0% {
-        transform: translateY(-40px);
-        opacity: 0;
-    }
-    60% {
-        transform: translateY(6px);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(0);
-    }
+@keyframes navbar-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(-60px);
+    filter: blur(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
-.animate-navbar-drop {
-    animation: navbarDrop 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+.animate-navbar-enter {
+  animation: navbar-enter 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform, opacity;
 }

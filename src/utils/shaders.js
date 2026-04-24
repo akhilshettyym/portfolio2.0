@@ -81,15 +81,12 @@ varying vec2 vUv;
 void main() {
     vec4 sim = texture2D(textureA, vUv);
 
-    vec2 distortion = sim.zw * 0.25;
+    vec2 distortion = sim.zw * 0.1;
     vec2 uv = vUv + distortion;
 
     vec4 text = texture2D(textureB, uv);
 
-    float alpha = smoothstep(0.2, 0.8, text.r);
-
-    vec3 color = vec3(0.0); // BLACK text
-
-    gl_FragColor = vec4(color, alpha);
+    // KEEP ORIGINAL COLOR (NO FORCED BLACK)
+    gl_FragColor = vec4(text.rgb, 1.0);
 }
 `;

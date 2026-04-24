@@ -91,6 +91,49 @@ export default function Navbar() {
         return () => clearInterval(interval);
     }, []);
 
+    const [ipParts, setIpParts] = useState([192, 168, 34, 120]);
+
+    const clamp = (num) => Math.max(0, Math.min(255, num));
+
+    // 🔥 SCROLL → smooth evolution
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+
+            setIpParts((prev) => {
+                const next = [...prev];
+
+                next[0] = clamp((192 + Math.floor(scrollY * 0.01)) % 256);
+                next[1] = clamp((168 + Math.floor(scrollY * 0.02)) % 256);
+                next[2] = clamp((34 + Math.floor(scrollY * 0.03)) % 256);
+
+                return next;
+            });
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            const xRatio = e.clientX / window.innerWidth;
+
+            setIpParts((prev) => {
+                const next = [...prev];
+
+                next[3] = clamp(Math.floor(xRatio * 255));
+
+                return next;
+            });
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    const ip = ipParts.join(".");
+
     const navItems = [
         { label: "INFO", href: "/info" },
         { label: "WORK", href: "/work" },
@@ -157,6 +200,9 @@ export default function Navbar() {
                     <div className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen || hovering ? "opacity-0" : "opacity-100"}`}>
                         <div className="font-bold"> AKHIL SHETTY M <span className="font-light">, IN</span></div>
                         <div>{time || "—:—:— --"}</div>
+                        <div key={ip} className="font-mono text-[8px] font-semibold uppercase tracking-[0.25em] text-black/50"> connection{" "}
+                            <span className="inline-block w-25 text-right"> {ip} </span>
+                        </div>
                     </div>
 
                     <div onClick={() => setConsoleOpen((prev) => !prev)} className="w-10 aspect-square border border-black flex items-center justify-center relative overflow-hidden bg-white transition-all duration-300 cursor-pointer z-40 hover:bg-black">

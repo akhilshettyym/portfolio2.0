@@ -59,20 +59,22 @@ const educationData = [
 function EducationRow({ e, start, index }) {
     const animated = useCountUp(e.score * 10, start);
 
-    const display = e.type === "cgpa" ? `${(animated / 10).toFixed(2)} CGPA` : `${Math.min(animated / 10, 100).toFixed(2)}%`;
+    const display =
+        e.type === "cgpa"
+            ? `${(animated / 10).toFixed(2)} CGPA`
+            : `${Math.min(animated / 10, 100).toFixed(2)}%`;
 
     return (
         <div className={`w-full flex items-center justify-between px-3 py-2 transition-all duration-500 hover:translate-x-1 ${start ? "animate-row" : ""}`} style={{ animationDelay: `${index * 120}ms` }}>
-            <span className="text-gray-500 w-28"> DOC.[{e.id}] </span>
-
-            <span className="w-40 text-white/90"> {e.level} </span>
+            <span className="text-black/40 w-28"> DOC.[{e.id}] </span>
+            <span className="w-40 text-black/90"> {e.level} </span>
 
             <span className="flex-1 text-center">
-                <span className="text-lg font-semibold text-white"> {display} </span>
-                <span className="text-xs text-gray-400 ml-2"> | {e.years} </span>
+                <span className="text-lg font-semibold text-black"> {display} </span>
+                <span className="text-xs text-black/40 ml-2"> | {e.years} </span>
             </span>
 
-            <span className="w-96 text-right text-white/70"> {e.institution} </span>
+            <span className="w-96 text-right text-black/70"> {e.institution} </span>
         </div>
     );
 }
@@ -92,9 +94,7 @@ export default function EducationLog() {
                     observer.disconnect();
                 }
             },
-            {
-                threshold: 0.2,
-            }
+            { threshold: 0.2 }
         );
 
         observer.observe(node);
@@ -103,25 +103,25 @@ export default function EducationLog() {
     }, []);
 
     return (
-        <div className="pt-10 pr-10 pl-10">
-            <div ref={ref} className="w-full font-mono text-sm">
-            <div className="mb-6 relative">
-                <div className="border-t border-white/10" />
-                <div className="absolute -top-3 left-0 w-full flex justify-between text-white/60">
-                    <span> + </span><span> + </span><span> + </span><span> + </span>
+        <div className="pt-10 pr-10 pl-10 bg-white">
+            <div ref={ref} className="w-full font-mono text-sm text-black">
+
+                <div className="mb-6 relative">
+                    <div className="border-t border-black/20" />
+                    <div className="absolute -top-3 left-0 w-full flex justify-between text-black/50">
+                        <span> + </span> <span> + </span> <span> + </span> <span> + </span>
+                    </div>
+                </div>
+
+                <div className="mb-5 text-[12px] tracking-[0.25em] text-black/50"> / EDUCATION LOG </div>
+                <div className="mb-6 border-t border-black/20" />
+
+                <div className="space-y-1">
+                    {educationData.map((e, i) => (
+                        <EducationRow key={e.id} e={e} start={start} index={i} />
+                    ))}
                 </div>
             </div>
-
-            <div className="mb-5 text-[12px] tracking-[0.25em] text-white/40"> / EDUCATION LOG </div>
-
-            <div className="mb-6 border-t border-white/20" />
-
-            <div className="space-y-1">
-                {educationData.map((e, i) => (
-                    <EducationRow key={e.id} e={e} start={start} index={i} />
-                ))}
-            </div>
-        </div>
         </div>
     );
 }

@@ -78,55 +78,15 @@ uniform sampler2D textureB;
 
 varying vec2 vUv;
 
-vec3 motionColor(float intensity) {
-
-    vec3 calm = vec3(0.0, 0.4, 0.8);
-
-    vec3 mid = vec3(0.0, 0.85, 0.75);
-
-    vec3 high = vec3(0.6, 1.0, 0.95);
-
-    float t1 = smoothstep(0.0, 0.3, intensity);
-    float t2 = smoothstep(0.3, 0.8, intensity);
-
-    vec3 color = mix(calm, mid, t1);
-    color = mix(color, high, t2);
-
-    return color;
-}
-
 void main() {
-
     vec4 sim = texture2D(textureA, vUv);
-    vec4 base = texture2D(textureB, vUv);
 
-    vec2 distortion = sim.zw * 0.3;
+    vec2 distortion = sim.zw * 0.1;
     vec2 uv = vUv + distortion;
 
-    vec4 text =
-        texture2D(textureB, uv) * 0.4 +
-        texture2D(textureB, uv + vec2(0.001, 0.0)) * 0.15 +
-        texture2D(textureB, uv - vec2(0.001, 0.0)) * 0.15 +
-        texture2D(textureB, uv + vec2(0.0, 0.001)) * 0.15 +
-        texture2D(textureB, uv - vec2(0.0, 0.001)) * 0.15;
+    vec4 text = texture2D(textureB, uv);
 
-    float finalMask = smoothstep(0.0, 0.7, text.r);
-
-    float r = texture2D(textureB, uv + distortion * 0.12).r;
-    float g = texture2D(textureB, uv).g;
-    float b = texture2D(textureB, uv - distortion * 0.12).b;
-
-    vec3 color = vec3(r, g, b);
-    color *= finalMask;
-
-    float intensity = length(sim.zw);
-
-    intensity = smoothstep(0.0, 0.25, intensity);
-
-    vec3 rippleCol = motionColor(intensity);
-
-    color += rippleCol * intensity * 0.5;
-
-    gl_FragColor = vec4(color, 1.0);
+    // KEEP ORIGINAL COLOR (NO FORCED BLACK)
+    gl_FragColor = vec4(text.rgb, 1.0);
 }
 `;

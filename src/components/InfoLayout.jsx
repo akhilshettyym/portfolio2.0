@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { GlobePanel } from "./GlobePanel";
 import Hero from "./Hero";
+import Clouds from "./Clouds";
 
 const InfoLayout = () => {
 
@@ -46,8 +47,9 @@ const InfoLayout = () => {
 
     return (
         <>
+        <Clouds />
             {/* 00_INTRO */}
-            <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
+            {/* <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
                 <div className="flex min-w-0 flex-1 flex-col md:flex-row">
                     <div className="shrink-0 sm:w-56">
                         <div className="sm:sticky">
@@ -62,16 +64,12 @@ const InfoLayout = () => {
                             <div className="absolute -left-6 top-2 h-16 w-0.5 bg-black/10 hidden md:block" />
 
                             <p className="text-xl leading-snug text-black font-medium tracking-tight">
-    Hi, I'm
-</p>
+                                Hi, I'm
+                            </p>
 
-<div className="inline-block">
-    <Hero />
-</div>
-
-<p className="text-xl leading-snug text-black font-medium tracking-tight">
-    — I design and build web products with a focus on performance and precision.
-</p>
+                            <p className="text-xl leading-snug text-black font-medium tracking-tight">
+                                — I design and build web products with a focus on performance and precision.
+                            </p>
 
                             <p className="text-xl leading-relaxed text-black/70 max-w-4xl">
                                 Focused on performance, scalability, and system design, I build reliable, production-ready
@@ -84,7 +82,6 @@ const InfoLayout = () => {
                 <div className="shrink-0 sm:w-60">
                     <div className="sm:sticky flex flex-col items-end">
                         <div className="group relative w-40 sm:w-48 aspect-[3/4] overflow-hidden rounded-[1.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
-                            {/* glow behind */}
                             <div className="absolute -inset-4 rounded-[2rem] bg-black/10 blur-2xl opacity-40 transition duration-700 group-hover:opacity-70" />
 
                             <img
@@ -93,28 +90,24 @@ const InfoLayout = () => {
                                 className="relative z-10 h-full w-full object-cover grayscale contrast-110 brightness-90 saturate-0 transition duration-700 group-hover:scale-[1.06] group-hover:brightness-100"
                             />
 
-                            {/* premium overlays */}
                             <div className="absolute inset-0 z-20 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.16),transparent_30%,transparent_70%,rgba(0,0,0,0.18))] pointer-events-none" />
                             <div className="absolute inset-0 z-20 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.18),transparent_35%)] pointer-events-none" />
 
-                            {/* moving scan line */}
                             <div className="absolute inset-0 z-20 overflow-hidden pointer-events-none">
                                 <div className="absolute left-0 top-[-30%] h-[140%] w-full bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.22),transparent)] rotate-12 opacity-0 transition duration-700 group-hover:opacity-100 group-hover:translate-y-[18%]" />
                             </div>
 
-                            {/* border */}
                             <div className="absolute inset-0 z-30 border border-black/15 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] pointer-events-none" />
 
-                            {/* slanted edge accent */}
                             <div className="absolute bottom-0 left-0 z-30 h-10 w-10 border-l border-b border-black/20 pointer-events-none" style={{ clipPath: "polygon(0 0, 100% 100%, 0 100%)" }} />
                         </div>
                     </div>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full border-t border-black/10" />
-            </section>
+            </section> */}
 
             {/* 01_ABOUT */}
-            <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
+            {/* <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
                 <div className="flex min-w-0 flex-1 flex-col md:flex-row">
                     <div className="shrink-0 sm:w-56">
                         <div className="sm:sticky">
@@ -146,10 +139,10 @@ const InfoLayout = () => {
                     </div>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full border-t border-black/10" />
-            </section>
+            </section> */}
 
             {/* 02_SERVICES */}
-            <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
+            {/* <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
                 <div className="flex min-w-0 flex-1 flex-col md:flex-row">
                     <div className="shrink-0 sm:w-56">
                         <div className="sm:sticky">
@@ -209,11 +202,10 @@ const InfoLayout = () => {
 
                 <div className="shrink-0 sm:w-60">
                     <div className="pt-25 text-end sm:sticky">
-                        {/* <SciFiOrbCTA /> */}
                     </div>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full border-t border-black/10" />
-            </section>
+            </section> */}
         </>
     );
 };

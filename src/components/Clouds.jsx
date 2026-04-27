@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/clouds.css";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
@@ -14,6 +15,22 @@ export default function Clouds() {
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
         let start_time = Date.now();
+
+        const btn = document.querySelector(".btn");
+
+        if (btn) {
+            btn.addEventListener("mousemove", (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+
+            btn.addEventListener("mouseleave", () => {
+                btn.style.transform = `translate(0px, 0px)`;
+            });
+        }
 
         const cloudShader = {
             vertexShader: `
@@ -156,45 +173,38 @@ export default function Clouds() {
             container.removeChild(renderer.domElement);
             renderer.dispose();
         };
+
     }, []);
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                zIndex: 0,
-            }}
-        >
-            <div
-                ref={containerRef}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    background:
-                        "linear-gradient(to bottom, #ffffff 10%, #4fa3d1 100%)",
-                }}
-            />
+        <div className="wrapper">
+            <div ref={containerRef} className="canvas-bg" />
 
-            <div
-                style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    fontSize: "60px",
-                    fontWeight: "800",
-                    color: "#fff",
-                    letterSpacing: "5px",
-                    pointerEvents: "none",
-                    zIndex: 10,
-                }}
-            >
+            <div className="hero-text">
+                <span className="line dim">We're a creative-owned</span>
+                <span className="line dim">agency that specialises</span>
+                <span className="line strong">Super x Solid outcomes.</span>
+
+                <a className="btn">
+                    <span className="label">
+                        <span className="main">See how we create outcomes</span>
+                        <span className="alt">Explore our work →</span>
+                    </span>
+                </a>
+            </div>
+
+            <div className="hero-name">
                 AKHIL SHETTY
             </div>
+
+            {[
+                { top: "110px", left: "40px" },
+                { top: "110px", right: "40px" },
+                { bottom: "40px", left: "40px" },
+                { bottom: "40px", right: "40px" },
+            ].map((pos, i) => (
+                <div key={i} className="corner" style={pos} />
+            ))}
         </div>
     );
 }

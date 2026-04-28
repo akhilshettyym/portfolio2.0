@@ -4,6 +4,7 @@ import "@/styles/clouds.css";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import WordCarousel from "./WordCarousel";
 
 export default function Clouds() {
     const containerRef = useRef(null);
@@ -181,9 +182,12 @@ export default function Clouds() {
             <div ref={containerRef} className="canvas-bg" />
 
             <div className="hero-text">
-                <span className="line dim">We're a creative-owned</span>
-                <span className="line dim">agency that specialises</span>
-                <span className="line strong">Super x Solid outcomes.</span>
+                <span className="line dim uppercase"> BUILD SYSTEMS <br /></span>
+                <span className="line dim uppercase"> OPTIMIZE SCALE × LATENCY <br /></span>
+                <span className="line strong">
+                    <span className="text-md uppercase tracking-tight">OPS</span> <WordCarousel />
+                </span>
+
 
                 <a className="btn">
                     <span className="label">
@@ -193,18 +197,16 @@ export default function Clouds() {
                 </a>
             </div>
 
-            <div className="hero-name">
-                AKHIL SHETTY
+            <div className="hero-name"> AKHIL SHETTY </div>
+
+            <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
+                <span className="scroll-text"> DISCOVER </span>
+                <div className="scroll-indicator" />
             </div>
 
-            {[
-                { top: "110px", left: "40px" },
-                { top: "110px", right: "40px" },
-                { bottom: "40px", left: "40px" },
-                { bottom: "40px", right: "40px" },
-            ].map((pos, i) => (
-                <div key={i} className="corner" style={pos} />
-            ))}
+            <div className="corner" style={{ top: "120px", left: "40px" }} />
+            <div className="corner" style={{ bottom: "40px", left: "40px" }} />
+            <div className="corner" style={{ bottom: "40px", right: "40px" }} />
         </div>
     );
 }

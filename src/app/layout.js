@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         <LoaderWrapper>
 
           <div className="fixed top-0 left-0 w-full z-50">
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-md backdrop-saturate-150 border-b border-black/10" />
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-md backdrop-saturate-50 border-b border-black/10" />
             <div className="relative">
               <Navbar />
             </div>

@@ -187,12 +187,77 @@
 
   z-index: 10;
 
-  background: linear-gradient(180deg, #ffffff 0%, #d6ecff 100%);
-  background: linear-gradient(180deg, #ffffff 0%, #d6ecff 100%);
-  background-clip: text;
+  /* base glass feel */
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(190, 220, 235, 0.65) 40%,
+    rgba(120, 160, 190, 0.4) 100%
+  );
+
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+  background-clip: text;
+
+  /* depth instead of box */
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.15),
+    0 10px 40px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(180, 220, 255, 0.18);
+
+  /* subtle “energy separation” */
+  filter: contrast(1.1) saturate(1.2);
+
+  /* smooth presence */
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.hero-subtext-wrap {
+  position: absolute;
+  top: calc(70% + 90px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: inline-block;
+}
+
+.hero-subtext {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  line-height: 1.6;
+
+  text-align: center;
+  color: rgba(129, 129, 129, 0.65);
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  margin: 0;
+}
+
+.dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(214, 236, 255, 0.35);
+}
+
+.dot.tl {
+  top: -8px;
+  left: -40px;
+}
+.dot.tr {
+  top: -8px;
+  right: -40px;
+}
+.dot.bl {
+  bottom: -8px;
+  left: -40px;
+}
+.dot.br {
+  bottom: -8px;
+  right: -40px;
 }
 
 .corner {

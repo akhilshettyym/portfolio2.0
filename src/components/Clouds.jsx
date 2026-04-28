@@ -197,7 +197,19 @@ export default function Clouds() {
                 </a>
             </div>
 
-            <div className="hero-name"> AKHIL SHETTY </div>
+            <div className="hero-name">AKHIL SHETTY</div>
+
+            <div className="hero-subtext-wrap">
+                <p className="hero-subtext">
+                    Design and code, refined until <br />
+                    nothing feels unnecessary.
+                </p>
+
+                <span className="dot tl" />
+                <span className="dot tr" />
+                <span className="dot bl" />
+                <span className="dot br" />
+            </div>
 
             <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
                 <span className="scroll-text"> DISCOVER </span>

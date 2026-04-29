@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import WordCarousel from "./WordCarousel";
+import { motion } from "framer-motion";
+import GlitchText from "./GlitchText";
 
 export default function Clouds() {
     const containerRef = useRef(null);
@@ -210,6 +212,22 @@ export default function Clouds() {
                 <span className="dot bl" />
                 <span className="dot br" />
             </div>
+
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.3 }} className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
+                <div className="relative px-10 py-4 text-xs tracking-widest">
+                    <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
+                        ©001
+                    </div>
+
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
+                        (DEV)
+                    </div>
+
+                    <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-auto">
+                        <GlitchText text="SCROLL_MORE__" />
+                    </div>
+                </div>
+            </motion.div>
 
             <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
                 <span className="scroll-text"> DISCOVER </span>

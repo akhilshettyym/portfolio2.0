@@ -141,7 +141,7 @@ export default function Navbar() {
     ];
 
     return (
-        <div className="px-10 w-full bg-white text-black relative">
+        <div className="px-10 pt-1 w-full bg-white text-black relative">
             <div className="mt-6 flex items-center">
                 <div className="flex items-center gap-3 shrink-0">
                     <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">

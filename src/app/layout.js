@@ -2,6 +2,8 @@ import { Montserrat, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import LoaderWrapper from "@/components/LoaderWrapper";
+import NavbarWrapper from "@/components/NavbarWrapper";
+import { LenisProvider } from "@/context/LenisContext";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -22,21 +24,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
-      <body className="bg-white text-black overflow-x-hidden">
+      <body className="bg-white text-black">
+        <LenisProvider>
+          <LoaderWrapper>
 
-        <LoaderWrapper>
-
-          <div className="fixed top-0 left-0 w-full z-50">
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-md backdrop-saturate-50 border-b border-black/10" />
-            <div className="relative">
+            <NavbarWrapper>
               <Navbar />
-            </div>
-          </div>
+            </NavbarWrapper>
 
-          <main className="pt-20">{children}</main>
+            <main className="pt-20">{children}</main>
 
-        </LoaderWrapper>
-
+          </LoaderWrapper>
+        </LenisProvider>
       </body>
     </html>
   );

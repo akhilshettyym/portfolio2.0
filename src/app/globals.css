@@ -14,6 +14,12 @@
   }
 }
 
+html {
+  scroll-padding-top: 80px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   font-family:
     var(--font-sans),
@@ -25,11 +31,6 @@ body {
     Helvetica,
     Arial,
     sans-serif;
-}
-
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Navbar */
@@ -82,4 +83,64 @@ html {
 .animate-navbar-enter {
   animation: navbar-enter 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   will-change: transform, opacity;
+}
+
+/* ===== PARALLAX EFFECT ===== */
+.parallax-container {
+  perspective: 1000px;
+}
+
+.parallax-element {
+  transform-origin: center;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ===== SCROLL-LINKED ANIMATIONS ===== */
+@keyframes scroll-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-fade-section {
+  animation: scroll-fade-in 0.8s ease-out forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+@keyframes scroll-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scroll-scale-section {
+  animation: scroll-scale 0.8s ease-out forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+/* Smooth overflow for better scrolling */
+body {
+  overflow-x: hidden;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }

@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { GlobePanel } from "./GlobePanel";
 import Hero from "./Hero";
 import Clouds from "./Clouds";
+import { useScrollParallax } from "@/hooks/useScrollParallax";
 
 const InfoLayout = () => {
-
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isResetting, setIsResetting] = useState(false);
+
+    const parallax = useScrollParallax(0.3);
 
     const words = [
         { text: "CORE JAVA" },
@@ -47,7 +50,51 @@ const InfoLayout = () => {
 
     return (
         <>
-        <Clouds />
+            {/* PARALLAX INTRO SECTION */}
+            <motion.section 
+              ref={parallax.ref} 
+              className="parallax-container relative w-full py-20 md:py-32 flex items-center justify-center min-h-screen overflow-hidden"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: false, amount: 0.3 }}
+            >
+                <motion.div 
+                  style={parallax.style}
+                  className="parallax-element w-full max-w-6xl px-6 md:px-12"
+                >
+                    <div className="space-y-8 text-center">
+                        <motion.h1 
+                          className="text-5xl md:text-7xl font-bold text-black leading-tight"
+                          initial={{ y: 20, opacity: 0 }}
+                          whileInView={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.1 }}
+                          viewport={{ once: false, amount: 0.5 }}
+                        >
+                            Hello, I&apos;m Akhil Shetty
+                        </motion.h1>
+                        <motion.p 
+                          className="text-xl md:text-2xl text-black/70 max-w-3xl mx-auto leading-relaxed"
+                          initial={{ y: 20, opacity: 0 }}
+                          whileInView={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.2 }}
+                          viewport={{ once: false, amount: 0.5 }}
+                        >
+                            I design and build web products with a focus on performance and precision.
+                        </motion.p>
+                        <motion.p 
+                          className="text-lg md:text-xl text-black/60 max-w-2xl mx-auto"
+                          initial={{ y: 20, opacity: 0 }}
+                          whileInView={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.3 }}
+                          viewport={{ once: false, amount: 0.5 }}
+                        >
+                            Focused on scalability, system design, and clean architecture. I build reliable, production-ready software with an emphasis on execution quality.
+                        </motion.p>
+                    </div>
+                </motion.div>
+            </motion.section>
+
             {/* 00_INTRO */}
             {/* <section className="relative flex w-full flex-col sm:flex-row sm:pt-10 sm:pb-10">
                 <div className="flex min-w-0 flex-1 flex-col md:flex-row">

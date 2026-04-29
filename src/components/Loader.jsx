@@ -115,7 +115,7 @@ export default function Loader({ onFinish, duration = 3000 }) {
         circumference - (progress / 100) * circumference;
 
     return (
-        <div className="fixed inset-0 z-999 overflow-hidden bg-white">\
+        <div className="fixed inset-0 z-999 overflow-hidden bg-white">
 
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.10),transparent_60%)]" />

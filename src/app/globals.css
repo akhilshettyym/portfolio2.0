@@ -55,7 +55,6 @@ body {
   background: linear-gradient(to left, white, transparent);
 }
 
-/* ===== TERMINAL CURSOR ===== */
 .animate-blink {
   animation: blink 1s steps(2, start) infinite;
 }
@@ -85,7 +84,6 @@ body {
   will-change: transform, opacity;
 }
 
-/* ===== PARALLAX EFFECT ===== */
 .parallax-container {
   perspective: 1000px;
 }
@@ -96,7 +94,6 @@ body {
   transform: translateZ(0);
 }
 
-/* ===== SCROLL-LINKED ANIMATIONS ===== */
 @keyframes scroll-fade-in {
   from {
     opacity: 0;
@@ -131,7 +128,6 @@ body {
   animation-range: entry 0% cover 30%;
 }
 
-/* Smooth overflow for better scrolling */
 body {
   overflow-x: hidden;
 }

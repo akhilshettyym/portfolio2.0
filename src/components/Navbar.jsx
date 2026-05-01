@@ -95,7 +95,6 @@ export default function Navbar() {
 
     const clamp = (num) => Math.max(0, Math.min(255, num));
 
-    // 🔥 SCROLL → smooth evolution
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
@@ -135,7 +134,7 @@ export default function Navbar() {
     const ip = ipParts.join(".");
 
     const navItems = [
-        { label: "INFO", href: "/info" },
+        { label: "INFO", href: "/" },
         { label: "WORK", href: "/work" },
         { label: "START", href: "/start" },
     ];

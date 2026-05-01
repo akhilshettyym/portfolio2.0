@@ -2,9 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { GlobePanel } from "./GlobePanel";
-import Hero from "./Hero";
-import Clouds from "./Clouds";
 import { useScrollParallax } from "@/hooks/useScrollParallax";
 
 const InfoLayout = () => {
@@ -50,19 +47,8 @@ const InfoLayout = () => {
 
     return (
         <>
-            {/* PARALLAX INTRO SECTION */}
-            <motion.section 
-              ref={parallax.ref} 
-              className="parallax-container relative w-full py-20 md:py-32 flex items-center justify-center min-h-screen overflow-hidden"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: false, amount: 0.3 }}
-            >
-                <motion.div 
-                  style={parallax.style}
-                  className="parallax-element w-full max-w-6xl px-6 md:px-12"
-                >
+            <motion.section ref={parallax.ref} className="parallax-container relative w-full py-20 md:py-32 flex items-center justify-center min-h-screen overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} viewport={{ once: false, amount: 0.3 }}>
+                <motion.div style={parallax.style} className="parallax-element w-full max-w-6xl px-6 md:px-12">
                     <div className="space-y-8 text-center">
                         <motion.h1 
                           className="text-5xl md:text-7xl font-bold text-black leading-tight"

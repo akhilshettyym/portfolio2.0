@@ -2,12 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import {
-    simulationVertexShader,
-    simulationFragmentShader,
-    renderVertexShader,
-    renderFragmentShader,
-} from "@/utils/shaders";
+import { simulationVertexShader, simulationFragmentShader, renderVertexShader, renderFragmentShader } from "@/utils/shaders";
 
 export default function Hero() {
     const mountRef = useRef(null);
@@ -23,13 +18,12 @@ export default function Hero() {
 
         const renderer = new THREE.WebGLRenderer({
             antialias: true,
-            alpha: false, // IMPORTANT: no transparency confusion
+            alpha: false,
         });
 
         const DPR = Math.min(window.devicePixelRatio, 2);
         renderer.setPixelRatio(DPR);
 
-        // FORCE WHITE BACKGROUND
         renderer.setClearColor(0xffffff, 1);
 
         const canvas = document.createElement("canvas");
@@ -50,7 +44,6 @@ export default function Hero() {
         canvas.height = height;
 
         function drawText() {
-            // WHITE BG
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, width, height);
 
@@ -62,11 +55,9 @@ export default function Hero() {
 
             ctx.font = `900 ${fontSize}px Inter, Helvetica, Arial`;
 
-            // BLACK TEXT
             ctx.fillStyle = "#000000";
 
             ctx.fillText(text, 0, 0);
-
             ctx.restore();
         }
 

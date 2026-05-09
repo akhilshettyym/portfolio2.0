@@ -4,9 +4,14 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='p-10'>
-      <HeroSection />
-      <InfoLayout />
+    <div className='relative w-full overflow-x-hidden'>
+      <div className='relative h-screen w-full'>
+        <HeroSection />
+      </div>
+
+      <div className='relative w-full mt-[-100vh] pt-[100vh]'>
+        <InfoLayout />
+      </div>
     </div>
   )
 }

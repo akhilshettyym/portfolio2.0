@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
               <Navbar />
             </NavbarWrapper>
 
-            <main className="pt-20">{children}</main>
+            <main className="pt-28"> {children} </main>
 
           </LoaderWrapper>
         </LenisProvider>

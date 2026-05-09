@@ -40,49 +40,41 @@ const InfoLayout = () => {
     const parallax = useScrollParallax(0.045);
 
     return (
-        <section className="relative w-full overflow-hidden bg-white text-black">
-
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute inset-0 bg-white" />
-                <div className="absolute top-0 left-0 w-full h-[65vh] bg-linear-to-b from-[#dbeafe] via-[#eef5ff] to-white " />
-                <div className=" absolute top-[-10%] eft-1/2 -translate-x-1/2 w-250 h-150 rounded-full bg-blue-200/35 blur-[140px]" />
-                <div className="absolute top-20 left-[8%] w-60 h-60 rounded-full bg-white/80 blur-[100px]" />
-                <div className="absolute top-32 right-[10%] w-[320px] h-80 rounded-full bg-white/70 blur-[120px] " />
-                <div className="absolute top-[28%] left-[38%] w-55 h-55 rounded-full bg-white/60 blur-[90px] " />
-                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,rgba(255,255,255,0.82)_100%)] " />
-            </div>
+        <section className="relative w-full overflow-hidden bg-white text-black -mt-20 md:-mt-28 z-20">
 
             <div className="relative z-10 px-8 md:px-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
-                    <motion.div {...fadeUp}>
-                        <h1 className="text-[clamp(3rem,7vw,7rem)] leading-[0.86] font-semibold tracking-[-0.07em]">
-                            FULL STACK
-                            <br />
-                            DEVELOPER
-                        </h1>
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-y-14 md:gap-x-8 items-end">
+                    <motion.div {...fadeUp} className="md:col-span-8">
 
-                        <p className="mt-6 text-[10px] uppercase tracking-[0.32em] text-black/50">
-                            Engineering systems with precision
-                        </p>
+                        <div className="overflow-hidden">
+                            <h1 className="text-[clamp(4.5rem,9vw,9rem)] leading-[0.82] font-black tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}> FULL STACK </h1>
+                        </div>
+
+                        <div className="overflow-hidden -mt-3">
+                            <h1 className="text-[clamp(4.5rem,9vw,9rem)] leading-[0.82] font-black tracking-[-0.09em] text-black/90 will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}> DEVELOPER </h1>
+                        </div>
                     </motion.div>
 
-                    <motion.div {...fadeUp}
-                        transition={{ ...fadeUp.transition, delay: 0.08 }} className="text-left md:text-right">
+                    <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }} className="md:col-span-4 flex flex-col items-start md:items-end justify-end text-left md:text-right pb-2">
 
-                        <h1 className="text-[clamp(2.5rem,5vw,5.5rem)] leading-[0.9] font-semibold tracking-[-0.06em] ">
+                        <h2 className="text-[clamp(2.3rem,4vw,4.8rem)] leading-[0.9] font-black tracking-[-0.07em] text-black/95 will-change-transform">
                             / FROM
                             <br />
                             MUMBAI, MH
-                        </h1>
+                        </h2>
 
-                        <p className="mt-6 text-[10px] uppercase tracking-[0.32em] text-black/50 ">
+                        <p className="mt-6 max-w-70 text-[11px] uppercase tracking-[0.3em] leading-relaxed text-black/45">
+                            <span
+                                className="mb-6 text-[11px] uppercase tracking-[0.28em] text-black/35"> © 2026 </span>
                             Building scalable digital experiences
                         </p>
-                    </motion.div>
 
+                    </motion.div>
                 </div>
             </div>
+
+
 
             <motion.div {...fadeUp} className="relative z-20 px-8 md:px-16 pt-20 pb-14">
                 <div className="flex justify-between items-center text-[10px] uppercase tracking-[0.28em] text-black/45 mb-6">

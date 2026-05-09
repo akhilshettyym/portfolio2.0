@@ -4,15 +4,10 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='relative w-full overflow-x-hidden'>
-      <div className='relative h-screen w-full'>
-        <HeroSection />
-      </div>
-
-      <div className='relative w-full mt-[-100vh] pt-[100vh]'>
-        <InfoLayout />
-      </div>
-    </div>
+    <main className="pt-12 md:pt-12">
+      <HeroSection />
+      <InfoLayout />
+    </main>
   )
 }
 

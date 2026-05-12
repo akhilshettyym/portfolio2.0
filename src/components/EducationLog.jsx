@@ -103,15 +103,8 @@ export default function EducationLog() {
     }, []);
 
     return (
-        <div className="pt-10 pr-10 pl-10 bg-white">
+        <div className="pr-10 pl-10 bg-white mr-10 ml-10">
             <div ref={ref} className="w-full font-mono text-sm text-black">
-
-                <div className="mb-6 relative">
-                    <div className="border-t border-black/20" />
-                    <div className="absolute -top-3 left-0 w-full flex justify-between text-black/50">
-                        <span> + </span> <span> + </span> <span> + </span> <span> + </span>
-                    </div>
-                </div>
 
                 <div className="mb-5 text-[12px] tracking-[0.25em] text-black/50"> / EDUCATION LOG </div>
                 <div className="mb-6 border-t border-black/20" />

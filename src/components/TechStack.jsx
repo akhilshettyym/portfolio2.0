@@ -88,7 +88,7 @@ export default function TechStack() {
     if (!mounted) return null;
 
     return (
-        <div className="bg-white">
+        <div className="bg-white p-10">
 
             <section className="relative w-full overflow-hidden px-6 py-4 text-black flex justify-center">
                 <div className="relative mx-auto w-full max-w-8xl">
@@ -125,12 +125,10 @@ export default function TechStack() {
                                 const isAlert = alertIndex === i;
 
                                 return (
-                                    <div
-                                        key={`${tech.name}-${i}`}
-                                        className={`min-h-28 min-w-27.5 rounded-xl border bg-white p-3 transition-all duration-300 ${isActive ? isAlert
-                                            ? "border-black shadow-[0_0_12px_rgba(244,63,94,0.25)]"
-                                            : "border-black shadow-[0_0_12px_rgba(0,0,0,0.25)]"
-                                            : "border-black/20"}`}>
+                                    <div key={`${tech.name}-${i}`} className={`min-h-2 min-w-20 rounded-xl border bg-white p-3 transition-all duration-300 ${isActive ? isAlert
+                                        ? "border-black shadow-[0_0_12px_rgba(244,63,94,0.25)]"
+                                        : "border-black shadow-[0_0_12px_rgba(0,0,0,0.25)]"
+                                        : "border-black/20"}`}>
                                         <div className="flex h-full flex-col justify-between">
 
                                             <div className="flex justify-between">
@@ -138,12 +136,11 @@ export default function TechStack() {
                                                     {isActive ? (isAlert ? "alert" : "lock") : "idle"}
                                                 </span>
 
-                                                <div
-                                                    className={`h-2 w-2 rounded-full ${isActive ? isAlert
-                                                        ? "bg-rose-500"
-                                                        : "bg-emerald-500"
-                                                        : "bg-black/20"
-                                                        }`} />
+                                                <div className={`h-2 w-2 rounded-full ${isActive ? isAlert
+                                                    ? "bg-rose-500"
+                                                    : "bg-emerald-500"
+                                                    : "bg-black/20"
+                                                    }`} />
                                             </div>
 
                                             <div className="flex flex-1 items-center justify-center">

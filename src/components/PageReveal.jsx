@@ -1,4 +1,5 @@
 "use client";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 // NEW
@@ -50,8 +51,7 @@ export default function PageReveal({ active, children }) {
 
                         {Array.from({ length: 6 }).map((_, i) => (
                             <motion.div
-                                key={i}
-                                className="absolute left-0 right-0 h-px bg-white/20"
+                                key={i} className="absolute left-0 right-0 h-px bg-white/20"
                                 style={{ top: `${18 + i * 11}%` }}
                                 animate={{ x: [0, i % 2 ? 12 : -12, 0] }}
                                 transition={{ duration: 0.55, delay: i * 0.05, ease: "easeOut" }}

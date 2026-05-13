@@ -7,13 +7,13 @@ import HeroSection from '@/components/HeroSection';
 
 const page = () => {
   return (
-    <main className="pt-12 md:pt-12">
+    <div>
       <HeroSection />
-      {/* <DevTicker />
+      <DevTicker />
       <InfoLayout />
-      <EducationLog />
+      {/* <EducationLog />
       <TechStack /> */}
-    </main>
+    </div>
   )
 }
 

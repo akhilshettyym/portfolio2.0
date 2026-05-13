@@ -2,64 +2,22 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 
-// NEW
 export default function PageReveal({ active, children }) {
+
     return (
-        <AnimatePresence mode="wait">
-            {active && (
-                <motion.div
-                    className="relative min-h-screen w-full overflow-hidden bg-black"
-                    initial={{
-                        clipPath: "inset(47% 47% 47% 47% round 28px)",
-                        scale: 1.06,
-                        opacity: 1,
-                    }}
-                    animate={{
-                        clipPath: [
-                            "inset(47% 47% 47% 47% round 28px)",
-                            "inset(28% 28% 28% 28% round 18px)",
-                            "inset(0% 0% 0% 0% round 0px)",
-                        ],
-                        scale: [1.06, 1.015, 1],
-                        opacity: 1,
-                    }}
-                    transition={{
-                        duration: 1.55,
-                        ease: [0.22, 1, 0.36, 1],
-                        times: [0, 0.38, 1],
-                    }}
-                    style={{
-                        transformOrigin: "center center",
-                        willChange: "clip-path, transform",
-                    }}
-                >
-                    {children}
-                    <motion.div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 z-[999] mix-blend-screen"
-                        initial={{ opacity: 0.9 }}
-                        animate={{ opacity: [0.9, 0.45, 0] }}
-                        transition={{ duration: 1.1, ease: "easeOut" }}
-                    >
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.28)_0%,rgba(255,255,255,0.08)_18%,rgba(255,255,255,0)_52%)]" />
-
-                        <motion.div
-                            className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.14)_48%,transparent_100%)]"
-                            animate={{ y: ["-10%", "10%", "-10%"], opacity: [0, 1, 0] }}
-                            transition={{ duration: 0.8, repeat: 1, ease: "easeInOut" }}
-                        />
-
-                        {Array.from({ length: 6 }).map((_, i) => (
-                            <motion.div
-                                key={i} className="absolute left-0 right-0 h-px bg-white/20"
-                                style={{ top: `${18 + i * 11}%` }}
-                                animate={{ x: [0, i % 2 ? 12 : -12, 0] }}
-                                transition={{ duration: 0.55, delay: i * 0.05, ease: "easeOut" }}
-                            />
-                        ))}
+        <>
+            {children}
+            <AnimatePresence>
+                {active && (
+                    <motion.div nitial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }} className="fixed inset-0 z-9999 pointer-events-none overflow-hidden">
+                        <motion.div initial={{ height: "50%" }} animate={{ height: ["50%", "24%", "0%"] }} transition={{ duration: 1.8, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }} className="absolute top-0 left-0 right-0 bg-white" />
+                        <motion.div initial={{ height: "50%" }} animate={{ height: ["50%", "24%", "0%"] }} transition={{ duration: 1.8, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }} className="absolute bottom-0 left-0 right-0 bg-white" />
+                        <motion.div initial={{ top: "50%", bottom: "50%", width: "50%" }} animate={{ top: ["50%", "24%", "0%"], bottom: ["50%", "24%", "0%"], width: ["50%", "16%", "0%"] }} transition={{ duration: 1.8, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 bg-white" />
+                        <motion.div initial={{ top: "50%", bottom: "50%", width: "50%" }} animate={{ top: ["50%", "24%", "0%"], bottom: ["50%", "24%", "0%"], width: ["50%", "16%", "0%"] }} transition={{ duration: 1.8, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }} className="absolute right-0 bg-white " />
+                        <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: [0.6, 1, 1.4], opacity: [0, 0.18, 0] }} transition={{ duration: 1.8, times: [0, 0.4, 1], ease: "easeOut" }} className="absolute left-1/2 top-1/2 h-55 w-55 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white blur-3xl" />
                     </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
+                )}
+            </AnimatePresence>
+        </>
     );
 }

@@ -20,75 +20,63 @@
 // }
 
 
+
 "use client";
 
-import { createContext, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { createContext, useEffect, useState } from "react";
+
 import Loader from "./Loader";
+import PageReveal from "./PageReveal";
 
 export const LoadingContext = createContext();
 
-export default function LoaderWrapper({ children, onComplete }) {
+export default function LoaderWrapper({ children }) {
+
     const [loading, setLoading] = useState(true);
 
-    return (
-        <LoadingContext.Provider value={{ isLoading: loading }}>
-            <AnimatePresence mode="wait">
-                {loading && (
-                    <motion.div
-                        key="loader"
-                        className="fixed inset-0 z-[9999] bg-black"
-                        exit={{
-                            opacity: 0,
-                            transition: {
-                                duration: 0.45,
-                                ease: [0.76, 0, 0.24, 1],
-                            },
-                        }}
-                    >
-                        <Loader
-                            onFinish={() => {
-                                setLoading(false);
-                                onComplete?.();
-                            }}
-                        />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+    const [showReveal, setShowReveal] = useState(false);
 
-            <motion.div
-                initial={false}
-                animate={
-                    loading
-                        ? {
-                            clipPath:
-                                "inset(50% 50% 50% 50% round 30px)",
-                            scale: 1.08,
-                            opacity: 0,
-                        }
-                        : {
-                            clipPath: [
-                                "inset(46% 46% 46% 46% round 28px)",
-                                "inset(24% 24% 24% 24% round 20px)",
-                                "inset(0% 0% 0% 0% round 0px)",
-                            ],
-                            scale: [1.08, 1.02, 1],
-                            opacity: 1,
-                        }
-                }
-                transition={{
-                    duration: 1.8,
-                    ease: [0.22, 1, 0.36, 1],
-                    times: [0, 0.45, 1],
-                }}
-                className="relative min-h-screen overflow-hidden bg-black"
-                style={{
-                    transformOrigin: "center center",
-                    willChange: "clip-path, transform",
-                }}
-            >
-                {children}
-            </motion.div>
+    useEffect(() => {
+
+        if (!loading) {
+
+            setShowReveal(true);
+
+            const timeout = setTimeout(() => {
+                setShowReveal(false);
+            }, 1800);
+
+            return () => clearTimeout(timeout);
+        }
+
+    }, [loading]);
+
+    return (
+
+        <LoadingContext.Provider value={{ isLoading: loading }}>
+
+            {/* LOADER */}
+
+            {loading && (
+                <Loader onFinish={() => setLoading(false)} />
+            )}
+
+            {/* APP */}
+
+            <PageReveal active={showReveal}>
+
+                <div
+                    className={`
+                        transition-opacity
+                        duration-500
+                        ${loading ? "opacity-0" : "opacity-100"}
+                    `}
+                >
+                    {children}
+                </div>
+
+            </PageReveal>
+
         </LoadingContext.Provider>
     );
 }

@@ -68,7 +68,7 @@ const InfoLayout = () => {
                             </span>
 
                             <div className="relative w-14 h-px overflow-hidden">
-                                <div className="absolute inset-0 bg-black/[0.08]" />
+                                <div className="absolute inset-0 bg-black/8" />
                                 <motion.div className="absolute top-0 h-px w-6 bg-black/40 blur-[0.5px]" animate={{ x: ["-120%", "250%"] }} transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }} />
                             </div>
 
@@ -79,7 +79,7 @@ const InfoLayout = () => {
                     </div>
 
                     <div className="relative mt-5 h-px overflow-hidden">
-                        <div className="absolute inset-0 bg-black/[0.06]" />
+                        <div className="absolute inset-0 bg-black/6" />
                     </div>
                 </div>
             </motion.div>

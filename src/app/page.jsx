@@ -9,10 +9,10 @@ const page = () => {
   return (
     <main className="pt-12 md:pt-12">
       <HeroSection />
-      <DevTicker />
+      {/* <DevTicker />
       <InfoLayout />
       <EducationLog />
-      <TechStack />
+      <TechStack /> */}
     </main>
   )
 }

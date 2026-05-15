@@ -181,7 +181,7 @@ const HeroSection = () => {
     }, []);
 
     return (
-        <section className="relative h-screen w-full overflow-hidden">
+        <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
                 <div ref={containerRef} className="canvas-bg" />
 

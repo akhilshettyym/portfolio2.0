@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import "@/styles/devticker.css";
 
 const primary = [
     "CPU 42% OK",
@@ -40,7 +41,7 @@ export default function WarRoomHUD() {
     const streamB = [...secondary, ...secondary];
 
     return (
-        <div className="w-full bg-white font-mono text-xs border-y border-black/10">
+        <div className="w-full bg-white font-mono text-xs border-y border-black/10 pb-10">
             <div className="flex justify-between px-3 py-1 text-[10px] bg-black/3 border-b border-black/10 uppercase tracking-widest text-black/50">
                 <button onClick={() => setPaused((p) => !p)} className="hover:text-black transition">
                     {paused ? "RUN" : "PAUSE"}

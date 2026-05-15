@@ -140,3 +140,19 @@ html.lenis body {
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
+
+/* Curtain Effect */
+@keyframes curtain-rise {
+  from {
+    transform: translateY(100px);
+    opacity: 0.3;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.curtain-section {
+  will-change: transform, opacity;
+}

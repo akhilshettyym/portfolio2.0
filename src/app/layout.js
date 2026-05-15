@@ -27,8 +27,8 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-black">
         <LenisProvider>
           {/* <LoaderWrapper> */}
-
-            {/* <NavbarWrapper>
+{/* 
+            <NavbarWrapper>
               <Navbar />
             </NavbarWrapper> */}
 

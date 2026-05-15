@@ -39,13 +39,53 @@ export default function BubbleScene() {
 
         const loader = new THREE.TextureLoader();
 
-        const texture1 = loader.load("/bubble/bubble.github.svg");
-        const texture2 = loader.load("/bubble/bubble.nodejs.svg");
+        const texture1 = loader.load("/bubbles/bubbles.animate.svg");
+        const texture2 = loader.load("/bubbles/bubbles.css.svg");
+        const texture3 = loader.load("/bubbles/bubbles.docker.svg");
+        const texture4 = loader.load("/bubbles/bubbles.express.svg");
+        const texture5 = loader.load("/bubbles/bubbles.figma.svg");
+        const texture6 = loader.load("/bubbles/bubbles.firebase.svg");
+        const texture7 = loader.load("/bubbles/bubbles.git.svg");
+        const texture8 = loader.load("/bubbles/bubbles.github.svg");
+        const texture9 = loader.load("/bubbles/bubbles.html.svg");
+        const texture10 = loader.load("/bubbles/bubbles.java.svg");
+        const texture11 = loader.load("/bubbles/bubbles.javascript.svg");
+        const texture12 = loader.load("/bubbles/bubbles.jest.svg");
+        const texture13 = loader.load("/bubbles/bubbles.kuber.svg");
+        const texture14 = loader.load("/bubbles/bubbles.nextjs.svg");
+        const texture15 = loader.load("/bubbles/bubbles.nodejs.svg");
+        const texture16 = loader.load("/bubbles/bubbles.reactjs.svg");
+        const texture17 = loader.load("/bubbles/bubbles.salesforce.svg");
+        const texture18 = loader.load("/bubbles/bubbles.sql.svg");
+        const texture19 = loader.load("/bubbles/bubbles.tailwind.svg");
+        const texture20 = loader.load("/bubbles/bubbles.tedx.svg");
+        const texture21 = loader.load("/bubbles/bubbles.threejs.svg");
 
         texture1.colorSpace = THREE.SRGBColorSpace;
         texture2.colorSpace = THREE.SRGBColorSpace;
+        texture3.colorSpace = THREE.SRGBColorSpace;
+        texture4.colorSpace = THREE.SRGBColorSpace;
+        texture5.colorSpace = THREE.SRGBColorSpace;
+        texture6.colorSpace = THREE.SRGBColorSpace;
+        texture7.colorSpace = THREE.SRGBColorSpace;
+        texture8.colorSpace = THREE.SRGBColorSpace;
+        texture9.colorSpace = THREE.SRGBColorSpace;
+        texture10.colorSpace = THREE.SRGBColorSpace;
+        texture11.colorSpace = THREE.SRGBColorSpace;
+        texture12.colorSpace = THREE.SRGBColorSpace;
+        texture13.colorSpace = THREE.SRGBColorSpace;
+        texture14.colorSpace = THREE.SRGBColorSpace;
+        texture15.colorSpace = THREE.SRGBColorSpace;
+        texture16.colorSpace = THREE.SRGBColorSpace;
+        texture17.colorSpace = THREE.SRGBColorSpace;
+        texture18.colorSpace = THREE.SRGBColorSpace;
+        texture19.colorSpace = THREE.SRGBColorSpace;
+        texture20.colorSpace = THREE.SRGBColorSpace;
+        texture21.colorSpace = THREE.SRGBColorSpace;
 
-        const textures = [texture1, texture2];
+        const textures = [texture1, texture2, texture3, texture4, texture5, texture6, texture7, texture8, texture9, texture10, texture11, texture12, texture13, texture14, texture15, texture16, texture17, texture18, texture19, texture20, texture21];
+
+
         const group = new THREE.Group();
 
         scene.add(group);

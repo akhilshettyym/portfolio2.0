@@ -9,9 +9,9 @@ import BubbleScene from '@/components/BubbleScene';
 const page = () => {
   return (
     <div>
-      {/* <HeroSection /> */}
+      <HeroSection />
       {/* <DevTicker /> */}
-      {/* <InfoLayout /> */}
+      <InfoLayout />
       {/* <EducationLog /> */}
       {/* <TechStack /> */}
 

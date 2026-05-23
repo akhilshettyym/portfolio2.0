@@ -1,20 +1,15 @@
 import React from 'react'
 import InfoLayout from '@/components/InfoLayout';
-import DevTicker from '@/components/DevTicker';
-import TechStack from '@/components/TechStack';
-import EducationLog from '@/components/EducationLog';
 import HeroSection from '@/components/HeroSection';
 import BubbleScene from '@/components/BubbleScene';
+import DevTicker from '@/components/DevTicker';
 
 const page = () => {
   return (
     <div>
-      {/* <HeroSection /> */}
-      {/* <DevTicker /> */}
-      {/* <InfoLayout /> */}
-      {/* <EducationLog /> */}
-      {/* <TechStack /> */}
-
+      <HeroSection />
+      <InfoLayout />
+      <DevTicker />
       <BubbleScene />
     </div>
   )

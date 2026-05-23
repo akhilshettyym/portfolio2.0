@@ -50,10 +50,7 @@ export default function Loader({ onFinish, duration = 3000 }) {
         scene.fog = new THREE.Fog(0xffffff, 6, 18);
 
         const camera = new THREE.PerspectiveCamera(
-            60,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
+            60, window.innerWidth / window.innerHeight, 0.1, 1000
         );
 
         camera.position.z = isMobile ? 6 : 5;
@@ -144,8 +141,7 @@ export default function Loader({ onFinish, duration = 3000 }) {
     const normalizedRadius = radius - stroke * 2;
     const circumference = normalizedRadius * 2 * Math.PI;
 
-    const strokeDashoffset =
-        circumference - (progress / 100) * circumference;
+    const strokeDashoffset = circumference - (progress / 100) * circumference;
 
     return (
         <div className="fixed inset-0 z-999 overflow-hidden bg-white">
@@ -171,10 +167,7 @@ export default function Loader({ onFinish, duration = 3000 }) {
                     <svg height={isMobile ? 160 : 200} width={isMobile ? 160 : 200} className="absolute -rotate-90">
                         <circle stroke="rgba(0,0,0,0.08)" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx="50%" cy="50%" />
                         <circle stroke="black" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%"
-                            style={{
-                                transition: "stroke-dashoffset 0.1s linear",
-                                filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))",
-                            }} />
+                            style={{ transition: "stroke-dashoffset 0.1s linear", filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))" }} />
                     </svg>
 
                     <div className={`text-black font-light tabular-nums ${isMobile ? "text-xl" : "text-2xl"}`}>

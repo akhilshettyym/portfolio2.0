@@ -1,3 +1,37 @@
+.ticker-wrapper {
+  position: relative;
+}
+
+.fade-left,
+.fade-right {
+  position: absolute;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fade-left {
+  left: 0;
+
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.fade-right {
+  right: 0;
+
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0)
+  );
+}
+
 .marquee,
 .marquee2 {
   display: flex;
@@ -14,6 +48,7 @@
 .marquee.left {
   animation: marqueeL 48s linear infinite;
 }
+
 .marquee.right {
   animation: marqueeR 48s linear infinite;
 }
@@ -21,6 +56,7 @@
 .marquee2.left {
   animation: marqueeL 72s linear infinite;
 }
+
 .marquee2.right {
   animation: marqueeR 72s linear infinite;
 }
@@ -29,6 +65,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -38,6 +75,7 @@
   from {
     transform: translateX(-50%);
   }
+
   to {
     transform: translateX(0);
   }

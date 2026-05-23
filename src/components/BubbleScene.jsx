@@ -25,12 +25,13 @@ export default function BubbleScene() {
 
         const scene = new THREE.Scene();
 
-        scene.background = new THREE.Color("#ffffff");
-
-        scene.fog = new THREE.Fog("#ffffff", 18, 38);
+        /**
+         * SOFT CENTER GLOW BACKGROUND
+         */
+        scene.fog = new THREE.Fog("#ffffff", 22, 42);
 
         const camera = new THREE.PerspectiveCamera(
-            25,
+            28,
             wrapper.clientWidth / wrapper.clientHeight,
             0.1,
             1000
@@ -41,7 +42,7 @@ export default function BubbleScene() {
         const renderer = new THREE.WebGLRenderer({
             canvas,
             antialias: true,
-            alpha: false,
+            alpha: true,
         });
 
         renderer.setSize(
@@ -53,86 +54,188 @@ export default function BubbleScene() {
             Math.min(window.devicePixelRatio, 2)
         );
 
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.outputColorSpace =
+            THREE.SRGBColorSpace;
 
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMapping =
+            THREE.ACESFilmicToneMapping;
 
-        renderer.toneMappingExposure = 1.2;
+        renderer.toneMappingExposure = 1.1;
 
+        /**
+         * CONTROLS
+         */
         const controls = new OrbitControls(
             camera,
             renderer.domElement
         );
 
         controls.enableDamping = true;
+        controls.dampingFactor = 0.045;
+
         controls.enableRotate = false;
         controls.enableZoom = false;
         controls.enablePan = false;
 
+        /**
+         * TEXTURES
+         */
         const loader = new THREE.TextureLoader();
 
-        const texturePaths = ["animate", "css", "docker", "express", "figma", "firebase", "git", "github", "html", "java", "javascript", "jest", "kuber", "nextjs", "nodejs", "reactjs", "salesforce", "sql", "tailwind", "tedx", "threejs"];
+        const texturePaths = [
+            "animate",
+            "css",
+            "docker",
+            "express",
+            "figma",
+            "firebase",
+            "git",
+            "github",
+            "html",
+            "java",
+            "javascript",
+            "jest",
+            "kuber",
+            "nextjs",
+            "nodejs",
+            "reactjs",
+            "salesforce",
+            "sql",
+            "tailwind",
+            "tedx",
+            "threejs",
+        ];
 
         const textures = texturePaths.map((name) => {
-            const texture = loader.load(`/bubbles/bubbles.${name}.svg`);
-            texture.colorSpace = THREE.SRGBColorSpace;
+            const texture = loader.load(
+                `/bubbles/bubbles.${name}.svg`
+            );
+
+            texture.colorSpace =
+                THREE.SRGBColorSpace;
+
             return texture;
         });
 
-        const group = new THREE.Group();
-        scene.add(group);
+        /**
+         * LIGHTING
+         */
+        const ambientLight = new THREE.AmbientLight(
+            0xffffff,
+            1.35
+        );
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.15);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight("#ffffff", 0.9);
-        directionalLight.position.set(10, 10, 10);
+        const directionalLight =
+            new THREE.DirectionalLight(
+                "#dbeafe",
+                1.2
+            );
+
+        directionalLight.position.set(8, 12, 10);
 
         scene.add(directionalLight);
 
+        /**
+         * GROUP
+         */
+        const group = new THREE.Group();
+        scene.add(group);
+
+        /**
+         * BUBBLES
+         */
         const bubbles = [];
 
         positions.forEach((pos, index) => {
             const radius = radii[index] ?? 0.5;
-            const randomTexture = textures[Math.floor(Math.random() * textures.length)];
-            const material = new THREE.SpriteMaterial({ map: randomTexture, transparent: true, depthWrite: false });
+
+            const randomTexture =
+                textures[
+                Math.floor(
+                    Math.random() * textures.length
+                )
+                ];
+
+            const material =
+                new THREE.SpriteMaterial({
+                    map: randomTexture,
+                    transparent: true,
+                    depthWrite: false,
+                    opacity: 0.96,
+                });
+
             const bubble = new THREE.Sprite(material);
-            const scale = radius * 2.7;
+
+            const scale = radius * 2.6;
 
             bubble.scale.set(scale, scale, scale);
-            bubble.position.set(pos.x, -25, pos.z);
-            bubble.userData = { originalPosition: { ...pos }, velocity: new THREE.Vector3(), radius, hovered: false };
-            bubbles.push(bubble);
 
+            bubble.position.set(
+                pos.x,
+                -20,
+                pos.z
+            );
+
+            bubble.userData = {
+                originalPosition: {
+                    x: pos.x,
+                    y: pos.y,
+                    z: pos.z,
+                },
+
+                velocity: new THREE.Vector3(),
+
+                radius,
+
+                hovered: false,
+
+                floatOffset: Math.random() * Math.PI * 2,
+            };
+
+            bubbles.push(bubble);
             group.add(bubble);
         });
 
-        const damping = 0.94;
-        const mouseForce = 0.025;
-        const returnStrength = 0.022;
-        const breathingSpeed = 0.0015;
-        const breathingAmplitude = 0.05;
-        const hoverScale = 2.8;
+        /**
+         * MOTION SETTINGS
+         */
+        const damping = 0.965;
+        const mouseForce = 0.012;
+        const returnStrength = 0.012;
 
-        const tempVector = new THREE.Vector3();
+        const floatSpeed = 0.0007;
+        const floatAmplitude = 0.18;
+
+        const hoverScale = 2.9;
+
         const mouse = new THREE.Vector2(-10, -10);
+
         const raycaster = new THREE.Raycaster();
 
+        const tempVector = new THREE.Vector3();
+
+        /**
+         * START ANIMATION
+         */
         function startAnimation() {
             if (animationStarted) return;
 
             animationStarted = true;
 
             bubbles.forEach((bubble, i) => {
-                const delay = i * 0.015;
+                const delay = i * 0.025;
 
                 gsap.to(bubble.position, {
                     x: bubble.userData.originalPosition.x,
                     y: bubble.userData.originalPosition.y,
                     z: bubble.userData.originalPosition.z,
-                    duration: 1,
+
+                    duration: 1.8,
                     delay,
-                    ease: "power2.out",
+
+                    ease: "power3.out",
                 });
 
                 gsap.fromTo(
@@ -142,42 +245,62 @@ export default function BubbleScene() {
                         y: 0,
                     },
                     {
-                        x: bubble.userData.radius * 2.7,
-                        y: bubble.userData.radius * 2.7,
-                        duration: 0.9,
+                        x:
+                            bubble.userData.radius *
+                            2.6,
+
+                        y:
+                            bubble.userData.radius *
+                            2.6,
+
+                        duration: 1.4,
                         delay,
-                        ease: "back.out(1.2)",
+
+                        ease: "elastic.out(1, 0.75)",
                     }
                 );
             });
 
             setTimeout(() => {
                 loadingComplete = true;
-            }, 1300);
+            }, 1800);
         }
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (
-                        entry.isIntersecting &&
-                        entry.intersectionRatio > 0.5
-                    ) {
-                        startAnimation();
-                    }
-                });
-            },
-            {
-                threshold: [0.5],
-            }
-        );
+        /**
+         * INTERSECTION
+         */
+        const observer =
+            new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (
+                            entry.isIntersecting &&
+                            entry.intersectionRatio >
+                            0.45
+                        ) {
+                            startAnimation();
+                        }
+                    });
+                },
+                {
+                    threshold: [0.45],
+                }
+            );
 
         observer.observe(wrapper);
 
+        /**
+         * MOUSE
+         */
         const onMouseMove = (event) => {
-            const rect = wrapper.getBoundingClientRect();
+            const rect =
+                wrapper.getBoundingClientRect();
 
-            const isInside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+            const isInside =
+                event.clientX >= rect.left &&
+                event.clientX <= rect.right &&
+                event.clientY >= rect.top &&
+                event.clientY <= rect.bottom;
 
             if (!isInside) {
                 mouse.x = -10;
@@ -185,32 +308,65 @@ export default function BubbleScene() {
                 return;
             }
 
-            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            mouse.x =
+                ((event.clientX - rect.left) /
+                    rect.width) *
+                2 -
+                1;
+
+            mouse.y =
+                -(
+                    (event.clientY - rect.top) /
+                    rect.height
+                ) *
+                2 +
+                1;
 
             clearTimeout(mouseMoveTimeout);
 
             mouseMoveTimeout = setTimeout(() => {
                 mouse.x = -10;
                 mouse.y = -10;
-            }, 120);
+            }, 140);
         };
 
-        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener(
+            "mousemove",
+            onMouseMove
+        );
 
+        /**
+         * SOFT COLLISIONS
+         */
         function handleCollisions() {
             for (let i = 0; i < bubbles.length; i++) {
                 const bubbleA = bubbles[i];
 
-                const radiusA = bubbleA.userData.radius;
-
-                for (let j = i + 1; j < bubbles.length; j++) {
+                for (
+                    let j = i + 1;
+                    j < bubbles.length;
+                    j++
+                ) {
                     const bubbleB = bubbles[j];
-                    const radiusB = bubbleB.userData.radius;
-                    const distance = bubbleA.position.distanceTo(bubbleB.position);
-                    const minDistance = (radiusA + radiusB) * 1.1;
 
-                    if (distance < minDistance) {
+                    const radiusA =
+                        bubbleA.userData.radius;
+
+                    const radiusB =
+                        bubbleB.userData.radius;
+
+                    const minDistance =
+                        (radiusA + radiusB) * 1.35;
+
+                    const distance =
+                        bubbleA.position.distanceTo(
+                            bubbleB.position
+                        );
+
+                    if (
+                        distance > 0 &&
+                        distance < minDistance
+                    ) {
                         tempVector.subVectors(
                             bubbleB.position,
                             bubbleA.position
@@ -218,13 +374,17 @@ export default function BubbleScene() {
 
                         tempVector.normalize();
 
-                        const pushStrength = (minDistance - distance) * 0.035;
+                        const overlap =
+                            minDistance - distance;
+
+                        const correction =
+                            overlap * 0.012;
 
                         bubbleA.position.add(
                             tempVector
                                 .clone()
                                 .multiplyScalar(
-                                    -pushStrength
+                                    -correction
                                 )
                         );
 
@@ -232,7 +392,7 @@ export default function BubbleScene() {
                             tempVector
                                 .clone()
                                 .multiplyScalar(
-                                    pushStrength
+                                    correction
                                 )
                         );
                     }
@@ -240,67 +400,119 @@ export default function BubbleScene() {
             }
         }
 
+        /**
+         * ANIMATE
+         */
         const animate = () => {
-            animationFrameId = requestAnimationFrame(animate);
+            animationFrameId =
+                requestAnimationFrame(animate);
 
-            const time = Date.now() * breathingSpeed;
+            const time =
+                performance.now() * floatSpeed;
 
             if (loadingComplete) {
                 let intersects = [];
 
-                if (mouse.x !== -10 && mouse.y !== -10) {
-                    raycaster.setFromCamera(mouse, camera);
-                    intersects = raycaster.intersectObjects(bubbles);
+                if (
+                    mouse.x !== -10 &&
+                    mouse.y !== -10
+                ) {
+                    raycaster.setFromCamera(
+                        mouse,
+                        camera
+                    );
+
+                    intersects =
+                        raycaster.intersectObjects(
+                            bubbles
+                        );
                 }
 
                 bubbles.forEach((bubble, i) => {
-                    const original = bubble.userData.originalPosition;
-                    const velocity = bubble.userData.velocity;
-                    const breathingY = Math.sin(time + i * 0.3) * breathingAmplitude;
-                    const breathingZ = Math.cos(time + i * 0.3) * breathingAmplitude * 0.35;
+                    const {
+                        originalPosition,
+                        velocity,
+                        floatOffset,
+                    } = bubble.userData;
 
-                    const returnForce =
-                        new THREE.Vector3(
-                            original.x -
-                            bubble.position.x,
+                    /**
+                     * NATURAL FLOATING
+                     */
+                    const targetY =
+                        originalPosition.y +
+                        Math.sin(
+                            time + floatOffset
+                        ) *
+                        floatAmplitude;
 
-                            original.y +
-                            breathingY -
-                            bubble.position.y,
+                    const targetX =
+                        originalPosition.x +
+                        Math.cos(
+                            time * 0.8 +
+                            floatOffset
+                        ) *
+                        0.08;
 
-                            original.z +
-                            breathingZ -
-                            bubble.position.z
-                        ).multiplyScalar(returnStrength);
+                    const targetZ =
+                        originalPosition.z +
+                        Math.sin(
+                            time * 0.65 +
+                            floatOffset
+                        ) *
+                        0.12;
 
-                    velocity.add(returnForce);
+                    /**
+                     * RETURN FORCE
+                     */
+                    velocity.x +=
+                        (targetX -
+                            bubble.position.x) *
+                        returnStrength;
 
+                    velocity.y +=
+                        (targetY -
+                            bubble.position.y) *
+                        returnStrength;
+
+                    velocity.z +=
+                        (targetZ -
+                            bubble.position.z) *
+                        returnStrength;
+
+                    /**
+                     * MOUSE INTERACTION
+                     */
                     let isHovered = false;
 
-                    if (mouse.x !== -10 && mouse.y !== -10) {
-                        intersects.forEach((hit) => {
-                            if (hit.object === bubble) {
-                                isHovered = true;
+                    intersects.forEach((hit) => {
+                        if (hit.object === bubble) {
+                            isHovered = true;
 
-                                const pushDirection =
-                                    new THREE.Vector3()
-                                        .subVectors(
-                                            bubble.position,
-                                            hit.point
-                                        )
-                                        .normalize();
-
-                                velocity.add(
-                                    pushDirection.multiplyScalar(
-                                        mouseForce
+                            const pushDirection =
+                                new THREE.Vector3()
+                                    .subVectors(
+                                        bubble.position,
+                                        hit.point
                                     )
-                                );
-                            }
-                        });
-                    }
+                                    .normalize();
 
-                    if (isHovered && !bubble.userData.hovered) {
-                        bubble.userData.hovered = true;
+                            velocity.add(
+                                pushDirection.multiplyScalar(
+                                    mouseForce
+                                )
+                            );
+                        }
+                    });
+
+                    /**
+                     * HOVER SCALE
+                     */
+                    if (
+                        isHovered &&
+                        !bubble.userData.hovered
+                    ) {
+                        bubble.userData.hovered =
+                            true;
 
                         gsap.to(bubble.scale, {
                             x:
@@ -313,97 +525,150 @@ export default function BubbleScene() {
                                     .radius *
                                 hoverScale,
 
-                            duration: 0.35,
-                            ease: "power2.out",
+                            duration: 0.4,
+                            ease: "power3.out",
                         });
                     }
 
-                    if (!isHovered && bubble.userData.hovered) {
+                    if (
+                        !isHovered &&
+                        bubble.userData.hovered
+                    ) {
                         bubble.userData.hovered =
                             false;
 
                         gsap.to(bubble.scale, {
                             x:
                                 bubble.userData
-                                    .radius * 2.7,
+                                    .radius *
+                                2.6,
 
                             y:
                                 bubble.userData
-                                    .radius * 2.7,
+                                    .radius *
+                                2.6,
 
                             duration: 0.7,
                             ease: "power3.out",
                         });
                     }
 
+                    /**
+                     * SMOOTH DAMPING
+                     */
                     velocity.multiplyScalar(damping);
 
                     bubble.position.add(velocity);
+
                     bubble.lookAt(camera.position);
                 });
 
                 handleCollisions();
             }
 
-            group.rotation.y += 0.0008;
+            /**
+             * VERY SUBTLE GROUP ROTATION
+             */
+            group.rotation.y += 0.00018;
+
             controls.update();
+
             renderer.render(scene, camera);
         };
 
         animate();
 
+        /**
+         * RESIZE
+         */
         const onResize = () => {
             const width = wrapper.clientWidth;
             const height = wrapper.clientHeight;
 
             camera.aspect = width / height;
+
             camera.updateProjectionMatrix();
+
             renderer.setSize(width, height);
 
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(
+                Math.min(
+                    window.devicePixelRatio,
+                    2
+                )
+            );
         };
 
-        resizeObserver = new ResizeObserver(onResize);
+        resizeObserver =
+            new ResizeObserver(onResize);
+
         resizeObserver.observe(wrapper);
 
+        /**
+         * CLEANUP
+         */
         return () => {
-            cancelAnimationFrame(animationFrameId);
+            cancelAnimationFrame(
+                animationFrameId
+            );
+
             clearTimeout(mouseMoveTimeout);
 
             observer.disconnect();
+
             resizeObserver?.disconnect();
 
-            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener(
+                "mousemove",
+                onMouseMove
+            );
 
             controls.dispose();
+
             renderer.dispose();
 
-            textures.forEach((texture) => texture.dispose());
-            bubbles.forEach((bubble) => { bubble.material.dispose() });
+            textures.forEach((texture) =>
+                texture.dispose()
+            );
+
+            bubbles.forEach((bubble) => {
+                bubble.material.dispose();
+            });
         };
     }, []);
 
     return (
         <section className="bubble-wrapper">
-            <div ref={wrapperRef} className="bubble-scene-panel">
+            <div
+                ref={wrapperRef}
+                className="bubble-scene-panel"
+            >
+                <div className="bubble-radial-bg" />
+
                 <canvas ref={canvasRef} />
 
                 <div className="bubble-content">
-                    <p className="bubble-kicker"> Creative 3D Motion </p>
+                    <p className="bubble-kicker">
+                        Creative 3D Motion
+                    </p>
 
-                    <h2 className="bubble-heading"> Interactive Bubble Scene </h2>
+                    <h2 className="bubble-heading">
+                        Interactive Bubble Scene
+                    </h2>
 
                     <p className="bubble-text">
-                        Smooth floating animations with
-                        real-time mouse interactions and
-                        dynamic collisions powered by
+                        Smooth floating animations
+                        with real-time mouse
+                        interactions and dynamic
+                        collisions powered by
                         Three.js.
                     </p>
 
                     <p className="bubble-text">
                         Fully responsive immersive
-                        experience with fluid motion
-                        and interactive depth.
+                        experience with fluid
+                        motion and interactive
+                        depth.
                     </p>
                 </div>
             </div>

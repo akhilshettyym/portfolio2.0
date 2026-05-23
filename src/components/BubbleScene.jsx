@@ -25,9 +25,6 @@ export default function BubbleScene() {
 
         const scene = new THREE.Scene();
 
-        /**
-         * SOFT CENTER GLOW BACKGROUND
-         */
         scene.fog = new THREE.Fog("#ffffff", 22, 42);
 
         const camera = new THREE.PerspectiveCamera(
@@ -40,35 +37,17 @@ export default function BubbleScene() {
         camera.position.z = 24;
 
         const renderer = new THREE.WebGLRenderer({
-            canvas,
-            antialias: true,
-            alpha: true,
+            canvas, antialias: true, alpha: true,
         });
 
-        renderer.setSize(
-            wrapper.clientWidth,
-            wrapper.clientHeight
-        );
+        renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        renderer.setPixelRatio(
-            Math.min(window.devicePixelRatio, 2)
-        );
-
-        renderer.outputColorSpace =
-            THREE.SRGBColorSpace;
-
-        renderer.toneMapping =
-            THREE.ACESFilmicToneMapping;
-
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.1;
 
-        /**
-         * CONTROLS
-         */
-        const controls = new OrbitControls(
-            camera,
-            renderer.domElement
-        );
+        const controls = new OrbitControls(camera, renderer.domElement);
 
         controls.enableDamping = true;
         controls.dampingFactor = 0.045;
@@ -77,86 +56,33 @@ export default function BubbleScene() {
         controls.enableZoom = false;
         controls.enablePan = false;
 
-        /**
-         * TEXTURES
-         */
         const loader = new THREE.TextureLoader();
 
-        const texturePaths = [
-            "animate",
-            "css",
-            "docker",
-            "express",
-            "figma",
-            "firebase",
-            "git",
-            "github",
-            "html",
-            "java",
-            "javascript",
-            "jest",
-            "kuber",
-            "nextjs",
-            "nodejs",
-            "reactjs",
-            "salesforce",
-            "sql",
-            "tailwind",
-            "tedx",
-            "threejs",
-        ];
+        const texturePaths = ["animate", "css", "docker", "express", "figma", "firebase", "git", "github", "html", "java", "javascript", "jest", "kuber", "nextjs", "nodejs", "reactjs", "salesforce", "sql", "tailwind", "tedx", "threejs"];
 
         const textures = texturePaths.map((name) => {
-            const texture = loader.load(
-                `/bubbles/bubbles.${name}.svg`
-            );
-
-            texture.colorSpace =
-                THREE.SRGBColorSpace;
-
+            const texture = loader.load(`/bubbles/bubbles.${name}.svg`);
+            texture.colorSpace = THREE.SRGBColorSpace;
             return texture;
         });
 
-        /**
-         * LIGHTING
-         */
-        const ambientLight = new THREE.AmbientLight(
-            0xffffff,
-            1.35
-        );
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.35);
 
         scene.add(ambientLight);
 
-        const directionalLight =
-            new THREE.DirectionalLight(
-                "#dbeafe",
-                1.2
-            );
+        const directionalLight = new THREE.DirectionalLight("#dbeafe", 1.2);
 
         directionalLight.position.set(8, 12, 10);
-
         scene.add(directionalLight);
 
-        /**
-         * GROUP
-         */
         const group = new THREE.Group();
         scene.add(group);
 
-        /**
-         * BUBBLES
-         */
         const bubbles = [];
 
         positions.forEach((pos, index) => {
             const radius = radii[index] ?? 0.5;
-
-            const randomTexture =
-                textures[
-                Math.floor(
-                    Math.random() * textures.length
-                )
-                ];
+            const randomTexture = textures[Math.floor(Math.random() * textures.length)];
 
             const material =
                 new THREE.SpriteMaterial({
@@ -167,16 +93,10 @@ export default function BubbleScene() {
                 });
 
             const bubble = new THREE.Sprite(material);
-
             const scale = radius * 2.6;
 
             bubble.scale.set(scale, scale, scale);
-
-            bubble.position.set(
-                pos.x,
-                -20,
-                pos.z
-            );
+            bubble.position.set(pos.x, -20, pos.z);
 
             bubble.userData = {
                 originalPosition: {
@@ -186,11 +106,8 @@ export default function BubbleScene() {
                 },
 
                 velocity: new THREE.Vector3(),
-
                 radius,
-
                 hovered: false,
-
                 floatOffset: Math.random() * Math.PI * 2,
             };
 
@@ -198,27 +115,16 @@ export default function BubbleScene() {
             group.add(bubble);
         });
 
-        /**
-         * MOTION SETTINGS
-         */
         const damping = 0.965;
         const mouseForce = 0.012;
         const returnStrength = 0.012;
-
         const floatSpeed = 0.0007;
         const floatAmplitude = 0.18;
-
         const hoverScale = 2.9;
-
         const mouse = new THREE.Vector2(-10, -10);
-
         const raycaster = new THREE.Raycaster();
-
         const tempVector = new THREE.Vector3();
 
-        /**
-         * START ANIMATION
-         */
         function startAnimation() {
             if (animationStarted) return;
 
@@ -234,28 +140,19 @@ export default function BubbleScene() {
 
                     duration: 1.8,
                     delay,
-
                     ease: "power3.out",
                 });
 
                 gsap.fromTo(
                     bubble.scale,
                     {
-                        x: 0,
-                        y: 0,
+                        x: 0, y: 0,
                     },
                     {
-                        x:
-                            bubble.userData.radius *
-                            2.6,
-
-                        y:
-                            bubble.userData.radius *
-                            2.6,
-
+                        x: bubble.userData.radius * 2.6,
+                        y: bubble.userData.radius * 2.6,
                         duration: 1.4,
                         delay,
-
                         ease: "elastic.out(1, 0.75)",
                     }
                 );
@@ -266,18 +163,11 @@ export default function BubbleScene() {
             }, 1800);
         }
 
-        /**
-         * INTERSECTION
-         */
         const observer =
             new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
-                        if (
-                            entry.isIntersecting &&
-                            entry.intersectionRatio >
-                            0.45
-                        ) {
+                        if (entry.isIntersecting && entry.intersectionRatio > 0.45) {
                             startAnimation();
                         }
                     });
@@ -289,18 +179,10 @@ export default function BubbleScene() {
 
         observer.observe(wrapper);
 
-        /**
-         * MOUSE
-         */
         const onMouseMove = (event) => {
-            const rect =
-                wrapper.getBoundingClientRect();
+            const rect = wrapper.getBoundingClientRect();
 
-            const isInside =
-                event.clientX >= rect.left &&
-                event.clientX <= rect.right &&
-                event.clientY >= rect.top &&
-                event.clientY <= rect.bottom;
+            const isInside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
 
             if (!isInside) {
                 mouse.x = -10;
@@ -308,19 +190,8 @@ export default function BubbleScene() {
                 return;
             }
 
-            mouse.x =
-                ((event.clientX - rect.left) /
-                    rect.width) *
-                2 -
-                1;
-
-            mouse.y =
-                -(
-                    (event.clientY - rect.top) /
-                    rect.height
-                ) *
-                2 +
-                1;
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
             clearTimeout(mouseMoveTimeout);
 
@@ -330,307 +201,134 @@ export default function BubbleScene() {
             }, 140);
         };
 
-        window.addEventListener(
-            "mousemove",
-            onMouseMove
-        );
+        window.addEventListener("mousemove", onMouseMove);
 
-        /**
-         * SOFT COLLISIONS
-         */
         function handleCollisions() {
             for (let i = 0; i < bubbles.length; i++) {
                 const bubbleA = bubbles[i];
 
-                for (
-                    let j = i + 1;
-                    j < bubbles.length;
-                    j++
-                ) {
+                for (let j = i + 1; j < bubbles.length; j++) {
                     const bubbleB = bubbles[j];
+                    const radiusA = bubbleA.userData.radius;
+                    const radiusB = bubbleB.userData.radius;
+                    const minDistance = (radiusA + radiusB) * 1.35;
+                    const distance = bubbleA.position.distanceTo(bubbleB.position);
 
-                    const radiusA =
-                        bubbleA.userData.radius;
-
-                    const radiusB =
-                        bubbleB.userData.radius;
-
-                    const minDistance =
-                        (radiusA + radiusB) * 1.35;
-
-                    const distance =
-                        bubbleA.position.distanceTo(
-                            bubbleB.position
-                        );
-
-                    if (
-                        distance > 0 &&
-                        distance < minDistance
-                    ) {
-                        tempVector.subVectors(
-                            bubbleB.position,
-                            bubbleA.position
-                        );
+                    if (distance > 0 && distance < minDistance) {
+                        tempVector.subVectors(bubbleB.position, bubbleA.position);
 
                         tempVector.normalize();
 
-                        const overlap =
-                            minDistance - distance;
+                        const overlap = minDistance - distance;
+                        const correction = overlap * 0.012;
 
-                        const correction =
-                            overlap * 0.012;
+                        bubbleA.position.add(tempVector.clone().multiplyScalar(-correction));
 
-                        bubbleA.position.add(
-                            tempVector
-                                .clone()
-                                .multiplyScalar(
-                                    -correction
-                                )
-                        );
-
-                        bubbleB.position.add(
-                            tempVector
-                                .clone()
-                                .multiplyScalar(
-                                    correction
-                                )
+                        bubbleB.position.add(tempVector.clone().multiplyScalar(correction)
                         );
                     }
                 }
             }
         }
 
-        /**
-         * ANIMATE
-         */
         const animate = () => {
-            animationFrameId =
-                requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
 
-            const time =
-                performance.now() * floatSpeed;
+            const time = performance.now() * floatSpeed;
 
             if (loadingComplete) {
                 let intersects = [];
 
-                if (
-                    mouse.x !== -10 &&
-                    mouse.y !== -10
-                ) {
-                    raycaster.setFromCamera(
-                        mouse,
-                        camera
-                    );
+                if (mouse.x !== -10 && mouse.y !== -10) {
+                    raycaster.setFromCamera(mouse, camera);
 
-                    intersects =
-                        raycaster.intersectObjects(
-                            bubbles
-                        );
+                    intersects = raycaster.intersectObjects(bubbles);
                 }
 
                 bubbles.forEach((bubble, i) => {
-                    const {
-                        originalPosition,
-                        velocity,
-                        floatOffset,
-                    } = bubble.userData;
+                    const { originalPosition, velocity, floatOffset } = bubble.userData;
+                    const targetY = originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
+                    const targetX = originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
+                    const targetZ = originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
 
-                    /**
-                     * NATURAL FLOATING
-                     */
-                    const targetY =
-                        originalPosition.y +
-                        Math.sin(
-                            time + floatOffset
-                        ) *
-                        floatAmplitude;
+                    velocity.x += (targetX - bubble.position.x) * returnStrength;
+                    velocity.y += (targetY - bubble.position.y) * returnStrength;
+                    velocity.z += (targetZ - bubble.position.z) * returnStrength;
 
-                    const targetX =
-                        originalPosition.x +
-                        Math.cos(
-                            time * 0.8 +
-                            floatOffset
-                        ) *
-                        0.08;
-
-                    const targetZ =
-                        originalPosition.z +
-                        Math.sin(
-                            time * 0.65 +
-                            floatOffset
-                        ) *
-                        0.12;
-
-                    /**
-                     * RETURN FORCE
-                     */
-                    velocity.x +=
-                        (targetX -
-                            bubble.position.x) *
-                        returnStrength;
-
-                    velocity.y +=
-                        (targetY -
-                            bubble.position.y) *
-                        returnStrength;
-
-                    velocity.z +=
-                        (targetZ -
-                            bubble.position.z) *
-                        returnStrength;
-
-                    /**
-                     * MOUSE INTERACTION
-                     */
                     let isHovered = false;
 
                     intersects.forEach((hit) => {
                         if (hit.object === bubble) {
                             isHovered = true;
-
-                            const pushDirection =
-                                new THREE.Vector3()
-                                    .subVectors(
-                                        bubble.position,
-                                        hit.point
-                                    )
-                                    .normalize();
-
-                            velocity.add(
-                                pushDirection.multiplyScalar(
-                                    mouseForce
-                                )
+                            const pushDirection = new THREE.Vector3().subVectors(bubble.position, hit.point).normalize();
+                            velocity.add(pushDirection.multiplyScalar(mouseForce)
                             );
                         }
                     });
 
-                    /**
-                     * HOVER SCALE
-                     */
-                    if (
-                        isHovered &&
-                        !bubble.userData.hovered
-                    ) {
-                        bubble.userData.hovered =
-                            true;
+                    if (isHovered && !bubble.userData.hovered) {
+                        bubble.userData.hovered = true;
 
                         gsap.to(bubble.scale, {
-                            x:
-                                bubble.userData
-                                    .radius *
-                                hoverScale,
-
-                            y:
-                                bubble.userData
-                                    .radius *
-                                hoverScale,
-
+                            x: bubble.userData.radius * hoverScale,
+                            y: bubble.userData.radius * hoverScale,
                             duration: 0.4,
                             ease: "power3.out",
                         });
                     }
 
-                    if (
-                        !isHovered &&
-                        bubble.userData.hovered
+                    if (!isHovered && bubble.userData.hovered
                     ) {
-                        bubble.userData.hovered =
-                            false;
+                        bubble.userData.hovered = false;
 
                         gsap.to(bubble.scale, {
-                            x:
-                                bubble.userData
-                                    .radius *
-                                2.6,
-
-                            y:
-                                bubble.userData
-                                    .radius *
-                                2.6,
-
+                            x: bubble.userData.radius * 2.6,
+                            y: bubble.userData.radius * 2.6,
                             duration: 0.7,
                             ease: "power3.out",
                         });
                     }
 
-                    /**
-                     * SMOOTH DAMPING
-                     */
                     velocity.multiplyScalar(damping);
-
                     bubble.position.add(velocity);
-
                     bubble.lookAt(camera.position);
                 });
 
                 handleCollisions();
             }
 
-            /**
-             * VERY SUBTLE GROUP ROTATION
-             */
             group.rotation.y += 0.00018;
-
             controls.update();
-
             renderer.render(scene, camera);
         };
 
         animate();
 
-        /**
-         * RESIZE
-         */
         const onResize = () => {
             const width = wrapper.clientWidth;
             const height = wrapper.clientHeight;
 
             camera.aspect = width / height;
-
             camera.updateProjectionMatrix();
-
             renderer.setSize(width, height);
-
-            renderer.setPixelRatio(
-                Math.min(
-                    window.devicePixelRatio,
-                    2
-                )
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)
             );
         };
 
-        resizeObserver =
-            new ResizeObserver(onResize);
-
+        resizeObserver = new ResizeObserver(onResize);
         resizeObserver.observe(wrapper);
 
-        /**
-         * CLEANUP
-         */
         return () => {
-            cancelAnimationFrame(
-                animationFrameId
-            );
-
+            cancelAnimationFrame(animationFrameId);
             clearTimeout(mouseMoveTimeout);
 
             observer.disconnect();
-
             resizeObserver?.disconnect();
-
-            window.removeEventListener(
-                "mousemove",
-                onMouseMove
-            );
-
+            window.removeEventListener("mousemove", onMouseMove);
             controls.dispose();
-
             renderer.dispose();
 
-            textures.forEach((texture) =>
-                texture.dispose()
-            );
-
+            textures.forEach((texture) => texture.dispose());
             bubbles.forEach((bubble) => {
                 bubble.material.dispose();
             });
@@ -639,10 +337,7 @@ export default function BubbleScene() {
 
     return (
         <section className="bubble-wrapper">
-            <div
-                ref={wrapperRef}
-                className="bubble-scene-panel"
-            >
+            <div ref={wrapperRef} className="bubble-scene-panel">
                 <div className="bubble-radial-bg" />
 
                 <canvas ref={canvasRef} />

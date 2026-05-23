@@ -16,7 +16,7 @@ const InfoLayout = () => {
     const parallax = useScrollParallax(0.045);
 
     return (
-        <section className="relative w-full overflow-hidden bg-white text-black -mt-20 md:-mt-28 z-20">
+        <section className="relative w-full overflow-hidden bg-white text-black -mt-20 md:-mt-25 z-20">
 
             <div className="relative z-10 px-8 md:px-16">
                 <div className="grid grid-cols-1 mt-5 md:grid-cols-12 gap-y-14 md:gap-x-8 items-end">

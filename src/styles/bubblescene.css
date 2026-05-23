@@ -1,4 +1,4 @@
-html,
+/* html,
 body {
   margin: 0;
   padding: 0;
@@ -49,6 +49,136 @@ body {
     rgba(255, 255, 255, 0.7) 40%,
     rgba(255, 255, 255, 0) 100%
   );
+}
+
+.bubble-kicker {
+  margin: 0 0 12px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: #6b7280;
+}
+
+.bubble-heading {
+  margin: 0 0 18px;
+
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1;
+
+  color: #111827;
+
+  max-width: 700px;
+}
+
+.bubble-text {
+  margin: 0 0 16px;
+
+  font-size: 1rem;
+  line-height: 1.8;
+
+  color: #4b5563;
+
+  max-width: 650px;
+}
+
+@media (max-width: 768px) {
+  .bubble-content {
+    padding: 32px 24px;
+  }
+
+  .bubble-heading {
+    font-size: clamp(2rem, 9vw, 3.5rem);
+  }
+
+  .bubble-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+} */
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #ffffff;
+}
+
+.bubble-wrapper {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.bubble-scene-panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/**
+ * RADIAL BLUE GLOW
+ */
+.bubble-radial-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(191, 219, 254, 0.9) 0%,
+      rgba(219, 234, 254, 0.65) 22%,
+      rgba(239, 246, 255, 0.35) 42%,
+      rgba(255, 255, 255, 0.12) 62%,
+      rgba(255, 255, 255, 1) 100%
+    );
+
+  filter: blur(6px);
+  transform: scale(1.08);
+}
+
+.bubble-scene-panel canvas {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.bubble-content {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  padding: 64px;
+
+  box-sizing: border-box;
+
+  z-index: 5;
+
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.78) 42%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  /* backdrop-filter: blur(8px); */
 }
 
 .bubble-kicker {

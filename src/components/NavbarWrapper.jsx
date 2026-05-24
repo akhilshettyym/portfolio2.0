@@ -5,9 +5,9 @@ import { LoadingContext } from "./LoaderWrapper";
 
 export default function NavbarWrapper({ children }) {
     const context = useContext(LoadingContext);
-    const isLoading = context?.isLoading ?? true;
+    const navReady = context?.navReady ?? false;
 
-    if (isLoading) {
+    if (!navReady) {
         return null;
     }
 

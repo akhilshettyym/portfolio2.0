@@ -37,17 +37,12 @@ export default function DevTicker() {
 
                 <div className="dev-marquee flex items-center whitespace-nowrap">
                     {stream.map((item, i) => (
-                        <div
-                            key={i}
-                            className="flex items-center shrink-0"
-                        >
+                        <div key={i} className="flex items-center shrink-0">
                             <span className="mx-6 text-[8px] uppercase tracking-[0.22em] text-black/45 font-medium">
                                 {item}
                             </span>
 
-                            <span className="text-black/15 text-[10px]">
-                                +
-                            </span>
+                            <span className="text-black/15 text-[10px]"> + </span>
                         </div>
                     ))}
                 </div>

@@ -1,189 +1,52 @@
-// "use client";
-
-// import { useState } from "react";
-// import "@/styles/devticker.css";
-
-// const primary = [
-//     "CPU 42% OK",
-//     "MEM 68% OK",
-//     "LATENCY 98ms",
-//     "DEPLOY PROD → SYNCED",
-//     "BUILD PASS",
-//     "TEST PASS",
-//     "API HEALTHY",
-//     "DB OK",
-//     "QUEUE NORMAL",
-//     "REQUESTS 1.3K/s",
-//     "CACHE HIT 92%",
-//     "VERCEL EDGE OK",
-//     "GITHUB ACTIONS RUNNING",
-//     "WORKS_ON_MY_MACHINE",
-// ];
-
-// const secondary = [
-//     "WARN MEM SPIKE NODE-3",
-//     "TRACE: auth-service 120ms",
-//     "DEBUG cache-miss user-session",
-//     "CORS intermittent block",
-//     "retry queue latency rising",
-//     "minor GC pressure detected",
-//     "webpack rebuild slow",
-//     "edge function cold start",
-//     "log ingestion delayed",
-//     "synthetic test jitter detected",
-// ];
-
-// export default function WarRoomHUD() {
-//     const [paused, setPaused] = useState(false);
-//     const [dir, setDir] = useState("left");
-
-//     const streamA = [...primary, ...primary];
-//     const streamB = [...secondary, ...secondary];
-
-//     return (
-//         <div className="w-full bg-[#ffffff] backdrop-blur-md font-mono text-xs border-y border-black/10">
-//             <div className="flex justify-between text-[10px] bg-black/3 border-b border-black/10 uppercase tracking-widest text-black/50">
-//                 <button onClick={() => setPaused((p) => !p)} className="hover:text-black transition">
-//                     {paused ? "RUN" : "PAUSE"}
-//                 </button>
-
-//                 <button onClick={() => setDir((d) => (d === "left" ? "right" : "left"))} className="hover:text-black transition"> DIR {dir === "left" ? "←" : "→"}
-//                 </button>
-//             </div>
-
-//             <div className="relative h-4 overflow-hidden border-b border-black/10">
-//                 <div className={`marquee ${dir} ${paused ? "paused" : ""}`}>
-//                     {streamA.map((t, i) => (
-//                         <span key={i} className="text-[10px] text-black/70 opacity-80 hover:text-black hover:opacity-100 transition"> {t} </span>
-//                     ))}
-//                 </div>
-//             </div>
-
-//             <div className="relative h-4 overflow-hidden">
-//                 <div className={`marquee2 ${dir === "left" ? "right" : "left"
-//                     } ${paused ? "paused" : ""}`}>
-//                     {streamB.map((t, i) => (
-//                         <span key={i} className="text-[10px] text-black/40 opacity-60"> {t} </span>
-//                     ))}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
-
 "use client";
 
-import { useState } from "react";
 import "@/styles/devticker.css";
 
-const primary = [
-    "CPU 42% OK",
-    "MEM 68% OK",
-    "LATENCY 98ms",
-    "DEPLOY PROD → SYNCED",
-    "BUILD PASS",
-    "TEST PASS",
-    "API HEALTHY",
-    "DB OK",
-    "QUEUE NORMAL",
-    "REQUESTS 1.3K/s",
-    "CACHE HIT 92%",
-    "VERCEL EDGE OK",
-    "GITHUB ACTIONS RUNNING",
-    "WORKS_ON_MY_MACHINE",
+const items = [
+    "BUILD STATUS — STABLE",
+    "API RESPONSE 124ms",
+    "DEPLOYMENT SYNCHRONIZED",
+    "CACHE HIT RATE 92%",
+    "EDGE FUNCTIONS ACTIVE",
+    "AUTH SERVICE HEALTHY",
+    "CI/CD PIPELINE PASSING",
+    "REQUEST LOAD NORMAL",
+    "SCALABLE SYSTEM DESIGN",
+    "THREE.JS RENDER LOOP ACTIVE",
+    "NEXT.JS APP ROUTER READY",
+    "PRODUCTION BUILD OPTIMIZED",
+    "INTERACTIVE UI SYSTEMS",
+    "REAL-TIME MOTION ENGINE",
+    "DATABASE CONNECTION SECURE",
+    "PERFORMANCE SCORE — HIGH",
+    "TYPE-SAFE APPLICATION LAYER",
+    "FULL STACK ARCHITECTURE",
+    "SYSTEM LATENCY WITHIN RANGE",
+    "SHIPPING RELIABLE EXPERIENCES",
 ];
 
-const secondary = [
-    "WARN MEM SPIKE NODE-3",
-    "TRACE: auth-service 120ms",
-    "DEBUG cache-miss user-session",
-    "CORS intermittent block",
-    "retry queue latency rising",
-    "minor GC pressure detected",
-    "webpack rebuild slow",
-    "edge function cold start",
-    "log ingestion delayed",
-    "synthetic test jitter detected",
-];
-
-export default function WarRoomHUD() {
-    const [paused, setPaused] = useState(false);
-    const [dir, setDir] = useState("left");
-
-    const streamA = [...primary, ...primary];
-    const streamB = [...secondary, ...secondary];
+export default function DevTicker() {
+    const stream = [...items, ...items];
 
     return (
-        <div className="w-full bg-[#ffffff] backdrop-blur-md font-mono text-xs border-y border-black/10">
-            <div className="flex justify-between text-[10px] bg-black/3 border-b border-black/10 uppercase tracking-widest text-black/50">
-                <button
-                    onClick={() =>
-                        setPaused((p) => !p)
-                    }
-                    className="hover:text-black transition"
-                >
-                    {paused ? "RUN" : "PAUSE"}
-                </button>
+        <section className="w-full border-y border-black/8 bg-white overflow-hidden">
+            <div className="relative h-9 flex items-center">
+                <div className="absolute left-0 top-0 h-full w-24 bg-linear-to-r from-white via-white/95 to-transparent z-10 pointer-events-none" />
 
-                <button
-                    onClick={() =>
-                        setDir((d) =>
-                            d === "left"
-                                ? "right"
-                                : "left"
-                        )
-                    }
-                    className="hover:text-black transition"
-                >
-                    DIR{" "}
-                    {dir === "left" ? "←" : "→"}
-                </button>
-            </div>
+                <div className="absolute right-0 top-0 h-full w-24 bg-linear-to-l from-white via-white/95 to-transparent z-10 pointer-events-none" />
 
-            <div className="ticker-wrapper relative h-4 overflow-hidden border-b border-black/10">
-                <div className="fade-left" />
-                <div className="fade-right" />
+                <div className="dev-marquee flex items-center whitespace-nowrap">
+                    {stream.map((item, i) => (
+                        <div key={i} className="flex items-center shrink-0">
+                            <span className="mx-6 text-[8px] uppercase tracking-[0.22em] text-black/45 font-medium">
+                                {item}
+                            </span>
 
-                <div
-                    className={`marquee ${dir} ${
-                        paused ? "paused" : ""
-                    }`}
-                >
-                    {streamA.map((t, i) => (
-                        <span
-                            key={i}
-                            className="text-[10px] text-black/70 opacity-80 hover:text-black hover:opacity-100 transition"
-                        >
-                            {t}
-                        </span>
+                            <span className="text-black/15 text-[10px]"> + </span>
+                        </div>
                     ))}
                 </div>
             </div>
-
-            <div className="ticker-wrapper relative h-4 overflow-hidden">
-                <div className="fade-left" />
-                <div className="fade-right" />
-
-                <div
-                    className={`marquee2 ${
-                        dir === "left"
-                            ? "right"
-                            : "left"
-                    } ${
-                        paused ? "paused" : ""
-                    }`}
-                >
-                    {streamB.map((t, i) => (
-                        <span
-                            key={i}
-                            className="text-[10px] text-black/40 opacity-60"
-                        >
-                            {t}
-                        </span>
-                    ))}
-                </div>
-            </div>
-        </div>
+        </section>
     );
 }

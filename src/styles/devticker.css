@@ -1,87 +1,14 @@
-.ticker-wrapper {
-  position: relative;
+.dev-marquee {
+    width: max-content;
+    animation: devTickerMove 28s linear infinite;
 }
 
-.fade-left,
-.fade-right {
-  position: absolute;
-  top: 0;
-  width: 80px;
-  height: 100%;
-  z-index: 2;
-  pointer-events: none;
-}
+@keyframes devTickerMove {
+    from {
+        transform: translateX(0);
+    }
 
-.fade-left {
-  left: 0;
-
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
-}
-
-.fade-right {
-  right: 0;
-
-  background: linear-gradient(
-    to left,
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
-}
-
-.marquee,
-.marquee2 {
-  display: flex;
-  white-space: nowrap;
-  gap: 2.5rem;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  align-items: center;
-  will-change: transform;
-}
-
-.marquee.left {
-  animation: marqueeL 48s linear infinite;
-}
-
-.marquee.right {
-  animation: marqueeR 48s linear infinite;
-}
-
-.marquee2.left {
-  animation: marqueeL 72s linear infinite;
-}
-
-.marquee2.right {
-  animation: marqueeR 72s linear infinite;
-}
-
-@keyframes marqueeL {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes marqueeR {
-  from {
-    transform: translateX(-50%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-.marquee.paused,
-.marquee2.paused {
-  animation-play-state: paused;
+    to {
+        transform: translateX(-50%);
+    }
 }

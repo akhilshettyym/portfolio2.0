@@ -7,7 +7,6 @@ import gsap from "gsap";
 
 export default function Loader({ onFinish, duration = 3000 }) {
     const containerRef = useRef(null);
-    const canvasRef = useRef(null);
 
     const [progress, setProgress] = useState(0);
     const [done, setDone] = useState(false);

@@ -26,15 +26,15 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
         <LenisProvider>
-          <LoaderWrapper>
+          {/* <LoaderWrapper> */}
 
-            <NavbarWrapper>
+            {/* <NavbarWrapper>
               <Navbar />
-            </NavbarWrapper>
+            </NavbarWrapper> */}
 
             <main className="pt-25"> {children} </main>
 
-          </LoaderWrapper>
+          {/* </LoaderWrapper> */}
         </LenisProvider>
       </body>
     </html>

@@ -90,7 +90,7 @@ export default function GithubGraphQl({ username = "akhilshettyym" }) {
     });
 
     return (
-        <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="w-full p-20">
+        <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="w-full p-8">
             <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                     <h2 className="text-[20px] font-semibold tracking-tight text-black uppercase"> Contribution activity </h2>
@@ -119,9 +119,9 @@ export default function GithubGraphQl({ username = "akhilshettyym" }) {
                 </div>
             </div>
 
-            <div className="min-h-[340px] w-full rounded-2xl border border-zinc-200 p-6 md:p-8">
+            <div className="min-h-70 w-full rounded-2xl border border-zinc-200 p-6 md:p-8">
                 {loading ? (
-                    <div className="flex h-[260px] items-center justify-center">
+                    <div className="flex h-65 items-center justify-center">
                         <div className="flex items-center gap-3">
                             <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-black" />
                             <p className="text-sm font-medium text-zinc-500">
@@ -144,9 +144,9 @@ export default function GithubGraphQl({ username = "akhilshettyym" }) {
                                 <span> Fri </span>
                             </div>
 
-                            <div className="grid flex-1 grid-cols-53 gap-[4px]">
+                            <div className="grid flex-1 grid-cols-53 gap-1">
                                 {weeks.map((week, weekIndex) => (
-                                    <div key={weekIndex} className="grid grid-rows-7 gap-[4px]">
+                                    <div key={weekIndex} className="grid grid-rows-7 gap-1">
                                         {week.contributionDays.map((day, dayIndex) => (
                                             <motion.div key={day.date}
                                                 initial={{ opacity: 0, scale: 0.85 }}
@@ -167,9 +167,9 @@ export default function GithubGraphQl({ username = "akhilshettyym" }) {
 
                             <div className="flex items-center gap-2">
                                 <span> Less </span>
-                                <div className="flex gap-[3px]">
+                                <div className="flex gap-0.75">
                                     {["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"].map((color) => (
-                                        <div key={color} className="h-[12px] w-[12px] rounded-[2px]" style={{ backgroundColor: color }} />
+                                        <div key={color} className="h-3 w-3 rounded-xs" style={{ backgroundColor: color }} />
                                     ))}
                                 </div>
                                 <span> More </span>

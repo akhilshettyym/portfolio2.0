@@ -1,9 +1,10 @@
 import React from 'react'
+import GithubGraphQl from './GithubGraphQl';
 
 const WorkLayout = () => {
   return (
     <div>
-      WORK LAYOUT
+      <GithubGraphQl />
     </div>
   )
 }

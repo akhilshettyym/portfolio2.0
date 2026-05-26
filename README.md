@@ -34,3 +34,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+I want this ID to be designed in such a way that the I want the robot like a lego character which should be in complete transparent glass type, no colors on it. I want it complete transparent. And this card should be hold technical certificates title. I want this to blend in with the card and the character should resemble with the text, and it should justify the title, And at the bottom left I want a bar code type of thing which will tell the time line. In corporate this cleanly with the said image. I want the above to be afixed into the card frame what I'll give. I want this lego character to be subtle and transparent, And if I place any text behind this I should be able to see that. Generate an image according to this.

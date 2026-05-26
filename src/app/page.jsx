@@ -8,10 +8,10 @@ import CardStackReveal from '@/components/CardStackReveal';
 const page = () => {
   return (
     <div>
-      {/* <HeroSection />
+      <HeroSection />
       <InfoLayout />
       <DevTicker />
-      <BubbleScene /> */}
+      <BubbleScene />
       <CardStackReveal />
     </div>
   )

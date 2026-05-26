@@ -113,15 +113,15 @@ function FloatingCard({ card, index, progress }) {
     const whiteWash = useTransform(finalized, [0, 1], [0, 1]);
 
     return (
-        <motion.div className="absolute left-1/2 top-1/2 w-85 -translate-x-1/2 -translate-y-1/2" style={{ x: stateX, y: stateY, scale: stateScale, opacity: stateOpacity, rotate: stateRotate, filter: blurFilter, zIndex: 20 + index }}>
-            <motion.div className="relative overflow-hidden rounded-[1.5rem] border backdrop-blur-3xl" style={{ background, borderColor: border, boxShadow: shadow }}>
+        <motion.div className="absolute left-1/2 top-1/2 w-75 -translate-x-1/2 -translate-y-1/2" style={{ x: stateX, y: stateY, scale: stateScale, opacity: stateOpacity, rotate: stateRotate, filter: blurFilter, zIndex: 20 + index }}>
+            <motion.div className="relative overflow-hidden rounded-3xl border backdrop-blur-3xl" style={{ background, borderColor: border, boxShadow: shadow }}>
                 <motion.div className="absolute inset-0 bg-white" style={{ opacity: whiteWash }} />
 
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.95),transparent_60%)]" />
 
                 <div className="absolute inset-px rounded-[calc(2.6rem-1px)] border border-white/30" />
 
-                <div className="relative flex min-h-125 flex-col justify-between p-9">
+                <div className="relative flex min-h-110 flex-col justify-between p-9">
                     <div className="flex items-start justify-between">
                         <h2 className="text-[3.6rem] font-semibold tracking-tight text-black">
                             {/* {card.amount} */}
@@ -178,14 +178,14 @@ export default function ScrollCardStackReveal({ cards = DEFAULT_CARDS }) {
     const backgroundFilter = useMotionTemplate`blur(${backgroundBlur}px)`;
 
     return (
-        <section ref={sectionRef} className="relative h-[500vh] bg-white">
+        <section ref={sectionRef} className="relative h-[425vh] bg-white">
             <div className="sticky top-0 h-screen overflow-hidden bg-white">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)]" />
 
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                     <motion.div className="flex flex-col items-center gap-2 text-center" style={{ filter: backgroundFilter }}>
                         <div className="text-[clamp(2rem,4vw,4rem)] font-black uppercase text-black/50">
-                            {/* ACHIEVEMENTS */}
+                            ACHIEVEMENTS
                         </div>
                     </motion.div>
                 </div>

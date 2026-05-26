@@ -3,7 +3,7 @@ import DevTicker from '@/components/DevTicker';
 import InfoLayout from '@/components/InfoLayout';
 import HeroSection from '@/components/HeroSection';
 import BubbleScene from '@/components/BubbleScene';
-import ScrollCardStackReveal from '@/components/ScrollCardStackReveal';
+import CardStackReveal from '@/components/CardStackReveal';
 
 const page = () => {
   return (
@@ -12,7 +12,7 @@ const page = () => {
       <InfoLayout />
       <DevTicker />
       <BubbleScene /> */}
-      <ScrollCardStackReveal />
+      <CardStackReveal />
     </div>
   )
 }

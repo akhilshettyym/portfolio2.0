@@ -334,36 +334,82 @@ export default function BubbleScene() {
     }, []);
 
     return (
-        <section className="bubble-wrapper" style={{ height: "800px", overflow: "hidden" }}>
+        <section className="bubble-wrapper" style={{ height: "600px" }}>
             <div ref={wrapperRef} className="bubble-scene-panel" style={{ height: "100%", position: "relative", borderRadius: "36px", overflow: "hidden", background: `adial-gradient(circle at top, rgba(255,255,255,0.95) 0%, rgba(244,247,255,0.82) 35%, rgba(235,242,255,0.55) 65%, rgba(255,255,255,0.18) 100%)` }}>
                 <div className="bubble-radial-bg" style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at center, rgba(191,219,254,0.18), rgba(255,255,255,0))` }} />
 
                 <canvas ref={canvasRef} />
 
                 <div className="bubble-content">
-                    <p className="bubble-kicker">
-                        Creative 3D Motion
-                    </p>
+                    <div className="fixed bottom-0 left-0 p-10">
 
-                    <h2 className="bubble-heading">
-                        Interactive Bubble Scene
-                    </h2>
+                        <div className="border-b border-black/10 pb-3">
+                            <div className="grid grid-cols-[100px_1fr]">
+                                <div className="flex items-start">
+                                    <p className="text-[35px] font-semibold text-gray-300"> 01. </p>
+                                </div>
 
-                    <p className="bubble-text">
-                        Smooth floating animations
-                        with real-time mouse
-                        interactions and dynamic
-                        collisions powered by
-                        Three.js.
-                    </p>
+                                <div className="space-y-1">
+                                    <p className="text-[20px] font-bold text-gray-600"> Systems &amp; Ecosystem </p>
 
-                    <p className="bubble-text">
-                        Fully responsive immersive
-                        experience with fluid
-                        motion and interactive
-                        depth.
-                    </p>
+                                    <div className="flex flex-wrap gap-1">
+                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                            <p className="text-[10px] leading-none text-gray-400"> a.
+                                                <span className="text-slate-500"> Interactive Interfaces </span>
+                                            </p>
+                                        </div>
+
+                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                            <p className="text-[10px] leading-none text-gray-400"> b.
+                                                <span className="text-slate-500"> Services &amp; API's </span>
+                                            </p>
+                                        </div>
+
+                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                            <p className="text-[10px] leading-none text-gray-400"> c.
+                                                <span className="text-slate-500"> Cloud Infrastructure </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="border-b border-black/10 pb-3">
+                            <div className="grid grid-cols-[100px_1fr]">
+                                <div className="flex items-start">
+                                    <p className="text-[35px] font-semibold text-gray-400"> 02. </p>
+                                </div>
+
+                                <div className="space-y-1 mt-2">
+                                    <p className="text-[20px] font-bold text-gray-600"> Core Architecture Framework </p>
+
+                                    <div className="flex flex-wrap gap-1">
+                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                            <p className="text-[10px] leading-none text-gray-400"> a.
+                                                <span className="text-slate-500"> Distributed Environments </span>
+                                            </p>
+                                        </div>
+
+                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                            <p className="text-[10px] leading-none text-gray-400"> b.
+                                                <span className="text-slate-500"> Client-Side Interfaces </span>
+                                            </p>
+                                        </div>
+
+                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                            <p className="text-[10px] leading-none text-gray-400"> c.
+                                                <span className="text-slate-500"> Automated Deployments </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
         </section>
     );

@@ -1,4 +1,17 @@
-export const radii = [
+export const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export const WORDS = ["CORE JAVA", "DATA STRUCTURES", "MERN STACK", "VERSION CONTROL", "SALESFORCE", "API INTEGRATIONS", "FRAMEWORKS", "ARCHITECTURES", "DEPLOYMENT"];
+
+export const DEV_TICKERS = ["BUILD STATUS — STABLE", "API RESPONSE 124ms", "DEPLOYMENT SYNCHRONIZED", "CACHE HIT RATE 92%", "EDGE FUNCTIONS ACTIVE", "AUTH SERVICE HEALTHY", "CI/CD PIPELINE PASSING", "REQUEST LOAD NORMAL", "SCALABLE SYSTEM DESIGN", "THREE.JS RENDER LOOP ACTIVE", "NEXT.JS APP ROUTER READY", "PRODUCTION BUILD OPTIMIZED", "INTERACTIVE UI SYSTEMS", "REAL-TIME MOTION ENGINE", "DATABASE CONNECTION SECURE", "PERFORMANCE SCORE — HIGH", "TYPE-SAFE APPLICATION LAYER", "FULL STACK ARCHITECTURE", "SYSTEM LATENCY WITHIN RANGE", "SHIPPING RELIABLE EXPERIENCES"];
+
+export const FADEUP = {
+    initial: { opacity: 0, y: 40 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    viewport: { once: true, amount: 0.15 },
+};
+
+export const RADII = [
     1, 0.6, 0.8, 0.4, 0.9, 0.7, 0.9, 0.3, 0.2, 0.5,
     0.6, 0.4, 0.5, 0.6, 0.7, 0.3, 0.4, 0.8, 0.7, 0.5,
     0.4, 0.6, 0.35, 0.38, 0.9, 0.3, 0.6, 0.4, 0.2, 0.35,
@@ -12,7 +25,7 @@ export const radii = [
     0.3
 ];
 
-export const positions = [
+export const POSITIONS = [
     { x: 0, y: 0, z: 0 }, { x: 1.2, y: 0.9, z: -0.5 }, { x: 1.8, y: -0.3, z: 0 }, { x: -1, y: -1, z: 0 }, { x: -1, y: 1.62, z: 0 }, { x: -1.65, y: 0, z: -0.4 }, { x: -2.13, y: -1.54, z: -0.4 }, { x: 0.8, y: 0.94, z: 0.3 }, { x: 0.5, y: -1, z: 1.2 }, { x: -0.16, y: -1.2, z: 0.9 },
 
     { x: 1.5, y: 1.2, z: 0.8 }, { x: 0.5, y: -1.58, z: 1.4 }, { x: -1.5, y: 1, z: 1.15 }, { x: -1.5, y: -1.5, z: 0.99 }, { x: -1.5, y: -1.5, z: -1.9 }, { x: 1.85, y: 0.8, z: 0.05 }, { x: 1.5, y: -1.2, z: -0.75 }, { x: 0.9, y: -1.62, z: 0.22 }, { x: 0.45, y: 2, z: 0.65 }, { x: 2.5, y: 1.22, z: -0.2 },

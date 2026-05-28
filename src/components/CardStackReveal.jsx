@@ -7,26 +7,24 @@ const DEFAULT_CARDS = [
     {
         amount: "$12B",
         badge: "SEQUOIA",
-        caption: "7 Portfolio companies supported",
+        caption: "",
     },
     {
         amount: "$14B",
         badge: "A16Z",
-        caption: "9 Portfolio companies supported",
+        caption: "",
     },
     {
         amount: "$8B",
         badge: "FOUNDERS",
-        caption: "5 Portfolio companies supported",
+        caption: "",
     },
     {
         amount: "$4B",
         badge: "YC",
-        caption: "7 Portfolio companies supported",
+        caption: "",
     },
 ];
-
-const BACKGROUND_LINES = ["MODERN INTERFACES", "MOTION SYSTEMS", "PREMIUM EXPERIENCES"];
 
 function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -115,18 +113,18 @@ function FloatingCard({ card, index, progress }) {
     const whiteWash = useTransform(finalized, [0, 1], [0, 1]);
 
     return (
-        <motion.div className="absolute left-1/2 top-1/2 w-85 -translate-x-1/2 -translate-y-1/2" style={{ x: stateX, y: stateY, scale: stateScale, opacity: stateOpacity, rotate: stateRotate, filter: blurFilter, zIndex: 20 + index }}>
-            <motion.div className="relative overflow-hidden rounded-[2.6rem] border backdrop-blur-3xl" style={{ background, borderColor: border, boxShadow: shadow }}>
+        <motion.div className="absolute left-1/2 top-1/2 w-75 -translate-x-1/2 -translate-y-1/2" style={{ x: stateX, y: stateY, scale: stateScale, opacity: stateOpacity, rotate: stateRotate, filter: blurFilter, zIndex: 20 + index }}>
+            <motion.div className="relative overflow-hidden rounded-3xl border backdrop-blur-3xl" style={{ background, borderColor: border, boxShadow: shadow }}>
                 <motion.div className="absolute inset-0 bg-white" style={{ opacity: whiteWash }} />
 
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.95),transparent_60%)]" />
 
                 <div className="absolute inset-px rounded-[calc(2.6rem-1px)] border border-white/30" />
 
-                <div className="relative flex min-h-140 flex-col justify-between p-9">
+                <div className="relative flex min-h-110 flex-col justify-between p-9">
                     <div className="flex items-start justify-between">
                         <h2 className="text-[3.6rem] font-semibold tracking-tight text-black">
-                            {card.amount}
+                            {/* {card.amount} */}
                         </h2>
 
                         <div className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.32em] text-black/60">
@@ -134,26 +132,20 @@ function FloatingCard({ card, index, progress }) {
                         </div>
                     </div>
 
-                    <div className="flex flex-1 items-center justify-center">
-                        <div className="flex h-28 w-28 items-center justify-center rounded-4xl border border-black/10 bg-white/60 backdrop-blur-2xl">
-                            <div className="h-12 w-12 rounded-full border border-black/15" />
-                        </div>
-                    </div>
-
                     <div>
                         <p className="max-w-[15ch] text-xl leading-10 text-black/60">
-                            {card.caption}
+                            {/* {card.caption} */}
                         </p>
 
                         <div className="mt-7 h-px w-full bg-black/10" />
 
                         <div className="mt-5 flex items-center justify-between">
                             <span className="text-[11px] uppercase tracking-[0.3em] text-black/40">
-                                Portfolio
+                                {/* Portfolio */}
                             </span>
 
                             <span className="text-[11px] uppercase tracking-[0.3em] text-black/40">
-                                2026
+                                {/* 2026 */}
                             </span>
                         </div>
                     </div>
@@ -163,7 +155,8 @@ function FloatingCard({ card, index, progress }) {
     );
 }
 
-export default function ScrollCardStackReveal({ cards = DEFAULT_CARDS }) {
+const CardStackReveal = ({ cards = DEFAULT_CARDS }) => {
+    
     const sectionRef = React.useRef(null);
 
     const { scrollYProgress } = useScroll({
@@ -186,17 +179,15 @@ export default function ScrollCardStackReveal({ cards = DEFAULT_CARDS }) {
     const backgroundFilter = useMotionTemplate`blur(${backgroundBlur}px)`;
 
     return (
-        <section ref={sectionRef} className="relative h-[520vh] bg-white">
+        <section ref={sectionRef} className="relative h-[425vh] bg-white">
             <div className="sticky top-0 h-screen overflow-hidden bg-white">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)]" />
 
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                     <motion.div className="flex flex-col items-center gap-2 text-center" style={{ filter: backgroundFilter }}>
-                        {BACKGROUND_LINES.map((line) => (
-                            <div key={line} className="text-[clamp(2rem,4vw,4rem)] font-black uppercase tracking-[0.22em] text-black/10">
-                                {line}
-                            </div>
-                        ))}
+                        <div className="text-[clamp(2rem,4vw,4rem)] font-black uppercase text-black/50">
+                            ACHIEVEMENTS
+                        </div>
                     </motion.div>
                 </div>
 
@@ -211,3 +202,5 @@ export default function ScrollCardStackReveal({ cards = DEFAULT_CARDS }) {
         </section>
     );
 }
+
+export default CardStackReveal;

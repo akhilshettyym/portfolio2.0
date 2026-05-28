@@ -1,24 +1,14 @@
 "use client";
 
+import { WORDS } from "@/utils/basic-utils";
 import { useState, useEffect } from "react";
 
-export default function WordCarousel() {
+const WordCarousel = () => {
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isResetting, setIsResetting] = useState(false);
 
-    const words = [
-        "CORE JAVA",
-        "DATA STRUCTURES",
-        "MERN STACK",
-        "VERSION CONTROL",
-        "SALESFORCE",
-        "API INTEGRATIONS",
-        "FRAMEWORKS",
-        "ARCHITECTURES",
-        "DEPLOYMENT",
-    ];
-
-    const loopedWords = [...words, ...words];
+    const loopedWords = [...WORDS, ...WORDS];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -29,7 +19,7 @@ export default function WordCarousel() {
     }, []);
 
     useEffect(() => {
-        if (currentIndex === words.length) {
+        if (currentIndex === WORDS.length) {
             const resetTimeout = setTimeout(() => {
                 setIsResetting(true);
                 setCurrentIndex(0);
@@ -41,7 +31,7 @@ export default function WordCarousel() {
 
             return () => clearTimeout(resetTimeout);
         }
-    }, [currentIndex, words.length]);
+    }, [currentIndex, WORDS.length]);
 
     return (
         <span className="carousel">
@@ -50,8 +40,7 @@ export default function WordCarousel() {
                     const isActive = index === currentIndex;
 
                     return (
-                        <span key={index} className={`carousel-item ${isActive ? "active" : "inactive"
-                            }`}>
+                        <span key={index} className={`carousel-item ${isActive ? "active" : "inactive"}`}>
                             {word}
                         </span>
                     );
@@ -60,3 +49,5 @@ export default function WordCarousel() {
         </span>
     );
 }
+
+export default WordCarousel;

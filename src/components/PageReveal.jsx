@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function PageReveal({ active, children }) {
+const PageReveal = ({ active, children }) => {
 
     return (
         <>
@@ -21,3 +21,5 @@ export default function PageReveal({ active, children }) {
         </>
     );
 }
+
+export default PageReveal;

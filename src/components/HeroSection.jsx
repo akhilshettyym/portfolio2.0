@@ -1,12 +1,12 @@
 "use client";
 
 import "@/styles/clouds.css";
-import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import WordCarousel from "./WordCarousel";
-import { motion } from "framer-motion";
 import GlitchText from "./GlitchText";
+import { motion } from "framer-motion";
+import WordCarousel from "./WordCarousel";
+import { useEffect, useRef } from "react";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 const HeroSection = () => {
 
@@ -14,8 +14,7 @@ const HeroSection = () => {
 
     useEffect(() => {
         let camera, scene, renderer;
-        let mouseX = 0,
-            mouseY = 0;
+        let mouseX = 0, mouseY = 0;
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
         let start_time = Date.now();
@@ -63,7 +62,6 @@ const HeroSection = () => {
         };
 
         const container = containerRef.current;
-
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(
@@ -74,11 +72,7 @@ const HeroSection = () => {
         );
         camera.position.z = 6000;
 
-        renderer = new THREE.WebGLRenderer({
-            alpha: true,
-            antialias: false,
-        });
-
+        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
         container.appendChild(renderer.domElement);
 
@@ -125,9 +119,7 @@ const HeroSection = () => {
                 geometries.push(cloned);
             }
 
-            const mergedGeo =
-                BufferGeometryUtils.mergeGeometries(geometries);
-
+            const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
             const mesh = new THREE.Mesh(mergedGeo, material);
             mesh.renderOrder = 2;
 
@@ -189,19 +181,19 @@ const HeroSection = () => {
                     <span className="line dim uppercase"> BUILD SYSTEMS <br /></span>
                     <span className="line dim uppercase"> OPTIMIZE SCALE × LATENCY <br /></span>
                     <span className="line strong">
-                        <span className="text-md uppercase tracking-tight">OPS</span> <WordCarousel />
+                        <span className="text-md uppercase tracking-tight"> OPS </span> <WordCarousel />
                     </span>
 
 
                     <a className="btn">
                         <span className="label">
-                            <span className="main">See how we create outcomes</span>
-                            <span className="alt">Explore our work →</span>
+                            <span className="main"> See how we create outcomes </span>
+                            <span className="alt"> Explore our work → </span>
                         </span>
                     </a>
                 </div>
 
-                <div className="hero-name">AKHIL SHETTY</div>
+                <div className="hero-name"> AKHIL SHETTY </div>
 
                 <div className="hero-subtext-wrap">
                     <p className="hero-subtext">

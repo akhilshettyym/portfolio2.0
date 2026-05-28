@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import gsap from "gsap";
+import * as THREE from "three";
+import { useEffect, useRef, useState } from "react";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-export default function Loader({ onFinish, duration = 3000 }) {
+const Loader = ({ onFinish, duration = 3000 }) => {
+    
     const containerRef = useRef(null);
 
     const [progress, setProgress] = useState(0);
@@ -165,8 +166,7 @@ export default function Loader({ onFinish, duration = 3000 }) {
 
                     <svg height={isMobile ? 160 : 200} width={isMobile ? 160 : 200} className="absolute -rotate-90">
                         <circle stroke="rgba(0,0,0,0.08)" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx="50%" cy="50%" />
-                        <circle stroke="black" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%"
-                            style={{ transition: "stroke-dashoffset 0.1s linear", filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))" }} />
+                        <circle stroke="black" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear", filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))" }} />
                     </svg>
 
                     <div className={`text-black font-light tabular-nums ${isMobile ? "text-xl" : "text-2xl"}`}>
@@ -222,3 +222,5 @@ export default function Loader({ onFinish, duration = 3000 }) {
         </div>
     );
 }
+
+export default Loader;

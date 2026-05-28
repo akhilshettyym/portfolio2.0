@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 export const LenisContext = createContext(null);
 

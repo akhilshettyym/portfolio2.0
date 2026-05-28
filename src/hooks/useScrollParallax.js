@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { useMotionValue, useTransform } from "framer-motion";
 import { useLenis } from "@/context/LenisContext";
+import { useMotionValue, useTransform } from "framer-motion";
 
 export function useScrollParallax(speed = 0.3) {
     const ref = useRef(null);

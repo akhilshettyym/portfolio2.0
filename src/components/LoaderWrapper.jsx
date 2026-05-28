@@ -6,7 +6,8 @@ import { createContext, useEffect, useState } from "react";
 
 export const LoadingContext = createContext();
 
-export default function LoaderWrapper({ children }) {
+const LoaderWrapper = ({ children }) => {
+
     const [loading, setLoading] = useState(true);
     const [showReveal, setShowReveal] = useState(false);
     const [navReady, setNavReady] = useState(false);
@@ -37,3 +38,5 @@ export default function LoaderWrapper({ children }) {
         </LoadingContext.Provider>
     );
 }
+
+export default LoaderWrapper;

@@ -1,9 +1,9 @@
-import { Montserrat, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import LoaderWrapper from "@/components/LoaderWrapper";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
+import { Montserrat, Geist_Mono } from "next/font/google";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -28,11 +28,11 @@ export default function RootLayout({ children }) {
         <LenisProvider>
           {/* <LoaderWrapper> */}
 
-            {/* <NavbarWrapper>
+          {/* <NavbarWrapper>
               <Navbar />
             </NavbarWrapper> */}
 
-            <main className="pt-25"> {children} </main>
+          <main className="pt-25"> {children} </main>
 
           {/* </LoaderWrapper> */}
         </LenisProvider>

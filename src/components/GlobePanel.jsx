@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useMemo } from "react";
-import dynamic from "next/dynamic";
 import * as THREE from "three";
+import dynamic from "next/dynamic";
+import React, { useMemo } from "react";
 
 const Globe = dynamic(() => import("react-globe.gl"), { ssr: false });
 
@@ -46,8 +46,7 @@ export function GlobePanel() {
     return (
         <div className="flex justify-center items-center">
             <Globe
-                height={260}
-                width={260}
+                height={260} width={260}
                 backgroundColor="rgba(0,0,0,0)"
 
                 globeImageUrl="https://unpkg.com/three-globe/example/img/earth-night.jpg"

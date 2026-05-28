@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
+
   try {
     const { searchParams } = new URL(req.url);
     const username = searchParams.get("username");
@@ -44,6 +45,7 @@ export async function GET(req) {
     return NextResponse.json(data, { status: response.status });
 
   } catch (error) {
+    
     return NextResponse.json(
       { error: "Failed to fetch GitHub contributions" },
       { status: 500 }

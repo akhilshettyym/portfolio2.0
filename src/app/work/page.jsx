@@ -1,5 +1,5 @@
-import WorkLayout from '@/components/WorkLayout';
-import React from 'react'
+import React from "react";
+import WorkLayout from "@/components/WorkLayout";
 
 const page = () => {
   return (

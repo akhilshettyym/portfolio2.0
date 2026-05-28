@@ -4,10 +4,11 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubblescene.css";
 import { useEffect, useRef } from "react";
+import { RADII, POSITIONS } from "@/utils/basic-utils";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { radii, positions } from "@/utils/basic-utils";
 
 export default function BubbleScene() {
+
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
 
@@ -24,15 +25,12 @@ export default function BubbleScene() {
         let resizeObserver;
 
         const scene = new THREE.Scene();
-
         scene.fog = new THREE.Fog("#ffffff", 18, 48);
 
         const camera = new THREE.PerspectiveCamera(28, wrapper.clientWidth / wrapper.clientHeight, 0.1, 1000);
-
         camera.position.z = 24;
 
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-
         renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -41,7 +39,6 @@ export default function BubbleScene() {
         renderer.toneMappingExposure = 1.05;
 
         const controls = new OrbitControls(camera, renderer.domElement);
-
         controls.enableDamping = true;
         controls.dampingFactor = 0.045;
 
@@ -59,29 +56,25 @@ export default function BubbleScene() {
         });
 
         const ambientLight = new THREE.AmbientLight(0xffffff, 1.15);
-
         scene.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight("#dbeafe", 0.75);
-
         directionalLight.position.set(8, 12, 10);
         scene.add(directionalLight);
 
         const group = new THREE.Group();
-
         scene.add(group);
 
         const bubbles = [];
-
-        positions.forEach((pos, index) => {
-            const radius = radii[index] ?? 0.5;
+        POSITIONS.forEach((pos, index) => {
+            const radius = RADII[index] ?? 0.5;
             const randomTexture = textures[Math.floor(Math.random() * textures.length)];
 
             const material = new THREE.SpriteMaterial({
                 map: randomTexture,
                 transparent: true,
                 depthWrite: false,
-                opacity: 0.82,
+                opacity: 0.5,
             });
 
             const bubble = new THREE.Sprite(material);
@@ -161,10 +154,7 @@ export default function BubbleScene() {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (
-                        entry.isIntersecting &&
-                        entry.intersectionRatio > 0.45
-                    ) {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.45) {
                         startAnimation();
                     }
                 });
@@ -338,7 +328,7 @@ export default function BubbleScene() {
             <div ref={wrapperRef} className="bubble-scene-panel" style={{ height: "100%", position: "relative", borderRadius: "36px", overflow: "hidden", background: `adial-gradient(circle at top, rgba(255,255,255,0.95) 0%, rgba(244,247,255,0.82) 35%, rgba(235,242,255,0.55) 65%, rgba(255,255,255,0.18) 100%)` }}>
                 <div className="bubble-radial-bg" style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at center, rgba(191,219,254,0.18), rgba(255,255,255,0))` }} />
 
-                <canvas ref={canvasRef} />
+                {/* <canvas ref={canvasRef} /> */}
 
                 <div className="bubble-content">
                     <div className="fixed bottom-0 left-0 p-10">

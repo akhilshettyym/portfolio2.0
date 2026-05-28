@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -60,15 +60,14 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
 
     return (
         <Link href={href} onMouseEnter={handleEnter} onMouseLeave={handleLeave} className={`px-2 py-2 text-[11px] font-bold uppercase tracking-tight transition text-center inline-flex justify-center items-center min-w-10 
-            ${active ? "bg-black text-white"
-                : "bg-gray-200/90 text-gray-600 hover:bg-black hover:text-white"
-            }`} style={width ? { width: Math.max(width, 60) } : {}}>
+            ${active ? "bg-black text-white" : "bg-gray-200/90 text-gray-600 hover:bg-black hover:text-white"}`}
+            style={width ? { width: Math.max(width, 60) } : {}}>
             <span ref={ref} className="whitespace-nowrap">{text}</span>
         </Link>
     );
 }
 
-export default function Navbar() {
+const Navbar = () => {
     const [time, setTime] = useState("");
     const [consoleOpen, setConsoleOpen] = useState(false);
     const [hovering, setHovering] = useState(false);
@@ -290,3 +289,5 @@ export default function Navbar() {
         </>
     );
 }
+
+export default Navbar;

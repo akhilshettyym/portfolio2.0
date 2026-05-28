@@ -155,7 +155,8 @@ function FloatingCard({ card, index, progress }) {
     );
 }
 
-export default function ScrollCardStackReveal({ cards = DEFAULT_CARDS }) {
+const CardStackReveal = ({ cards = DEFAULT_CARDS }) => {
+    
     const sectionRef = React.useRef(null);
 
     const { scrollYProgress } = useScroll({
@@ -201,3 +202,5 @@ export default function ScrollCardStackReveal({ cards = DEFAULT_CARDS }) {
         </section>
     );
 }
+
+export default CardStackReveal;

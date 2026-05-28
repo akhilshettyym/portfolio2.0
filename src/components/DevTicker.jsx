@@ -1,32 +1,11 @@
 "use client";
 
 import "@/styles/devticker.css";
-
-const items = [
-    "BUILD STATUS — STABLE",
-    "API RESPONSE 124ms",
-    "DEPLOYMENT SYNCHRONIZED",
-    "CACHE HIT RATE 92%",
-    "EDGE FUNCTIONS ACTIVE",
-    "AUTH SERVICE HEALTHY",
-    "CI/CD PIPELINE PASSING",
-    "REQUEST LOAD NORMAL",
-    "SCALABLE SYSTEM DESIGN",
-    "THREE.JS RENDER LOOP ACTIVE",
-    "NEXT.JS APP ROUTER READY",
-    "PRODUCTION BUILD OPTIMIZED",
-    "INTERACTIVE UI SYSTEMS",
-    "REAL-TIME MOTION ENGINE",
-    "DATABASE CONNECTION SECURE",
-    "PERFORMANCE SCORE — HIGH",
-    "TYPE-SAFE APPLICATION LAYER",
-    "FULL STACK ARCHITECTURE",
-    "SYSTEM LATENCY WITHIN RANGE",
-    "SHIPPING RELIABLE EXPERIENCES",
-];
+import { DEV_TICKERS } from "@/utils/basic-utils";
 
 export default function DevTicker() {
-    const stream = [...items, ...items];
+
+    const stream = [...DEV_TICKERS, ...DEV_TICKERS];
 
     return (
         <section className="w-full border-y border-black/8 bg-white overflow-hidden">

@@ -1,9 +1,9 @@
 "use client";
 
+import { MONTHS } from "@/utils/basic-utils";
 import { useEffect, useMemo, useState } from "react";
 import { motion, useMotionValue, animate, useTransform, useSpring } from "framer-motion";
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export default function GithubGraphQl({ username = "akhilshettyym" }) {
 

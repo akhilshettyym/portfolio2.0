@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export const useParallax = (factor = 0.5) => {
+
     const ref = useRef(null);
     const [offset, setOffset] = useState(0);
 

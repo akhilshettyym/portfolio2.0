@@ -3,7 +3,8 @@
 import { useContext } from "react";
 import { LoadingContext } from "./LoaderWrapper";
 
-export default function NavbarWrapper({ children }) {
+const NavbarWrapper = ({ children }) => {
+    
     const context = useContext(LoadingContext);
     const navReady = context?.navReady ?? false;
 
@@ -20,3 +21,5 @@ export default function NavbarWrapper({ children }) {
         </div>
     );
 }
+
+export default NavbarWrapper;

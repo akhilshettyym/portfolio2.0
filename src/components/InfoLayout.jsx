@@ -34,9 +34,7 @@ const InfoLayout = () => {
                     <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }} className="md:col-span-4 flex flex-col items-start md:items-end justify-end text-left md:text-right pb-2">
 
                         <h2 className="text-[clamp(2.3rem,4vw,4rem)] leading-[0.9] font-black tracking-[-0.07em] text-black/95 will-change-transform">
-                            / FROM
-                            <br />
-                            MUMBAI, MH
+                            / FROM <br /> MUMBAI, MH
                         </h2>
 
                         <p className="mt-6 max-w-70 text-[11px] uppercase tracking-[0.3em] leading-relaxed text-black/45">
@@ -58,8 +56,8 @@ const InfoLayout = () => {
                         </div>
 
                         <div className="hidden md:flex items-center gap-5 text-[10px] tracking-[0.38em] uppercase text-black/35 font-mono">
-                            <span>12.8761° N</span>
-                            <span>74.8316° E</span>
+                            <span> 12.8761° N </span>
+                            <span> 74.8316° E </span>
                         </div>
 
                         <div className="flex items-center gap-4 font-mono">
@@ -72,9 +70,7 @@ const InfoLayout = () => {
                                 <motion.div className="absolute top-0 h-px w-6 bg-black/40 blur-[0.5px]" animate={{ x: ["-120%", "250%"] }} transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }} />
                             </div>
 
-                            <span className="text-[10px] tracking-[0.38em] uppercase text-black/70">
-                                2026
-                            </span>
+                            <span className="text-[10px] tracking-[0.38em] uppercase text-black/70"> 2026 </span>
                         </div>
                     </div>
 

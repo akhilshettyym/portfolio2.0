@@ -11,8 +11,8 @@ const page = () => {
       {/* <HeroSection /> */}
       {/* <InfoLayout /> */}
       {/* <DevTicker /> */}
-      {/* <BubbleScene /> */}
-      <CardStackReveal />
+      <BubbleScene />
+      {/* <CardStackReveal /> */}
     </div>
   )
 }

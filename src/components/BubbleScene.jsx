@@ -3,8 +3,9 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubblescene.css";
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { RADII, POSITIONS } from "@/utils/basic-utils";
+import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default function BubbleScene() {
@@ -47,9 +48,8 @@ export default function BubbleScene() {
         controls.enablePan = false;
 
         const loader = new THREE.TextureLoader();
-        const texturePaths = ["animate", "css", "docker", "express", "figma", "firebase", "git", "github", "html", "java", "javascript", "jest", "kuber", "nextjs", "nodejs", "reactjs", "salesforce", "sql", "tailwind", "tedx", "threejs"];
 
-        const textures = texturePaths.map((name) => {
+        const textures = TEXTURE_PATHS.map((name) => {
             const texture = loader.load(`/bubbles/bubbles.${name}.svg`);
             texture.colorSpace = THREE.SRGBColorSpace;
             return texture;
@@ -74,7 +74,6 @@ export default function BubbleScene() {
                 map: randomTexture,
                 transparent: true,
                 depthWrite: false,
-                opacity: 0.5,
             });
 
             const bubble = new THREE.Sprite(material);
@@ -328,11 +327,10 @@ export default function BubbleScene() {
             <div ref={wrapperRef} className="bubble-scene-panel" style={{ height: "100%", position: "relative", borderRadius: "36px", overflow: "hidden", background: `adial-gradient(circle at top, rgba(255,255,255,0.95) 0%, rgba(244,247,255,0.82) 35%, rgba(235,242,255,0.55) 65%, rgba(255,255,255,0.18) 100%)` }}>
                 <div className="bubble-radial-bg" style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at center, rgba(191,219,254,0.18), rgba(255,255,255,0))` }} />
 
-                {/* <canvas ref={canvasRef} /> */}
+                <canvas ref={canvasRef} />
 
-                <div className="bubble-content">
-                    <div className="fixed bottom-0 left-0 p-10">
-
+                <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content absolute bottom-0 left-0 z-20 w-full p-10">
+                    <div className="max-w-2xl">
                         <div className="border-b border-black/10 pb-3">
                             <div className="grid grid-cols-[100px_1fr]">
                                 <div className="flex items-start">
@@ -343,21 +341,27 @@ export default function BubbleScene() {
                                     <p className="text-[20px] font-bold text-gray-600"> Systems &amp; Ecosystem </p>
 
                                     <div className="flex flex-wrap gap-1">
-                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                        <div className="rounded-full bg-gray-100 px-2 py-2 backdrop-blur-sm">
                                             <p className="text-[10px] leading-none text-gray-400"> a.
-                                                <span className="text-slate-500"> Interactive Interfaces </span>
+                                                <span className="text-slate-500"> {" "}
+                                                    Interactive Interfaces{" "}
+                                                </span>
                                             </p>
                                         </div>
 
-                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                        <div className="rounded-full bg-gray-100 px-2 py-2 backdrop-blur-sm">
                                             <p className="text-[10px] leading-none text-gray-400"> b.
-                                                <span className="text-slate-500"> Services &amp; API's </span>
+                                                <span className="text-slate-500"> {" "}
+                                                    Services &amp; APIs{" "}
+                                                </span>
                                             </p>
                                         </div>
 
-                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                        <div className="rounded-full bg-gray-100 px-2 py-2 backdrop-blur-sm">
                                             <p className="text-[10px] leading-none text-gray-400"> c.
-                                                <span className="text-slate-500"> Cloud Infrastructure </span>
+                                                <span className="text-slate-500"> {" "}
+                                                    Cloud Infrastructure{" "}
+                                                </span>
                                             </p>
                                         </div>
                                     </div>
@@ -365,41 +369,45 @@ export default function BubbleScene() {
                             </div>
                         </div>
 
-                        <div className="border-b border-black/10 pb-3">
+                        <div className="pt-4">
                             <div className="grid grid-cols-[100px_1fr]">
                                 <div className="flex items-start">
-                                    <p className="text-[35px] font-semibold text-gray-400"> 02. </p>
+                                    <p className="text-[35px] font-semibold text-gray-300"> 02. </p>
                                 </div>
 
                                 <div className="space-y-1 mt-2">
                                     <p className="text-[20px] font-bold text-gray-600"> Core Architecture Framework </p>
 
                                     <div className="flex flex-wrap gap-1">
-                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                        <div className="rounded-full bg-gray-100 px-2 py-2 backdrop-blur-sm">
                                             <p className="text-[10px] leading-none text-gray-400"> a.
-                                                <span className="text-slate-500"> Distributed Environments </span>
+                                                <span className="text-slate-500"> {" "}
+                                                    Distributed Environments{" "}
+                                                </span>
                                             </p>
                                         </div>
 
-                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                        <div className="rounded-full bg-gray-100 px-2 py-2 backdrop-blur-sm">
                                             <p className="text-[10px] leading-none text-gray-400"> b.
-                                                <span className="text-slate-500"> Client-Side Interfaces </span>
+                                                <span className="text-slate-500"> {" "}
+                                                    Client-Side Interfaces{" "}
+                                                </span>
                                             </p>
                                         </div>
 
-                                        <div className="rounded-full border-black/15 bg-gray-100 px-2 py-2 backdrop-blur-sm">
+                                        <div className="rounded-full bg-gray-100 px-2 py-2 backdrop-blur-sm">
                                             <p className="text-[10px] leading-none text-gray-400"> c.
-                                                <span className="text-slate-500"> Automated Deployments </span>
+                                                <span className="text-slate-500"> {" "}
+                                                    Automated Deployments{" "}
+                                                </span>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                </div>
-
+                </motion.div>
             </div>
         </section>
     );

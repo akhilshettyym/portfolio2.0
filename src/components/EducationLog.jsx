@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 function useCountUp(target, start, duration = 1200) {
+    
     const [value, setValue] = useState(0);
 
     useEffect(() => {
@@ -59,10 +60,7 @@ const educationData = [
 function EducationRow({ e, start, index }) {
     const animated = useCountUp(e.score * 10, start);
 
-    const display =
-        e.type === "cgpa"
-            ? `${(animated / 10).toFixed(2)} CGPA`
-            : `${Math.min(animated / 10, 100).toFixed(2)}%`;
+    const display = e.type === "cgpa" ? `${(animated / 10).toFixed(2)} CGPA` : `${Math.min(animated / 10, 100).toFixed(2)}%`;
 
     return (
         <div className={`w-full flex items-center justify-between px-3 py-2 transition-all duration-500 hover:translate-x-1 ${start ? "animate-row" : ""}`} style={{ animationDelay: `${index * 120}ms` }}>
@@ -79,7 +77,8 @@ function EducationRow({ e, start, index }) {
     );
 }
 
-export default function EducationLog() {
+const EducationLog = () => {
+
     const ref = useRef(null);
     const [start, setStart] = useState(false);
 
@@ -118,3 +117,5 @@ export default function EducationLog() {
         </div>
     );
 }
+
+export default EducationLog;

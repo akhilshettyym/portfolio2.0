@@ -178,7 +178,6 @@ const Navbar = () => {
                 <div className="flex items-center justify-between">
 
                     <div className="flex items-center gap-3">
-
                         <div className="w-10 h-10">
                             <img src="/akhil.svg" alt="Akhil" className="w-full h-full object-cover" />
                         </div>

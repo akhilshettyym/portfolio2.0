@@ -141,7 +141,6 @@ html.lenis body {
   scroll-behavior: auto !important;
 }
 
-/* Curtain Effect */
 @keyframes curtain-rise {
   from {
     transform: translateY(100px);

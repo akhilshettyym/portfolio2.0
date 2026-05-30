@@ -4,16 +4,18 @@ import DevTicker from "@/components/DevTicker";
 import HeroSection from "@/components/HeroSection";
 import BubbleScene from "@/components/BubbleScene";
 import CardStackReveal from "@/components/CardStackReveal";
+import GithubGraphQl from "./GithubGraphQl";
 
 const InfoLayout = () => {
 
     return (
         <div>
-            <HeroSection />
-            <SubjectProfile />
-            <DevTicker />
-            <BubbleScene />
-            <CardStackReveal />
+            {/* <HeroSection /> */}
+            {/* <SubjectProfile /> */}
+            {/* <DevTicker /> */}
+            {/* <BubbleScene /> */}
+            {/* <CardStackReveal /> */}
+            {/* <GithubGraphQl /> */}
         </div>
     );
 };

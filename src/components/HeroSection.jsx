@@ -5,63 +5,124 @@ import * as THREE from "three";
 import GlitchText from "./GlitchText";
 import { motion } from "framer-motion";
 import WordCarousel from "./WordCarousel";
-import { useEffect, useRef } from "react";
+import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
+import { useEffect, useRef, useState } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 const HeroSection = () => {
-
     const containerRef = useRef(null);
+    const btnRef = useRef(null);
+
+    const [paused, setPaused] = useState(false);
+
+    const pausedRef = useRef(false);
+
+    const tunnelPositionRef = useRef(0);
+    const speedRef = useRef(0.8);
 
     useEffect(() => {
-        let camera, scene, renderer;
-        let mouseX = 0, mouseY = 0;
+        pausedRef.current = paused;
+    }, [paused]);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        const btn = btnRef.current;
+
+        if (!container) return;
+
+        let camera;
+        let scene;
+        let renderer;
+        let mesh;
+        let mesh2;
+        let texture;
+        let material;
+
+        let mouseX = 0;
+        let mouseY = 0;
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
-        let start_time = Date.now();
-
-        const btn = document.querySelector(".btn");
-
-        if (btn) {
-            btn.addEventListener("mousemove", (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-
-                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-            });
-
-            btn.addEventListener("mouseleave", () => {
-                btn.style.transform = `translate(0px, 0px)`;
-            });
-        }
+        let animationId;
 
         const cloudShader = {
             vertexShader: `
-            varying vec2 vUv;
-            void main() {
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-          `,
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
             fragmentShader: `
-            uniform sampler2D map;
-            uniform vec3 fogColor;
-            uniform float fogNear;
-            uniform float fogFar;
-            varying vec2 vUv;
-    
-            void main() {
-              float depth = gl_FragCoord.z / gl_FragCoord.w;
-              float fogFactor = smoothstep(fogNear, fogFar, depth);
-    
-              gl_FragColor = texture2D(map, vUv);
-              gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
-              gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
-            }
-          `,
+        uniform sampler2D map;
+        uniform vec3 fogColor;
+        uniform float fogNear;
+        uniform float fogFar;
+        varying vec2 vUv;
+
+        void main() {
+          float depth = gl_FragCoord.z / gl_FragCoord.w;
+          float fogFactor = smoothstep(fogNear, fogFar, depth);
+
+          gl_FragColor = texture2D(map, vUv);
+          gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
+          gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
+        }
+      `,
         };
 
-        const container = containerRef.current;
+        const onMouseMove = (e) => {
+            if (pausedRef.current) return;
+
+            mouseX = (e.clientX - windowHalfX) * 0.25;
+            mouseY = (e.clientY - windowHalfY) * 0.15;
+        };
+
+        const onResize = () => {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+
+            if (!camera || !renderer) return;
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        };
+
+        const animate = () => {
+            animationId = requestAnimationFrame(animate);
+
+            if (camera) {
+                const targetSpeed = pausedRef.current ? 0 : 0.8;
+                speedRef.current += (targetSpeed - speedRef.current) * 0.025;
+                tunnelPositionRef.current += speedRef.current;
+
+                const mouseFactor = pausedRef.current ? 0 : 1;
+                camera.position.x += ((mouseX * mouseFactor) - camera.position.x) * 0.01;
+                camera.position.y += ((-mouseY * mouseFactor) - camera.position.y) * 0.01;
+                camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
+            }
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        };
+
+        const handleBtnMouseMove = (e) => {
+            if (!btn) return;
+
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        };
+
+        const handleBtnMouseLeave = () => {
+            if (!btn) return;
+            btn.style.transform = "translate(0px, 0px)";
+        };
+
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(
@@ -74,19 +135,21 @@ const HeroSection = () => {
 
         renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
         const textureLoader = new THREE.TextureLoader();
 
-        textureLoader.load("/cloud.png", (texture) => {
+        textureLoader.load("/cloud.png", (loadedTexture) => {
+            texture = loadedTexture;
             texture.colorSpace = THREE.SRGBColorSpace;
-            texture.magFilter = THREE.LinearMipMapLinearFilter;
-            texture.minFilter = THREE.LinearMipMapLinearFilter;
+            texture.magFilter = THREE.LinearMipmapLinearFilter;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
 
             const fog = new THREE.Fog(0xcfefff, -100, 3000);
             scene.fog = fog;
 
-            const material = new THREE.ShaderMaterial({
+            material = new THREE.ShaderMaterial({
                 uniforms: {
                     map: { value: texture },
                     fogColor: { value: fog.color },
@@ -120,56 +183,61 @@ const HeroSection = () => {
             }
 
             const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
-            const mesh = new THREE.Mesh(mergedGeo, material);
+
+            mesh = new THREE.Mesh(mergedGeo, material);
             mesh.renderOrder = 2;
 
-            const mesh2 = mesh.clone();
+            mesh2 = mesh.clone();
             mesh2.position.z = -8000;
             mesh2.renderOrder = 1;
 
             scene.add(mesh);
             scene.add(mesh2);
 
+            planeGeo.dispose();
             animate();
         });
-
-        function onMouseMove(e) {
-            mouseX = (e.clientX - windowHalfX) * 0.25;
-            mouseY = (e.clientY - windowHalfY) * 0.15;
-        }
-
-        function onResize() {
-            windowHalfX = window.innerWidth / 2;
-            windowHalfY = window.innerHeight / 2;
-
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const position = ((Date.now() - start_time) * 0.03) % 8000;
-
-            camera.position.x += (mouseX - camera.position.x) * 0.01;
-            camera.position.y += (-mouseY - camera.position.y) * 0.01;
-            camera.position.z = -position + 8000;
-
-            renderer.render(scene, camera);
-        }
 
         window.addEventListener("mousemove", onMouseMove);
         window.addEventListener("resize", onResize);
 
+        if (btn) {
+            btn.addEventListener("mousemove", handleBtnMouseMove);
+            btn.addEventListener("mouseleave", handleBtnMouseLeave);
+        }
+
         return () => {
             window.removeEventListener("mousemove", onMouseMove);
             window.removeEventListener("resize", onResize);
-            container.removeChild(renderer.domElement);
-            renderer.dispose();
-        };
 
+            if (btn) {
+                btn.removeEventListener("mousemove", handleBtnMouseMove);
+                btn.removeEventListener("mouseleave", handleBtnMouseLeave);
+                btn.style.transform = "translate(0px, 0px)";
+            }
+
+            if (animationId) cancelAnimationFrame(animationId);
+
+            if (mesh) {
+                scene.remove(mesh);
+                mesh.geometry?.dispose?.();
+            }
+
+            if (mesh2) {
+                scene.remove(mesh2);
+                mesh2.geometry?.dispose?.();
+            }
+
+            if (material) material.dispose();
+            if (texture) texture.dispose();
+
+            if (renderer) {
+                renderer.dispose();
+                if (container.contains(renderer.domElement)) {
+                    container.removeChild(renderer.domElement);
+                }
+            }
+        };
     }, []);
 
     return (
@@ -177,23 +245,49 @@ const HeroSection = () => {
             <div className="wrapper">
                 <div ref={containerRef} className="canvas-bg" />
 
+                <button type="button" onClick={() => setPaused((prev) => !prev)} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
+                    <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
+                        <defs>
+                            <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+                        </defs>
+
+                        <text fill="rgba(0,0,0,0.3)" fontSize="10" letterSpacing="2.5" className="uppercase">
+                            <textPath href="#hero-control-ring" startOffset="0%">
+                                CONTROL THE CLOUDS • CONTROL THE CLOUDS •
+                            </textPath>
+                        </text>
+                    </svg>
+
+                    <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/25">
+                        {paused ? (
+                            <HiMiniPlay size={18} className="translate-x-px text-white/90" />
+                        ) : (
+                            <HiMiniPause size={18} className="text-white/90" />
+                        )}
+                    </div>
+                </button>
+
                 <div className="hero-text">
-                    <span className="line dim uppercase"> BUILD SYSTEMS <br /></span>
-                    <span className="line dim uppercase"> OPTIMIZE SCALE × LATENCY <br /></span>
+                    <span className="line dim uppercase">
+                        BUILD SYSTEMS <br />
+                    </span>
+                    <span className="line dim uppercase">
+                        OPTIMIZE SCALE × LATENCY <br />
+                    </span>
                     <span className="line strong">
-                        <span className="text-md uppercase tracking-tight"> OPS </span> <WordCarousel />
+                        <span className="text-md uppercase tracking-tight">OPS</span>{" "}
+                        <WordCarousel />
                     </span>
 
-
-                    <a className="btn">
+                    <button ref={btnRef} type="button" className="btn">
                         <span className="label">
-                            <span className="main"> See how we create outcomes </span>
-                            <span className="alt"> Explore our work → </span>
+                            <span className="main">See how we create outcomes</span>
+                            <span className="alt">Explore our work →</span>
                         </span>
-                    </a>
+                    </button>
                 </div>
 
-                <div className="hero-name"> AKHIL SHETTY </div>
+                <div className="hero-name">AKHIL SHETTY</div>
 
                 <div className="hero-subtext-wrap">
                     <p className="hero-subtext">
@@ -207,7 +301,12 @@ const HeroSection = () => {
                     <span className="dot br" />
                 </div>
 
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.3 }} className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400"
+                >
                     <div className="relative px-10 py-4 text-xs tracking-widest">
                         <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
                             ©001
@@ -224,7 +323,7 @@ const HeroSection = () => {
                 </motion.div>
 
                 <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
-                    <span className="scroll-text"> DISCOVER </span>
+                    <span className="scroll-text">DISCOVER</span>
                     <div className="scroll-indicator" />
                 </div>
 

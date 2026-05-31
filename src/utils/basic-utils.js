@@ -4,7 +4,7 @@ export const WORDS = ["CORE JAVA", "DATA STRUCTURES", "MERN STACK", "VERSION CON
 
 export const DEV_TICKERS = ["BUILD STATUS — STABLE", "API RESPONSE 124ms", "DEPLOYMENT SYNCHRONIZED", "CACHE HIT RATE 92%", "EDGE FUNCTIONS ACTIVE", "AUTH SERVICE HEALTHY", "CI/CD PIPELINE PASSING", "REQUEST LOAD NORMAL", "SCALABLE SYSTEM DESIGN", "THREE.JS RENDER LOOP ACTIVE", "NEXT.JS APP ROUTER READY", "PRODUCTION BUILD OPTIMIZED", "INTERACTIVE UI SYSTEMS", "REAL-TIME MOTION ENGINE", "DATABASE CONNECTION SECURE", "PERFORMANCE SCORE — HIGH", "TYPE-SAFE APPLICATION LAYER", "FULL STACK ARCHITECTURE", "SYSTEM LATENCY WITHIN RANGE", "SHIPPING RELIABLE EXPERIENCES"];
 
-export const TEXTURE_PATHS = ["animate", "css", "docker", "express", "figma", "firebase", "git", "github", "html", "java", "javascript", "jest", "kuber", "nextjs", "nodejs", "reactjs", "salesforce", "sql", "tailwind", "tedx", "threejs"];
+export const TEXTURE_PATHS = ["animate", "css", "docker", "expressjs", "figma", "firebase", "git", "github", "html", "java", "javascript", "jest", "kuber", "nextjs", "nodejs", "reactjs", "salesforce", "sql", "tailwind", "tedx", "threejs"];
 
 export const FADEUP = {
     initial: { opacity: 0, y: 40 },

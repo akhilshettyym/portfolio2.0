@@ -146,7 +146,8 @@ const HeroSection = () => {
             texture.magFilter = THREE.LinearMipmapLinearFilter;
             texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-            const fog = new THREE.Fog(0xcfefff, -100, 3000);
+            // const fog = new THREE.Fog(0xcfefff, -100, 3000);
+            const fog = new THREE.Fog(0xffffff, -100, 3000);
             scene.fog = fog;
 
             material = new THREE.ShaderMaterial({

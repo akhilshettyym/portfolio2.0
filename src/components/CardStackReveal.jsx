@@ -6,23 +6,23 @@ import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "f
 const DEFAULT_CARDS = [
     {
         amount: "$12B",
-        badge: "SEQUOIA",
-        caption: "",
+        badge: "Impact Highlights",
+        caption: "Milestones That Made a Difference",
     },
     {
         amount: "$14B",
-        badge: "A16Z",
-        caption: "",
+        badge: "Technical Certifications",
+        caption: "Continuous Learning, Verified Skills",
     },
     {
         amount: "$8B",
-        badge: "FOUNDERS",
-        caption: "",
+        badge: "Co-Curricular Recognition",
+        caption: "Leadership Beyond Academics",
     },
     {
         amount: "$4B",
-        badge: "YC",
-        caption: "",
+        badge: "Acedemic Records",
+        caption: "A Foundation of Excellence",
     },
 ];
 
@@ -186,7 +186,7 @@ const CardStackReveal = ({ cards = DEFAULT_CARDS }) => {
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                     <motion.div className="flex flex-col items-center gap-2 text-center" style={{ filter: backgroundFilter }}>
                         <div className="text-[clamp(2rem,4vw,4rem)] font-black uppercase text-black/50">
-                            ACHIEVEMENTS
+                            {/* ACHIEVEMENTS */}
                         </div>
                     </motion.div>
                 </div>

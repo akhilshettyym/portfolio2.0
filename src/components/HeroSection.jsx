@@ -5,24 +5,34 @@ import * as THREE from "three";
 import GlitchText from "./GlitchText";
 import { motion } from "framer-motion";
 import WordCarousel from "./WordCarousel";
-import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
+import { CLOUD_SHADER } from "@/utils/shaders";
 import { useEffect, useRef, useState } from "react";
+import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 const HeroSection = () => {
-    const containerRef = useRef(null);
     const btnRef = useRef(null);
+    const speedRef = useRef(0.8);
+    const pausedRef = useRef(false);
+    const containerRef = useRef(null);
+    const tunnelPositionRef = useRef(0);
 
     const [paused, setPaused] = useState(false);
 
-    const pausedRef = useRef(false);
-
-    const tunnelPositionRef = useRef(0);
-    const speedRef = useRef(0.8);
-
     useEffect(() => {
-        pausedRef.current = paused;
-    }, [paused]);
+        const storedValue = localStorage.getItem("cloudControl");
+        if (storedValue !== null) {
+            setPaused(storedValue === "true");
+        }
+    }, []);
+
+    const handleCloudControl = () => {
+        setPaused((prev) => {
+            const nextState = !prev;
+            localStorage.setItem("cloudControl", String(nextState));
+            return nextState;
+        });
+    };
 
     useEffect(() => {
         const container = containerRef.current;
@@ -43,32 +53,6 @@ const HeroSection = () => {
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
         let animationId;
-
-        const cloudShader = {
-            vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-            fragmentShader: `
-        uniform sampler2D map;
-        uniform vec3 fogColor;
-        uniform float fogNear;
-        uniform float fogFar;
-        varying vec2 vUv;
-
-        void main() {
-          float depth = gl_FragCoord.z / gl_FragCoord.w;
-          float fogFactor = smoothstep(fogNear, fogFar, depth);
-
-          gl_FragColor = texture2D(map, vUv);
-          gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
-          gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
-        }
-      `,
-        };
 
         const onMouseMove = (e) => {
             if (pausedRef.current) return;
@@ -125,11 +109,9 @@ const HeroSection = () => {
 
         scene = new THREE.Scene();
 
-        camera = new THREE.PerspectiveCamera(
-            30,
+        camera = new THREE.PerspectiveCamera(30,
             window.innerWidth / window.innerHeight,
-            1,
-            3000
+            1, 3000
         );
         camera.position.z = 6000;
 
@@ -157,8 +139,8 @@ const HeroSection = () => {
                     fogNear: { value: fog.near },
                     fogFar: { value: fog.far },
                 },
-                vertexShader: cloudShader.vertexShader,
-                fragmentShader: cloudShader.fragmentShader,
+                vertexShader: CLOUD_SHADER.vertexShader,
+                fragmentShader: CLOUD_SHADER.fragmentShader,
                 depthWrite: false,
                 depthTest: false,
                 transparent: true,
@@ -173,8 +155,7 @@ const HeroSection = () => {
                 planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
                 planeObj.position.z = i;
                 planeObj.rotation.z = Math.random() * Math.PI;
-                planeObj.scale.x = planeObj.scale.y =
-                    Math.random() * Math.random() * 1.5 + 0.5;
+                planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
 
                 planeObj.updateMatrix();
 
@@ -244,10 +225,12 @@ const HeroSection = () => {
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
+
                 <div ref={containerRef} className="canvas-bg" />
 
-                <button type="button" onClick={() => setPaused((prev) => !prev)} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
+                <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
+
                         <defs>
                             <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
                         </defs>
@@ -261,9 +244,33 @@ const HeroSection = () => {
 
                     <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/25">
                         {paused ? (
-                            <HiMiniPlay size={18} className="translate-x-px text-white/90" />
+                            <>
+                                <HiMiniPlay size={18} className="translate-x-px text-white/90" />
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 hidden group-hover:block pointer-events-none drop-shadow-md">
+                                    <svg width="40" height="100" viewBox="0 0 2 100" className="overflow-visible">
+                                        <defs>
+                                            <path id="leftTextCurve" d="M 40,89 A 40,40 0 0,1 35,10" fill="transparent" />
+                                        </defs>
+                                        <text className="fill-slate-700 font-bold text-[8px] uppercase">
+                                            <textPath href="#leftTextCurve" startOffset="50%" textAnchor="middle"> Run Clouds </textPath>
+                                        </text>
+                                    </svg>
+                                </div>
+                            </>
                         ) : (
-                            <HiMiniPause size={18} className="text-white/90" />
+                            <>
+                                <HiMiniPause size={18} className="text-white/90" />
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 hidden group-hover:block pointer-events-none drop-shadow-md">
+                                    <svg width="40" height="100" viewBox="0 0 2 100" className="overflow-visible">
+                                        <defs>
+                                            <path id="leftTextCurve" d="M 39,89 A 40,40 0 0,1 35,10" fill="transparent" />
+                                        </defs>
+                                        <text className="fill-slate-700 font-bold text-[8px] uppercase">
+                                            <textPath href="#leftTextCurve" startOffset="50%" textAnchor="middle"> Stall Clouds </textPath>
+                                        </text>
+                                    </svg>
+                                </div>
+                            </>
                         )}
                     </div>
                 </button>
@@ -302,12 +309,7 @@ const HeroSection = () => {
                     <span className="dot br" />
                 </div>
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400"
-                >
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.3 }} className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
                     <div className="relative px-10 py-4 text-xs tracking-widest">
                         <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
                             ©001

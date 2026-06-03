@@ -4,12 +4,53 @@ export const WORDS = ["CORE JAVA", "DATA STRUCTURES", "MERN STACK", "VERSION CON
 
 export const DEV_TICKERS = ["BUILD STATUS — STABLE", "API RESPONSE 124ms", "DEPLOYMENT SYNCHRONIZED", "CACHE HIT RATE 92%", "EDGE FUNCTIONS ACTIVE", "AUTH SERVICE HEALTHY", "CI/CD PIPELINE PASSING", "REQUEST LOAD NORMAL", "SCALABLE SYSTEM DESIGN", "THREE.JS RENDER LOOP ACTIVE", "NEXT.JS APP ROUTER READY", "PRODUCTION BUILD OPTIMIZED", "INTERACTIVE UI SYSTEMS", "REAL-TIME MOTION ENGINE", "DATABASE CONNECTION SECURE", "PERFORMANCE SCORE — HIGH", "TYPE-SAFE APPLICATION LAYER", "FULL STACK ARCHITECTURE", "SYSTEM LATENCY WITHIN RANGE", "SHIPPING RELIABLE EXPERIENCES"];
 
+export const TEXTURE_PATHS = ["animate", "css", "docker", "expressjs", "figma", "firebase", "git", "github", "html", "java", "javascript", "jest", "kuber", "nextjs", "nodejs", "reactjs", "salesforce", "sql", "tailwind", "tedx", "threejs"];
+
 export const FADEUP = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
     transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
     viewport: { once: true, amount: 0.15 },
 };
+
+export const DEFAULT_CARDS = [
+    {
+        title: "Impact Highlights",
+        caption: "Milestones That Made a Difference",
+        description:
+            "A curated collection of results, contributions, and outcomes that reflect consistent execution, ownership, and measurable impact across academic and personal initiatives.",
+        year: "2021–2025",
+        href: "https://your-link.com/impact-highlights",
+        cta: "View highlights",
+    },
+    {
+        title: "Technical Certifications",
+        caption: "Continuous Learning, Verified Skills",
+        description:
+            "Formal certifications that validate practical technical knowledge, hands-on learning, and the ability to apply modern tools and frameworks with confidence.",
+        year: "2024–2025",
+        href: "https://your-link.com/certifications",
+        cta: "See certificates",
+    },
+    {
+        title: "Co-Curricular Recognition",
+        caption: "Leadership Beyond Academics",
+        description:
+            "Recognition earned through leadership, teamwork, communication, and active participation in activities that strengthen both character and collaboration.",
+        year: "2022–2025",
+        href: "https://your-link.com/co-curricular",
+        cta: "Explore recog.",
+    },
+    {
+        title: "Academic Records",
+        caption: "A Foundation of Excellence",
+        description:
+            "A strong academic journey supported by consistency, discipline, and a long-term focus on building a reliable foundation for future growth.",
+        year: "2019–2026",
+        href: "https://your-link.com/academic-records",
+        cta: "Open record",
+    },
+];
 
 export const RADII = [
     1, 0.6, 0.8, 0.4, 0.9, 0.7, 0.9, 0.3, 0.2, 0.5,

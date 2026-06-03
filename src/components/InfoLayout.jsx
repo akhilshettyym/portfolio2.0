@@ -5,6 +5,8 @@ import HeroSection from "@/components/HeroSection";
 import BubbleScene from "@/components/BubbleScene";
 import CardStackReveal from "@/components/CardStackReveal";
 import GithubGraphQl from "./GithubGraphQl";
+import SelectedWorks from "./SelectedWorks";
+import EducationLog from "./EducationLog";
 
 const InfoLayout = () => {
 
@@ -16,6 +18,8 @@ const InfoLayout = () => {
             {/* <BubbleScene /> */}
             <CardStackReveal />
             {/* <GithubGraphQl /> */}
+            {/* <SelectedWorks /> */}
+            {/* <EducationLog /> */}
         </div>
     );
 };

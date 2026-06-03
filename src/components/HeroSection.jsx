@@ -283,14 +283,14 @@ const HeroSection = () => {
                         OPTIMIZE SCALE × LATENCY <br />
                     </span>
                     <span className="line strong">
-                        <span className="text-md uppercase tracking-tight">OPS</span>{" "}
+                        <span className="text-md uppercase tracking-tight"> OPS </span>{" "}
                         <WordCarousel />
                     </span>
 
                     <button ref={btnRef} type="button" className="btn">
                         <span className="label">
-                            <span className="main">See how we create outcomes</span>
-                            <span className="alt">Explore our work →</span>
+                            <span className="main"> See how we create outcomes </span>
+                            <span className="alt"> Explore our work → </span>
                         </span>
                     </button>
                 </div>
@@ -326,7 +326,7 @@ const HeroSection = () => {
                 </motion.div>
 
                 <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
-                    <span className="scroll-text">DISCOVER</span>
+                    <span className="scroll-text"> DISCOVER </span>
                     <div className="scroll-indicator" />
                 </div>
 

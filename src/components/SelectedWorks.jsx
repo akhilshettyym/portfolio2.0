@@ -1,7 +1,16 @@
+"use client";
+
 import React from 'react'
-import CustomButton from './CustomButton';
+import { useRouter } from 'next/router';
+import CustomButton from './basic/CustomButton';
 
 const SelectedWorks = () => {
+
+    const router = useRouter();
+
+    const handleNavigate = () => {
+        router.push("/");
+    };
 
     return (
         <div>
@@ -113,7 +122,7 @@ const SelectedWorks = () => {
 
                                     <div className="flex h-[200px] p-2">
                                         <div className="w-full rounded-2xl border-black/10 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)] overflow-hidden flex items-center justify-center">
-                                            <CustomButton title="View Project" href="/" width="180" height="50" />
+                                            <CustomButton title="View Project" onClick={handleNavigate} width="180" height="50" />
                                         </div>
                                     </div>
 

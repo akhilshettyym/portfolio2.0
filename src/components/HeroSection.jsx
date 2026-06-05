@@ -2,10 +2,10 @@
 
 import "@/styles/clouds.css";
 import * as THREE from "three";
-import GlitchText from "./GlitchText";
+import GlitchText from "./basic/GlitchText";
 import { motion } from "framer-motion";
-import WordCarousel from "./WordCarousel";
-import { CLOUD_SHADER } from "@/utils/shaders";
+import WordCarousel from "./basic/WordCarousel";
+import { CLOUD_SHADER } from "@/utils/shader-utils";
 import { useEffect, useRef, useState } from "react";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";

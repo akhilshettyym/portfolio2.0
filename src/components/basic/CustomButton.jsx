@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const CustomButton = ({ title, href, width = 180, height = 56, className = "" }) => {
+const CustomButton = ({ title, onClick, width = 180, height = 56, className = "" }) => {
 
     const [isHovered, setIsHovered] = useState(false);
 
@@ -18,31 +17,33 @@ const CustomButton = ({ title, href, width = 180, height = 56, className = "" })
     };
 
     return (
-        <Link href={href} className={`inline-block ${className}`}>
-            <motion.div onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)} whileTap={{ scale: 0.97, transition: { duration: 0.15 } }} className="relative cursor-pointer overflow-hidden border border-zinc-300 bg-white" style={{ width: `${width}px`, height: `${height}px`, clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)" }}>
-
+        <button type="button" onClick={onClick} className={`inline-block ${className}`}>
+            <motion.div onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)}
+                whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
+                className="relative cursor-pointer overflow-hidden border border-zinc-300 bg-white"
+                style={{ width: `${width}px`, height: `${height}px`, clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)" }}>
                 <div className="flex h-full">
                     <div className="flex w-3/4 items-center justify-start bg-zinc-900 px-5">
-                        <span className="text-xs font-medium uppercase text-white"> {title} </span>
+                        <span className="text-xs font-medium uppercase text-white">
+                            {title}
+                        </span>
                     </div>
-
                     <div className="flex w-1/4 items-center justify-center border-l border-white/10 bg-zinc-800 text-white">
-                        <motion.div animate={{ x: isHovered ? 3 : 0, y: isHovered ? -3 : 0 }}
-                            transition={{ duration: 0.25, ease: "easeOut" }}>
+                        <motion.div animate={{ x: isHovered ? 3 : 0, y: isHovered ? -3 : 0 }} transition={{ duration: 0.25, ease: "easeOut" }}>
                             <ArrowIcon />
                         </motion.div>
                     </div>
                 </div>
-
                 <AnimatePresence mode="wait">
                     {isHovered && (
                         <motion.div key="wipe" initial={{ x: "-110%" }} animate={{ x: "0%" }} exit={{ x: "110%" }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="absolute inset-0 z-10 flex h-full" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)" }}>
                             <div className="flex w-3/4 items-center justify-start bg-white px-5">
-                                <span className="text-xs font-medium uppercase text-black"> {title} </span>
+                                <span className="text-xs font-medium uppercase text-black">
+                                    {title}
+                                </span>
                             </div>
-
                             <div className="flex w-1/4 items-center justify-center border-l border-black/10 bg-black text-white">
-                                <motion.div initial={{ x: 0, y: 0 }} animate={{ x: 3, y: -3 }} exit={{ x: 0, y: 0 }} transition={{ duration: 0.25, ease: "easeOut" }}>
+                                <motion.div initial={{ x: 0, y: 0 }} animate={{ x: 3, y: 0 }} exit={{ x: 0, y: 0 }} transition={{ duration: 0.25, ease: "easeOut" }}>
                                     <ArrowIcon />
                                 </motion.div>
                             </div>
@@ -50,8 +51,7 @@ const CustomButton = ({ title, href, width = 180, height = 56, className = "" })
                     )}
                 </AnimatePresence>
             </motion.div>
-        </Link>
+        </button>
     );
 };
-
 export default CustomButton;

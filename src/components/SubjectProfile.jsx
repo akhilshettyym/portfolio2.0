@@ -81,7 +81,7 @@ const SubjectProfile = () => {
 
                         <div className="col-span-12 md:col-span-4 relative min-h-80 md:min-h-105 p-6 md:p-8 flex items-center justify-center">
                             <div className="relative w-full h-full max-w-65 max-h-85 rounded-3xl overflow-hidden">
-                                <motion.img src="/Id3.png" alt="profile" initial={{ scale: 1.08 }} whileInView={{ scale: 1 }} transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }} className="absolute inset-0 w-full h-full object-cover" />
+                                {/* <motion.img src="/Id3.png" alt="profile" initial={{ scale: 1.08 }} whileInView={{ scale: 1 }} transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }} className="absolute inset-0 w-full h-full object-cover" /> */}
                             </div>
                         </div>
 

@@ -323,13 +323,13 @@ export default function BubbleScene() {
     }, []);
 
     return (
-        <section className="bubble-wrapper" style={{ height: "600px" }}>
+        <section className="bubble-wrapper" style={{ height: "800px" }}>
             <div ref={wrapperRef} className="bubble-scene-panel" style={{ height: "100%", position: "relative", borderRadius: "36px", overflow: "hidden", background: `adial-gradient(circle at top, rgba(255,255,255,0.95) 0%, rgba(244,247,255,0.82) 35%, rgba(235,242,255,0.55) 65%, rgba(255,255,255,0.18) 100%)` }}>
                 <div className="bubble-radial-bg" style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at center, rgba(191,219,254,0.18), rgba(255,255,255,0))` }} />
 
                 <canvas ref={canvasRef} />
 
-                <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content absolute bottom-0 left-0 z-20 w-full p-10">
+                <motion.div  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content absolute bottom-0 left-0 z-20 w-full p-10">
                     <div className="max-w-2xl">
                         <div className="border-b border-black/10 pb-3">
                             <div className="grid grid-cols-[100px_1fr]">

@@ -20,9 +20,16 @@ const HeroSection = () => {
     const [paused, setPaused] = useState(false);
 
     useEffect(() => {
+        pausedRef.current = paused;
+    }, [paused]);
+
+    useEffect(() => {
         const storedValue = localStorage.getItem("cloudControl");
+
         if (storedValue !== null) {
-            setPaused(storedValue === "true");
+            const value = storedValue === "true";
+            setPaused(value);
+            pausedRef.current = value;
         }
     }, []);
 

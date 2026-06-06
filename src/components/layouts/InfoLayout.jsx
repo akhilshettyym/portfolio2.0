@@ -10,12 +10,12 @@ const InfoLayout = () => {
 
     return (
         <div>
-            {/* <HeroSection /> */}
-            {/* <SubjectProfile /> */}
-            {/* <DevTicker /> */}
-            {/* <BubbleScene /> */}
-            {/* <CardStackReveal /> */}
-            {/* <EducationLog /> */}
+            <HeroSection />
+            <SubjectProfile />
+            <DevTicker />
+            <BubbleScene />
+            <CardStackReveal />
+            <EducationLog />
         </div>
     );
 };

@@ -14,7 +14,7 @@ const SelectedWorks = () => {
 
     return (
         <div>
-            <div className="min-h-[100%] w-full flex items-center justify-center">
+            <div className="min-h-full w-full flex items-center justify-center">
                 <div className="w-full max-w-8xl flex flex-row">
 
                     <div className="w-[10%] pt-40">

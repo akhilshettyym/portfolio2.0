@@ -9,9 +9,9 @@
 .canvas-bg {
   width: 100%;
   height: 100%;
-  background-image:
+  /* background-image:
     linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)),
-    url("/morning_clouds.png");
+    url("/clouds_background/morning_clear.png"); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

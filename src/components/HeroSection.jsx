@@ -18,103 +18,88 @@ const HeroSection = () => {
     const pausedRef = useRef(false);
     const containerRef = useRef(null);
     const tunnelPositionRef = useRef(0);
-
-    const [scene, setScene] = useState();
-    const [clouds, setClouds] = useState();
-    const [cloudScene, setCloudScene] = useState();
-
     const [paused, setPaused] = useState(false);
+
+
+// ----------------------------------------
+
+    const [clouds, setClouds] = useState("morning_clear");
+    const [cloudScene, setCloudScene] = useState("morning_clear");
+
+    const SCENE_CONFIG = {
+        afternoon_clear: {
+            clouds: "afternoon_clear",
+            cloudScene: "afternoon_clear",
+        },
+        afternoon_cloudy: {
+            clouds: "afternoon_cloudy",
+            cloudScene: "afternoon_cloudy",
+        },
+        dawn_clear: {
+            clouds: "dawn_clear",
+            cloudScene: "dawn_clear",
+        },
+        dawn_overcast: {
+            clouds: "dawn_overcast",
+            cloudScene: "dawn_overcast",
+        },
+        golden_hour: {
+            clouds: "golden_hour",
+            cloudScene: "golden_hour",
+        },
+        morning_clear: {
+            clouds: "morning_clear",
+            cloudScene: "morning_clear",
+        },
+        morning_cloudy: {
+            clouds: "morning_cloudy",
+            cloudScene: "morning_cloudy",
+        },
+        night: {
+            clouds: "night",
+            cloudScene: "night",
+        },
+        rain: {
+            clouds: "rain",
+            cloudScene: "rain",
+        },
+        storm: {
+            clouds: "storm",
+            cloudScene: "storm",
+        },
+        sunset: {
+            clouds: "sunset",
+            cloudScene: "sunset",
+        },
+    };
 
     useEffect(() => {
         async function init() {
-            const sceneData = await getWeatherScene();
-            console.log(sceneData);
-            setScene(sceneData);
+            try {
+                const sceneData = await getWeatherScene();
+
+                const weatherScene = sceneData?.scene?.toLowerCase();
+
+                const config = SCENE_CONFIG[weatherScene];
+
+                console.log("Weather Scene:", weatherScene, "Config:", config);
+
+                setClouds(config?.clouds ?? "morning_clear");
+                setCloudScene(config?.cloudScene ?? "morning_clear");
+
+            } catch (error) {
+                console.error("Failed to load weather scene:", error);
+
+                setClouds("morning_clear");
+                setCloudScene("morning_clear");
+            }
         }
+
         init();
     }, []);
 
 
-    const cloud_background = ["afternoon_clear", "afternoon_cloudy", "dawn_clear", "dawn_overcast", "golden_hour", "morning_clear", "morning_cloudy", "night", "rain", "storm", "sunset"];
-
-    const cloudss = ["afternoon_clear", "afternoon_cloudy", "dawn_clear", "dawn_overcast", "golden_hour", "morning_clear", "morning_cloudy", "night", "rain", "storm", "sunset"];
-
-    if (sceneData == afternoon_clear) {
-        setClouds(afternoon_clear);
-        setCloudScene(afternoon_clear);
-
-    } else if (sceneData == afternoon_cloudy) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == afternoon_cloudy) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == dawn_clear) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == dawn_overcast) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == golden_hour) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == morning_clear) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == morning_cloudy) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == night) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == rain) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == storm) {
-        setClouds();
-        setCloudScene();
-
-    } else if (sceneData == sunset) {
-        setClouds();
-        setCloudScene();
-
-    } else {
-        setClouds();
-        setCloudScene();
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ----------------------------------------
 
 
     useEffect(() => {
@@ -140,13 +125,14 @@ const HeroSection = () => {
     };
 
     useEffect(() => {
+        if (!clouds) return;
         const container = containerRef.current;
         const btn = btnRef.current;
 
         if (!container) return;
 
         let camera;
-        let scene;
+        let threeScene;
         let renderer;
         let mesh;
         let mesh2;
@@ -192,8 +178,8 @@ const HeroSection = () => {
                 camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
             }
 
-            if (renderer && scene && camera) {
-                renderer.render(scene, camera);
+            if (renderer && threeScene && camera) {
+                renderer.render(threeScene, camera);
             }
         };
 
@@ -212,7 +198,7 @@ const HeroSection = () => {
             btn.style.transform = "translate(0px, 0px)";
         };
 
-        scene = new THREE.Scene();
+        threeScene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(30,
             window.innerWidth / window.innerHeight,
@@ -227,7 +213,8 @@ const HeroSection = () => {
 
         const textureLoader = new THREE.TextureLoader();
 
-        textureLoader.load("/clouds/morning_clear.svg", (loadedTexture) => {
+        // textureLoader.load("/clouds/morning_clear.svg", (loadedTexture) => {
+        textureLoader.load(`/clouds/${clouds}.svg`, (loadedTexture) => {
             texture = loadedTexture;
             texture.colorSpace = THREE.SRGBColorSpace;
             texture.magFilter = THREE.LinearMipmapLinearFilter;
@@ -235,7 +222,7 @@ const HeroSection = () => {
 
             // const fog = new THREE.Fog(0xcfefff, -100, 3000);
             const fog = new THREE.Fog(0xffffff, -100, 3000);
-            scene.fog = fog;
+            threeScene.fog = fog;
 
             material = new THREE.ShaderMaterial({
                 uniforms: {
@@ -278,8 +265,8 @@ const HeroSection = () => {
             mesh2.position.z = -8000;
             mesh2.renderOrder = 1;
 
-            scene.add(mesh);
-            scene.add(mesh2);
+            threeScene.add(mesh);
+            threeScene.add(mesh2);
 
             planeGeo.dispose();
             animate();
@@ -306,12 +293,12 @@ const HeroSection = () => {
             if (animationId) cancelAnimationFrame(animationId);
 
             if (mesh) {
-                scene.remove(mesh);
+                threeScene.remove(mesh);
                 mesh.geometry?.dispose?.();
             }
 
             if (mesh2) {
-                scene.remove(mesh2);
+                threeScene.remove(mesh2);
                 mesh2.geometry?.dispose?.();
             }
 
@@ -325,13 +312,13 @@ const HeroSection = () => {
                 }
             }
         };
-    }, []);
+    }, [clouds]);
 
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${scene.toLowerCase()}.png")` }} /> */}
+                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${cloudScene.toLowerCase()}.png")` }} />
 
                 <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>

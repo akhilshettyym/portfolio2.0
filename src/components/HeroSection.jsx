@@ -2,27 +2,132 @@
 
 import "@/styles/clouds.css";
 import * as THREE from "three";
-import GlitchText from "./GlitchText";
+import GlitchText from "./basic/GlitchText";
 import { motion } from "framer-motion";
-import WordCarousel from "./WordCarousel";
-import { CLOUD_SHADER } from "@/utils/shaders";
+import WordCarousel from "./basic/WordCarousel";
+import { CLOUD_SHADER } from "@/utils/shader-utils";
 import { useEffect, useRef, useState } from "react";
+import { getWeatherScene } from "@/app/api/weather";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 const HeroSection = () => {
+
     const btnRef = useRef(null);
     const speedRef = useRef(0.8);
     const pausedRef = useRef(false);
     const containerRef = useRef(null);
     const tunnelPositionRef = useRef(0);
 
+    const [scene, setScene] = useState();
+    const [clouds, setClouds] = useState();
+    const [cloudScene, setCloudScene] = useState();
+
     const [paused, setPaused] = useState(false);
 
     useEffect(() => {
+        async function init() {
+            const sceneData = await getWeatherScene();
+            console.log(sceneData);
+            setScene(sceneData);
+        }
+        init();
+    }, []);
+
+
+    const cloud_background = ["afternoon_clear", "afternoon_cloudy", "dawn_clear", "dawn_overcast", "golden_hour", "morning_clear", "morning_cloudy", "night", "rain", "storm", "sunset"];
+
+    const cloudss = ["afternoon_clear", "afternoon_cloudy", "dawn_clear", "dawn_overcast", "golden_hour", "morning_clear", "morning_cloudy", "night", "rain", "storm", "sunset"];
+
+    if (sceneData == afternoon_clear) {
+        setClouds(afternoon_clear);
+        setCloudScene(afternoon_clear);
+
+    } else if (sceneData == afternoon_cloudy) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == afternoon_cloudy) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == dawn_clear) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == dawn_overcast) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == golden_hour) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == morning_clear) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == morning_cloudy) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == night) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == rain) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == storm) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == sunset) {
+        setClouds();
+        setCloudScene();
+
+    } else {
+        setClouds();
+        setCloudScene();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    useEffect(() => {
+        pausedRef.current = paused;
+    }, [paused]);
+
+    useEffect(() => {
         const storedValue = localStorage.getItem("cloudControl");
+
         if (storedValue !== null) {
-            setPaused(storedValue === "true");
+            const value = storedValue === "true";
+            setPaused(value);
+            pausedRef.current = value;
         }
     }, []);
 
@@ -122,7 +227,7 @@ const HeroSection = () => {
 
         const textureLoader = new THREE.TextureLoader();
 
-        textureLoader.load("/cloud.png", (loadedTexture) => {
+        textureLoader.load("/clouds/morning_clear.svg", (loadedTexture) => {
             texture = loadedTexture;
             texture.colorSpace = THREE.SRGBColorSpace;
             texture.magFilter = THREE.LinearMipmapLinearFilter;
@@ -226,7 +331,7 @@ const HeroSection = () => {
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-                <div ref={containerRef} className="canvas-bg" />
+                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${scene.toLowerCase()}.png")` }} /> */}
 
                 <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>

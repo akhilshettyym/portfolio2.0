@@ -1,24 +1,20 @@
 import React from "react";
-import SubjectProfile from "./SubjectProfile";
+import EducationLog from "../EducationLog";
 import DevTicker from "@/components/DevTicker";
+import SubjectProfile from "../SubjectProfile";
 import HeroSection from "@/components/HeroSection";
 import BubbleScene from "@/components/BubbleScene";
 import CardStackReveal from "@/components/CardStackReveal";
-import GithubGraphQl from "./GithubGraphQl";
-import SelectedWorks from "./SelectedWorks";
-import EducationLog from "./EducationLog";
 
 const InfoLayout = () => {
 
     return (
         <div>
-            {/* <HeroSection /> */}
+            <HeroSection />
             {/* <SubjectProfile /> */}
             {/* <DevTicker /> */}
             {/* <BubbleScene /> */}
-            <CardStackReveal />
-            {/* <GithubGraphQl /> */}
-            {/* <SelectedWorks /> */}
+            {/* <CardStackReveal /> */}
             {/* <EducationLog /> */}
         </div>
     );

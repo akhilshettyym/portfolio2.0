@@ -1,16 +1,25 @@
+"use client";
+
 import React from 'react'
-import CustomButton from './CustomButton';
+import { useRouter } from 'next/navigation';
+import CustomButton from './basic/CustomButton';
 
 const SelectedWorks = () => {
 
+    const router = useRouter();
+
+    const handleNavigate = () => {
+        router.push("/");
+    };
+
     return (
         <div>
-            <div className="min-h-screen w-full flex items-center justify-center p-6">
-                <div className="w-full max-w-7xl flex flex-col flex-row">
+            <div className="min-h-full w-full flex items-center justify-center">
+                <div className="w-full max-w-8xl flex flex-row">
 
-                    <div className="w-[15%] pt-40">
-                        <div className="relative h-[500px] overflow-hidden">
-                            <div className="absolute left-1/2 top-1/2 -translate-x-1/3 -translate-y-1/2 -rotate-90 w-[350px] flex flex-col">
+                    <div className="w-[10%] pt-40">
+                        <div className="relative h-125 overflow-hidden">
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/3 -translate-y-1/2 -rotate-90 w-50 flex flex-col">
                                 <p className="w-full text-left whitespace-nowrap tracking-[0.40em] text-sm font-medium text-zinc-900 uppercase"> // Beyond <span className="lowercase tracking-[0.20em]"> localhost:3000 </span> </p>
 
                                 <p className="w-full text-right whitespace-nowrap tracking-[0.20em] text-[10px] font-medium text-zinc-500 uppercase mt-2"> Where 127.0.0.1 Ends </p>
@@ -18,7 +27,7 @@ const SelectedWorks = () => {
                         </div>
                     </div>
 
-                    <div className='w-[85%]'>
+                    <div className='w-[90%] mr-5'>
                         <div className="mb-2">
                             <div className="relative px-10 py-2 text-xs tracking-widest">
                                 <div className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-auto">
@@ -42,12 +51,12 @@ const SelectedWorks = () => {
                             </div>
                         </div>
 
-                        <div className="flex-1 min-h-[500px] rounded-2xl border border-black/10 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)] overflow-hidden">
+                        <div className="flex-1 min-h-125 rounded-2xl border border-black/10 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)] overflow-hidden">
 
                             <div className="p-1">
                                 <div className="grid grid-cols-2 divide-x divide-black/10 border-b border-black/10">
 
-                                    <div className="h-[350px] p-6 flex flex-col justify-between">
+                                    <div className="h-87.5 p-6 flex flex-col justify-between">
                                         <div>
                                             <p className="text-[10px] uppercase tracking-[0.4em] text-black/35">
                                                 top left
@@ -63,7 +72,7 @@ const SelectedWorks = () => {
                                     </div>
 
 
-                                    <div className="h-[350px] p-6 flex flex-col justify-between">
+                                    <div className="h-87.5 p-6 flex flex-col justify-between">
                                         <div>
                                             <p className="text-[10px] uppercase tracking-[0.4em] text-black/35">
                                                 top right
@@ -83,7 +92,7 @@ const SelectedWorks = () => {
 
                                 <div className="grid grid-cols-4 divide-x divide-black/10">
 
-                                    <div className="h-[200px] p-5">
+                                    <div className="h-50 p-5">
                                         <p className="text-[10px] uppercase tracking-[0.35em] text-black/35">
                                             bottom 1
                                         </p>
@@ -92,7 +101,7 @@ const SelectedWorks = () => {
                                         </p>
                                     </div>
 
-                                    <div className="h-[200px] p-5">
+                                    <div className="h-50 p-5">
                                         <p className="text-[10px] uppercase tracking-[0.35em] text-black/35">
                                             bottom 2
                                         </p>
@@ -101,7 +110,7 @@ const SelectedWorks = () => {
                                         </p>
                                     </div>
 
-                                    <div className="h-[200px] p-5">
+                                    <div className="h-50 p-5">
                                         <p className="text-[10px] uppercase tracking-[0.35em] text-black/35">
                                             bottom 3
                                         </p>
@@ -111,9 +120,9 @@ const SelectedWorks = () => {
                                     </div>
 
 
-                                    <div className="flex h-[200px] p-2">
+                                    <div className="flex h-50 p-2">
                                         <div className="w-full rounded-2xl border-black/10 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.08)] overflow-hidden flex items-center justify-center">
-                                            <CustomButton title="View Project" href="/" width="180" height="50" />
+                                            <CustomButton title="View Project" onClick={handleNavigate} width="180" height="50" />
                                         </div>
                                     </div>
 

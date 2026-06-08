@@ -1,9 +1,10 @@
 import React from "react";
+import CreateSomething from "../CreateSomething";
 
 const StartLayout = () => {
   return (
     <div>
-      START LAYOUT
+      <CreateSomething />
     </div>
   )
 }

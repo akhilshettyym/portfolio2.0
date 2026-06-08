@@ -1,5 +1,5 @@
 import React from "react";
-import StartLayout from "@/components/StartLayout";
+import StartLayout from "@/components/layouts/StartLayout";
 
 const page = () => {
   return (

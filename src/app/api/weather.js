@@ -196,7 +196,7 @@ export async function getWeatherScene() {
         };
 
     } catch (error) {
-        console.error("Weather Scene Error:", error);
+        // console.error("Weather Scene Error:", error);
 
         return {
             success: false,

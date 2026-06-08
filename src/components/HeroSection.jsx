@@ -19,17 +19,103 @@ const HeroSection = () => {
     const containerRef = useRef(null);
     const tunnelPositionRef = useRef(0);
 
+    const [scene, setScene] = useState();
+    const [clouds, setClouds] = useState();
+    const [cloudScene, setCloudScene] = useState();
+
     const [paused, setPaused] = useState(false);
 
     useEffect(() => {
         async function init() {
             const sceneData = await getWeatherScene();
             console.log(sceneData);
+            setScene(sceneData);
         }
         init();
     }, []);
 
-    const scene = "MORNING_CLEAR";
+
+    const cloud_background = ["afternoon_clear", "afternoon_cloudy", "dawn_clear", "dawn_overcast", "golden_hour", "morning_clear", "morning_cloudy", "night", "rain", "storm", "sunset"];
+
+    const cloudss = ["afternoon_clear", "afternoon_cloudy", "dawn_clear", "dawn_overcast", "golden_hour", "morning_clear", "morning_cloudy", "night", "rain", "storm", "sunset"];
+
+    if (sceneData == afternoon_clear) {
+        setClouds(afternoon_clear);
+        setCloudScene(afternoon_clear);
+
+    } else if (sceneData == afternoon_cloudy) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == afternoon_cloudy) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == dawn_clear) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == dawn_overcast) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == golden_hour) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == morning_clear) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == morning_cloudy) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == night) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == rain) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == storm) {
+        setClouds();
+        setCloudScene();
+
+    } else if (sceneData == sunset) {
+        setClouds();
+        setCloudScene();
+
+    } else {
+        setClouds();
+        setCloudScene();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     useEffect(() => {
         pausedRef.current = paused;

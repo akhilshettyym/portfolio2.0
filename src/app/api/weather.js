@@ -98,7 +98,7 @@ function resolveScene(weather) {
 }
 
 async function fetchWeather(latitude, longitude) {
-    const url = new URL(`${process.env.LOCATION_FROM_OPEN_METEO_API}`);
+    const url = new URL(`${process.env.NEXT_PUBLIC_LOCATION_FROM_OPEN_METEO_API}`);
     url.searchParams.set("latitude", latitude);
     url.searchParams.set("longitude", longitude);
     url.searchParams.set("current", "temperature_2m,weather_code,is_day,cloud_cover,wind_speed_10m");
@@ -143,7 +143,7 @@ async function getLocationFromIP() {
     const timeout = setTimeout(() => controller.abort(), 5000);
 
     try {
-        const response = await fetch(`${process.env.LOCATION_FROM_IP}`, { signal: controller.signal });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCATION_FROM_IP}`, { signal: controller.signal });
 
         if (!response.ok) {
             throw new Error("IP lookup failed");

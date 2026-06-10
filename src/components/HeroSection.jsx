@@ -82,63 +82,6 @@ const HeroSection = () => {
         setLocationReady(true);
     };
 
-
-    // -------------------------------------------------------
-    // WORKING
-
-    // const [sceneAssets, setSceneAssets] = useState({
-    //     background: "morning_clear",
-    //     clouds: "morning_clear",
-    // });
-
-    // console.log("PROPS", sceneAssets);
-
-    // useEffect(() => {
-    //     let mounted = true;
-    //     async function init() {
-    //         try {
-    //             const navType = performance.getEntriesByType("navigation")?.[0]?.type;
-    //             const sceneData = await getWeatherScene({
-    //                 forceRefresh: navType === "reload",
-    //             });
-    //             if (!mounted) return;
-    //             setSceneAssets({
-    //                 background: sceneData.backgroundKey ?? "morning_clear",
-    //                 clouds: sceneData.cloudKey ?? "morning_clear",
-    //             });
-    //             console.log("Weather scene:", sceneData);
-    //         } catch (error) {
-    //             console.error("Failed to load weather scene:", error);
-    //             if (!mounted) return;
-    //             setSceneAssets({
-    //                 background: "morning_clear",
-    //                 clouds: "morning_clear",
-    //             });
-    //         }
-    //     }
-    //     init();
-    //     return () => {
-    //         mounted = false;
-    //     };
-    // }, []);
-
-
-    // ---------------------------------------
-
-    // const [showLocationModal, setShowLocationModal] = useState(false);
-
-    // useEffect(() => {
-    //     const mode = getLocationMode();
-    //     if (!mode) {
-    //         setShowLocationModal(true);
-    //     }
-    // }, []);
-
-    // <LocationPreferenceModal open={showLocationModal} onClose={() => setShowLocationModal(false)} />
-
-    // ----------------------------------------
-
-
     useEffect(() => {
         pausedRef.current = paused;
     }, [paused]);
@@ -161,195 +104,193 @@ const HeroSection = () => {
         });
     };
 
-    // useEffect(() => {
-    //     if (!clouds) return;
-    //     const container = containerRef.current;
-    //     const btn = btnRef.current;
+    useEffect(() => {
+        if (!sceneAssets?.clouds) return;
+        const container = containerRef.current;
+        const btn = btnRef.current;
 
-    //     if (!container) return;
+        if (!container) return;
 
-    //     let camera;
-    //     let threeScene;
-    //     let renderer;
-    //     let mesh;
-    //     let mesh2;
-    //     let texture;
-    //     let material;
+        let camera;
+        let threeScene;
+        let renderer;
+        let mesh;
+        let mesh2;
+        let texture;
+        let material;
 
-    //     let mouseX = 0;
-    //     let mouseY = 0;
-    //     let windowHalfX = window.innerWidth / 2;
-    //     let windowHalfY = window.innerHeight / 2;
-    //     let animationId;
+        let mouseX = 0;
+        let mouseY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+        let animationId;
 
-    //     const onMouseMove = (e) => {
-    //         if (pausedRef.current) return;
+        const onMouseMove = (e) => {
+            if (pausedRef.current) return;
 
-    //         mouseX = (e.clientX - windowHalfX) * 0.25;
-    //         mouseY = (e.clientY - windowHalfY) * 0.15;
-    //     };
+            mouseX = (e.clientX - windowHalfX) * 0.25;
+            mouseY = (e.clientY - windowHalfY) * 0.15;
+        };
 
-    //     const onResize = () => {
-    //         windowHalfX = window.innerWidth / 2;
-    //         windowHalfY = window.innerHeight / 2;
+        const onResize = () => {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
 
-    //         if (!camera || !renderer) return;
+            if (!camera || !renderer) return;
 
-    //         camera.aspect = window.innerWidth / window.innerHeight;
-    //         camera.updateProjectionMatrix();
-    //         renderer.setSize(window.innerWidth, window.innerHeight);
-    //         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    //     };
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        };
 
-    //     const animate = () => {
-    //         animationId = requestAnimationFrame(animate);
+        const animate = () => {
+            animationId = requestAnimationFrame(animate);
 
-    //         if (camera) {
-    //             const targetSpeed = pausedRef.current ? 0 : 0.8;
-    //             speedRef.current += (targetSpeed - speedRef.current) * 0.025;
-    //             tunnelPositionRef.current += speedRef.current;
+            if (camera) {
+                const targetSpeed = pausedRef.current ? 0 : 0.8;
+                speedRef.current += (targetSpeed - speedRef.current) * 0.025;
+                tunnelPositionRef.current += speedRef.current;
 
-    //             const mouseFactor = pausedRef.current ? 0 : 1;
-    //             camera.position.x += ((mouseX * mouseFactor) - camera.position.x) * 0.01;
-    //             camera.position.y += ((-mouseY * mouseFactor) - camera.position.y) * 0.01;
-    //             camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
-    //         }
+                const mouseFactor = pausedRef.current ? 0 : 1;
+                camera.position.x += ((mouseX * mouseFactor) - camera.position.x) * 0.01;
+                camera.position.y += ((-mouseY * mouseFactor) - camera.position.y) * 0.01;
+                camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
+            }
 
-    //         if (renderer && threeScene && camera) {
-    //             renderer.render(threeScene, camera);
-    //         }
-    //     };
+            if (renderer && threeScene && camera) {
+                renderer.render(threeScene, camera);
+            }
+        };
 
-    //     const handleBtnMouseMove = (e) => {
-    //         if (!btn) return;
+        const handleBtnMouseMove = (e) => {
+            if (!btn) return;
 
-    //         const rect = btn.getBoundingClientRect();
-    //         const x = e.clientX - rect.left - rect.width / 2;
-    //         const y = e.clientY - rect.top - rect.height / 2;
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
 
-    //         btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-    //     };
+            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        };
 
-    //     const handleBtnMouseLeave = () => {
-    //         if (!btn) return;
-    //         btn.style.transform = "translate(0px, 0px)";
-    //     };
+        const handleBtnMouseLeave = () => {
+            if (!btn) return;
+            btn.style.transform = "translate(0px, 0px)";
+        };
 
-    //     threeScene = new THREE.Scene();
+        threeScene = new THREE.Scene();
 
-    //     camera = new THREE.PerspectiveCamera(30,
-    //         window.innerWidth / window.innerHeight,
-    //         1, 3000
-    //     );
-    //     camera.position.z = 6000;
+        camera = new THREE.PerspectiveCamera(30,
+            window.innerWidth / window.innerHeight,
+            1, 3000
+        );
+        camera.position.z = 6000;
 
-    //     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
-    //     renderer.setSize(window.innerWidth, window.innerHeight);
-    //     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    //     container.appendChild(renderer.domElement);
+        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
 
-    //     const textureLoader = new THREE.TextureLoader();
+        const textureLoader = new THREE.TextureLoader();
 
-    //     // textureLoader.load("/clouds/morning_clear.svg", (loadedTexture) => {
-    //     textureLoader.load(`/clouds/${clouds}.svg`, (loadedTexture) => {
-    //         texture = loadedTexture;
-    //         texture.colorSpace = THREE.SRGBColorSpace;
-    //         texture.magFilter = THREE.LinearMipmapLinearFilter;
-    //         texture.minFilter = THREE.LinearMipmapLinearFilter;
+        textureLoader.load(`/clouds/${sceneAssets?.clouds}.svg`, (loadedTexture) => {
+            texture = loadedTexture;
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.magFilter = THREE.LinearMipmapLinearFilter;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-    //         // const fog = new THREE.Fog(0xcfefff, -100, 3000);
-    //         const fog = new THREE.Fog(0xffffff, -100, 3000);
-    //         threeScene.fog = fog;
+            const fog = new THREE.Fog(0xffffff, -100, 3000);
+            threeScene.fog = fog;
 
-    //         material = new THREE.ShaderMaterial({
-    //             uniforms: {
-    //                 map: { value: texture },
-    //                 fogColor: { value: fog.color },
-    //                 fogNear: { value: fog.near },
-    //                 fogFar: { value: fog.far },
-    //             },
-    //             vertexShader: CLOUD_SHADER.vertexShader,
-    //             fragmentShader: CLOUD_SHADER.fragmentShader,
-    //             depthWrite: false,
-    //             depthTest: false,
-    //             transparent: true,
-    //         });
+            material = new THREE.ShaderMaterial({
+                uniforms: {
+                    map: { value: texture },
+                    fogColor: { value: fog.color },
+                    fogNear: { value: fog.near },
+                    fogFar: { value: fog.far },
+                },
+                vertexShader: CLOUD_SHADER.vertexShader,
+                fragmentShader: CLOUD_SHADER.fragmentShader,
+                depthWrite: false,
+                depthTest: false,
+                transparent: true,
+            });
 
-    //         const planeGeo = new THREE.PlaneGeometry(64, 64);
-    //         const planeObj = new THREE.Object3D();
-    //         const geometries = [];
+            const planeGeo = new THREE.PlaneGeometry(64, 64);
+            const planeObj = new THREE.Object3D();
+            const geometries = [];
 
-    //         for (let i = 0; i < 8000; i++) {
-    //             planeObj.position.x = Math.random() * 1000 - 500;
-    //             planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
-    //             planeObj.position.z = i;
-    //             planeObj.rotation.z = Math.random() * Math.PI;
-    //             planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+            for (let i = 0; i < 8000; i++) {
+                planeObj.position.x = Math.random() * 1000 - 500;
+                planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
+                planeObj.position.z = i;
+                planeObj.rotation.z = Math.random() * Math.PI;
+                planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
 
-    //             planeObj.updateMatrix();
+                planeObj.updateMatrix();
 
-    //             const cloned = planeGeo.clone();
-    //             cloned.applyMatrix4(planeObj.matrix);
-    //             geometries.push(cloned);
-    //         }
+                const cloned = planeGeo.clone();
+                cloned.applyMatrix4(planeObj.matrix);
+                geometries.push(cloned);
+            }
 
-    //         const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
+            const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
 
-    //         mesh = new THREE.Mesh(mergedGeo, material);
-    //         mesh.renderOrder = 2;
+            mesh = new THREE.Mesh(mergedGeo, material);
+            mesh.renderOrder = 2;
 
-    //         mesh2 = mesh.clone();
-    //         mesh2.position.z = -8000;
-    //         mesh2.renderOrder = 1;
+            mesh2 = mesh.clone();
+            mesh2.position.z = -8000;
+            mesh2.renderOrder = 1;
 
-    //         threeScene.add(mesh);
-    //         threeScene.add(mesh2);
+            threeScene.add(mesh);
+            threeScene.add(mesh2);
 
-    //         planeGeo.dispose();
-    //         animate();
-    //     });
+            planeGeo.dispose();
+            animate();
+        });
 
-    //     window.addEventListener("mousemove", onMouseMove);
-    //     window.addEventListener("resize", onResize);
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("resize", onResize);
 
-    //     if (btn) {
-    //         btn.addEventListener("mousemove", handleBtnMouseMove);
-    //         btn.addEventListener("mouseleave", handleBtnMouseLeave);
-    //     }
+        if (btn) {
+            btn.addEventListener("mousemove", handleBtnMouseMove);
+            btn.addEventListener("mouseleave", handleBtnMouseLeave);
+        }
 
-    //     return () => {
-    //         window.removeEventListener("mousemove", onMouseMove);
-    //         window.removeEventListener("resize", onResize);
+        return () => {
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("resize", onResize);
 
-    //         if (btn) {
-    //             btn.removeEventListener("mousemove", handleBtnMouseMove);
-    //             btn.removeEventListener("mouseleave", handleBtnMouseLeave);
-    //             btn.style.transform = "translate(0px, 0px)";
-    //         }
+            if (btn) {
+                btn.removeEventListener("mousemove", handleBtnMouseMove);
+                btn.removeEventListener("mouseleave", handleBtnMouseLeave);
+                btn.style.transform = "translate(0px, 0px)";
+            }
 
-    //         if (animationId) cancelAnimationFrame(animationId);
+            if (animationId) cancelAnimationFrame(animationId);
 
-    //         if (mesh) {
-    //             threeScene.remove(mesh);
-    //             mesh.geometry?.dispose?.();
-    //         }
+            if (mesh) {
+                threeScene.remove(mesh);
+                mesh.geometry?.dispose?.();
+            }
 
-    //         if (mesh2) {
-    //             threeScene.remove(mesh2);
-    //             mesh2.geometry?.dispose?.();
-    //         }
+            if (mesh2) {
+                threeScene.remove(mesh2);
+                mesh2.geometry?.dispose?.();
+            }
 
-    //         if (material) material.dispose();
-    //         if (texture) texture.dispose();
+            if (material) material.dispose();
+            if (texture) texture.dispose();
 
-    //         if (renderer) {
-    //             renderer.dispose();
-    //             if (container.contains(renderer.domElement)) {
-    //                 container.removeChild(renderer.domElement);
-    //             }
-    //         }
-    //     };
-    // }, [clouds]);
+            if (renderer) {
+                renderer.dispose();
+                if (container.contains(renderer.domElement)) {
+                    container.removeChild(renderer.domElement);
+                }
+            }
+        };
+    }, [sceneAssets?.clouds]);
 
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
@@ -358,7 +299,7 @@ const HeroSection = () => {
 
                 <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationComplete} />
 
-                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${cloudScene.toLowerCase()}.png")` }} /> */}
+                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets?.background.toLowerCase()}.png")` }} />
 
                 <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
@@ -427,7 +368,7 @@ const HeroSection = () => {
                     </button>
                 </div>
 
-                {/* <div className="hero-name"> AKHIL SHETTY </div> */}
+                <div className="hero-name"> AKHIL SHETTY </div>
 
                 <div className="hero-subtext-wrap">
                     <p className="hero-subtext">

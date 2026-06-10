@@ -1,168 +1,124 @@
-// // services/weather.js
-
-// export async function fetchWeather(latitude, longitude) {
-//     try {
-//         const response = await fetch(
-//             `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,cloud_cover,weather_code,is_day,wind_speed_10m&daily=sunrise,sunset&timezone=auto`
-//         );
-
-//         if (!response.ok) {
-//             throw new Error("Failed to fetch weather");
-//         }
-
-//         const data = await response.json();
-
-//         return {
-//             temperature: data.current.temperature_2m,
-//             cloudCover: data.current.cloud_cover,
-//             weatherCode: data.current.weather_code,
-//             isDay: data.current.is_day === 1,
-//             windSpeed: data.current.wind_speed_10m,
-//             sunrise: data.daily.sunrise?.[0],
-//             sunset: data.daily.sunset?.[0],
-//         };
-//     } catch (error) {
-//         console.error("Weather fetch failed:", error);
-
-//         return null;
-//     }
-// }
-
-
-// async function loadWeather() {
-//     navigator.geolocation.getCurrentPosition(
-//         async ({ coords }) => {
-//             const weather = await fetchWeather(
-//                 coords.latitude,
-//                 coords.longitude
-//             );
-
-//             console.log(weather);
-//         },
-//         (error) => {
-//             console.error(error);
-//         }
-//     );
-// }
-
-
-// const data = loadWeather();
-// console.log("DATA", data)
-
-
-
-
-// services/weather-scene.js
-
 import { Moon } from "lunarphase-js";
-
-const WEATHER_CODES = {
-    RAIN: [51, 53, 55, 61, 63, 65, 80, 81, 82],
-    STORM: [95, 96, 99]
-};
+import { WEATHER_CODES, CACHE_KEY, LOCATION_MODE_KEY, CACHE_TTL_MS } from "../../utils/basic-utils";
 
 function getMoonVariant() {
     const phase = Moon.lunarPhase();
-
     switch (phase) {
         case "New Moon":
             return "NEW_MOON";
-
         case "Waxing Crescent":
         case "Waning Crescent":
             return "CRESCENT";
-
         case "First Quarter":
         case "Last Quarter":
             return "HALF_MOON";
-
         case "Waxing Gibbous":
         case "Waning Gibbous":
         case "Full Moon":
-            return "FULL_MOON";
-
         default:
             return "FULL_MOON";
     }
 }
 
-function resolveScene(weather) {
-    const { cloudCover, weatherCode, sunrise, sunset } = weather;
+function getWeatherCondition(weatherCode) {
+    if (WEATHER_CODES.STORM.includes(weatherCode)) return "storm";
+    if (WEATHER_CODES.RAIN.includes(weatherCode)) return "rain";
+    if (WEATHER_CODES.SNOW.includes(weatherCode)) return "snow";
+    if (WEATHER_CODES.MIST.includes(weatherCode)) return "mist";
+    return "clear";
+}
 
-    const now = new Date();
-
-    const sunriseDate = new Date(sunrise);
-    const sunsetDate = new Date(sunset);
-
-    const currentTime = now.getTime();
-
-    const sunriseTime = sunriseDate.getTime();
-    const sunsetTime = sunsetDate.getTime();
-
+function getTimeBand(now, sunrise, sunset) {
     const HOUR = 60 * 60 * 1000;
-
+    const sunriseTime = new Date(sunrise).getTime();
+    const sunsetTime = new Date(sunset).getTime();
+    const currentTime = now.getTime();
     const isDawn = currentTime >= sunriseTime && currentTime < sunriseTime + HOUR;
     const isGoldenHour = currentTime >= sunsetTime - HOUR && currentTime < sunsetTime;
     const isSunset = currentTime >= sunsetTime && currentTime < sunsetTime + HOUR;
     const isNight = currentTime > sunsetTime + HOUR || currentTime < sunriseTime;
-    const isMorning = !isNight && !isDawn && now.getHours() < 12;
-    const isAfternoon = !isNight && !isMorning && !isGoldenHour && !isSunset;
 
-    if (WEATHER_CODES.STORM.includes(weatherCode)) {
-        return "STORM";
+    if (isNight) return "night";
+    if (isDawn) return "dawn";
+    if (isGoldenHour) return "golden_hour";
+    if (isSunset) return "sunset";
+
+    return now.getHours() < 12 ? "morning" : "afternoon";
+}
+
+function resolveScene(weather) {
+    const now = new Date();
+    const { cloudCover = 0, weatherCode, sunrise, sunset } = weather;
+    const timeBand = getTimeBand(now, sunrise, sunset);
+    const condition = getWeatherCondition(weatherCode);
+
+    const cloudy = Number(cloudCover) > 40;
+    let backgroundKey = "morning_clear";
+
+    switch (timeBand) {
+        case "dawn":
+            backgroundKey = cloudy ? "dawn_overcast" : "dawn_clear";
+            break;
+
+        case "morning":
+            backgroundKey = cloudy ? "morning_cloudy" : "morning_clear";
+            break;
+
+        case "afternoon":
+            backgroundKey = cloudy ? "afternoon_cloudy" : "afternoon_clear";
+            break;
+
+        case "golden_hour":
+            backgroundKey = "golden_hour";
+            break;
+
+        case "sunset":
+            backgroundKey = "sunset";
+            break;
+
+        case "night":
+            backgroundKey = "night";
+            break;
+
+        default:
+            backgroundKey = "morning_clear";
     }
 
-    if (WEATHER_CODES.RAIN.includes(weatherCode)
-    ) {
-        return "RAIN";
-    }
+    let cloudKey = backgroundKey;
 
-    if (isNight) {
-        return "NIGHT";
-    }
+    if (condition === "storm") {
+        cloudKey = "storm";
 
-    if (isSunset) {
-        return "SUNSET";
+    } else if (condition === "rain") {
+        cloudKey = "rain";
     }
-
-    if (isGoldenHour) {
-        return "GOLDEN_HOUR";
-    }
-
-    if (isDawn) {
-        return cloudCover <= 40 ? "DAWN_CLEAR" : "DAWN_OVERCAST";
-    }
-
-    if (isMorning) {
-        return cloudCover <= 40 ? "MORNING_CLEAR" : "MORNING_CLOUDY";
-    }
-
-    if (isAfternoon) {
-        return cloudCover <= 40 ? "AFTERNOON_CLEAR" : "AFTERNOON_CLOUDY";
-    }
-
-    return "AFTERNOON_CLEAR";
+    return {
+        backgroundKey, cloudKey, timeBand, condition,
+    };
 }
 
 async function fetchWeather(latitude, longitude) {
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,cloud_cover,weather_code,is_day,wind_speed_10m&daily=sunrise,sunset&timezone=auto`);
+    const url = new URL(`${process.env.LOCATION_FROM_OPEN_METEO_API}`);
+    url.searchParams.set("latitude", latitude);
+    url.searchParams.set("longitude", longitude);
+    url.searchParams.set("current", "temperature_2m,weather_code,is_day,cloud_cover,wind_speed_10m");
+    url.searchParams.set("daily", "sunrise,sunset");
+    url.searchParams.set("timezone", "auto");
+
+    const response = await fetch(url.toString());
 
     if (!response.ok) {
-        throw new Error(
-            "Failed to fetch weather"
-        );
+        throw new Error("Failed to fetch weather");
     }
-
     const data = await response.json();
-
     return {
-        temperature: data.current.temperature_2m,
-        cloudCover: data.current.cloud_cover,
-        weatherCode: data.current.weather_code,
-        isDay: data.current.is_day === 1,
-        windSpeed: data.current.wind_speed_10m,
-        sunrise: data.daily.sunrise?.[0],
-        sunset: data.daily.sunset?.[0]
+        temperature: data.current?.temperature_2m,
+        cloudCover: data.current?.cloud_cover,
+        weatherCode: data.current?.weather_code,
+        isDay: data.current?.is_day === 1,
+        windSpeed: data.current?.wind_speed_10m,
+        sunrise: data.daily?.sunrise?.[0],
+        sunset: data.daily?.sunset?.[0],
     };
 }
 
@@ -175,34 +131,147 @@ function getCurrentPosition() {
                 {
                     enableHighAccuracy: true,
                     timeout: 10000,
-                    maximumAge: 300000
+                    maximumAge: 300000,
                 }
             );
         }
     );
 }
 
-export async function getWeatherScene() {
+async function getLocationFromIP() {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
     try {
-        const position = await getCurrentPosition();
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        const weather = await fetchWeather(latitude, longitude);
-        const scene = resolveScene(weather);
-        const moonPhase = scene === "NIGHT" ? getMoonVariant() : null;
+        const response = await fetch(`${process.env.LOCATION_FROM_IP}`, { signal: controller.signal });
+
+        if (!response.ok) {
+            throw new Error("IP lookup failed");
+        }
+
+        const data = await response.json();
 
         return {
-            success: true, scene, moonPhase, weather
+            latitude: data.latitude,
+            longitude: data.longitude,
         };
 
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+async function getCoordinates() {
+    const mode = localStorage.getItem(LOCATION_MODE_KEY) || "fast";
+
+    if (mode === "accurate") {
+        try {
+            const position = await getCurrentPosition();
+            return {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            };
+        } catch {
+            console.warn("GPS failed. Falling back to IP.");
+            return await getLocationFromIP();
+        }
+    }
+    return await getLocationFromIP();
+}
+
+function readCachedScene() {
+    if (typeof window === "undefined")
+        return null;
+
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+
+        if (!parsed?.timestamp || !parsed?.data) {
+            return null;
+        }
+
+        const age = Date.now() - parsed.timestamp;
+        if (age > CACHE_TTL_MS) {
+            return null;
+        }
+
+        return parsed.data;
+
+    } catch {
+        return null;
+    }
+}
+
+function writeCachedScene(data) {
+    if (typeof window === "undefined")
+        return;
+
+    try {
+        localStorage.setItem(
+            CACHE_KEY,
+            JSON.stringify({
+                timestamp: Date.now(),
+                data,
+            })
+        );
+    } catch { }
+}
+
+export function setLocationMode(mode) {
+    localStorage.setItem(LOCATION_MODE_KEY, mode);
+    localStorage.removeItem(CACHE_KEY);
+}
+
+export function getLocationMode() {
+    return localStorage.getItem(LOCATION_MODE_KEY);
+}
+
+export async function getWeatherScene({ forceRefresh = false } = {}) {
+    try {
+        if (!forceRefresh) {
+            const cached = readCachedScene();
+
+            if (cached) {
+                return cached;
+            }
+        }
+
+        const { latitude, longitude } = await getCoordinates();
+        const weather = await fetchWeather(latitude, longitude);
+
+        const scene = resolveScene(weather);
+        const moonPhase = scene.timeBand === "night" ? getMoonVariant() : null;
+
+        const result = {
+            success: true,
+            scene: scene.timeBand,
+            backgroundKey: scene.backgroundKey,
+            cloudKey: scene.cloudKey,
+            moonPhase,
+            weather,
+        };
+
+        writeCachedScene(result);
+        return result;
+
     } catch (error) {
-        // console.error("Weather Scene Error:", error);
+        console.error(error);
+        const cached = readCachedScene();
+
+        if (cached) {
+            return cached;
+        }
 
         return {
             success: false,
-            scene: "AFTERNOON_CLEAR",
+            scene: "morning",
+            backgroundKey: "morning_clear",
+            cloudKey: "morning_clear",
             moonPhase: null,
-            weather: null
+            weather: null,
         };
     }
 }

@@ -35,6 +35,20 @@ export const EASEOUTEXPO = (t) => {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 }
 
+export const WEATHER_CODES = {
+    CLEAR: [0, 1, 2, 3],
+    MIST: [45, 48],
+    RAIN: [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82],
+    SNOW: [71, 73, 75, 77, 85, 86],
+    STORM: [95, 96, 99],
+};
+
+export const CACHE_KEY = "weather_scene_cache";
+
+export const LOCATION_MODE_KEY = "weather_location_mode";
+
+export const CACHE_TTL_MS = 15 * 60 * 1000;
+
 export const DEFAULT_CARDS = [
     {
         title: "Impact Highlights",

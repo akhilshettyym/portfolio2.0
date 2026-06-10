@@ -7,9 +7,10 @@ import { motion } from "framer-motion";
 import WordCarousel from "./basic/WordCarousel";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
 import { useEffect, useRef, useState } from "react";
-import { getWeatherScene } from "@/app/api/weather";
+import { getLocationMode, getWeatherScene } from "@/app/api/weather";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import LocationPreferenceModal from "./LocationPreferenceModal";
 
 const HeroSection = () => {
 
@@ -20,123 +21,120 @@ const HeroSection = () => {
     const tunnelPositionRef = useRef(0);
     const [paused, setPaused] = useState(false);
 
-
-    // ----------------------------------------
-
-    // const [clouds, setClouds] = useState("morning_clear");
-    // const [cloudScene, setCloudScene] = useState("morning_clear");
-
-    // const SCENE_CONFIG = {
-    //     afternoon_clear: {
-    //         clouds: "afternoon_clear",
-    //         cloudScene: "afternoon_clear",
-    //     },
-    //     afternoon_cloudy: {
-    //         clouds: "afternoon_cloudy",
-    //         cloudScene: "afternoon_cloudy",
-    //     },
-    //     dawn_clear: {
-    //         clouds: "dawn_clear",
-    //         cloudScene: "dawn_clear",
-    //     },
-    //     dawn_overcast: {
-    //         clouds: "dawn_overcast",
-    //         cloudScene: "dawn_overcast",
-    //     },
-    //     golden_hour: {
-    //         clouds: "golden_hour",
-    //         cloudScene: "golden_hour",
-    //     },
-    //     morning_clear: {
-    //         clouds: "morning_clear",
-    //         cloudScene: "morning_clear",
-    //     },
-    //     morning_cloudy: {
-    //         clouds: "morning_cloudy",
-    //         cloudScene: "morning_cloudy",
-    //     },
-    //     night: {
-    //         clouds: "night",
-    //         cloudScene: "night",
-    //     },
-    //     rain: {
-    //         clouds: "rain",
-    //         cloudScene: "rain",
-    //     },
-    //     storm: {
-    //         clouds: "storm",
-    //         cloudScene: "storm",
-    //     },
-    //     sunset: {
-    //         clouds: "sunset",
-    //         cloudScene: "sunset",
-    //     },
-    // };
-
-    // useEffect(() => {
-    //     async function init() {
-    //         try {
-    //             const sceneData = await getWeatherScene();
-
-    //             const weatherScene = sceneData?.scene?.toLowerCase();
-
-    //             const config = SCENE_CONFIG[weatherScene];
-
-    //             console.log("Weather Scene:", weatherScene, "Config:", config);
-
-    //             setClouds(config?.clouds ?? "morning_clear");
-    //             setCloudScene(config?.cloudScene ?? "morning_clear");
-
-    //         } catch (error) {
-    //             console.error("Failed to load weather scene:", error);
-
-    //             setClouds("morning_clear");
-    //             setCloudScene("morning_clear");
-    //         }
-    //     }
-
-    //     init();
-    // }, []);
-
-
+    const [locationReady, setLocationReady] = useState(false);
+    const [showLocationModal, setShowLocationModal] = useState(false);
 
     const [sceneAssets, setSceneAssets] = useState({
         background: "morning_clear",
         clouds: "morning_clear",
     });
 
-    console.log("PROPS", sceneAssets);
+    useEffect(() => {
+        const mode = getLocationMode();
+
+        if (!mode) {
+            setShowLocationModal(true);
+        } else {
+            setLocationReady(true);
+        }
+    }, []);
+
 
     useEffect(() => {
+        if (!locationReady) return;
         let mounted = true;
+
         async function init() {
             try {
-                const navType = performance.getEntriesByType("navigation")?.[0]?.type;
-                const sceneData = await getWeatherScene({
-                    forceRefresh: navType === "reload",
-                });
+                const navigation = performance.getEntriesByType("navigation")[0];
+                const isReload = navigation?.type === "reload";
+                const sceneData = await getWeatherScene({ forceRefresh: isReload });
+
                 if (!mounted) return;
                 setSceneAssets({
                     background: sceneData.backgroundKey ?? "morning_clear",
                     clouds: sceneData.cloudKey ?? "morning_clear",
                 });
                 console.log("Weather scene:", sceneData);
+
             } catch (error) {
                 console.error("Failed to load weather scene:", error);
+
                 if (!mounted) return;
+
                 setSceneAssets({
                     background: "morning_clear",
                     clouds: "morning_clear",
                 });
             }
         }
+
         init();
         return () => {
             mounted = false;
         };
-    }, []);
+
+    }, [locationReady]);
 
 
+    const handleLocationComplete = () => {
+        setShowLocationModal(false);
+        setLocationReady(true);
+    };
+
+
+    // -------------------------------------------------------
+    // WORKING
+
+    // const [sceneAssets, setSceneAssets] = useState({
+    //     background: "morning_clear",
+    //     clouds: "morning_clear",
+    // });
+
+    // console.log("PROPS", sceneAssets);
+
+    // useEffect(() => {
+    //     let mounted = true;
+    //     async function init() {
+    //         try {
+    //             const navType = performance.getEntriesByType("navigation")?.[0]?.type;
+    //             const sceneData = await getWeatherScene({
+    //                 forceRefresh: navType === "reload",
+    //             });
+    //             if (!mounted) return;
+    //             setSceneAssets({
+    //                 background: sceneData.backgroundKey ?? "morning_clear",
+    //                 clouds: sceneData.cloudKey ?? "morning_clear",
+    //             });
+    //             console.log("Weather scene:", sceneData);
+    //         } catch (error) {
+    //             console.error("Failed to load weather scene:", error);
+    //             if (!mounted) return;
+    //             setSceneAssets({
+    //                 background: "morning_clear",
+    //                 clouds: "morning_clear",
+    //             });
+    //         }
+    //     }
+    //     init();
+    //     return () => {
+    //         mounted = false;
+    //     };
+    // }, []);
+
+
+    // ---------------------------------------
+
+    // const [showLocationModal, setShowLocationModal] = useState(false);
+
+    // useEffect(() => {
+    //     const mode = getLocationMode();
+    //     if (!mode) {
+    //         setShowLocationModal(true);
+    //     }
+    // }, []);
+
+    // <LocationPreferenceModal open={showLocationModal} onClose={() => setShowLocationModal(false)} />
 
     // ----------------------------------------
 
@@ -356,6 +354,9 @@ const HeroSection = () => {
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
+
+
+                <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationComplete} />
 
                 {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${cloudScene.toLowerCase()}.png")` }} /> */}
 

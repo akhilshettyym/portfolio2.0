@@ -45,6 +45,8 @@ export const WEATHER_CODES = {
 
 export const CACHE_KEY = "weather_scene_cache";
 
+export const LOCATION_MODE_KEY = "weather_location_mode";
+
 export const CACHE_TTL_MS = 15 * 60 * 1000;
 
 export const DEFAULT_CARDS = [

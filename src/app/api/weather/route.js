@@ -1,20 +1,30 @@
 import { Moon } from "lunarphase-js";
-import { WEATHER_CODES, CACHE_KEY, LOCATION_MODE_KEY, CACHE_TTL_MS } from "../../utils/basic-utils";
+import { WEATHER_CODES, CACHE_KEY, LOCATION_MODE_KEY, CACHE_TTL_MS } from "../../../utils/basic-utils";
+import axios from "axios";
 
 function getMoonVariant() {
     const phase = Moon.lunarPhase();
+
     switch (phase) {
         case "New Moon":
             return "NEW_MOON";
+
         case "Waxing Crescent":
+
         case "Waning Crescent":
             return "CRESCENT";
+
         case "First Quarter":
+
         case "Last Quarter":
             return "HALF_MOON";
+
         case "Waxing Gibbous":
+
         case "Waning Gibbous":
+
         case "Full Moon":
+
         default:
             return "FULL_MOON";
     }
@@ -98,36 +108,63 @@ function resolveScene(weather) {
 }
 
 async function fetchWeather(latitude, longitude) {
-    const url = new URL(`${process.env.NEXT_PUBLIC_LOCATION_FROM_OPEN_METEO_API}`);
+    const WEATHER_API = process.env.NEXT_PUBLIC_LOCATION_FROM_OPEN_METEO_API || "https://api.open-meteo.com/v1/forecast";
+
+    const url = new URL(WEATHER_API);
+
     url.searchParams.set("latitude", latitude);
     url.searchParams.set("longitude", longitude);
     url.searchParams.set("current", "temperature_2m,weather_code,is_day,cloud_cover,wind_speed_10m");
     url.searchParams.set("daily", "sunrise,sunset");
     url.searchParams.set("timezone", "auto");
 
-    const response = await fetch(url.toString());
+    let lastError;
 
-    if (!response.ok) {
-        throw new Error("Failed to fetch weather");
+    for (let i = 0; i < 3; i++) {
+        try {
+            const response = await axios.get(url.toString(), {
+                timeout: 10000,
+            });
+
+            const data = response.data;
+
+            return {
+                temperature: data.current?.temperature_2m,
+                cloudCover: data.current?.cloud_cover,
+                weatherCode: data.current?.weather_code,
+                isDay: data.current?.is_day === 1,
+                windSpeed: data.current?.wind_speed_10m,
+                sunrise: data.daily?.sunrise?.[0],
+                sunset: data.daily?.sunset?.[0],
+            };
+        } catch (error) {
+            lastError = error;
+
+            console.error(
+                `Weather fetch attempt ${i + 1} failed`,
+                {
+                    url: url.toString(),
+                    status: error.response?.status,
+                    statusText: error.response?.statusText,
+                    response: error.response?.data,
+                    message: error.message,
+                }
+            );
+
+            await new Promise(resolve =>
+                setTimeout(resolve, 1000 * (i + 1))
+            );
+        }
     }
-    const data = await response.json();
-    return {
-        temperature: data.current?.temperature_2m,
-        cloudCover: data.current?.cloud_cover,
-        weatherCode: data.current?.weather_code,
-        isDay: data.current?.is_day === 1,
-        windSpeed: data.current?.wind_speed_10m,
-        sunrise: data.daily?.sunrise?.[0],
-        sunset: data.daily?.sunset?.[0],
-    };
+
+    throw lastError;
 }
 
 function getCurrentPosition() {
     return new Promise(
         (resolve, reject) => {
             navigator.geolocation.getCurrentPosition(
-                resolve,
-                reject,
+                resolve, reject,
                 {
                     enableHighAccuracy: true,
                     timeout: 10000,
@@ -143,18 +180,26 @@ async function getLocationFromIP() {
     const timeout = setTimeout(() => controller.abort(), 5000);
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCATION_FROM_IP}`, { signal: controller.signal });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION_FROM_IP}`, {
+            signal: controller.signal
+        });
 
-        if (!response.ok) {
-            throw new Error("IP lookup failed");
-        }
-
-        const data = await response.json();
+        const data = response.data;
 
         return {
             latitude: data.latitude,
             longitude: data.longitude,
         };
+
+    } catch (error) {
+        if (axios.isCancel(error)) {
+            console.warn("IP lookup request timed out after 5 seconds");
+            throw new Error("IP lookup timed out");
+
+        } else {
+            console.error("Axios network error during IP lookup:", error.message);
+            throw new Error("IP lookup failed");
+        }
 
     } finally {
         clearTimeout(timeout);
@@ -167,10 +212,12 @@ async function getCoordinates() {
     if (mode === "accurate") {
         try {
             const position = await getCurrentPosition();
+
             return {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
             };
+
         } catch {
             console.warn("GPS failed. Falling back to IP.");
             return await getLocationFromIP();
@@ -193,7 +240,7 @@ function readCachedScene() {
             return null;
         }
 
-        const age = Date.now() - parsed.timestamp;
+        const age = Date.now() - parsed.timestamp; 2
         if (age > CACHE_TTL_MS) {
             return null;
         }
@@ -229,6 +276,19 @@ export function getLocationMode() {
     return localStorage.getItem(LOCATION_MODE_KEY);
 }
 
+export function getWeatherIconData() {
+    const rawData = localStorage.getItem(CACHE_KEY);
+    if (!rawData) return { getMoonPhase: "MOON", getSceneCondition: "SCENE" };
+
+    const parsedData = JSON.parse(rawData);
+    const innerData = parsedData?.data;
+
+    return {
+        getMoonPhase: innerData?.renderMoonPhase,
+        getSceneCondition: innerData?.sceneCondition
+    };
+}
+
 export async function getWeatherScene({ forceRefresh = false } = {}) {
     try {
         if (!forceRefresh) {
@@ -241,8 +301,11 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
 
         const { latitude, longitude } = await getCoordinates();
         const weather = await fetchWeather(latitude, longitude);
+        const mode = localStorage.getItem(LOCATION_MODE_KEY) || "fast";
 
         const scene = resolveScene(weather);
+        const sceneCondition = scene?.condition;
+        const renderMoonPhase = getMoonVariant();
         const moonPhase = scene.timeBand === "night" ? getMoonVariant() : null;
 
         const result = {
@@ -251,7 +314,9 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
             backgroundKey: scene.backgroundKey,
             cloudKey: scene.cloudKey,
             moonPhase,
-            weather,
+            sceneCondition,
+            renderMoonPhase,
+            ...(mode === "accurate" && { weather })
         };
 
         writeCachedScene(result);
@@ -270,6 +335,8 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
             scene: "morning",
             backgroundKey: "morning_clear",
             cloudKey: "morning_clear",
+            sceneCondition: "CLEAR",
+            renderMoonPhase: "MOON",
             moonPhase: null,
             weather: null,
         };

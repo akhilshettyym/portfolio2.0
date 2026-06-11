@@ -2,15 +2,16 @@
 
 import "@/styles/clouds.css";
 import * as THREE from "three";
-import GlitchText from "./basic/GlitchText";
 import { motion } from "framer-motion";
+import GlitchText from "./basic/GlitchText";
+import WeatherIcon from "./basic/WeatherIcon";
 import WordCarousel from "./basic/WordCarousel";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
 import { useEffect, useRef, useState } from "react";
-import { getLocationMode, getWeatherScene } from "@/app/api/weather";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import LocationPreferenceModal from "./LocationPreferenceModal";
+import { getLocationMode, getWeatherScene } from "../app/api/weather/route";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 const HeroSection = () => {
 
@@ -30,8 +31,11 @@ const HeroSection = () => {
     });
 
     useEffect(() => {
-        const mode = getLocationMode();
+        pausedRef.current = paused;
+    }, [paused]);
 
+    useEffect(() => {
+        const mode = getLocationMode();
         if (!mode) {
             setShowLocationModal(true);
         } else {
@@ -39,6 +43,15 @@ const HeroSection = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const storedValue = localStorage.getItem("cloudControl");
+
+        if (storedValue !== null) {
+            const value = storedValue === "true";
+            setPaused(value);
+            pausedRef.current = value;
+        }
+    }, []);
 
     useEffect(() => {
         if (!locationReady) return;
@@ -55,6 +68,7 @@ const HeroSection = () => {
                     background: sceneData.backgroundKey ?? "morning_clear",
                     clouds: sceneData.cloudKey ?? "morning_clear",
                 });
+
                 console.log("Weather scene:", sceneData);
 
             } catch (error) {
@@ -73,36 +87,7 @@ const HeroSection = () => {
         return () => {
             mounted = false;
         };
-
     }, [locationReady]);
-
-
-    const handleLocationComplete = () => {
-        setShowLocationModal(false);
-        setLocationReady(true);
-    };
-
-    useEffect(() => {
-        pausedRef.current = paused;
-    }, [paused]);
-
-    useEffect(() => {
-        const storedValue = localStorage.getItem("cloudControl");
-
-        if (storedValue !== null) {
-            const value = storedValue === "true";
-            setPaused(value);
-            pausedRef.current = value;
-        }
-    }, []);
-
-    const handleCloudControl = () => {
-        setPaused((prev) => {
-            const nextState = !prev;
-            localStorage.setItem("cloudControl", String(nextState));
-            return nextState;
-        });
-    };
 
     useEffect(() => {
         if (!sceneAssets?.clouds) return;
@@ -111,13 +96,13 @@ const HeroSection = () => {
 
         if (!container) return;
 
-        let camera;
-        let threeScene;
-        let renderer;
         let mesh;
         let mesh2;
+        let camera;
         let texture;
         let material;
+        let renderer;
+        let threeScene;
 
         let mouseX = 0;
         let mouseY = 0;
@@ -184,6 +169,7 @@ const HeroSection = () => {
             window.innerWidth / window.innerHeight,
             1, 3000
         );
+
         camera.position.z = 6000;
 
         renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
@@ -292,14 +278,26 @@ const HeroSection = () => {
         };
     }, [sceneAssets?.clouds]);
 
+    const handleLocationComplete = () => {
+        setShowLocationModal(false);
+        setLocationReady(true);
+    };
+
+    const handleCloudControl = () => {
+        setPaused((prev) => {
+            const nextState = !prev;
+            localStorage.setItem("cloudControl", String(nextState));
+            return nextState;
+        });
+    };
+
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-
                 <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationComplete} />
 
-                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets?.background.toLowerCase()}.png")` }} />
+                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets?.background.toLowerCase()}.png")` }} /> */}
 
                 <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
@@ -348,6 +346,10 @@ const HeroSection = () => {
                     </div>
                 </button>
 
+                <div className="absolute top-80 right-8 z-9999 flex items-center justify-center h-12 w-12 group">
+                    {locationReady ? <WeatherIcon /> : ""}
+                </div>
+
                 <div className="hero-text">
                     <span className="line dim uppercase">
                         BUILD SYSTEMS <br />
@@ -368,7 +370,7 @@ const HeroSection = () => {
                     </button>
                 </div>
 
-                <div className="hero-name"> AKHIL SHETTY </div>
+                {/* <div className="hero-name"> AKHIL SHETTY </div> */}
 
                 <div className="hero-subtext-wrap">
                     <p className="hero-subtext">

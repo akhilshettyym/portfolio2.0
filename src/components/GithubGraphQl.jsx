@@ -1,13 +1,14 @@
 "use client";
 
+import axios from "axios";
 import { MONTHS } from "@/utils/basic-utils";
 import { useEffect, useMemo, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
 const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
-    const [weeks, setWeeks] = useState([]);
     const [total, setTotal] = useState(0);
+    const [weeks, setWeeks] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const motionTotal = useMotionValue(0);
@@ -59,28 +60,31 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
         const fetchContributions = async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`/api?username=${encodeURIComponent(username)}&from=${range.from}&to=${range.to}`);
 
-                if (!res.ok) {
-                    throw new Error(`HTTP ${res.status}`);
-                }
+                const response = await axios.get('/api/github', {
+                    params: {
+                        username: username,
+                        from: range.from,
+                        to: range.to
+                    }
+                });
 
-                const data = await res.json();
-                const calendar = data?.data?.user?.contributionsCollection?.contributionCalendar;
+                const calendar = response.data?.data?.user?.contributionsCollection?.contributionCalendar;
                 const fetchedWeeks = calendar?.weeks || [];
 
                 setWeeks(fetchedWeeks);
                 setTotal(calendar?.totalContributions || 0);
 
             } catch (err) {
-                console.error("GitHub contributions fetch failed :", err);
-
+                console.error("GitHub contributions fetch failed :", err.message);
             } finally {
                 setLoading(false);
             }
         };
+
         fetchContributions();
     }, [username, range]);
+
 
     const monthLabels = [];
     const renderedMonths = new Set();

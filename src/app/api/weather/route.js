@@ -1,5 +1,5 @@
 import { Moon } from "lunarphase-js";
-import { WEATHER_CODES, CACHE_KEY, LOCATION_MODE_KEY, CACHE_TTL_MS, SCENE_CONDITION, MOON_PHASE } from "../../../utils/basic-utils";
+import { WEATHER_CODES, CACHE_KEY, LOCATION_MODE_KEY, CACHE_TTL_MS } from "../../../utils/basic-utils";
 import axios from "axios";
 
 function getMoonVariant() {
@@ -240,7 +240,7 @@ function readCachedScene() {
             return null;
         }
 
-        const age = Date.now() - parsed.timestamp;
+        const age = Date.now() - parsed.timestamp; 2
         if (age > CACHE_TTL_MS) {
             return null;
         }
@@ -276,13 +276,17 @@ export function getLocationMode() {
     return localStorage.getItem(LOCATION_MODE_KEY);
 }
 
-export function getMoonPhase() {
-    return localStorage.getItem(MOON_PHASE);
-}
+export function getWeatherIconData() {
+    const rawData = localStorage.getItem(CACHE_KEY);
+    if (!rawData) return { getMoonPhase: "MOON", getSceneCondition: "SCENE" };
 
-export function getSceneCondition() {
-    const data = localStorage.getItem(SCENE_CONDITION);
-    return data ? data : null;
+    const parsedData = JSON.parse(rawData);
+    const innerData = parsedData?.data;
+
+    return {
+        getMoonPhase: innerData?.renderMoonPhase,
+        getSceneCondition: innerData?.sceneCondition
+    };
 }
 
 export async function getWeatherScene({ forceRefresh = false } = {}) {
@@ -297,11 +301,12 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
 
         const { latitude, longitude } = await getCoordinates();
         const weather = await fetchWeather(latitude, longitude);
+        const mode = localStorage.getItem(LOCATION_MODE_KEY) || "fast";
 
         const scene = resolveScene(weather);
-        localStorage.setItem(SCENE_CONDITION, scene?.condition);
+        const sceneCondition = scene?.condition;
+        const renderMoonPhase = getMoonVariant();
         const moonPhase = scene.timeBand === "night" ? getMoonVariant() : null;
-        localStorage.setItem(MOON_PHASE, moonPhase);
 
         const result = {
             success: true,
@@ -309,7 +314,9 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
             backgroundKey: scene.backgroundKey,
             cloudKey: scene.cloudKey,
             moonPhase,
-            weather,
+            sceneCondition,
+            renderMoonPhase,
+            ...(mode === "accurate" && { weather })
         };
 
         writeCachedScene(result);
@@ -328,6 +335,8 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
             scene: "morning",
             backgroundKey: "morning_clear",
             cloudKey: "morning_clear",
+            sceneCondition: "CLEAR",
+            renderMoonPhase: "MOON",
             moonPhase: null,
             weather: null,
         };

@@ -49,10 +49,6 @@ export const LOCATION_MODE_KEY = "weather_location_mode";
 
 export const CACHE_TTL_MS = 15 * 60 * 1000;
 
-export const SCENE_CONDITION = "scene_condition";
-
-export const MOON_PHASE = "moon_phase"
-
 export const DEFAULT_CARDS = [
     {
         title: "Impact Highlights",

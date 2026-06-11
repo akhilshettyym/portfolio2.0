@@ -347,9 +347,8 @@ const HeroSection = () => {
                 </button>
 
                 <div className="absolute top-80 right-8 z-9999 flex items-center justify-center h-12 w-12 group">
-                        {locationReady ? <WeatherIcon /> : ""}
+                    {locationReady ? <WeatherIcon /> : ""}
                 </div>
-
 
                 <div className="hero-text">
                     <span className="line dim uppercase">

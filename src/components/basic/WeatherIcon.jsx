@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { getSceneCondition, getMoonPhase } from "@/app/api/weather/route";
+import { getWeatherIconData } from "@/app/api/weather/route";
 import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
 import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
 
 const WeatherIcon = () => {
-    const condition = getSceneCondition();
-    const moonPhase = getMoonPhase();
+    const data = getWeatherIconData();
+    const moonPhase = data?.getMoonPhase;
+    const sceneCondition = data?.getSceneCondition;
 
     const weatherMap = {
         clear: {
@@ -63,9 +64,9 @@ const WeatherIcon = () => {
         },
     };
 
-    const WeatherGlyph = weatherMap[condition]?.icon || TiWeatherSunny;
+    const WeatherGlyph = weatherMap[sceneCondition]?.icon || TiWeatherSunny;
     const MoonGlyph = moonMap[moonPhase]?.icon || WiMoonAltFull;
-    const weatherLabel = weatherMap[condition]?.label || "Weather";
+    const weatherLabel = weatherMap[sceneCondition]?.label || "Weather";
     const moonLabel = moonMap[moonPhase]?.label || "Moon";
 
     return (
@@ -80,7 +81,7 @@ const WeatherIcon = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 className="flex h-[72px] w-[42px] flex-col items-center justify-between rounded-full border border-black/10 bg-white/55 px-2 py-2 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
 
-                <motion.div animate={{ rotate: condition === "storm" ? [-5, 5, -5] : 0 }} transition={{ duration: 1.5, repeat: condition === "storm" ? Infinity : 0 }}>
+                <motion.div animate={{ rotate: sceneCondition === "storm" ? [-5, 5, -5] : 0 }} transition={{ duration: 1.5, repeat: sceneCondition === "storm" ? Infinity : 0 }}>
                     <WeatherGlyph ize={20} className="text-black" />
                 </motion.div>
 

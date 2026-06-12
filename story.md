@@ -555,3 +555,7 @@ And then the the final reveal,
 And at last - the same question - "WHO AM I ?"
 
 come to this point and leave.
+
+With all that I've explained, Create a single standalone component which will be hosting all these what i said and I want you to build this in a nice cenematic immersive experience holding up the viewer. And make sure to keep the whole scene in black and white, Either the screen is black and texts white or vice versa, Start with white background and black text, And end with black background and white text. You can switch these themes in between and make it work. As I told you can use any packages and work on it. 
+
+Finally if you wanna enhance do it and at the end let me know what needs to added, and what package to install. 

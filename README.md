@@ -38,203 +38,64 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ---
 
 
-# Weather Scene Matrix
+Subject profile should be improved, Experience section should be added.
+Animations for component entering viewport.
 
-## 1. DAWN_CLEAR
+Is backend required for teh START section.
 
-### Trigger
 
-* Dawn
-* Cloud Cover: 0-40%
+https://www.rishabh-upadhyay.com/
 
-### Visuals
+Asking questions is important - Building isn't hard, knowing what and how to build.
 
-* Background: Pink → Peach → Pale Blue
-* Clouds: Warm Peach White
-* Lighting: Golden Sunrise
-* Effects: None
+Reliability comes from consistency - Consistency comes from clarity
 
----
+Yes AI can code and refactor. But can it think for us ? - Testing and Developing only what's needed.
 
-## 2. DAWN_OVERCAST
 
-### Trigger
+https://hackfirst.io/
+The Hidden Vulnerabilities can destroy you
 
-* Dawn
-* Cloud Cover: 40-100%
 
-### Visuals
+Do we need code..? or solutions ?
 
-* Background: Muted Peach Grey
-* Clouds: Warm Grey
-* Lighting: Diffused Sunrise Glow
-* Effects: Light Fog
+Adapting to pace of development environments. Sounds Interesting ?
 
----
 
-## 3. MORNING_CLEAR
 
-### Trigger
+My work commits exist in another dimensions
 
-* Morning
-* Cloud Cover: 0-40%
+Scroll effects - https://azizkhaldi.com/
 
-### Visuals
 
-* Background: Bright Blue Sky
-* Clouds: White
-* Lighting: Neutral Sunlight
-* Effects: None
 
----
 
-## 4. MORNING_CLOUDY
 
-### Trigger
 
-* Morning
-* Cloud Cover: 40-100%
+I wanna create a story telling portfolio website as in me telling a story of myself to the world. Let's start with a question asking soemthing like - 
 
-### Visuals
+Asking questions is important...right ? Who am I ?
 
-* Background: Soft Blue Grey
-* Clouds: Grey White
-* Lighting: Soft Ambient
-* Effects: Atmospheric Haze
+Scrolling should reveal the subject profile with relevant animated component and so on.
 
----
+Building isn't hard, Knowing what and how to build is, 
 
-## 5. RAIN
+And I know exactly what am doing - 
 
-### Trigger
+My tech stack reveal saying this is what I specialize in and what I do.
 
-* Weather Code = Rain
+Yes, AI can code and refactor. But, 
+- can you control it completely ?
+- is it secure for the data you are working with ?
+-
 
-### Visuals
+The glicth component here and say - The hidden vulnerabilities can destry you.
 
-* Background: Dark Grey Blue
-* Clouds: Deep Grey
-* Lighting: Soft Diffused
-* Effects:
+Hand it over to the one who does it better.
 
-  * Rain
-  * Mist
-  * Wet Atmosphere
+I want to include my achievements and education logs here which should blend in with this story am telling. 
 
----
+And at the end say - this is who I am...
 
-## 6. STORM
 
-### Trigger
-
-* Weather Code = Thunderstorm
-
-### Visuals
-
-* Background: Charcoal Grey
-* Clouds: Almost Black
-* Lighting: Low Contrast
-* Effects:
-
-  * Heavy Rain
-  * Lightning
-  * Dense Cloud Layer
-
----
-
-## 7. AFTERNOON_CLEAR
-
-### Trigger
-
-* Afternoon
-* Cloud Cover: 0-40%
-
-### Visuals
-
-* Background: Deep Vibrant Blue
-* Clouds: Bright White
-* Lighting: Strong Sunlight
-* Effects: None
-
----
-
-## 8. AFTERNOON_CLOUDY
-
-### Trigger
-
-* Afternoon
-* Cloud Cover: 40-100%
-
-### Visuals
-
-* Background: Steel Blue Grey
-* Clouds: Neutral Grey
-* Lighting: Softened Daylight
-* Effects: Haze
-
----
-
-## 9. GOLDEN_HOUR
-
-### Trigger
-
-* One Hour Before Sunset
-
-### Visuals
-
-* Background: Orange → Gold
-* Clouds: Gold / Copper Edge Highlights
-* Lighting: Cinematic Warm Light
-* Effects: Light Atmospheric Bloom
-
----
-
-## 10. SUNSET
-
-### Trigger
-
-* Sunset Window
-
-### Visuals
-
-* Background: Purple → Pink → Orange
-* Clouds: Pink / Orange / Purple
-* Lighting: Rich Warm Rim Light
-* Effects: None
-
----
-
-## 11. NIGHT
-
-### Trigger
-
-* After Sunset
-
-### Visuals
-
-* Background: Midnight Blue
-* Clouds: Silver Blue / Dark Grey
-* Moon: Dynamic Moon Phase
-* Lighting: Moonlight
-
-### Variants
-
-#### New Moon
-
-* Very Dark Sky
-* Clouds: Dark Blue Grey
-
-#### Crescent Moon
-
-* Small Crescent Visible
-* Clouds: Blue Grey
-
-#### Half Moon
-
-* Half Moon Visible
-* Clouds: Silver Blue
-
-#### Full Moon
-
-* Bright Moon Glow
-* Clouds: Silver White
+This is just a blueprint, I want you to enhance this into a professional level Story where I can integrate this in a smooth scroll and highly interactive website. Give me ideas and layouts for this, How I can try this out. I want a detailed explaination. And also if you wanna add anything please be free to do that, and if u wanna remove anything then you can do that too. 

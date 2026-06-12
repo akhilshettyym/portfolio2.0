@@ -4,6 +4,9 @@ import axios from "axios";
 import { MONTHS } from "@/utils/basic-utils";
 import { useEffect, useMemo, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { DiCoffeescript } from "react-icons/di";
+import { FaGitAlt } from "react-icons/fa";
+import { GiRaiseZombie } from "react-icons/gi";
 
 const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
@@ -195,7 +198,9 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
                     <motion.p onHoverStart={() => triggerGlitch("100M+", setAiDisplay)} className="cursor-default text-[26px] font-bold tracking-tight text-black"> {aiDisplay} </motion.p>
 
-                    <p className="mt-1 text-sm text-zinc-500"> AI tokens used </p>
+                    <p className="flex items-center mt-2 text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700">
+                        <span className="mr-1 animate-pulse-slow"> <GiRaiseZombie size={20} /> </span> AI tokens used
+                    </p>
                 </div>
 
                 <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
@@ -207,7 +212,10 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
                     <motion.p onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)} className="cursor-default text-[26px] font-bold tracking-tight text-black"> {coffeeDisplay} </motion.p>
 
-                    <p className="mt-1 text-sm text-zinc-500"> Coffees drank </p>
+                    <p className="flex items-center mt-2 text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700">
+                        <span className="mr-1 animate-pulse-slow"> <DiCoffeescript size={20} /> </span> Coffees drank
+                    </p>
+
                 </div>
 
                 <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
@@ -219,7 +227,9 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
                     <motion.p onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)} className="cursor-default text-[26px] font-bold tracking-tight text-black"> {commitDisplay} </motion.p>
 
-                    <p className="mt-1 text-sm text-zinc-500"> Code Commits </p>
+                    <p className="flex items-center mt-2 text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700">
+                        <span className="mr-1 animate-pulse-slow"> <FaGitAlt size={20} /> </span> Code Commits
+                    </p>
                 </div>
             </div>
 
@@ -279,7 +289,7 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
                                                 }
 
                                                 return (
-                                                    <motion.div key={day.date} initial={{ opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: weekIndex * 0.01 + dayIndex * 0.002, duration: 0.16 }} whileHover={{ scale: 1.12, y: -1 }} title={`${day.contributionCount} contributions on ${day.date}`} className="aspect-square w-full rounded-[3px] transition-all duration-150 hover:ring-1  hover:ring-black/10" style={{ backgroundColor }} />
+                                                    <motion.div key={day.date} initial={{ opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: weekIndex * 0.01 + dayIndex * 0.002, duration: 0.16 }} whileHover={{ scale: 1, y: -1 }} title={`${day.contributionCount} contributions on ${day.date}`} className="aspect-square w-full rounded-[3px] transition-all duration-150 hover:ring-1  hover:ring-black/10" style={{ backgroundColor }} />
                                                 );
                                             }
                                         )}

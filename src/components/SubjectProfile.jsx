@@ -17,7 +17,7 @@ const SubjectProfile = () => {
                     <motion.div {...FADEUP} className="md:col-span-8">
 
                         <div className="overflow-hidden">
-                            <h1 className="text-[clamp(4.5rem,9vw,7rem)] leading-[0.82] font-black tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}> FULL STACK </h1>
+                            <h1 className="text-[clamp(4.5rem,9vw,8rem)] leading-[0.82] font-black tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}> FULL STACK </h1>
                         </div>
 
                         <div className="overflow-hidden -mt-3">
@@ -91,7 +91,7 @@ const SubjectProfile = () => {
                                 <motion.p {...FADEUP}>
                                     Hi, I&apos;m Akhil — a Full-Stack Developer and UI/UX Designer
                                     passionate about building fast, scalable, and visually refined digital
-                                    experiences. Over the past 3+ years, I&apos;ve worked with technologies
+                                    experiences. Over the past 4+ years, I&apos;ve worked with technologies
                                     like React, Next.js, Node.js, Three.js, and Firebase to create modern
                                     web applications focused on performance and seamless user experience.
                                 </motion.p>

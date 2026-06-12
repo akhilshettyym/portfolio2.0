@@ -13,6 +13,14 @@ import LocationPreferenceModal from "./LocationPreferenceModal";
 import { getLocationMode, getWeatherScene } from "../app/api/weather/route";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
+function isSameScene(a, b) {
+    if (!a || !b) return false;
+    return (
+        a.background === b.background &&
+        a.clouds === b.clouds
+    );
+}
+
 const HeroSection = () => {
 
     const btnRef = useRef(null);
@@ -25,10 +33,20 @@ const HeroSection = () => {
     const [locationReady, setLocationReady] = useState(false);
     const [showLocationModal, setShowLocationModal] = useState(false);
 
-    const [sceneAssets, setSceneAssets] = useState({
-        background: "morning_clear",
-        clouds: "morning_clear",
-    });
+    const [sceneAssets, setSceneAssets] = useState(null);
+
+    useEffect(() => {
+        try {
+            const cached = localStorage.getItem(
+                "weatherSceneAssets"
+            );
+            if (cached) {
+                setSceneAssets(JSON.parse(cached));
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
 
     useEffect(() => {
         pausedRef.current = paused;
@@ -56,33 +74,58 @@ const HeroSection = () => {
     useEffect(() => {
         if (!locationReady) return;
         let mounted = true;
-
         async function init() {
             try {
-                const navigation = performance.getEntriesByType("navigation")[0];
-                const isReload = navigation?.type === "reload";
-                const sceneData = await getWeatherScene({ forceRefresh: isReload });
-
+                const navigation =
+                    performance.getEntriesByType("navigation")[0];
+                const isReload =
+                    navigation?.type === "reload";
+                const sceneData = await getWeatherScene({
+                    forceRefresh: isReload,
+                });
                 if (!mounted) return;
-                setSceneAssets({
-                    background: sceneData.backgroundKey ?? "morning_clear",
-                    clouds: sceneData.cloudKey ?? "morning_clear",
+                const nextScene = {
+                    background:
+                        sceneData.backgroundKey ??
+                        "morning_clear",
+                    clouds:
+                        sceneData.cloudKey ??
+                        "morning_clear",
+                };
+
+                setSceneAssets((prev) => {
+                    if (isSameScene(prev, nextScene)) {
+                        return prev;
+                    }
+
+                    localStorage.setItem(
+                        "weatherSceneAssets",
+                        JSON.stringify(nextScene)
+                    );
+
+                    return nextScene;
                 });
 
                 console.log("Weather scene:", sceneData);
-
             } catch (error) {
-                console.error("Failed to load weather scene:", error);
-
+                console.error(
+                    "Failed to load weather scene:",
+                    error
+                );
                 if (!mounted) return;
-
-                setSceneAssets({
-                    background: "morning_clear",
-                    clouds: "morning_clear",
-                });
+                if (!sceneAssets) {
+                    const fallback = {
+                        background: "morning_clear",
+                        clouds: "morning_clear",
+                    };
+                    localStorage.setItem(
+                        "weatherSceneAssets",
+                        JSON.stringify(fallback)
+                    );
+                    setSceneAssets(fallback);
+                }
             }
         }
-
         init();
         return () => {
             mounted = false;
@@ -90,7 +133,7 @@ const HeroSection = () => {
     }, [locationReady]);
 
     useEffect(() => {
-        if (!sceneAssets?.clouds) return;
+        if (!sceneAssets) return;
         const container = containerRef.current;
         const btn = btnRef.current;
 
@@ -286,7 +329,7 @@ const HeroSection = () => {
     const handleCloudControl = () => {
         setPaused((prev) => {
             const nextState = !prev;
-            localStorage.setItem("cloudControl", String(nextState));
+            localStorage.setItem("cloudControl", nextState);
             return nextState;
         });
     };
@@ -297,7 +340,7 @@ const HeroSection = () => {
 
                 <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationComplete} />
 
-                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets?.background.toLowerCase()}.png")` }} /> */}
+                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background.toLowerCase()}.png")` : "none" }} />
 
                 <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
@@ -370,7 +413,7 @@ const HeroSection = () => {
                     </button>
                 </div>
 
-                {/* <div className="hero-name"> AKHIL SHETTY </div> */}
+                <div className="hero-name"> AKHIL SHETTY </div>
 
                 <div className="hero-subtext-wrap">
                     <p className="hero-subtext">

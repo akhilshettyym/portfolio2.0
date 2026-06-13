@@ -224,9 +224,13 @@ const HeroSection = () => {
 
         textureLoader.load(`/clouds/${sceneAssets?.clouds}.svg`, (loadedTexture) => {
             texture = loadedTexture;
+
             texture.colorSpace = THREE.SRGBColorSpace;
-            texture.magFilter = THREE.LinearMipmapLinearFilter;
-            texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+            texture.generateMipmaps = false;
+            texture.magFilter = THREE.LinearFilter;
+            texture.minFilter = THREE.LinearFilter;
+            texture.needsUpdate = true;
 
             const fog = new THREE.Fog(0xffffff, -100, 3000);
             threeScene.fog = fog;

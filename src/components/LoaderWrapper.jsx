@@ -31,7 +31,7 @@ const LoaderWrapper = ({ children }) => {
             {loading && <Loader onFinish={() => setLoading(false)} />}
 
             <PageReveal active={showReveal}>
-                <div className={`transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}>
+                <div className={`relative transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}>
                     {children}
                 </div>
             </PageReveal>

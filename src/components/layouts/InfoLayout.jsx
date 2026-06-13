@@ -5,6 +5,7 @@ import SubjectProfile from "../SubjectProfile";
 import HeroSection from "@/components/HeroSection";
 import BubbleScene from "@/components/BubbleScene";
 import CardStackReveal from "@/components/CardStackReveal";
+import CinematicScrollMovie from "../CinematicScrollMovie";
 
 const InfoLayout = () => {
 
@@ -14,8 +15,9 @@ const InfoLayout = () => {
             {/* <SubjectProfile /> */}
             {/* <DevTicker /> */}
             {/* <BubbleScene /> */}
-            <CardStackReveal />
+            {/* <CardStackReveal /> */}
             {/* <EducationLog /> */}
+            <CinematicScrollMovie />
         </div>
     );
 };

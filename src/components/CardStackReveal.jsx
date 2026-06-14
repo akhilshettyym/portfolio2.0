@@ -41,7 +41,7 @@ const CardStackReveal = ({ cards = DEFAULT_CARDS }) => {
                 </div>
 
                 <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
-                    <div className="relative h-full w-full max-w-[90rem]">
+                    <div className="relative h-full w-full max-w-360">
                         {cards.map((card, index) => (
                             <FloatingCard key={`${card.title}-${index}`} card={card} index={index} progress={progress} hoveredCard={hoveredCard} setHoveredCard={setHoveredCard} />
                         ))}

@@ -526,9 +526,9 @@ export default function CinematicScrollMovie() {
         }
 
         if (scene === 4) {
-            timers.push(setTimeout(() => setBuildingStage(1), 1400));
-            timers.push(setTimeout(() => setBuildingStage(2), 3200));
-            timers.push(setTimeout(() => setReady(true), 5200));
+            timers.push(setTimeout(() => setBuildingStage(1), 3000));
+            timers.push(setTimeout(() => setBuildingStage(2), 7000));
+            timers.push(setTimeout(() => setReady(true), 9500));
         }
 
         if (scene === 5) {
@@ -539,7 +539,7 @@ export default function CinematicScrollMovie() {
                     setQuestionIndex((i) =>
                         Math.min(i + 1, problemQuestions.length - 1)
                     );
-                }, 1300)
+                }, 2000)
             );
 
             timers.push(
@@ -557,11 +557,17 @@ export default function CinematicScrollMovie() {
         }
 
         if (scene === 7) {
-            timers.push(setTimeout(() => setCodeStage(1), 500));
-            timers.push(setTimeout(() => setCodeStage(2), 2200));
-            timers.push(setTimeout(() => setReady(true), 4200));
-            intervals.push(setInterval(() => setCodeSeed((v) => v + 1), 1200));
-            timers.push(setTimeout(() => setDarkCurtainDone(true), 950));
+            timers.push(setTimeout(() => setCodeStage(1), 600));
+            timers.push(setTimeout(() => setCodeStage(2), 4200));
+            timers.push(setTimeout(() => setReady(true), 7500));
+
+            intervals.push(
+                setInterval(() => setCodeSeed((v) => v + 1), 1000)
+            );
+
+            timers.push(
+                setTimeout(() => setDarkCurtainDone(true), 950)
+            );
         }
 
         if (scene === 8) {
@@ -679,51 +685,79 @@ export default function CinematicScrollMovie() {
             return (
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6">
-                        <motion.div
-                            initial={{
-                                opacity: 0,
-                                scale: 1.05,
-                                y: 40,
-                                filter: "blur(12px)",
-                            }}
-                            animate={{
-                                opacity: 1,
-                                scale: 1,
-                                y: 0,
-                                filter: "blur(0px)",
-                            }}
-                            transition={{
-                                duration: 1.2,
-                                ease: [0.77, 0, 0.175, 1],
-                            }}
-                            className="max-w-6xl text-center"
-                        >
-                            <div className="text-[clamp(2.8rem,8vw,4rem)] font-semibold tracking-tight">
-                                <CurtainText>
-                                    My name is <span className="font-bold">AKHIL</span>
-                                </CurtainText>
-                            </div>
+                        <div className="relative h-65 w-full max-w-6xl text-center">
 
-                            <AnimatePresence mode="wait">
-                                {nameStage >= 1 ? (
+                            {/* Fixed Title */}
+                            <motion.div
+                                initial={{
+                                    opacity: 0,
+                                    scale: 1.05,
+                                    y: 20,
+                                    filter: "blur(12px)",
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    scale: 1,
+                                    y: 0,
+                                    filter: "blur(0px)",
+                                }}
+                                transition={{
+                                    duration: 1.2,
+                                    ease: [0.77, 0, 0.175, 1],
+                                }}
+                                className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[-80%]"
+                            >
+                                <div className="text-[clamp(2.8rem,8vw,4rem)] font-semibold tracking-tight whitespace-nowrap">
+                                    <CurtainText>
+                                        My name is{" "}
+                                        <span className="font-bold">
+                                            AKHIL
+                                        </span>
+                                    </CurtainText>
+                                </div>
+                            </motion.div>
+
+                            {/* Subtitle */}
+                            <AnimatePresence>
+                                {nameStage >= 1 && (
                                     <motion.div
-                                        key="name-sub"
-                                        initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-                                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        transition={{
-                                            duration: 0.8,
-                                            ease: [0.77, 0, 0.175, 1],
+                                        initial={{
+                                            opacity: 0,
+                                            y: 30,
+                                            filter: "blur(10px)",
                                         }}
-                                        className="mt-7 text-[clamp(1.5rem,3.4vw,2rem)] text-black/70"
+                                        animate={{
+                                            opacity: 1,
+                                            y: 0,
+                                            filter: "blur(0px)",
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                            y: -10,
+                                        }}
+                                        transition={{
+                                            duration: 0.9,
+                                            ease: [0.22, 1, 0.36, 1],
+                                        }}
+                                        className="
+                                    absolute
+                                    left-1/2
+                                    top-1/2
+                                    mt-12
+                                    -translate-x-1/2
+                                    text-[clamp(1.5rem,3.4vw,2rem)]
+                                    text-black/70
+                                    whitespace-nowrap
+                                "
                                     >
                                         <CurtainText delay={0.15}>
                                             But that doesn't tell you much.
                                         </CurtainText>
                                     </motion.div>
-                                ) : null}
+                                )}
                             </AnimatePresence>
-                        </motion.div>
+
+                        </div>
                     </div>
                 </SceneShell>
             );
@@ -940,10 +974,25 @@ export default function CinematicScrollMovie() {
                                 {buildingStage === 0 ? (
                                     <motion.div
                                         key="build-0"
-                                        initial={{ opacity: 0, y: 26 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -18 }}
-                                        transition={{ duration: 0.75 }}
+                                        initial={{
+                                            opacity: 0,
+                                            y: 40,
+                                            filter: "blur(10px)",
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            y: 0,
+                                            filter: "blur(0px)",
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                            y: -30,
+                                            filter: "blur(8px)",
+                                        }}
+                                        transition={{
+                                            duration: 1.2,
+                                            ease: [0.22, 1, 0.36, 1],
+                                        }}
                                         className="space-y-4"
                                     >
                                         <div className="text-[clamp(2.6rem,7vw,3rem)] font-semibold tracking-tight">
@@ -1005,7 +1054,7 @@ export default function CinematicScrollMovie() {
                                 }}
                                 className="max-w-6xl"
                             >
-                                <div className="text-[clamp(2.4rem,6vw,5rem)] font-semibold tracking-tight">
+                                <div className="text-[clamp(2.4rem,6vw,4rem)] font-semibold tracking-tight">
                                     {problemQuestions[questionIndex]}
                                 </div>
                             </motion.div>
@@ -1031,7 +1080,6 @@ export default function CinematicScrollMovie() {
                 <SceneShell dark={false}>
                     <div className="absolute inset-0 overflow-hidden">
                         <div className="absolute inset-0 opacity-[0.16]">
-                            <div className="absolute left-[50%] top-[50%] h-24 w-px -translate-x-1/2 -translate-y-1/2 bg-black" />
                             {treeNodes.map((n, i) => (
                                 <motion.div
                                     key={`${i}-${treePulse}`}
@@ -1081,78 +1129,93 @@ export default function CinematicScrollMovie() {
 
         if (scene === 7) {
             return (
-                <SceneShell2 dark={isDarkScene} curtain={isFirstDarkScene}>
+                <SceneShell2
+                    dark={codeStage >= 2}
+                    curtain={isFirstDarkScene}
+                >
+                    {codeStage >= 2 && (
+                        <video
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="auto"
+                            className="absolute inset-0 z-1 h-full w-full object-cover scale-105"
+                        >
+                            <source
+                                src="/scene6.mp4"
+                                type="video/mp4"
+                            />
+                        </video>
+                    )}
 
-                    <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        className="absolute inset-0 z-1 h-full w-full object-cover scale-105"
-                    >
-                        <source src="/scene6.mp4" type="video/mp4" />
-                    </video>
+                    {codeStage < 2 && (
+                        <div className="absolute inset-0 bg-white" />
+                    )}
 
-                    {/* Cinematic Overlays */}
-                    <div className="absolute inset-0 z-2 bg-black/40" />
+                    {codeStage >= 2 && (
+                        <>
+                            <div className="absolute inset-0 z-2 bg-black/45" />
 
-                    <div className="absolute inset-0 z-2 bg-linear-to-b from-black/20 via-transparent to-black/75" />
+                            <div className="absolute inset-0 z-2 bg-linear-to-b from-black/20 via-transparent to-black/80" />
 
-                    <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_45%)]" />
+                            <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_45%)]" />
+                        </>
+                    )}
 
-                    {/* Floating Code Layer */}
-                    <div className="absolute inset-0 z-3">
-                        <CodeRain active={codeStage >= 1} />
-                    </div>
+                    {codeStage >= 2 && (
+                        <div className="absolute inset-0 z-3">
+                            <CodeRain active />
+                        </div>
+                    )}
 
-                    {/* Main Content */}
-                    <div className="relative z-4 flex h-full w-full items-center justify-center px-6 text-center">
+                    {/* Content */}
+                    <div className="relative z-10 flex h-full w-full items-center justify-center px-6 text-center">
                         <AnimatePresence mode="wait">
+
                             {codeStage < 2 ? (
                                 <motion.div
-                                    key={`code-${codeStage}`}
-                                    initial={{ opacity: 0, y: 18 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -18 }}
-                                    transition={{ duration: 0.5 }}
+                                    key="tools"
+                                    initial={{
+                                        opacity: 0,
+                                        y: 40,
+                                        filter: "blur(10px)",
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        filter: "blur(0px)",
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: -40,
+                                        filter: "blur(10px)",
+                                    }}
+                                    transition={{
+                                        duration: 1.2,
+                                        ease: [0.22, 1, 0.36, 1],
+                                    }}
                                     className="max-w-5xl"
                                 >
-                                    <div className="text-[clamp(2.2rem,6vw,5.8rem)] font-semibold tracking-tight text-white">
+                                    <div className="text-[clamp(2.2rem,6vw,5.8rem)] font-semibold tracking-tight text-black">
                                         I specialize in tools.
                                     </div>
 
-                                    <div className="mt-4 text-[clamp(1.4rem,3.4vw,3rem)] text-white/70">
+                                    <div className="mt-4 text-[clamp(1.4rem,3.4vw,3rem)] text-black/60">
                                         They work as I say.
                                     </div>
                                 </motion.div>
                             ) : (
                                 <motion.div
-                                    key="code-glitch"
+                                    key="glitch"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="max-w-5xl"
-                                >
-                                    <motion.div
-                                        animate={{
-                                            x: [0, -5, 6, -3, 0],
-                                            y: [0, 1, -1, 0, 0],
-                                        }}
-                                        transition={{
-                                            duration: 0.55,
-                                            repeat: Infinity,
-                                            repeatDelay: 0.05,
-                                        }}
-                                        className="text-[clamp(2rem,5vw,4.8rem)] font-semibold tracking-tight text-white"
-                                    >
-                                        Code begins to fracture.
-                                    </motion.div>
-
-                                    <div className="mt-5 text-sm uppercase tracking-[0.5em] text-white/60">
-                                        Lines appear. Errors bloom. The system trembles.
-                                    </div>
-                                </motion.div>
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 1 }}
+                                    className="h-full w-full"
+                                />
                             )}
+
                         </AnimatePresence>
                     </div>
                 </SceneShell2>

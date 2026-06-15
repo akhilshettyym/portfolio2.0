@@ -1,125 +1,8 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
-const introLines = [
-    "Asking questions is important...",
-    "Right ?...",
-    "So let's start with one.",
-];
-
-const buildingLines = [
-    "Building isn't hard.",
-    "Knowing what to build is.",
-    "Knowing WHY to build it...",
-    "is even harder.",
-];
-
-const problemQuestions = [
-    "I don't start with code.",
-    "I start with questions.",
-    "Who uses it?",
-    "Why does it exist?",
-    "What breaks if it fails?",
-    "How will it scale?",
-    "How will it survive?",
-    "Code is the last step.",
-];
-
-const aiClaims = [
-    "YES.",
-    "AI can write code.",
-    "AI can refactor code.",
-    "AI can deploy code.",
-];
-
-const businessQuestions = [
-    "Can it understand your business?",
-    "Can it protect your data?",
-    "Can it see what isn't obvious?",
-    "Can it predict what breaks six months later?",
-];
-
-const vulnerabilities = [
-    "Silent data corruption.",
-    "Race condition in production.",
-    "Privilege escalation.",
-    "Memory leak after 3 months.",
-    "Multi-tenant data exposure.",
-    "Distributed cache inconsistency.",
-    "Deadlock under peak traffic.",
-    "Event ordering failure.",
-];
-
-const philosophy = [
-    "I don't build websites.",
-    "I build experiences.",
-    "I don't write code.",
-    "I design systems.",
-    "I don't chase trends.",
-    "I solve problems.",
-];
-
-const rewindLines = [
-    "I solve problems.",
-    "I don't chase trends.",
-    "I design systems.",
-    "I don't write code.",
-    "I build experiences.",
-    "I don't build websites.",
-
-    "Experience prevents disasters.",
-    "Intelligence generates code.",
-
-    "Distributed cache inconsistency.",
-    "Race condition in production.",
-    "Silent data corruption.",
-
-    "Can it predict what breaks six months later?",
-    "Can it protect your data?",
-    "Can it understand your business?",
-
-    "I specialize in tools.",
-
-    "Great software isn't written.",
-    "It's discovered.",
-
-    "Code is the last step.",
-    "Why does it exist?",
-    "Who uses it?",
-
-    "Knowing WHY to build it...",
-    "Knowing what to build is.",
-
-    "My name is AKHIL.",
-];
-
-const historyBands = [
-    {
-        year: "2018",
-        text: "Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.",
-        dir: "left",
-    },
-    {
-        year: "2020",
-        text: "Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.",
-        dir: "right",
-    },
-    {
-        year: "2022",
-        text: "Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.",
-        dir: "left",
-    },
-    {
-        year: "2024",
-        text: "Engineering products. Solving real problems. Designing trust. Making things work beautifully.Engineering products. Solving real problems. Designing trust. Making things work beautifully.",
-        dir: "right",
-    },
-];
-
-const TOTAL_SCENES = 14;
-const DARK_START_SCENE = 6;
+import React, { useEffect, useRef, useState } from "react";
+import {INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE, SAMPLES, ERRORBITS} from "../utils/basic-utils";
 
 function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));
@@ -179,11 +62,7 @@ function useWheelDeck(onDown, onUp, enabled = true) {
 function CurtainText({ children, delay = 0, className = "" }) {
     return (
         <div className={`overflow-hidden ${className}`}>
-            <motion.div
-                initial={{ y: "108%", opacity: 0 }}
-                animate={{ y: "0%", opacity: 1 }}
-                transition={{ duration: 0.9, delay, ease: [0.77, 0, 0.175, 1] }}
-            >
+            <motion.div initial={{ y: "108%", opacity: 0 }} animate={{ y: "0%", opacity: 1 }} transition={{ duration: 0.9, delay, ease: [0.77, 0, 0.175, 1] }} >
                 {children}
             </motion.div>
         </div>
@@ -193,9 +72,9 @@ function CurtainText({ children, delay = 0, className = "" }) {
 function GlitchText({ children, className = "" }) {
     return (
         <span className={`relative inline-block ${className}`}>
-            <span className="glitch-layer glitch-layer-a">{children}</span>
-            <span className="glitch-layer glitch-layer-b">{children}</span>
-            <span className="relative z-10">{children}</span>
+            <span className="glitch-layer glitch-layer-a"> {children} </span>
+            <span className="glitch-layer glitch-layer-b"> {children} </span>
+            <span className="relative z-10"> {children} </span>
         </span>
     );
 }
@@ -209,26 +88,13 @@ function CodeRain({ active }) {
             return undefined;
         }
 
-        const samples = [
-            "const trust = await verify(user, data);",
-            "if (!permission) throw new Error('403');",
-            "query = sanitize(input);",
-            "cache.invalidate('session:' + id);",
-            "await deploy(build());",
-            "for (let i = 0; i < n; i++) optimize();",
-            "server.on('error', recover);",
-            "try { render() } catch (e) { alert(e) }",
-            "db.transaction(async (tx) => await tx.commit());",
-            "security.scan();",
-        ];
-
         const id = setInterval(() => {
             setLines((prev) => {
                 const next = [
                     ...prev,
                     {
                         id: Math.random().toString(36).slice(2),
-                        text: samples[Math.floor(Math.random() * samples.length)],
+                        text: SAMPLES[Math.floor(Math.random() * SAMPLES.length)],
                         x: Math.random() * 90 + 2,
                         y: Math.random() * 100,
                         delay: Math.random() * 0.6,
@@ -251,12 +117,7 @@ function CodeRain({ active }) {
                     animate={{ opacity: 0.9, y: 0, filter: "blur(0px)" }}
                     transition={{ duration: 0.22, delay: line.delay }}
                     className="absolute font-mono text-[10px] leading-none tracking-[0.28em] text-white/75 md:text-[11px]"
-                    style={{
-                        left: `${line.x}%`,
-                        top: `${line.y}%`,
-                        transform: `translate(-50%, -50%) rotate(${(idx % 5) - 2}deg)`,
-                    }}
-                >
+                    style={{ left: `${line.x}%`, top: `${line.y}%`, transform: `translate(-50%, -50%) rotate(${(idx % 5) - 2}deg)` }}>
                     {line.text}
                 </motion.div>
             ))}
@@ -271,7 +132,6 @@ function GlitchField({ active, seed }) {
         if (!active) return;
 
         const id = setInterval(() => {
-            // irregular glitch bursts
             if (Math.random() > 0.4) {
                 setTick((t) => t + 1);
             }
@@ -280,100 +140,29 @@ function GlitchField({ active, seed }) {
         return () => clearInterval(id);
     }, [active]);
 
-    const errorBits = [
-        "RACE CONDITION DETECTED",
-        "SILENT DATA CORRUPTION",
-        "UNEXPECTED STATE MUTATION",
-        "PERMISSION ESCALATION",
-        "STALE CACHE WRITE",
-        "MEMORY LEAK",
-        "EVENT LOOP BLOCKED",
-        "DANGLING REFERENCE",
-        "INCONSISTENT REPLICA",
-    ];
-
     return (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
 
-            {/* Occasional white flash */}
-            <motion.div
-                animate={{
-                    opacity: tick % 7 === 0
-                        ? [0, 0.18, 0]
-                        : 0,
-                }}
-                transition={{
-                    duration: 0.08,
-                }}
-                className="absolute inset-0 bg-white mix-blend-screen"
-            />
+            <motion.div animate={{ opacity: tick % 7 === 0 ? [0, 0.18, 0] : 0 }} transition={{ duration: 0.08 }} className="absolute inset-0 bg-white mix-blend-screen" />
+            <div className="absolute inset-0 opacity-[0.035] bg-[repeating-linear-gradient(0deg, transparent, transparent_2px, rgba(255,255,255,0.15)_3px)]" />
 
-            {/* CRT scanlines */}
-            <div
-                className="
-                    absolute inset-0 opacity-[0.035]
-                    bg-[repeating-linear-gradient(
-                        0deg,
-                        transparent,
-                        transparent_2px,
-                        rgba(255,255,255,0.15)_3px
-                    )]
-                "
-            />
-
-            {/* Ambient pulse */}
-            <motion.div
-                key={`flash-${seed}-${tick}`}
+            <motion.div key={`flash-${seed}-${tick}`}
                 initial={{ opacity: 0 }}
-                animate={{
-                    opacity: [0, 0.12, 0.04, 0],
-                    scale: [1, 1.02, 1],
-                }}
-                transition={{
-                    duration: 0.25,
-                }}
-                className="
-                    absolute inset-0
-                    bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_45%)]
-                    mix-blend-screen
-                "
-            />
+                animate={{ opacity: [0, 0.12, 0.04, 0], scale: [1, 1.02, 1] }}
+                transition={{ duration: 0.25 }}
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_45%)] mix-blend-screen" />
 
-            {errorBits.map((bit, i) => {
+            {ERRORBITS.map((bit, i) => {
                 const xShift = Math.random() * 20 - 10;
                 const yShift = Math.random() * 8 - 4;
 
                 return (
-                    <motion.div
-                        key={`${bit}-${tick}-${i}`}
-                        initial={{
-                            opacity: 0,
-                            x: i % 2 ? 120 : -120,
-                        }}
-                        animate={{
-                            opacity: [0, 0.8, 0.3],
-                            x: [0, xShift, 0],
-                            y: [0, yShift, 0],
-                        }}
-                        transition={{
-                            duration: 0.18,
-                            delay: i * 0.03,
-                            ease: "linear",
-                        }}
-                        className="
-                            absolute
-                            font-mono
-                            text-[10px]
-                            uppercase
-                            tracking-[0.35em]
-                            text-white/70
-                            md:text-[11px]
-                        "
-                        style={{
-                            left: `${5 + (i * 11) % 80}%`,
-                            top: `${10 + (i * 12) % 75}%`,
-                        }}
-                    >
+                    <motion.div key={`${bit}-${tick}-${i}`}
+                        initial={{ opacity: 0, x: i % 2 ? 120 : -120 }}
+                        animate={{ opacity: [0, 0.8, 0.3], x: [0, xShift, 0], y: [0, yShift, 0] }}
+                        transition={{ duration: 0.18, delay: i * 0.03, ease: "linear" }}
+                        className="absolute font-mono text-[10px] uppercase tracking-[0.35em] text-white/70 md:text-[11px]"
+                        style={{ left: `${5 + (i * 11) % 80}%`, top: `${10 + (i * 12) % 75}%` }}>
                         {Math.random() > 0.75 ? (
                             <GlitchText>{bit}</GlitchText>
                         ) : (
@@ -388,17 +177,11 @@ function GlitchField({ active, seed }) {
 
 function BottomCurtain({ active }) {
     return (
-        <motion.div
-            initial={false}
-            animate={
-                active
-                    ? { width: "100vw", height: "100vh", borderRadius: 0, x: 0, y: 0 }
-                    : { width: "92vw", height: "88vh", borderRadius: 32, x: "4vw", y: 0 }
-            }
+        <motion.div initial={false}
+            animate={active ? { width: "100vw", height: "100vh", borderRadius: 0, x: 0, y: 0 } : { width: "92vw", height: "88vh", borderRadius: 32, x: "4vw", y: 0 }}
             transition={{ duration: 1.05, ease: [0.77, 0, 0.175, 1] }}
             className="absolute bottom-0 left-0 bg-black"
-            style={{ transformOrigin: "bottom center" }}
-        />
+            style={{ transformOrigin: "bottom center" }} />
     );
 }
 
@@ -409,38 +192,21 @@ function SceneShell({ dark, curtain = false, children }) {
             <div className={`absolute inset-0 ${dark ? "bg-black" : "bg-white"}`} />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.08),transparent_40%)] opacity-40" />
             <div className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay bg-[linear-gradient(rgba(0,0,0,0.55)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.25)_1px,transparent_1px)] bg-size-[100%_100%,100%_100%]" />
-            <div className="relative z-10 h-full w-full">{children}</div>
+            <div className="relative z-10 h-full w-full"> {children} </div>
         </div>
     );
 }
 
-function SceneShell2({
-    dark,
-    curtain = false,
-    children,
-}) {
+function SceneShell2({ dark, curtain = false, children }) {
     return (
         <div
-            className={`relative h-screen w-full overflow-hidden ${dark
-                ? "bg-black text-white"
-                : "bg-white text-black"
-                }`}
-        >
+            className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}>
             {curtain ? <BottomCurtain active /> : null}
 
-            {/* Base Background */}
-            <div
-                className={`absolute inset-0 z-0 ${dark ? "bg-black" : "bg-white"
-                    }`}
-            />
-
-            {/* Ambient Radial */}
+            <div className={`absolute inset-0 z-0 ${dark ? "bg-black" : "bg-white"}`} />
             <div className="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.08),transparent_40%)] opacity-40" />
-
-            {/* Film Grain / Texture */}
             <div className="pointer-events-none absolute inset-0 z-2 opacity-[0.08] mix-blend-overlay bg-[linear-gradient(rgba(0,0,0,0.55)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.25)_1px,transparent_1px)] bg-size-[100%_100%,100%_100%]" />
 
-            {/* Scene Content */}
             <div className="relative z-10 h-full w-full">
                 {children}
             </div>
@@ -449,46 +215,45 @@ function SceneShell2({
 }
 
 export default function CinematicScrollMovie() {
+
     const [scene, setScene] = useState(0);
-    const [ready, setReady] = useState(false);
-    const [introStep, setIntroStep] = useState(0);
-    const [whoChars, setWhoChars] = useState(0);
-    const [nameStage, setNameStage] = useState(0);
-    const [carouselProgress, setCarouselProgress] = useState(0);
-    const [buildingStage, setBuildingStage] = useState(0);
-    const [treeStage, setTreeStage] = useState(0);
-    const [treePulse, setTreePulse] = useState(0);
-    const [codeStage, setCodeStage] = useState(0);
-    const [codeSeed, setCodeSeed] = useState(0);
     const [aiStage, setAiStage] = useState(0);
     const [butStage, setButStage] = useState(0);
-    const [questionIndex, setQuestionIndex] = useState(0);
-    const [glitchSeed, setGlitchSeed] = useState(0);
     const [vulnTick, setVulnTick] = useState(0);
+    const [whoChars, setWhoChars] = useState(0);
+    const [codeSeed, setCodeSeed] = useState(0);
+    const [nameStage, setNameStage] = useState(0);
+    const [introStep, setIntroStep] = useState(0);
+    const [codeStage, setCodeStage] = useState(0);
+    const [treeStage, setTreeStage] = useState(0);
+    const [treePulse, setTreePulse] = useState(0);
+    const [finalStage, setFinalStage] = useState(0);
+    const [glitchSeed, setGlitchSeed] = useState(0);
+    const [rewindIndex, setRewindIndex] = useState(0);
     const [dangerStage, setDangerStage] = useState(0);
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [buildingStage, setBuildingStage] = useState(0);
     const [philosophyStage, setPhilosophyStage] = useState(0);
-    const [darkCurtainDone, setDarkCurtainDone] = useState(false);
+    const [carouselProgress, setCarouselProgress] = useState(0);
+
+    const [ready, setReady] = useState(false);
     const [whoHold, setWhoHold] = useState(false);
     const [timelineReveal, setTimelineReveal] = useState(false);
+    const [darkCurtainDone, setDarkCurtainDone] = useState(false);
 
-
-    const [finalFreeze, setFinalFreeze] = useState(false);
-
-    const [rewindIndex, setRewindIndex] = useState(0);
-    const [showFinalQuestion, setShowFinalQuestion] = useState(false);
-
-    const sceneRef = useRef(scene);
-    const readyRef = useRef(ready);
-    sceneRef.current = scene;
-    readyRef.current = ready;
-
-
-    const rowRefs = useRef({});
     const [rowWidths, setRowWidths] = useState({});
 
-    useBodyLock(true);
+    const reversedRewind = [...REWINDLINES].reverse();
 
+    const rowRefs = useRef({});
     const carouselRef = useRef(0);
+    const sceneRef = useRef(scene);
+    const readyRef = useRef(ready);
+
+    readyRef.current = ready;
+    sceneRef.current = scene;
+
+    useBodyLock(!(scene === 13 && finalStage >= 2));
 
     useEffect(() => {
         carouselRef.current = carouselProgress;
@@ -497,20 +262,16 @@ export default function CinematicScrollMovie() {
     useEffect(() => {
         const measure = () => {
             const widths = {};
-
             Object.entries(rowRefs.current).forEach(([key, el]) => {
                 if (el) {
                     widths[key] = el.scrollWidth;
                 }
             });
-
             setRowWidths(widths);
         };
 
         measure();
-
         window.addEventListener("resize", measure);
-
         return () => {
             window.removeEventListener("resize", measure);
         };
@@ -538,42 +299,34 @@ export default function CinematicScrollMovie() {
         }
     }, [scene, carouselProgress]);
 
-    useWheelDeck(
-        () => {
-            if (sceneRef.current === 3) {
-
-                if (carouselRef.current < 1) {
-                    setCarouselProgress((p) =>
-                        clamp(p + 0.015, 0, 1)
-                    );
-                    return;
-                }
-
-                nextScene();
+    useWheelDeck(() => {
+        if (sceneRef.current === 3) {
+            if (carouselRef.current < 1) {
+                setCarouselProgress((p) =>
+                    clamp(p + 0.015, 0, 1)
+                );
                 return;
             }
-
-            if (!readyRef.current) return;
-
             nextScene();
-        },
+            return;
+        }
 
+        if (!readyRef.current) return;
+        nextScene();
+    },
         () => {
             if (sceneRef.current === 3) {
-
                 if (carouselRef.current > 0) {
                     setCarouselProgress((p) =>
                         clamp(p - 0.015, 0, 1)
                     );
                     return;
                 }
-
                 prevScene();
                 return;
             }
 
             if (!readyRef.current) return;
-
             prevScene();
         },
         true
@@ -634,11 +387,10 @@ export default function CinematicScrollMovie() {
         if (scene === 3) {
             setCarouselProgress(0);
 
-            timers.push(
-                setTimeout(() => {
-                    setTimelineReveal(true);
-                    setReady(true);
-                }, 250)
+            timers.push(setTimeout(() => {
+                setTimelineReveal(true);
+                setReady(true);
+            }, 250)
             );
         }
 
@@ -651,18 +403,16 @@ export default function CinematicScrollMovie() {
         if (scene === 5) {
             setQuestionIndex(0);
 
-            intervals.push(
-                setInterval(() => {
-                    setQuestionIndex((i) =>
-                        Math.min(i + 1, problemQuestions.length - 1)
-                    );
-                }, 2000)
+            intervals.push(setInterval(() => {
+                setQuestionIndex((i) =>
+                    Math.min(i + 1, PROBLEMQUESTIONS.length - 1)
+                );
+            }, 2000)
             );
 
-            timers.push(
-                setTimeout(() => {
-                    setReady(true);
-                }, problemQuestions.length * 1300 + 1200)
+            timers.push(setTimeout(() => {
+                setReady(true);
+            }, PROBLEMQUESTIONS.length * 1300 + 1200)
             );
         }
 
@@ -677,65 +427,55 @@ export default function CinematicScrollMovie() {
             timers.push(setTimeout(() => setCodeStage(1), 600));
             timers.push(setTimeout(() => setCodeStage(2), 4200));
             timers.push(setTimeout(() => setReady(true), 7500));
-
-            intervals.push(
-                setInterval(() => setCodeSeed((v) => v + 1), 1000)
-            );
-
-            timers.push(
-                setTimeout(() => setDarkCurtainDone(true), 950)
-            );
+            intervals.push(setInterval(() => setCodeSeed((v) => v + 1), 1000));
+            timers.push(setTimeout(() => setDarkCurtainDone(true), 950));
         }
 
         if (scene === 8) {
-            timers.push(setTimeout(() => setAiStage(1), 900));
-            timers.push(setTimeout(() => setAiStage(2), 2100));
-            timers.push(setTimeout(() => setAiStage(3), 3200));
-            timers.push(setTimeout(() => setReady(true), 4300));
+            timers.push(setTimeout(() => setAiStage(1), 1800));
+            timers.push(setTimeout(() => setAiStage(2), 4200));
+            timers.push(setTimeout(() => setAiStage(3), 6600));
+            timers.push(setTimeout(() => setReady(true), 9000));
         }
 
         if (scene === 9) {
             setButStage(1);
+            timers.push(setTimeout(() => setButStage(2), 2500));
+            intervals.push(setInterval(() => setQuestionIndex((i) => (i + 1) % BUSINESSQUESTIONS.length), 2800));
+            timers.push(setTimeout(() => setReady(true), 2500 + BUSINESSQUESTIONS.length * 2800));
 
-            timers.push(
-                setTimeout(() => setButStage(2), 2500)
-            );
-
-            intervals.push(
-                setInterval(
-                    () =>
-                        setQuestionIndex(
-                            (i) => (i + 1) % businessQuestions.length
-                        ),
-                    2800
-                )
-            );
-
-            timers.push(
-                setTimeout(
-                    () => setReady(true),
-                    2500 + businessQuestions.length * 2800
-                )
-            );
+            const id = setInterval(() => {
+                setQuestionIndex((i) => {
+                    if (i >= BUSINESSQUESTIONS.length - 1) {
+                        clearInterval(id);
+                        return i;
+                    }
+                    return i + 1;
+                });
+            }, 3200);
+            intervals.push(id);
         }
 
         if (scene === 10) {
-            intervals.push(
-                setInterval(() => {
-                    if (Math.random() > 0.55) {
-                        setGlitchSeed((g) => g + 1);
+            setVulnTick(0);
+            const id = setInterval(() => {
+                setVulnTick((v) => {
+                    if (v >= VULNERABILITIES.length - 1) {
+                        clearInterval(id);
+                        return v;
                     }
-
-                    if (Math.random() > 0.75) {
-                        setVulnTick((v) => v + 1);
-                    }
-                }, 450)
+                    return v + 1;
+                });
+            }, 1800);
+            intervals.push(id);
+            timers.push(setTimeout(() => {
+                setReady(true);
+            }, VULNERABILITIES.length * 1800 + 1500)
             );
-            timers.push(setTimeout(() => setReady(true), 3700));
         }
 
         if (scene === 11) {
-            timers.push(setTimeout(() => setDangerStage(1), 900));
+            timers.push(setTimeout(() => setDangerStage(1), 1800));
             timers.push(setTimeout(() => setDangerStage(2), 2800));
             timers.push(setTimeout(() => setReady(true), 4300));
         }
@@ -743,60 +483,38 @@ export default function CinematicScrollMovie() {
         if (scene === 12) {
             setPhilosophyStage(0);
 
-            philosophy.forEach((_, index) => {
-                timers.push(
-                    setTimeout(() => {
-                        setPhilosophyStage(index);
-                    }, index * 2500)
-                );
+            PHILOSOPHY.forEach((_, index) => {
+                timers.push(setTimeout(() => {
+                    setPhilosophyStage(index);
+                }, index * 2500));
             });
 
-            timers.push(
-                setTimeout(() => {
-                    setReady(true);
-                }, philosophy.length * 2500)
+            timers.push(setTimeout(() => {
+                setReady(true);
+            }, PHILOSOPHY.length * 2500)
             );
         }
 
-        // if (scene === 13) {
-        //     timers.push(setTimeout(() => setRewindTick(1), 800));
-        //     timers.push(setTimeout(() => setRewindTick(2), 1800));
-        //     timers.push(setTimeout(() => setReady(true), 2600));
-        // }
-
         if (scene === 13) {
-            setRewindIndex(-1);
-            setShowFinalQuestion(false);
-            setFinalFreeze(false);
-
+            setFinalStage(0);
+            setRewindIndex(0);
+            const step = 110;
             reversedRewind.forEach((_, i) => {
-                const delay =
-                    i < reversedRewind.length - 5
-                        ? i * 900
-                        : (reversedRewind.length - 5) * 900 +
-                        (i - (reversedRewind.length - 5)) * 1500;
-
-                timers.push(
-                    setTimeout(() => {
-                        setRewindIndex(i);
-                    }, delay)
+                timers.push(setTimeout(() => {
+                    setRewindIndex(i);
+                }, i * step)
                 );
             });
 
-            const totalDuration =
-                (reversedRewind.length - 5) * 900 +
-                5 * 1500;
-
-            timers.push(
-                setTimeout(() => {
-                    setShowFinalQuestion(true);
-                }, totalDuration + 800)
+            const rewindEnd = reversedRewind.length * step;
+            timers.push(setTimeout(() => {
+                setFinalStage(1);
+            }, rewindEnd + 150)
             );
 
-            timers.push(
-                setTimeout(() => {
-                    setFinalFreeze(true);
-                }, totalDuration + 2500)
+            timers.push(setTimeout(() => {
+                setFinalStage(2);
+            }, rewindEnd + 2150)
             );
         }
 
@@ -809,7 +527,7 @@ export default function CinematicScrollMovie() {
     const renderScene = () => {
 
         if (scene === 0) {
-            const displayed = introLines[introStep] ?? introLines[0];
+            const displayed = INTROLINES[introStep] ?? INTROLINES[0];
             return (
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6">
@@ -821,8 +539,7 @@ export default function CinematicScrollMovie() {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: -18, scale: 1.01 }}
                                     transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }}
-                                    className="text-[clamp(2.6rem,6vw,3rem)] font-bold tracking-tight"
-                                >
+                                    className="text-[clamp(2.6rem,6vw,3rem)] font-bold tracking-tight">
                                     <CurtainText>{displayed}</CurtainText>
                                 </motion.div>
                             </AnimatePresence>
@@ -838,15 +555,10 @@ export default function CinematicScrollMovie() {
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6">
                         <div className="max-w-6xl text-center">
-                            <motion.div
-                                initial={{ opacity: 0, y: 18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8 }}
-                                className="text-[clamp(3rem,10vw,4rem)] font-bold tracking-normal"
-                            >
+                            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-[clamp(3rem,10vw,4rem)] font-bold tracking-normal">
                                 <span className="inline-block overflow-hidden">
                                     {word}
-                                    <span className="ml-2 inline-block h-[0.9em] w-0.75 translate-y-[0.1em] animate-pulse bg-black align-middle" />
+                                    <span className="ml-3 inline-block h-[1.0em] w-0.75 translate-y-[0.1em] animate-pulse bg-black" />
                                 </span>
                             </motion.div>
                         </div>
@@ -861,75 +573,31 @@ export default function CinematicScrollMovie() {
                     <div className="flex h-full w-full items-center justify-center px-6">
                         <div className="relative h-65 w-full max-w-6xl text-center">
 
-                            <motion.div
-                                initial={{
-                                    opacity: 0,
-                                    scale: 1.05,
-                                    y: 20,
-                                    filter: "blur(12px)",
-                                }}
-                                animate={{
-                                    opacity: 1,
-                                    scale: 1,
-                                    y: 0,
-                                    filter: "blur(0px)",
-                                }}
-                                transition={{
-                                    duration: 1.2,
-                                    ease: [0.77, 0, 0.175, 1],
-                                }}
-                                className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[-80%]"
-                            >
-                                <div className="text-[clamp(2.8rem,8vw,4rem)] font-semibold tracking-tight whitespace-nowrap">
-                                    <CurtainText>
-                                        My name is{" "}
-                                        <span className="font-bold">
-                                            AKHIL
-                                        </span>
+                            <motion.div initial={{ opacity: 0, scale: 1.05, y: 20, filter: "blur(12px)" }}
+                                animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+                                transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
+                                className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[-80%]">
+                                <div className="text-[clamp(2.8rem,8vw,3rem)] font-semibold tracking-tight whitespace-nowrap">
+                                    <CurtainText> My name is{" "}
+                                        <span className="font-bold"> AKHIL </span>
                                     </CurtainText>
                                 </div>
                             </motion.div>
 
-                            {/* Subtitle */}
                             <AnimatePresence>
                                 {nameStage >= 1 && (
                                     <motion.div
-                                        initial={{
-                                            opacity: 0,
-                                            y: 30,
-                                            filter: "blur(10px)",
-                                        }}
-                                        animate={{
-                                            opacity: 1,
-                                            y: 0,
-                                            filter: "blur(0px)",
-                                        }}
-                                        exit={{
-                                            opacity: 0,
-                                            y: -10,
-                                        }}
-                                        transition={{
-                                            duration: 0.9,
-                                            ease: [0.22, 1, 0.36, 1],
-                                        }}
-                                        className="
-                                    absolute
-                                    left-1/2
-                                    top-1/2
-                                    mt-12
-                                    -translate-x-1/2
-                                    text-[clamp(1.5rem,3.4vw,2rem)]
-                                    text-black/70
-                                    whitespace-nowrap
-                                "
-                                    >
+                                        initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+                                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute left-1/2 top-1/2 mt-8 -translate-x-1/2 text-[clamp(1.5rem,3.4vw,2rem)] text-black/70 whitespace-nowrap">
                                         <CurtainText delay={0.15}>
                                             But that doesn't tell you much.
                                         </CurtainText>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-
                         </div>
                     </div>
                 </SceneShell>
@@ -939,38 +607,16 @@ export default function CinematicScrollMovie() {
         if (scene === 3) {
             return (
                 <SceneShell dark={false}>
-                    <motion.div
-                        initial={{ scaleY: 1 }}
-                        animate={{ scaleY: timelineReveal ? 0 : 1 }}
-                        transition={{
-                            duration: 1.2,
-                            ease: [0.77, 0, 0.175, 1],
-                        }}
-                        className="absolute inset-0 z-30 origin-top bg-white"
-                    />
+                    <motion.div initial={{ scaleY: 1 }} animate={{ scaleY: timelineReveal ? 0 : 1 }} transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }} className="absolute inset-0 z-30 origin-top bg-white" />
 
-                    <motion.div
-                        initial={{
-                            opacity: 0,
-                            scale: 1.03,
-                            filter: "blur(16px)",
-                        }}
-                        animate={{
-                            opacity: timelineReveal ? 1 : 0,
-                            scale: timelineReveal ? 1 : 1.03,
-                            filter: timelineReveal ? "blur(0px)" : "blur(16px)",
-                        }}
-                        transition={{
-                            duration: 1.15,
-                            ease: [0.77, 0, 0.175, 1],
-                        }}
-                        className="flex h-full w-full flex-col overflow-hidden"
-                    >
-                        {historyBands.map((band, index) => {
+                    <motion.div initial={{ opacity: 0, scale: 1.03, filter: "blur(16px)" }}
+                        animate={{ opacity: timelineReveal ? 1 : 0, scale: timelineReveal ? 1 : 1.03, filter: timelineReveal ? "blur(0px)" : "blur(16px)" }}
+                        transition={{ duration: 1.15, ease: [0.77, 0, 0.175, 1] }}
+                        className="flex h-full w-full flex-col overflow-hidden">
+                        {HISTORYBANDS.map((band, index) => {
+
                             const depth = 1 - index * 0.12;
-
-                            const eased =
-                                1 - Math.pow(1 - carouselProgress, 3);
+                            const eased = 1 - Math.pow(1 - carouselProgress, 3);
 
                             const rowText = Array.from(
                                 { length: 12 }
@@ -978,137 +624,36 @@ export default function CinematicScrollMovie() {
                                 .fill(`${band.year} • ${band.text}`)
                                 .join("     ");
 
-                            const rowWidth =
-                                rowWidths[band.year] || 0;
+                            const rowWidth = rowWidths[band.year] || 0;
 
-                            const viewportWidth =
-                                typeof window !== "undefined"
-                                    ? window.innerWidth
-                                    : 1200;
+                            const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
 
-                            const travelDistance =
-                                Math.max(
-                                    0,
-                                    rowWidth - viewportWidth
-                                );
-
-                            const travelVW =
-                                (travelDistance /
-                                    viewportWidth) *
-                                100;
-
-                            const startOffset =
-                                band.dir === "left"
-                                    ? 0
-                                    : -travelVW;
-
-                            const endOffset =
-                                band.dir === "left"
-                                    ? -travelVW
-                                    : 0;
-
-                            const x =
-                                startOffset +
-                                (endOffset - startOffset) *
-                                eased *
-                                depth;
+                            const travelDistance = Math.max(0, rowWidth - viewportWidth);
+                            const travelVW = (travelDistance / viewportWidth) * 100;
+                            const startOffset = band.dir === "left" ? 0 : -travelVW;
+                            const endOffset = band.dir === "left" ? -travelVW : 0;
+                            const x = startOffset + (endOffset - startOffset) * eased * depth;
 
                             return (
                                 <motion.div
                                     key={band.year}
-                                    initial={{
-                                        opacity: 0,
-                                        y: 100,
-                                    }}
-                                    animate={{
-                                        opacity: timelineReveal
-                                            ? 1
-                                            : 0,
-                                        y: timelineReveal
-                                            ? 0
-                                            : 100,
-                                    }}
-                                    transition={{
-                                        duration: 1,
-                                        delay:
-                                            index * 0.18,
-                                        ease: [
-                                            0.77,
-                                            0,
-                                            0.175,
-                                            1,
-                                        ],
-                                    }}
-                                    className="relative flex-1 overflow-hidden border-b border-black/10"
-                                >
-                                    <motion.div
-                                        animate={{
-                                            x: `${x}vw`,
-                                        }}
-                                        transition={{
-                                            duration: 0.08,
-                                            ease: "linear",
-                                        }}
-                                        className="flex h-full items-center whitespace-nowrap px-4 md:px-10"
-                                    >
-                                        <div
-                                            ref={(el) => {
-                                                rowRefs.current[
-                                                    band.year
-                                                ] = el;
-                                            }}
-                                            className="text-[clamp(2rem,5vw,4.8rem)] font-black leading-none tracking-[-0.06em] md:text-[clamp(2.8rem,4.2vw,5.4rem)]"
-                                        >
+                                    initial={{ opacity: 0, y: 100 }}
+                                    animate={{ opacity: timelineReveal ? 1 : 0, y: timelineReveal ? 0 : 100 }}
+                                    transition={{ duration: 1, delay: index * 0.18, ease: [0.77, 0, 0.175, 1] }}
+                                    className="relative flex-1 overflow-hidden border-b border-black/10">
+                                    <motion.div animate={{ x: `${x}vw` }} transition={{ duration: 0.08, ease: "linear" }} className="flex h-full items-center whitespace-nowrap px-4 md:px-10">
+                                        <div ref={(el) => {
+                                            rowRefs.current[band.year] = el;
+                                        }} className="text-[clamp(2rem,5vw,4.8rem)] font-black leading-none tracking-[-0.06em] md:text-[clamp(2.8rem,4.2vw,5.4rem)]">
                                             <motion.span
-                                                initial={{
-                                                    opacity: 0,
-                                                    x: -40,
-                                                }}
-                                                animate={{
-                                                    opacity:
-                                                        timelineReveal
-                                                            ? 1
-                                                            : 0,
-                                                    x:
-                                                        timelineReveal
-                                                            ? 0
-                                                            : -40,
-                                                }}
-                                                transition={{
-                                                    duration: 0.8,
-                                                    delay:
-                                                        0.3 +
-                                                        index *
-                                                        0.15,
-                                                }}
-                                                className="mr-4 text-black/25"
-                                            >
+                                                initial={{ opacity: 0, x: -40 }}
+                                                animate={{ opacity: timelineReveal ? 1 : 0, x: timelineReveal ? 0 : -40 }}
+                                                transition={{ duration: 0.8, delay: 0.3 + index * 0.15 }}
+                                                className="mr-4 text-black/25">
                                                 {band.year}
                                             </motion.span>
 
-                                            <motion.span
-                                                initial={{
-                                                    opacity: 0,
-                                                    x: 40,
-                                                }}
-                                                animate={{
-                                                    opacity:
-                                                        timelineReveal
-                                                            ? 1
-                                                            : 0,
-                                                    x:
-                                                        timelineReveal
-                                                            ? 0
-                                                            : 40,
-                                                }}
-                                                transition={{
-                                                    duration: 0.9,
-                                                    delay:
-                                                        0.45 +
-                                                        index *
-                                                        0.15,
-                                                }}
-                                            >
+                                            <motion.span initial={{ opacity: 0, x: 40 }} animate={{ opacity: timelineReveal ? 1 : 0, x: timelineReveal ? 0 : 40 }} transition={{ duration: 0.9, delay: 0.45 + index * 0.15 }}>
                                                 {rowText}
                                             </motion.span>
                                         </div>
@@ -1122,16 +667,7 @@ export default function CinematicScrollMovie() {
                         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.06),transparent_45%)]" />
 
                         <motion.div className="pointer-events-none absolute inset-x-6 bottom-6 h-1 rounded-full bg-black/10">
-                            <motion.div
-                                className="h-full origin-left bg-black"
-                                animate={{
-                                    scaleX: carouselProgress,
-                                }}
-                                transition={{
-                                    duration: 0.08,
-                                    ease: "linear",
-                                }}
-                            />
+                            <motion.div className="h-full origin-left bg-black" animate={{ scaleX: carouselProgress }} transition={{ duration: 0.08, ease: "linear" }} />
                         </motion.div>
                     </motion.div>
                 </SceneShell>
@@ -1147,32 +683,16 @@ export default function CinematicScrollMovie() {
                                 {buildingStage === 0 ? (
                                     <motion.div
                                         key="build-0"
-                                        initial={{
-                                            opacity: 0,
-                                            y: 40,
-                                            filter: "blur(10px)",
-                                        }}
-                                        animate={{
-                                            opacity: 1,
-                                            y: 0,
-                                            filter: "blur(0px)",
-                                        }}
-                                        exit={{
-                                            opacity: 0,
-                                            y: -30,
-                                            filter: "blur(8px)",
-                                        }}
-                                        transition={{
-                                            duration: 1.2,
-                                            ease: [0.22, 1, 0.36, 1],
-                                        }}
-                                        className="space-y-4"
-                                    >
+                                        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                        exit={{ opacity: 0, y: -30, filter: "blur(8px)" }}
+                                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                                        className="space-y-4">
                                         <div className="text-[clamp(2.6rem,7vw,3rem)] font-semibold tracking-tight">
-                                            <CurtainText>{buildingLines[0]}</CurtainText>
+                                            <CurtainText>{BUILDINGLINES[0]}</CurtainText>
                                         </div>
                                         <div className="text-[clamp(1.5rem,3.4vw,2rem)] text-black/72">
-                                            <CurtainText delay={0.35}>{buildingLines[1]}</CurtainText>
+                                            <CurtainText delay={0.35}>{BUILDINGLINES[1]}</CurtainText>
                                         </div>
                                     </motion.div>
                                 ) : (
@@ -1182,13 +702,12 @@ export default function CinematicScrollMovie() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -18 }}
                                         transition={{ duration: 0.75 }}
-                                        className="space-y-4"
-                                    >
+                                        className="space-y-4">
                                         <div className="text-[clamp(2.4rem,6.5vw,3rem)] font-semibold tracking-tight">
-                                            <CurtainText>{buildingLines[2]}</CurtainText>
+                                            <CurtainText>{BUILDINGLINES[2]}</CurtainText>
                                         </div>
                                         <div className="text-[clamp(1.5rem,3.4vw,2rem)] text-black/72">
-                                            <CurtainText delay={0.28}>{buildingLines[3]}</CurtainText>
+                                            <CurtainText delay={0.28}>{BUILDINGLINES[3]}</CurtainText>
                                         </div>
                                     </motion.div>
                                 )}
@@ -1204,31 +723,17 @@ export default function CinematicScrollMovie() {
                 <SceneShell dark={false}>
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
                         <AnimatePresence mode="wait">
-                            <motion.div
-                                key={questionIndex}
-                                initial={{
-                                    opacity: 0,
-                                    y: 30,
-                                    filter: "blur(10px)",
-                                }}
-                                animate={{
-                                    opacity: 1,
-                                    y: 0,
+                            <motion.div key={questionIndex}
+                                initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+                                exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
+                                transition={{ duration: questionIndex === PROBLEMQUESTIONS.length - 1 ? 1.2 : 0.8, ease: [0.22, 1, 0.36, 1] }}
+                                animate={{ opacity: 1, y: 0,
+                                    scale: questionIndex === PROBLEMQUESTIONS.length - 1 ? 1.08 : 1,
                                     filter: "blur(0px)",
                                 }}
-                                exit={{
-                                    opacity: 0,
-                                    y: -30,
-                                    filter: "blur(10px)",
-                                }}
-                                transition={{
-                                    duration: 0.6,
-                                    ease: [0.77, 0, 0.175, 1],
-                                }}
-                                className="max-w-6xl"
-                            >
-                                <div className="text-[clamp(2.4rem,6vw,4rem)] font-semibold tracking-tight">
-                                    {problemQuestions[questionIndex]}
+                                className={`text-[clamp(2.4rem,6vw,4rem)] font-semibold tracking-tight ${questionIndex === PROBLEMQUESTIONS.length - 1 ? "text-black" : "text-black/85"}`}>
+                                <div className="text-[clamp(2.4rem,6vw,3rem)] font-semibold tracking-tight">
+                                    {PROBLEMQUESTIONS[questionIndex]}
                                 </div>
                             </motion.div>
                         </AnimatePresence>
@@ -1254,20 +759,12 @@ export default function CinematicScrollMovie() {
                     <div className="absolute inset-0 overflow-hidden">
                         <div className="absolute inset-0 opacity-[0.16]">
                             {treeNodes.map((n, i) => (
-                                <motion.div
-                                    key={`${i}-${treePulse}`}
+                                <motion.div key={`${i}-${treePulse}`}
                                     initial={{ scaleX: 0, opacity: 0 }}
                                     animate={{ scaleX: treeStage >= 1 ? 1 : 0, opacity: treeStage >= 1 ? 1 : 0 }}
                                     transition={{ duration: 0.8, delay: i * 0.04 }}
                                     className="absolute h-px bg-black"
-                                    style={{
-                                        left: `${n.x}%`,
-                                        top: `${n.y}%`,
-                                        width: `${n.len}%`,
-                                        transform: `rotate(${n.rot}deg)`,
-                                        transformOrigin: "left center",
-                                    }}
-                                />
+                                    style={{ left: `${n.x}%`, top: `${n.y}%`, width: `${n.len}%`, transform: `rotate(${n.rot}deg)`, transformOrigin: "left center" }} />
                             ))}
                         </div>
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.06),transparent_48%)]" />
@@ -1276,16 +773,9 @@ export default function CinematicScrollMovie() {
                         <div className="max-w-5xl text-center">
                             <motion.div
                                 initial={{ opacity: 0, y: 18 }}
-                                animate={{
-                                    opacity: treeStage >= 1 ? 1 : 0,
-                                    y: treeStage >= 1 ? 0 : 18,
-                                }}
-                                transition={{
-                                    duration: 0.8,
-                                    ease: [0.22, 1, 0.36, 1],
-                                }}
-                                className="space-y-4"
-                            >
+                                animate={{ opacity: treeStage >= 1 ? 1 : 0, y: treeStage >= 1 ? 0 : 18 }}
+                                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                                className="space-y-4">
                                 <div className="text-[clamp(2rem,6vw,3rem)] font-semibold tracking-tight">
                                     Great software isn't written.
                                 </div>
@@ -1302,23 +792,10 @@ export default function CinematicScrollMovie() {
 
         if (scene === 7) {
             return (
-                <SceneShell2
-                    dark={codeStage >= 2}
-                    curtain={isFirstDarkScene}
-                >
+                <SceneShell2 dark={codeStage >= 2} curtain={isFirstDarkScene}>
                     {codeStage >= 2 && (
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            preload="auto"
-                            className="absolute inset-0 z-1 h-full w-full object-cover scale-105"
-                        >
-                            <source
-                                src="/scene6.mp4"
-                                type="video/mp4"
-                            />
+                        <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
+                            <source src="/scene6.mp4" type="video/mp4" />
                         </video>
                     )}
 
@@ -1329,9 +806,7 @@ export default function CinematicScrollMovie() {
                     {codeStage >= 2 && (
                         <>
                             <div className="absolute inset-0 z-2 bg-black/45" />
-
                             <div className="absolute inset-0 z-2 bg-linear-to-b from-black/20 via-transparent to-black/80" />
-
                             <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_45%)]" />
                         </>
                     )}
@@ -1348,44 +823,16 @@ export default function CinematicScrollMovie() {
                             {codeStage < 2 ? (
                                 <motion.div
                                     key="tools"
-                                    initial={{
-                                        opacity: 0,
-                                        y: 40,
-                                        filter: "blur(10px)",
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                        y: 0,
-                                        filter: "blur(0px)",
-                                    }}
-                                    exit={{
-                                        opacity: 0,
-                                        y: -40,
-                                        filter: "blur(10px)",
-                                    }}
-                                    transition={{
-                                        duration: 1.2,
-                                        ease: [0.22, 1, 0.36, 1],
-                                    }}
-                                    className="max-w-5xl"
-                                >
-                                    <div className="text-[clamp(2.2rem,6vw,3rem)] font-semibold tracking-tight text-black">
-                                        I specialize in tools.
-                                    </div>
-
-                                    <div className="mt-4 text-[clamp(1.4rem,3.4vw,2rem)] text-black/60">
-                                        They work as I say.
-                                    </div>
+                                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                    exit={{ opacity: 0, y: -40, filter: "blur(10px)" }}
+                                    transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                                    className="max-w-5xl">
+                                    <div className="text-[clamp(2.2rem,6vw,3rem)] font-semibold tracking-tight text-black"> I specialize in tools. </div>
+                                    <div className="mt-4 text-[clamp(1.4rem,3.4vw,2rem)] text-black/60"> They work as I say. </div>
                                 </motion.div>
                             ) : (
-                                <motion.div
-                                    key="glitch"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 1 }}
-                                    className="h-full w-full"
-                                />
+                                <motion.div key="glitch" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="h-full w-full" />
                             )}
 
                         </AnimatePresence>
@@ -1400,19 +847,14 @@ export default function CinematicScrollMovie() {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_45%)]" />
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
                         <AnimatePresence mode="wait">
-                            <motion.div
-                                key={aiStage}
+                            <motion.div key={aiStage}
                                 initial={{ opacity: 0, y: 16 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -16 }}
                                 transition={{ duration: 0.4 }}
-                                className="max-w-5xl"
-                            >
+                                className="max-w-5xl">
                                 <div className="text-[clamp(2.3rem,6vw,3rem)] font-bold tracking-tight text-white">
-                                    {aiClaims[aiStage]}
-                                </div>
-                                <div className="mt-5 text-[clamp(1.4rem,3.2vw,2rem)] text-white/70">
-                                    {aiStage === 0 ? "" : aiStage === 1 ? "AI can write code." : aiStage === 2 ? "AI can refactor code." : "AI can deploy code."}
+                                    {AICLAIMS[aiStage]}
                                 </div>
                             </motion.div>
                         </AnimatePresence>
@@ -1434,50 +876,21 @@ export default function CinematicScrollMovie() {
                                     key="but"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    exit={{
-                                        opacity: 0,
-                                        scale: 1.15,
-                                        filter: "blur(10px)",
-                                    }}
-                                    transition={{
-                                        duration: 1.1,
-                                        ease: [0.22, 1, 0.36, 1],
-                                    }}
-                                    className="max-w-5xl"
-                                >
-                                    <div className="text-[clamp(3rem,8vw,5rem)] font-black tracking-tight text-white">
-                                        BUT...
-                                    </div>
+                                    exit={{ opacity: 0, scale: 1.15, filter: "blur(10px)" }}
+                                    transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                                    className="max-w-5xl">
+                                    <div className="text-[clamp(3rem,8vw,4rem)] font-bold tracking-tight text-white"> BUT... </div>
                                 </motion.div>
                             ) : (
                                 <motion.div
                                     key={questionIndex}
-                                    initial={{
-                                        opacity: 0,
-                                        y: 40,
-                                        scale: 0.97,
-                                        filter: "blur(10px)",
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                        y: 0,
-                                        scale: 1,
-                                        filter: "blur(0px)",
-                                    }}
-                                    exit={{
-                                        opacity: 0,
-                                        y: -40,
-                                        scale: 1.03,
-                                        filter: "blur(10px)",
-                                    }}
-                                    transition={{
-                                        duration: 0.3,
-                                        ease: [0.22, 1, 0.36, 1],
-                                    }}
-                                    className="max-w-5xl"
-                                >
+                                    initial={{ opacity: 0, y: 40, scale: 0.97, filter: "blur(10px)" }}
+                                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                    exit={{ opacity: 0, y: -40, scale: 1.03, filter: "blur(10px)" }}
+                                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                    className="max-w-5xl">
                                     <div className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white">
-                                        {businessQuestions[questionIndex]}
+                                        {BUSINESSQUESTIONS[questionIndex]}
                                     </div>
                                 </motion.div>
                             )}
@@ -1492,21 +905,12 @@ export default function CinematicScrollMovie() {
             return (
                 <SceneShell2 dark>
 
-                    <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        className="absolute inset-0 z-1 h-full w-full object-cover scale-105"
-                    >
+                    <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
                         <source src="/scene9.mp4" type="video/mp4" />
                     </video>
 
                     <div className="absolute inset-0 z-2 bg-black/50" />
-
                     <div className="absolute inset-0 z-2 bg-linear-to-b from-black/30 via-black/10 to-black/80" />
-
                     <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_center,transparent_0,rgba(0,0,0,0.82)_66%)]" />
 
                     <div className="absolute inset-0 z-3">
@@ -1517,29 +921,13 @@ export default function CinematicScrollMovie() {
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={vulnTick}
-                                initial={{
-                                    opacity: 0,
-                                    y: 40,
-                                    filter: "blur(12px)",
-                                }}
-                                animate={{
-                                    opacity: 1,
-                                    y: 0,
-                                    filter: "blur(0px)",
-                                }}
-                                exit={{
-                                    opacity: 0,
-                                    y: -40,
-                                    filter: "blur(12px)",
-                                }}
-                                transition={{
-                                    duration: 0.9,
-                                    ease: [0.77, 0, 0.175, 1],
-                                }}
-                                className="max-w-6xl"
-                            >
+                                initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
+                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                exit={{ opacity: 0, y: -40, filter: "blur(12px)" }}
+                                transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
+                                className="max-w-6xl">
                                 <div className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white">
-                                    {vulnerabilities[vulnTick]}
+                                    {VULNERABILITIES[vulnTick]}
                                 </div>
                             </motion.div>
                         </AnimatePresence>
@@ -1561,10 +949,9 @@ export default function CinematicScrollMovie() {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="max-w-5xl"
-                                >
-                                    <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white">The most dangerous bugs...</div>
-                                    <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72">are the ones nobody sees.</div>
+                                    className="max-w-5xl">
+                                    <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white"> The most dangerous bugs... </div>
+                                    <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72"> are the ones nobody sees. </div>
                                 </motion.div>
                             ) : (
                                 <motion.div
@@ -1573,10 +960,9 @@ export default function CinematicScrollMovie() {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="max-w-5xl"
-                                >
-                                    <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white">Intelligence generates code.</div>
-                                    <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72">Experience prevents disasters.</div>
+                                    className="max-w-5xl">
+                                    <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white"> Intelligence generates code. </div>
+                                    <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72"> Experience prevents disasters. </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -1592,43 +978,17 @@ export default function CinematicScrollMovie() {
 
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
                         <div className="max-w-6xl">
-
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={philosophyStage}
-                                    initial={{
-                                        opacity: 0,
-                                        y: 50,
-                                        scale: 0.98,
-                                        filter: "blur(12px)",
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                        y: 0,
-                                        scale: 1,
-                                        filter: "blur(0px)",
-                                    }}
-                                    exit={{
-                                        opacity: 0,
-                                        y: -50,
-                                        scale: 1.02,
-                                        filter: "blur(12px)",
-                                    }}
-                                    transition={{
-                                        duration: 0.9,
-                                        ease: [0.77, 0, 0.175, 1],
-                                    }}
-                                    className="
-                                text-[clamp(2rem,5vw,4.5rem)]
-                                font-semibold
-                                tracking-tight
-                                text-white
-                            "
-                                >
-                                    {philosophy[philosophyStage]}
+                                    initial={{ opacity: 0, y: 50, scale: 0.98, filter: "blur(12px)" }}
+                                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                    exit={{ opacity: 0, y: -50, scale: 1.02, filter: "blur(12px)" }}
+                                    transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
+                                    className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white">
+                                    {PHILOSOPHY[philosophyStage]}
                                 </motion.div>
                             </AnimatePresence>
-
                         </div>
                     </div>
                 </SceneShell>
@@ -1637,127 +997,42 @@ export default function CinematicScrollMovie() {
 
         if (scene === 13) {
             return (
-                <SceneShell dark>
-                    <motion.div
-                        animate={{
-                            opacity: showFinalQuestion ? 0.12 : 0.06,
-                            scale: showFinalQuestion ? 1.15 : 1,
-                        }}
-                        transition={{ duration: 2 }}
-                        className="
-                    absolute inset-0
-                    bg-[radial-gradient(circle_at_center,
-                    rgba(255,255,255,0.12),
-                    transparent_55%)]
-                " />
+                <SceneShell dark={finalStage === 0}>
+                    <motion.div initial={false} animate={{ opacity: finalStage === 0 ? 1 : 0, scale: finalStage === 0 ? 1 : 1.02 }} transition={{ duration: 0.35 }} className="absolute inset-0 bg-black" />
 
-                    <div className="relative flex h-full w-full items-center justify-center px-6 text-center overflow-hidden">
+                    {finalStage >= 1 && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45 }} className="absolute inset-0 bg-white" />
+                    )}
 
+                    {finalStage === 0 && (
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_42%)]" />
+                    )}
+
+                    <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-6 text-center">
                         <AnimatePresence mode="wait">
 
-                            {!showFinalQuestion && rewindIndex >= 0 && (
-                                <motion.div
-                                    key={rewindIndex}
-                                    initial={{
-                                        opacity: 0,
-                                        y: 60,
-                                        scale: 0.96,
-                                        filter: "blur(18px)",
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                        y: 0,
-                                        scale: 1,
-                                        filter: "blur(0px)",
-                                    }}
-                                    exit={{
-                                        opacity: 0,
-                                        y: -60,
-                                        scale: 1.04,
-                                        filter: "blur(20px)",
-                                    }}
-                                    transition={{
-                                        duration: 1,
-                                        ease: [0.22, 1, 0.36, 1],
-                                    }}
-                                    className="
-                                max-w-6xl
-                                text-[clamp(2rem,5vw,4.5rem)]
-                                font-semibold
-                                tracking-tight
-                                text-white
-                            "
-                                >
+                            {finalStage === 0 ? (
+                                <motion.div key={rewindIndex}
+                                    initial={{ opacity: 0, y: 28, scale: 0.98, filter: "blur(10px)" }}
+                                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                    exit={{ opacity: 0, y: -28, scale: 1.02, filter: "blur(10px)" }}
+                                    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                                    className="max-w-6xl text-[clamp(1.9rem,4.8vw,4.4rem)] font-semibold tracking-tight text-white">
                                     {reversedRewind[rewindIndex]}
                                 </motion.div>
-                            )}
 
-                            {showFinalQuestion && (
-                                <motion.div
-                                    key="who"
-                                    initial={{
-                                        opacity: 0,
-                                        scale: 0.75,
-                                        filter: "blur(30px)",
-                                    }}
-                                    animate={{
-                                        opacity: 1,
-                                        scale: 1,
-                                        filter: "blur(0px)",
-                                    }}
-                                    transition={{
-                                        duration: 2.2,
-                                        ease: [0.22, 1, 0.36, 1],
-                                    }}
-                                    className="space-y-8"
-                                >
-                                    <motion.div
-                                        animate={
-                                            finalFreeze
-                                                ? {}
-                                                : {
-                                                    opacity: [0.8, 1, 0.85, 1],
-                                                }
-                                        }
-                                        transition={{
-                                            duration: 4,
-                                            repeat: Infinity,
-                                        }}
-                                        className="
-                                    text-[clamp(3rem,9vw,8rem)]
-                                    font-black
-                                    tracking-[0.22em]
-                                    text-white
-                                "
-                                    >
+                            ) : finalStage >= 1 ? (
+                                <motion.div key="who" initial={{ opacity: 0, scale: 0.78, filter: "blur(24px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }} className="space-y-10">
+                                    <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="text-[clamp(3rem,9vw,4rem)] font-bold tracking-normal text-black">
                                         WHO AM I ?
                                     </motion.div>
-
-                                    <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{
-                                            opacity: finalFreeze ? 1 : 0,
-                                        }}
-                                        transition={{
-                                            duration: 2,
-                                        }}
-                                        className="
-                                    uppercase
-                                    tracking-[0.5em]
-                                    text-white/25
-                                    text-sm
-                                "
-                                    >
-                                        Scroll back up to find out.
-                                    </motion.div>
                                 </motion.div>
-                            )}
+                            ) : null}
                         </AnimatePresence>
                     </div>
                 </SceneShell>
             );
         }
-
         return null;
     };
 
@@ -1795,25 +1070,20 @@ export default function CinematicScrollMovie() {
                 <AnimatePresence mode="wait">{renderScene()}</AnimatePresence>
             </div>
 
-            <motion.div
-                initial={false}
+            <motion.div initial={false}
                 animate={{ opacity: scene === 3 ? 1 : 0 }}
                 transition={{ duration: 0.35 }}
-                className="pointer-events-none absolute left-0 top-0 h-px w-full bg-current/15"
-            />
-            <motion.div
-                initial={false}
-                animate={{ opacity: scene === 3 ? 1 : 0 }}
-                transition={{ duration: 0.35 }}
-                className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-current/15"
-            />
+                className="pointer-events-none absolute left-0 top-0 h-px w-full bg-current/15" />
 
-            <motion.div
-                initial={false}
+            <motion.div initial={false}
+                animate={{ opacity: scene === 3 ? 1 : 0 }}
+                transition={{ duration: 0.35 }}
+                className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-current/15" />
+
+            <motion.div initial={false}
                 animate={{ opacity: ready ? 0.5 : 0.95 }}
                 transition={{ duration: 0.4 }}
-                className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-[0.5em] text-current/35 backdrop-blur-sm"
-            >
+                className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-[0.5em] text-current/35 backdrop-blur-sm">
                 {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
             </motion.div>
         </div>

@@ -565,16 +565,24 @@ Finally if you wanna enhance do it and at the end let me know what needs to adde
 
 --------------
 
+scene 1 - ok
 
+scene 2 - line at the end padding bottom to lift high.
 
+scene 3 - font size - 3rem, 2rem
 
-The scrolling is fine, but the experience dosen't feel premium. The scrolls are just noraml scrolls. I dont want the, when each and everything come to the viewport it should come with some intent and make user to dive in and read it. User should be engaged, and the annimations feels off in few places there are lots of white spaces. 
+scene 4 - chevkout the intensity of of scroll
 
-Also untill the things are done to show in that particular section the scroll should be disabled. And once its done it should continue the flow. 
+scene 5 - font side - 3rem, rem
 
-Make the animations as in some curtain is coming from bottom to top and so on. Currently the black layout is just there, but no effects init. lets do something like 
-- A reactangle at the bottom slighly smaller than the screen and this will be the black region and as the user scrolls down it should come up and then cover up the screen filling it to black. 
-- The first who am I text is breaking it shouldn't. and also I want the mode in the left bottom corner remove that.
-- Also the carousel part is not working correctly, of the two parts are shown tehn the other two are just blank, These four should trigger as the first one enters the screen or viewport. 
+scene 6 - font size
 
-Make these changes and give me the complete updated code.
+scene 7 - ok
+
+scene 8 - two texts not required.
+
+scene 9 - smaller but weight and font
+
+Yes ai wala code runs fast, The text which says CAN IT, is looping too much.
+
+Next scene wala which has video is not great, update video and try.

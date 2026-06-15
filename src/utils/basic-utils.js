@@ -141,3 +141,83 @@ export const POSITIONS = [
 
     { x: 5.15, y: 0.95, z: 2 }, { x: 6.2, y: 0.5, z: -0.8 }, { x: 4, y: 0.08, z: 1.8 }
 ];
+
+
+/* Cinematic */
+
+export const TOTAL_SCENES = 14;
+
+export const DARK_START_SCENE = 6;
+
+export const INTROLINES = ["Asking questions is important...", "Right ?...", "So let's start with one."];
+
+export const BUILDINGLINES = ["Building isn't hard.", "Knowing what to build is.", "Knowing WHY to build it...", "is even harder."];
+
+export const PROBLEMQUESTIONS = ["I don't start with code.", "I start with questions.", "Who uses it?", "Why does it exist?", "What breaks if it fails?", "How will it scale?", "How will it survive?", "Code is the last step."];
+
+export const AICLAIMS = ["YES.", "AI can write code.", "AI can refactor code.", "AI can deploy code."];
+
+export const BUSINESSQUESTIONS = ["Can it understand your business?", "Can it protect your data?", "Can it see what isn't obvious?", "Can it predict what breaks six months later?"];
+
+export const VULNERABILITIES = ["Data corruption.", "Race condition in production.", "Privilege escalation.", "Memory leak after 3 months.", "User data leak.", "Multi-tenant data exposure.", "Distributed cache inconsistency.", "Deadlock under peak traffic.", "Event ordering failure.", "And more..."];
+
+export const PHILOSOPHY = ["I don't build websites.", "I build experiences.", "I don't write code.", "I design systems.", "I don't chase trends.", "I solve problems."];
+
+export const REWINDLINES = [
+    "I solve problems.", "I don't chase trends.", "I design systems.", "I don't write code.", "I build experiences.", "I don't build websites.",
+    "Experience prevents disasters.", "Intelligence generates code.",
+    "Distributed cache inconsistency.", "Race condition in production.", "Silent data corruption.",
+    "Can it predict what breaks six months later?", "Can it protect your data?", "Can it understand your business?",
+    "I specialize in tools.", "Great software isn't written.", "It's discovered.",
+    "Code is the last step.", "Why does it exist?", "Who uses it?",
+    "Knowing WHY to build it...", "Knowing what to build is.",
+    "My name is AKHIL.",
+];
+
+export const HISTORYBANDS = [
+    {
+        year: "2018",
+        text: "Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.",
+        dir: "left",
+    },
+    {
+        year: "2020",
+        text: "Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.",
+        dir: "right",
+    },
+    {
+        year: "2022",
+        text: "Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.",
+        dir: "left",
+    },
+    {
+        year: "2024",
+        text: "Engineering products. Solving real problems. Designing trust. Making things work beautifully.Engineering products. Solving real problems. Designing trust. Making things work beautifully.",
+        dir: "right",
+    },
+];
+
+export const SAMPLES = [
+    "const trust = await verify(user, data);",
+    "if (!permission) throw new Error('403');",
+    "query = sanitize(input);",
+    "cache.invalidate('session:' + id);",
+    "await deploy(build());",
+    "for (let i = 0; i < n; i++) optimize();",
+    "server.on('error', recover);",
+    "try { render() } catch (e) { alert(e) }",
+    "db.transaction(async (tx) => await tx.commit());",
+    "security.scan();",
+];
+
+export const ERRORBITS = [
+    "RACE CONDITION DETECTED",
+    "UNEXPECTED STATE MUTATION",
+    "PERMISSION ESCALATION",
+    "STALE CACHE WRITE",
+    "MEMORY LEAK",
+    "EVENT LOOP BLOCKED",
+    "DANGLING REFERENCE",
+    "SILENT DATA CORRUPTION",
+    "INCONSISTENT REPLICA",
+];

@@ -143,7 +143,7 @@ export const POSITIONS = [
 ];
 
 
-/* Cinematic */
+/* CinematicIntro */
 
 export const TOTAL_SCENES = 14;
 

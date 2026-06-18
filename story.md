@@ -565,24 +565,66 @@ Finally if you wanna enhance do it and at the end let me know what needs to adde
 
 --------------
 
-scene 1 - ok
 
-scene 2 - line at the end padding bottom to lift high.
 
-scene 3 - font size - 3rem, 2rem
+Subject profile should be improved, Experience section should be added.
+Animations for component entering viewport.
 
-scene 4 - chevkout the intensity of of scroll
+Is backend required for teh START section.
 
-scene 5 - font side - 3rem, rem
 
-scene 6 - font size
+https://www.rishabh-upadhyay.com/
 
-scene 7 - ok
+Asking questions is important - Building isn't hard, knowing what and how to build.
 
-scene 8 - two texts not required.
+Reliability comes from consistency - Consistency comes from clarity
 
-scene 9 - smaller but weight and font
+Yes AI can code and refactor. But can it think for us ? - Testing and Developing only what's needed.
 
-Yes ai wala code runs fast, The text which says CAN IT, is looping too much.
 
-Next scene wala which has video is not great, update video and try.
+https://hackfirst.io/
+The Hidden Vulnerabilities can destroy you
+
+
+Do we need code..? or solutions ?
+
+Adapting to pace of development environments. Sounds Interesting ?
+
+
+
+My work commits exist in another dimensions
+
+Scroll effects - https://azizkhaldi.com/
+
+
+
+---
+
+
+I wanna create a story telling portfolio website as in me telling a story of myself to the world. Let's start with a question asking soemthing like - 
+
+Asking questions is important...right ? Who am I ?
+
+Scrolling should reveal the subject profile with relevant animated component and so on.
+
+Building isn't hard, Knowing what and how to build is, 
+
+And I know exactly what am doing - 
+
+My tech stack reveal saying this is what I specialize in and what I do.
+
+Yes, AI can code and refactor. But, 
+- can you control it completely ?
+- is it secure for the data you are working with ?
+-
+
+The glicth component here and say - The hidden vulnerabilities can destry you.
+
+Hand it over to the one who does it better.
+
+I want to include my achievements and education logs here which should blend in with this story am telling. 
+
+And at the end say - this is who I am...
+
+
+This is just a blueprint, I want you to enhance this into a professional level Story where I can integrate this in a smooth scroll and highly interactive website. Give me ideas and layouts for this, How I can try this out. I want a detailed explaination. And also if you wanna add anything please be free to do that, and if u wanna remove anything then you can do that too. 

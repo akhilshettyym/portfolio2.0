@@ -3,18 +3,18 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+const ArrowIcon = () => {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
+            <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M10 7H17V14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+};
+
 const CustomButton = ({ title, onClick, width = 180, height = 56, className = "" }) => {
 
     const [isHovered, setIsHovered] = useState(false);
-
-    const ArrowIcon = () => {
-        return (
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
-                <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M10 7H17V14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-        );
-    };
 
     return (
         <button type="button" onClick={onClick} className={`inline-block ${className}`}>

@@ -344,7 +344,7 @@ const HeroSection = () => {
 
                 <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationComplete} />
 
-                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background.toLowerCase()}.png")` : "none" }} /> */}
+                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
                     <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>

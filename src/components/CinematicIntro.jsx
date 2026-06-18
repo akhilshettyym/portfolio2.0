@@ -2,7 +2,7 @@
 
 import "../styles/CinematicIntro.css";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "../utils/funct-utils";
 import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "../utils/basic-utils";
 
@@ -33,15 +33,61 @@ const CinematicIntro = () => {
 
     const [rowWidths, setRowWidths] = useState({});
 
-    const reversedRewind = [...REWINDLINES].reverse();
+    const reversedRewind = useMemo(
+        () => [...REWINDLINES].reverse(),
+        []
+    );
 
     const rowRefs = useRef({});
     const carouselRef = useRef(0);
+
     const sceneRef = useRef(scene);
     const readyRef = useRef(ready);
 
-    readyRef.current = ready;
-    sceneRef.current = scene;
+    useEffect(() => {
+        sceneRef.current = scene;
+    }, [scene]);
+
+    useEffect(() => {
+        readyRef.current = ready;
+    }, [ready]);
+
+    const resetSceneState = () => {
+        setReady(false);
+
+        setIntroStep(0);
+        setWhoChars(0);
+        setNameStage(0);
+
+        setCarouselProgress(0);
+
+        setBuildingStage(0);
+
+        setTreeStage(0);
+        setTreePulse(0);
+
+        setCodeStage(0);
+
+        setAiStage(0);
+
+        setButStage(0);
+        setQuestionIndex(0);
+
+        setGlitchSeed((v) => v + 1);
+
+        setVulnTick(0);
+
+        setDangerStage(0);
+
+        setPhilosophyStage(0);
+
+        setDarkCurtainDone(false);
+
+        setTimelineReveal(false);
+
+        setFinalStage(0);
+        setRewindIndex(0);
+    };
 
     useBodyLock(!(scene === 13 && finalStage >= 2));
 
@@ -72,21 +118,29 @@ const CinematicIntro = () => {
 
     const nextScene = () => {
         if (!readyRef.current) return;
-        setReady(false);
-        setScene((s) => Math.min(s + 1, TOTAL_SCENES - 1));
+        resetSceneState();
+        setScene((s) =>
+            Math.min(s + 1, TOTAL_SCENES - 1)
+        );
     };
 
     const prevScene = () => {
         if (!readyRef.current) return;
-        setReady(false);
-        setScene((s) => Math.max(s - 1, 0));
+        resetSceneState();
+        setScene((s) =>
+            Math.max(s - 1, 0)
+        );
     };
 
     useEffect(() => {
-        if (scene === 3 && carouselProgress >= 1) {
-            setReady(true);
-            nextScene();
-        }
+        if (scene !== 3 || carouselProgress < 1) return;
+
+        const id = setTimeout(() => {
+            resetSceneState();
+            setScene((s) => Math.min(s + 1, TOTAL_SCENES - 1));
+        }, 0);
+
+        return () => clearTimeout(id);
     }, [scene, carouselProgress]);
 
     useWheelDeck(() => {
@@ -123,24 +177,6 @@ const CinematicIntro = () => {
     );
 
     useEffect(() => {
-        setReady(false);
-        setIntroStep(0);
-        setWhoChars(0);
-        setNameStage(0);
-        setCarouselProgress(0);
-        setBuildingStage(0);
-        setTreeStage(0);
-        setTreePulse(0);
-        setCodeStage(0);
-        setAiStage(0);
-        setButStage(0);
-        setQuestionIndex(0);
-        setGlitchSeed((v) => v + 1);
-        setVulnTick(0);
-        setDangerStage(0);
-        setPhilosophyStage(0);
-        setDarkCurtainDone(false);
-        setTimelineReveal(false);
 
         const timers = [];
         const intervals = [];
@@ -172,12 +208,11 @@ const CinematicIntro = () => {
         }
 
         if (scene === 3) {
-            setCarouselProgress(0);
-
-            timers.push(setTimeout(() => {
-                setTimelineReveal(true);
-                setReady(true);
-            }, 250)
+            timers.push(
+                setTimeout(() => {
+                    setTimelineReveal(true);
+                    setReady(true);
+                }, 250)
             );
         }
 
@@ -188,18 +223,18 @@ const CinematicIntro = () => {
         }
 
         if (scene === 5) {
-            setQuestionIndex(0);
-
-            intervals.push(setInterval(() => {
-                setQuestionIndex((i) =>
-                    Math.min(i + 1, PROBLEMQUESTIONS.length - 1)
-                );
-            }, 2000)
+            intervals.push(
+                setInterval(() => {
+                    setQuestionIndex((i) =>
+                        Math.min(i + 1, PROBLEMQUESTIONS.length - 1)
+                    );
+                }, 2000)
             );
 
-            timers.push(setTimeout(() => {
-                setReady(true);
-            }, PROBLEMQUESTIONS.length * 1300 + 1200)
+            timers.push(
+                setTimeout(() => {
+                    setReady(true);
+                }, PROBLEMQUESTIONS.length * 1300 + 1200)
             );
         }
 
@@ -225,10 +260,17 @@ const CinematicIntro = () => {
         }
 
         if (scene === 9) {
-            setButStage(1);
-            timers.push(setTimeout(() => setButStage(2), 2500));
-            intervals.push(setInterval(() => setQuestionIndex((i) => (i + 1) % BUSINESSQUESTIONS.length), 2800));
-            timers.push(setTimeout(() => setReady(true), 2500 + BUSINESSQUESTIONS.length * 2800));
+            timers.push(
+                setTimeout(() => {
+                    setButStage(1);
+                }, 0)
+            );
+
+            timers.push(
+                setTimeout(() => {
+                    setButStage(2);
+                }, 2500)
+            );
 
             const id = setInterval(() => {
                 setQuestionIndex((i) => {
@@ -236,27 +278,39 @@ const CinematicIntro = () => {
                         clearInterval(id);
                         return i;
                     }
+
                     return i + 1;
                 });
             }, 3200);
+
             intervals.push(id);
+
+            timers.push(
+                setTimeout(
+                    () => setReady(true),
+                    2500 + BUSINESSQUESTIONS.length * 3200
+                )
+            );
         }
 
         if (scene === 10) {
-            setVulnTick(0);
             const id = setInterval(() => {
                 setVulnTick((v) => {
                     if (v >= VULNERABILITIES.length - 1) {
                         clearInterval(id);
                         return v;
                     }
+
                     return v + 1;
                 });
             }, 1800);
+
             intervals.push(id);
-            timers.push(setTimeout(() => {
-                setReady(true);
-            }, VULNERABILITIES.length * 1800 + 1500)
+
+            timers.push(
+                setTimeout(() => {
+                    setReady(true);
+                }, VULNERABILITIES.length * 1800 + 1500)
             );
         }
 
@@ -267,40 +321,44 @@ const CinematicIntro = () => {
         }
 
         if (scene === 12) {
-            setPhilosophyStage(0);
-
             PHILOSOPHY.forEach((_, index) => {
-                timers.push(setTimeout(() => {
-                    setPhilosophyStage(index);
-                }, index * 2500));
+                timers.push(
+                    setTimeout(() => {
+                        setPhilosophyStage(index);
+                    }, index * 2500)
+                );
             });
 
-            timers.push(setTimeout(() => {
-                setReady(true);
-            }, PHILOSOPHY.length * 2500)
+            timers.push(
+                setTimeout(() => {
+                    setReady(true);
+                }, PHILOSOPHY.length * 2500)
             );
         }
 
         if (scene === 13) {
-            setFinalStage(0);
-            setRewindIndex(0);
             const step = 110;
+
             reversedRewind.forEach((_, i) => {
-                timers.push(setTimeout(() => {
-                    setRewindIndex(i);
-                }, i * step)
+                timers.push(
+                    setTimeout(() => {
+                        setRewindIndex(i);
+                    }, i * step)
                 );
             });
 
             const rewindEnd = reversedRewind.length * step;
-            timers.push(setTimeout(() => {
-                setFinalStage(1);
-            }, rewindEnd + 150)
+
+            timers.push(
+                setTimeout(() => {
+                    setFinalStage(1);
+                }, rewindEnd + 150)
             );
 
-            timers.push(setTimeout(() => {
-                setFinalStage(2);
-            }, rewindEnd + 2150)
+            timers.push(
+                setTimeout(() => {
+                    setFinalStage(2);
+                }, rewindEnd + 2150)
             );
         }
 
@@ -308,7 +366,7 @@ const CinematicIntro = () => {
             timers.forEach(clearTimeout);
             intervals.forEach(clearInterval);
         };
-    }, [scene]);
+    }, [scene, reversedRewind]);
 
     const renderScene = () => {
 
@@ -377,7 +435,7 @@ const CinematicIntro = () => {
                                         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                                         className="absolute left-1/2 top-1/2 mt-8 -translate-x-1/2 text-[clamp(1.5rem,3.4vw,2rem)] text-black/70 whitespace-nowrap">
                                         <CurtainText delay={0.15}>
-                                            But that doesn't tell you much.
+                                            But that doesn&apos;t tell you much.
                                         </CurtainText>
                                     </motion.div>
                                 )}
@@ -556,11 +614,11 @@ const CinematicIntro = () => {
                                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                                 className="space-y-4">
                                 <div className="text-[clamp(2rem,6vw,3rem)] font-semibold tracking-tight">
-                                    Great software isn't written.
+                                    Great software isn&apos;t written.
                                 </div>
 
                                 <div className="text-[clamp(1.7rem,4vw,2rem)] text-black/72">
-                                    It's discovered.
+                                    It&apos;s discovered.
                                 </div>
                             </motion.div>
                         </div>

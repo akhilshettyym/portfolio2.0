@@ -6,20 +6,21 @@ import { useEffect, useRef, useState } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const Loader = ({ onFinish, duration = 3000 }) => {
-    
+
     const containerRef = useRef(null);
 
     const [progress, setProgress] = useState(0);
     const [done, setDone] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+
+    const [isMobile, setIsMobile] = useState(() => {
+        if (typeof window === "undefined") return false;
+        return window.matchMedia("(max-width: 640px)").matches;
+    });
 
     useEffect(() => {
         const media = window.matchMedia("(max-width: 640px)");
-        setIsMobile(media.matches);
-
         const handler = (e) => setIsMobile(e.matches);
         media.addEventListener("change", handler);
-
         return () => media.removeEventListener("change", handler);
     }, []);
 
@@ -45,6 +46,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
 
     useEffect(() => {
         if (!containerRef.current) return;
+        const container = containerRef.current;
 
         const scene = new THREE.Scene();
         scene.fog = new THREE.Fog(0xffffff, 6, 18);
@@ -63,7 +65,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
         renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        containerRef.current.appendChild(renderer.domElement);
+        container.appendChild(renderer.domElement);
 
         let controls;
         if (!isMobile) {
@@ -121,7 +123,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
             cancelAnimationFrame(frameId);
             window.removeEventListener("resize", handleResize);
             renderer.dispose();
-            containerRef.current?.removeChild(renderer.domElement);
+            container?.removeChild(renderer.domElement);
         };
     }, [isMobile]);
 
@@ -179,7 +181,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
                 <div className="text-[10px] sm:text-[11px] leading-5 text-black/60 max-w-md tracking-wide font-mono">
 
                     <div className="text-black/80 text-sm sm:text-md">
-                        AKHIL SHETTY // identity: portfolio_instance
+                        AKHIL SHETTY {"//"} identity: portfolio_instance
                     </div>
 
                     {progress < 25 && (

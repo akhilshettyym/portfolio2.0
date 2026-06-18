@@ -1,18 +1,18 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useLenis } from "@/context/LenisContext";
 import { useMotionValue, useTransform } from "framer-motion";
 
 export function useScrollParallax(speed = 0.3) {
-    const ref = useRef(null);
-    const lenis = useLenis();
+    const lenisRef = useLenis();
 
     const scrollY = useMotionValue(0);
-
     const y = useTransform(scrollY, (v) => v * -speed);
 
     useEffect(() => {
+        const lenis = lenisRef?.current;
+
         if (!lenis) return;
 
         const update = ({ scroll }) => {
@@ -24,10 +24,9 @@ export function useScrollParallax(speed = 0.3) {
         return () => {
             lenis.off("scroll", update);
         };
-    }, [lenis, scrollY]);
+    }, [lenisRef, scrollY]);
 
     return {
-        ref,
         style: { y },
     };
 }

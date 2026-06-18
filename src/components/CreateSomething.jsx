@@ -49,7 +49,7 @@ const CreateSomething = () => {
 
     return (
         <section className="w-full bg-white py-5 text-black">
-            <div className="mx-auto max-w-[1800px] px-6">
+            <div className="mx-auto max-w-450 px-6">
                 <div className="grid gap-12 grid-cols-[20%_70%_10%]">
 
                     <div>
@@ -71,8 +71,8 @@ const CreateSomething = () => {
 
                     <div className="max-w-5xl">
                         <p className="max-w-5xl indent-16 text-justify text-2xl font-medium text-neutral-600">
-                            Interested in working with me? I'd love to hear a bit more about
-                            your project! Fill out the form below and I'll get back to you as
+                            Interested in working with me? I&apos;d love to hear a bit more about
+                            your project! Fill out the form below and I&apos;ll get back to you as
                             soon as possible.
                         </p>
                         <form onSubmit={handleSubmit} className="mt-10">

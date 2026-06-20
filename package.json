@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "lint:fix": "eslint .--fix",
+    "lint:ci": "eslint .--max-warnings=0"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

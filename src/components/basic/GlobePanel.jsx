@@ -49,8 +49,8 @@ export function GlobePanel() {
                 height={260} width={260}
                 backgroundColor="rgba(0,0,0,0)"
 
-                globeImageUrl="https://unpkg.com/three-globe/example/img/earth-night.jpg"
-                bumpImageUrl="https://unpkg.com/three-globe/example/img/earth-topology.png"
+                globeImageUrl=""
+                bumpImageUrl=""
 
                 showAtmosphere
                 atmosphereColor="#66b3ff"

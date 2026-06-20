@@ -38,14 +38,14 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
     return (
         <motion.div className="absolute left-1/2 top-1/2 w-[min(90vw,20rem)] -translate-x-1/2 -translate-y-1/2" style={{ x: stateX, y: stateY, scale: stateScale, opacity: stateOpacity, rotate: stateRotate, filter: blurFilter, zIndex: isHovered ? 999 : 20 + index }}>
             <motion.div animate={{ filter: hasHoveredCard && !isHovered ? "blur(2px)" : "blur(0px)", opacity: hasHoveredCard && !isHovered ? 0.25 : 1, scale: hasHoveredCard && !isHovered ? 0.95 : 1 }} transition={{ duration: 0.3, ease: "easeOut" }} style={{ pointerEvents: hasHoveredCard && !isHovered ? "none" : "auto" }}>
-                <motion.article className="relative overflow-hidden rounded-[2rem] border backdrop-blur-3xl"
+                <motion.article className="relative overflow-hidden rounded-4xl border backdrop-blur-3xl"
                     style={{ background, borderColor: border, boxShadow: shadow }}
                     animate={{ y: isHovered ? -8 : 0 }}
                     transition={{ type: "spring", stiffness: 260, damping: 24 }}
                     onHoverStart={() => setHoveredCard(index)}
                     onHoverEnd={() => setHoveredCard(-1)}>
 
-                    <div className="relative flex min-h-[30rem] flex-col p-6">
+                    <div className="relative flex min-h-120 flex-col p-6">
                         <div className="mb-6 flex items-start justify-between gap-4">
                             <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-black/55">
                                 ©0{String(index + 1).padStart(2, "")}

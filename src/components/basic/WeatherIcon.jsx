@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { getWeatherIconData } from "@/app/api/weather/route";
+import { getWeatherIconData } from "../../utils/weather-scene";
 import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
 import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
 
@@ -76,10 +76,9 @@ const WeatherIcon = () => {
                 {weatherLabel} • {moonLabel}
             </div>
 
-            <motion.div
-                whileHover={{ scale: 1.05, y: -2 }}
+            <motion.div whileHover={{ scale: 1.05, y: -2 }}
                 transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                className="flex h-[72px] w-[42px] flex-col items-center justify-between rounded-full border border-black/10 bg-white/55 px-2 py-2 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+                className="flex h-18 w-10.5 flex-col items-center justify-between rounded-full border border-black/10 bg-white/55 px-2 py-2 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
 
                 <motion.div animate={{ rotate: sceneCondition === "storm" ? [-5, 5, -5] : 0 }} transition={{ duration: 1.5, repeat: sceneCondition === "storm" ? Infinity : 0 }}>
                     <WeatherGlyph ize={20} className="text-black" />
@@ -87,8 +86,7 @@ const WeatherIcon = () => {
 
                 <div className="h-px w-4 bg-black/15" />
 
-                <motion.div animate={{ y: moonPhase === "FULL_MOON" ? [0, -1, 0] : 0 }}
-                    transition={{ duration: 2.5, repeat: Infinity }}>
+                <motion.div animate={{ y: moonPhase === "FULL_MOON" ? [0, -1, 0] : 0 }} transition={{ duration: 2.5, repeat: Infinity }}>
                     <MoonGlyph size={22} className="text-black" />
                 </motion.div>
 

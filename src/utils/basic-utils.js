@@ -221,3 +221,7 @@ export const ERRORBITS = [
     "SILENT DATA CORRUPTION",
     "INCONSISTENT REPLICA",
 ];
+
+/* GlitchText */
+
+export const CHARS = "!<>-_\\/[]{}—=+*^?#________ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

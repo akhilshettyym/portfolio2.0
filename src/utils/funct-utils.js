@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { CLAMP, EASEOUTEXPO, ERRORBITS, LERP, SAMPLES } from "./basic-utils";
+import { CHARS, CLAMP, EASEOUTEXPO, ERRORBITS, LERP, SAMPLES } from "./basic-utils";
 
 export function getCardState(progress, index) {
     const enterStart = 0.08 + index * 0.08;
@@ -120,23 +120,21 @@ export function CodeRain({ active }) {
     const [lines, setLines] = useState([]);
 
     useEffect(() => {
-        if (!active) {
-            setLines([]);
-            return undefined;
-        }
+        if (!active) return undefined;
 
         const id = setInterval(() => {
             setLines((prev) => {
                 const next = [
                     ...prev,
                     {
-                        id: Math.random().toString(36).slice(2),
+                        id: crypto.randomUUID(),
                         text: SAMPLES[Math.floor(Math.random() * SAMPLES.length)],
                         x: Math.random() * 90 + 2,
                         y: Math.random() * 100,
                         delay: Math.random() * 0.6,
                     },
                 ];
+
                 return next.slice(-42);
             });
         }, 110);
@@ -147,7 +145,7 @@ export function CodeRain({ active }) {
     return (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_40%)]" />
-            {lines.map((line, idx) => (
+            {active && lines.map((line, idx) => (
                 <motion.div
                     key={line.id}
                     initial={{ opacity: 0, y: 22, filter: "blur(8px)" }}
@@ -164,47 +162,58 @@ export function CodeRain({ active }) {
 
 export function GlitchField({ active, seed }) {
     const [tick, setTick] = useState(0);
+    
+    const glitchPositions = ERRORBITS.map((_, i) => {
+        const seedNum = (seed || 1) * (i + 1);
+
+        return {
+            xShift: ((seedNum * 13) % 20) - 10,
+            yShift: ((seedNum * 7) % 8) - 4,
+            useGlitch: seedNum % 4 === 0,
+            left: `${5 + (i * 11) % 80}%`,
+            top: `${10 + (i * 12) % 75}%`,
+        };
+    });
 
     useEffect(() => {
         if (!active) return;
+
+        const delay = 350 + Math.random() * 400;
 
         const id = setInterval(() => {
             if (Math.random() > 0.4) {
                 setTick((t) => t + 1);
             }
-        }, 350 + Math.random() * 400);
+        }, delay);
 
         return () => clearInterval(id);
     }, [active]);
 
     return (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
             <motion.div animate={{ opacity: tick % 7 === 0 ? [0, 0.18, 0] : 0 }} transition={{ duration: 0.08 }} className="absolute inset-0 bg-white mix-blend-screen" />
-            <div className="absolute inset-0 opacity-[0.035] bg-[repeating-linear-gradient(0deg, transparent, transparent_2px, rgba(255,255,255,0.15)_3px)]" />
 
-            <motion.div key={`flash-${seed}-${tick}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 0.12, 0.04, 0], scale: [1, 1.02, 1] }}
-                transition={{ duration: 0.25 }}
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_45%)] mix-blend-screen" />
+            <div className="absolute inset-0 opacity-[0.035] bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.15)_3px)]" />
+
+            <motion.div key={`flash-${seed}-${tick}`} initial={{ opacity: 0 }} animate={{ opacity: [0, 0.12, 0.04, 0], scale: [1, 1.02, 1] }} transition={{ duration: 0.25 }} className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_45%)] mix-blend-screen" />
 
             {ERRORBITS.map((bit, i) => {
-                const xShift = Math.random() * 20 - 10;
-                const yShift = Math.random() * 8 - 4;
+                const config = glitchPositions[i];
 
                 return (
                     <motion.div key={`${bit}-${tick}-${i}`}
                         initial={{ opacity: 0, x: i % 2 ? 120 : -120 }}
-                        animate={{ opacity: [0, 0.8, 0.3], x: [0, xShift, 0], y: [0, yShift, 0] }}
+                        animate={{ opacity: [0, 0.8, 0.3], x: [0, config.xShift, 0], y: [0, config.yShift, 0] }}
                         transition={{ duration: 0.18, delay: i * 0.03, ease: "linear" }}
                         className="absolute font-mono text-[10px] uppercase tracking-[0.35em] text-white/70 md:text-[11px]"
-                        style={{ left: `${5 + (i * 11) % 80}%`, top: `${10 + (i * 12) % 75}%` }}>
-                        {Math.random() > 0.75 ? (
+                        style={{ left: config.left, top: config.top }}>
+
+                        {config.useGlitch ? (
                             <GlitchText>{bit}</GlitchText>
                         ) : (
                             bit
                         )}
+
                     </motion.div>
                 );
             })}
@@ -249,4 +258,10 @@ export function SceneShell2({ dark, curtain = false, children }) {
             </div>
         </div>
     );
+}
+
+/* GlitchText */
+
+export function randomChar() {
+    return CHARS[Math.floor(Math.random() * CHARS.length)];
 }

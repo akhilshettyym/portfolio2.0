@@ -76,7 +76,12 @@ const SubjectProfile = () => {
 
             <div className="relative z-10 px-6 md:px-16">
                 <div className="relative isolate pt-5">
-                    <motion.div ref={parallax.ref} style={{ ...parallax.style, willChange: "transform" }} initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.15 }} className="mt-5 relative z-0 overflow-hidden rounded-4xl border border-black/10 bg-white/70 backdrop-blur-2xl grid  grid-cols-12 shadow-[0_10px_80px_rgba(120,160,255,0.12)]">
+                    <motion.div style={{ ...parallax.style, willChange: "transform" }}
+                        initial={{ opacity: 0, y: 60 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, amount: 0.15 }}
+                        className="mt-5 relative z-0 overflow-hidden rounded-4xl border border-black/10 bg-white/70 backdrop-blur-2xl grid grid-cols-12 shadow-[0_10px_80px_rgba(120,160,255,0.12)]">
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(120,170,255,0.12),transparent_55%)] pointer-events-none" />
 
                         <div className="col-span-12 md:col-span-4 relative min-h-80 md:min-h-105 p-6 md:p-8 flex items-center justify-center">

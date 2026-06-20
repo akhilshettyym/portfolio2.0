@@ -628,3 +628,20 @@ And at the end say - this is who I am...
 
 
 This is just a blueprint, I want you to enhance this into a professional level Story where I can integrate this in a smooth scroll and highly interactive website. Give me ideas and layouts for this, How I can try this out. I want a detailed explaination. And also if you wanna add anything please be free to do that, and if u wanna remove anything then you can do that too. 
+
+
+---
+
+I have a project which is written with nextjs reactjs and tailwind css. Now I have used threejs framer motion lenis and more. Now what is happening is, my project structure is as 
+
+project name - portfolio2.0 
+- src/app/api/weather/route.js and here I have called few API's. 
+And you can see the code as is - 
+
+And now am using it as this in my component - 
+
+Now am getting issues while running this. I came to know that there is issue in how I have structured and called the files in component. I want you to restructure the this so that this works properly with no issues. I want complete updated and detailed explaination of how to fix this and make it right.
+
+---
+
+laggy herosection, github api too many calls, cache it

@@ -31,7 +31,7 @@ const WordCarousel = () => {
 
             return () => clearTimeout(resetTimeout);
         }
-    }, [currentIndex, WORDS.length]);
+    }, [currentIndex]);
 
     return (
         <span className="carousel">

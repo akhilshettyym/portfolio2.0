@@ -2,6 +2,7 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
+    
     try {
         const { searchParams } = new URL(req.url);
         const username = searchParams.get("username");
@@ -54,6 +55,7 @@ export async function GET(req) {
         );
 
         return NextResponse.json(response.data);
+
     } catch (error) {
         console.error("GitHub GraphQL Error:", error.response?.data || error.message);
 

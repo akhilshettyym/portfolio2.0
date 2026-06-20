@@ -4,47 +4,84 @@ import gsap from "gsap";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { hasLocationPreference } from "@/utils/weather-scene";
+import LocationPreferenceModal from "./LocationPreferenceModal";
 
 const Loader = ({ onFinish, duration = 3000 }) => {
-    
+
     const containerRef = useRef(null);
 
     const [progress, setProgress] = useState(0);
     const [done, setDone] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+
+    const [showLocationModal, setShowLocationModal] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const modalTriggeredRef = useRef(false);
+
+    const progressRef = useRef(0);
+    const pausePointRef = useRef(null);
+
+    useEffect(() => {
+        pausePointRef.current = Math.floor(Math.random() * 30) + 20;
+    }, []);
+
+    const [isMobile, setIsMobile] = useState(() => {
+        if (typeof window === "undefined") return false;
+        return window.matchMedia("(max-width: 640px)").matches;
+    });
 
     useEffect(() => {
         const media = window.matchMedia("(max-width: 640px)");
-        setIsMobile(media.matches);
-
         const handler = (e) => setIsMobile(e.matches);
         media.addEventListener("change", handler);
-
         return () => media.removeEventListener("change", handler);
     }, []);
 
     useEffect(() => {
-        const start = Date.now();
+        let frameId;
 
-        const id = setInterval(() => {
-            const p = Math.min(((Date.now() - start) / duration) * 100, 100);
-            setProgress(p);
+        const animate = () => {
 
-            if (p >= 100) {
-                clearInterval(id);
+            if (!isPaused) {
 
-                setTimeout(() => {
-                    setDone(true);
-                    onFinish?.();
-                }, 800);
+                progressRef.current += 100 / (duration / 16);
+
+                const next = Math.min(progressRef.current, 100);
+                setProgress(next);
+
+                const hasPreference = typeof window !== "undefined" && hasLocationPreference();
+
+                if (!hasPreference && !modalTriggeredRef.current && next >= pausePointRef.current) {
+                    modalTriggeredRef.current = true;
+                    setIsPaused(true);
+                    setShowLocationModal(true);
+                    return;
+                }
+
+                if (next >= 100) {
+                    setProgress(100);
+                    setTimeout(() => {
+                        setDone(true);
+                        onFinish?.();
+                    }, 800);
+                    return;
+                }
             }
-        }, 16);
+            frameId = requestAnimationFrame(animate);
+        };
 
-        return () => clearInterval(id);
-    }, [duration, onFinish]);
+        frameId = requestAnimationFrame(animate);
+
+        return () => {
+            cancelAnimationFrame(frameId);
+        };
+
+    }, [duration, isPaused, onFinish]);
 
     useEffect(() => {
         if (!containerRef.current) return;
+        const container = containerRef.current;
 
         const scene = new THREE.Scene();
         scene.fog = new THREE.Fog(0xffffff, 6, 18);
@@ -63,7 +100,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
         renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        containerRef.current.appendChild(renderer.domElement);
+        container.appendChild(renderer.domElement);
 
         let controls;
         if (!isMobile) {
@@ -121,7 +158,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
             cancelAnimationFrame(frameId);
             window.removeEventListener("resize", handleResize);
             renderer.dispose();
-            containerRef.current?.removeChild(renderer.domElement);
+            container?.removeChild(renderer.domElement);
         };
     }, [isMobile]);
 
@@ -135,6 +172,14 @@ const Loader = ({ onFinish, duration = 3000 }) => {
             ease: "power4.inOut",
         });
     }, [done, isMobile]);
+
+    const handleLocationSelected = () => {
+        setShowLocationModal(false);
+
+        setTimeout(() => {
+            setIsPaused(false);
+        }, 300);
+    };
 
     const radius = isMobile ? 70 : 85;
     const stroke = 2;
@@ -179,7 +224,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
                 <div className="text-[10px] sm:text-[11px] leading-5 text-black/60 max-w-md tracking-wide font-mono">
 
                     <div className="text-black/80 text-sm sm:text-md">
-                        AKHIL SHETTY // identity: portfolio_instance
+                        AKHIL SHETTY {"//"} identity: portfolio_instance
                     </div>
 
                     {progress < 25 && (
@@ -218,6 +263,8 @@ const Loader = ({ onFinish, duration = 3000 }) => {
                     )}
                 </div>
             </div>
+
+            <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationSelected} />
 
         </div>
     );

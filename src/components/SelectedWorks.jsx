@@ -20,7 +20,7 @@ const SelectedWorks = () => {
                     <div className="w-[10%] pt-40">
                         <div className="relative h-125 overflow-hidden">
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/3 -translate-y-1/2 -rotate-90 w-50 flex flex-col">
-                                <p className="w-full text-left whitespace-nowrap tracking-[0.40em] text-sm font-medium text-zinc-900 uppercase"> // Beyond <span className="lowercase tracking-[0.20em]"> localhost:3000 </span> </p>
+                                <p className="w-full text-left whitespace-nowrap tracking-[0.40em] text-sm font-medium text-zinc-900 uppercase"> {"//"} Beyond{" "} <span className="lowercase tracking-[0.20em]"> localhost:3000 </span> </p>
 
                                 <p className="w-full text-right whitespace-nowrap tracking-[0.20em] text-[10px] font-medium text-zinc-500 uppercase mt-2"> Where 127.0.0.1 Ends </p>
                             </div>

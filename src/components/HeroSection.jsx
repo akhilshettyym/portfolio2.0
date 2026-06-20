@@ -7,10 +7,9 @@ import GlitchText from "./basic/GlitchText";
 import WeatherIcon from "./basic/WeatherIcon";
 import WordCarousel from "./basic/WordCarousel";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
-import { useEffect, useRef, useState } from "react";
+import { getWeatherScene } from "../utils/weather-scene";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
-import LocationPreferenceModal from "./LocationPreferenceModal";
-import { getLocationMode, getWeatherScene } from "../app/api/weather/route";
+import { startTransition, useEffect, useRef, useState } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 function isSameScene(a, b) {
@@ -25,72 +24,64 @@ const HeroSection = () => {
 
     const btnRef = useRef(null);
     const speedRef = useRef(0.8);
-    const pausedRef = useRef(false);
     const containerRef = useRef(null);
     const tunnelPositionRef = useRef(0);
+
     const [paused, setPaused] = useState(false);
-
-    const [locationReady, setLocationReady] = useState(false);
-    const [showLocationModal, setShowLocationModal] = useState(false);
-
     const [sceneAssets, setSceneAssets] = useState(null);
 
-    useEffect(() => {
-        try {
-            const cached = localStorage.getItem(
-                "weatherSceneAssets"
-            );
-            if (cached) {
-                setSceneAssets(JSON.parse(cached));
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
+    const pausedRef = useRef(false);
+    const sceneAssetsRef = useRef(null);
 
     useEffect(() => {
         pausedRef.current = paused;
     }, [paused]);
 
     useEffect(() => {
-        const mode = getLocationMode();
-        if (!mode) {
-            setShowLocationModal(true);
-        } else {
-            setLocationReady(true);
+        try {
+            const cachedScene = localStorage.getItem("weatherSceneAssets");
+
+            if (cachedScene) {
+                const parsed = JSON.parse(cachedScene);
+                sceneAssetsRef.current = parsed;
+
+                startTransition(() => {
+                    setSceneAssets(parsed);
+                });
+            }
+
+            const cloudControl = localStorage.getItem("cloudControl");
+
+            if (cloudControl !== null) {
+                const value = cloudControl === "true";
+
+                pausedRef.current = value;
+
+                startTransition(() => {
+                    setPaused(value);
+                });
+            }
+        } catch (err) {
+            console.error(err);
         }
     }, []);
 
     useEffect(() => {
-        const storedValue = localStorage.getItem("cloudControl");
-
-        if (storedValue !== null) {
-            const value = storedValue === "true";
-            setPaused(value);
-            pausedRef.current = value;
-        }
-    }, []);
+        sceneAssetsRef.current = sceneAssets;
+    }, [sceneAssets]);
 
     useEffect(() => {
-        if (!locationReady) return;
         let mounted = true;
+
         async function init() {
             try {
-                const navigation =
-                    performance.getEntriesByType("navigation")[0];
-                const isReload =
-                    navigation?.type === "reload";
-                const sceneData = await getWeatherScene({
-                    forceRefresh: isReload,
-                });
+                const sceneData = await getWeatherScene();
+
                 if (!mounted) return;
+
                 const nextScene = {
-                    background:
-                        sceneData.backgroundKey ??
-                        "morning_clear",
-                    clouds:
-                        sceneData.cloudKey ??
-                        "morning_clear",
+                    background: sceneData.backgroundKey ?? "morning_clear",
+                    clouds: sceneData.cloudKey ?? "morning_clear",
                 };
 
                 setSceneAssets((prev) => {
@@ -98,39 +89,36 @@ const HeroSection = () => {
                         return prev;
                     }
 
-                    localStorage.setItem(
-                        "weatherSceneAssets",
-                        JSON.stringify(nextScene)
-                    );
-
+                    localStorage.setItem("weatherSceneAssets", JSON.stringify(nextScene));
                     return nextScene;
                 });
 
-                console.log("Weather scene:", sceneData);
             } catch (error) {
-                console.error(
-                    "Failed to load weather scene:",
-                    error
-                );
+
+                console.error("Failed to load weather scene:", error);
+
                 if (!mounted) return;
-                if (!sceneAssets) {
+                if (!sceneAssetsRef.current) {
+
                     const fallback = {
                         background: "morning_clear",
                         clouds: "morning_clear",
                     };
-                    localStorage.setItem(
-                        "weatherSceneAssets",
-                        JSON.stringify(fallback)
-                    );
+
+                    localStorage.setItem("weatherSceneAssets", JSON.stringify(fallback));
+
+                    sceneAssetsRef.current = fallback;
                     setSceneAssets(fallback);
                 }
             }
         }
+
         init();
+
         return () => {
             mounted = false;
         };
-    }, [locationReady]);
+    }, []);
 
     useEffect(() => {
         if (!sceneAssets) return;
@@ -323,12 +311,7 @@ const HeroSection = () => {
                 }
             }
         };
-    }, [sceneAssets?.clouds]);
-
-    const handleLocationComplete = () => {
-        setShowLocationModal(false);
-        setLocationReady(true);
-    };
+    }, [sceneAssets]);
 
     const handleCloudControl = () => {
         setPaused((prev) => {
@@ -341,8 +324,6 @@ const HeroSection = () => {
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
-
-                <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationComplete} />
 
                 <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
@@ -394,7 +375,7 @@ const HeroSection = () => {
                 </button>
 
                 <div className="absolute top-80 right-8 z-9999 flex items-center justify-center h-12 w-12 group">
-                    {locationReady ? <WeatherIcon /> : ""}
+                    {sceneAssets && (<WeatherIcon />)}
                 </div>
 
                 <div className="hero-text">

@@ -643,3 +643,5 @@ And now am using it as this in my component -
 Now am getting issues while running this. I came to know that there is issue in how I have structured and called the files in component. I want you to restructure the this so that this works properly with no issues. I want complete updated and detailed explaination of how to fix this and make it right.
 
 ---
+
+laggy herosection, github api too many calls, cache it

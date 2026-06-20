@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-export default function BubbleScene() {
+const BubbleScene = () => {
 
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
@@ -329,7 +329,7 @@ export default function BubbleScene() {
 
                 <canvas ref={canvasRef} />
 
-                <motion.div  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content absolute bottom-0 left-0 z-20 w-full p-10">
+                <motion.div transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content absolute bottom-0 left-0 z-20 w-full p-10">
                     <div className="max-w-2xl">
                         <div className="border-b border-black/10 pb-3">
                             <div className="grid grid-cols-[100px_1fr]">
@@ -412,3 +412,5 @@ export default function BubbleScene() {
         </section>
     );
 }
+
+export default BubbleScene;

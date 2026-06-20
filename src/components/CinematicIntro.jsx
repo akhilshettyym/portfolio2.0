@@ -372,6 +372,7 @@ const CinematicIntro = () => {
 
         if (scene === 0) {
             const displayed = INTROLINES[introStep] ?? INTROLINES[0];
+
             return (
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6">
@@ -383,7 +384,7 @@ const CinematicIntro = () => {
                                     exit={{ opacity: 0, y: -18, scale: 1.01 }}
                                     transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }}
                                     className="text-[clamp(2.6rem,6vw,3rem)] font-bold tracking-tight">
-                                    <CurtainText>{displayed}</CurtainText>
+                                    <CurtainText> {displayed} </CurtainText>
                                 </motion.div>
                             </AnimatePresence>
                         </div>
@@ -394,6 +395,7 @@ const CinematicIntro = () => {
 
         if (scene === 1) {
             const word = "WHO AM I ?".slice(0, whoChars);
+
             return (
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6">
@@ -411,6 +413,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 2) {
+
             return (
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6">
@@ -447,6 +450,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 3) {
+
             return (
                 <SceneShell dark={false}>
                     <motion.div initial={{ scaleY: 1 }} animate={{ scaleY: timelineReveal ? 0 : 1 }} transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }} className="absolute inset-0 z-30 origin-top bg-white" />
@@ -513,6 +517,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 4) {
+
             return (
                 <SceneShell dark={false}>
                     <div className="flex h-full w-full items-center justify-center px-6 text-center">
@@ -555,6 +560,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 5) {
+
             return (
                 <SceneShell dark={false}>
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
@@ -563,11 +569,7 @@ const CinematicIntro = () => {
                                 initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
                                 exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
                                 transition={{ duration: questionIndex === PROBLEMQUESTIONS.length - 1 ? 1.2 : 0.8, ease: [0.22, 1, 0.36, 1] }}
-                                animate={{
-                                    opacity: 1, y: 0,
-                                    scale: questionIndex === PROBLEMQUESTIONS.length - 1 ? 1.08 : 1,
-                                    filter: "blur(0px)",
-                                }}
+                                animate={{ opacity: 1, y: 0, scale: questionIndex === PROBLEMQUESTIONS.length - 1 ? 1.08 : 1, filter: "blur(0px)" }}
                                 className={`text-[clamp(2.4rem,6vw,4rem)] font-semibold tracking-tight ${questionIndex === PROBLEMQUESTIONS.length - 1 ? "text-black" : "text-black/85"}`}>
                                 <div className="text-[clamp(2.4rem,6vw,3rem)] font-semibold tracking-tight">
                                     {PROBLEMQUESTIONS[questionIndex]}
@@ -608,8 +610,7 @@ const CinematicIntro = () => {
                     </div>
                     <div className="relative flex h-full w-full items-center justify-center px-6">
                         <div className="max-w-5xl text-center">
-                            <motion.div
-                                initial={{ opacity: 0, y: 18 }}
+                            <motion.div initial={{ opacity: 0, y: 18 }}
                                 animate={{ opacity: treeStage >= 1 ? 1 : 0, y: treeStage >= 1 ? 0 : 18 }}
                                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                                 className="space-y-4">
@@ -628,6 +629,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 7) {
+
             return (
                 <SceneShell2 dark={codeStage >= 2} curtain={isFirstDarkScene}>
                     {codeStage >= 2 && (
@@ -658,8 +660,7 @@ const CinematicIntro = () => {
                         <AnimatePresence mode="wait">
 
                             {codeStage < 2 ? (
-                                <motion.div
-                                    key="tools"
+                                <motion.div key="tools"
                                     initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                                     exit={{ opacity: 0, y: -40, filter: "blur(10px)" }}
@@ -679,6 +680,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 8) {
+
             return (
                 <SceneShell dark>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_45%)]" />
@@ -701,6 +703,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 9) {
+
             return (
                 <SceneShell dark>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_45%)]" />
@@ -709,8 +712,7 @@ const CinematicIntro = () => {
                         <AnimatePresence mode="wait">
 
                             {butStage < 2 ? (
-                                <motion.div
-                                    key="but"
+                                <motion.div key="but"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 1.15, filter: "blur(10px)" }}
@@ -739,6 +741,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 10) {
+
             return (
                 <SceneShell2 dark>
 
@@ -756,8 +759,7 @@ const CinematicIntro = () => {
 
                     <div className="relative z-4 flex h-full w-full items-center justify-center px-6 text-center">
                         <AnimatePresence mode="wait">
-                            <motion.div
-                                key={vulnTick}
+                            <motion.div key={vulnTick}
                                 initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
                                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                                 exit={{ opacity: 0, y: -40, filter: "blur(12px)" }}
@@ -774,14 +776,14 @@ const CinematicIntro = () => {
         }
 
         if (scene === 11) {
+
             return (
                 <SceneShell dark>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_46%)]" />
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
                         <AnimatePresence mode="wait">
                             {dangerStage < 1 ? (
-                                <motion.div
-                                    key="danger-a"
+                                <motion.div key="danger-a"
                                     initial={{ opacity: 0, y: 18 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0 }}
@@ -791,8 +793,7 @@ const CinematicIntro = () => {
                                     <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72"> are the ones nobody sees. </div>
                                 </motion.div>
                             ) : (
-                                <motion.div
-                                    key="danger-b"
+                                <motion.div key="danger-b"
                                     initial={{ opacity: 0, y: 18 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0 }}
@@ -809,6 +810,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 12) {
+
             return (
                 <SceneShell dark>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05),transparent_45%)]" />
@@ -816,8 +818,7 @@ const CinematicIntro = () => {
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
                         <div className="max-w-6xl">
                             <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={philosophyStage}
+                                <motion.div key={philosophyStage}
                                     initial={{ opacity: 0, y: 50, scale: 0.98, filter: "blur(12px)" }}
                                     animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                                     exit={{ opacity: 0, y: -50, scale: 1.02, filter: "blur(12px)" }}
@@ -833,6 +834,7 @@ const CinematicIntro = () => {
         }
 
         if (scene === 13) {
+
             return (
                 <SceneShell dark={finalStage === 0}>
                     <motion.div initial={false} animate={{ opacity: finalStage === 0 ? 1 : 0, scale: finalStage === 0 ? 1 : 1.02 }} transition={{ duration: 0.35 }} className="absolute inset-0 bg-black" />

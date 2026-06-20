@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { LoadingContext } from "./LoaderWrapper";
 
 const NavbarWrapper = ({ children }) => {
-    
+
     const context = useContext(LoadingContext);
     const navReady = context?.navReady ?? false;
 

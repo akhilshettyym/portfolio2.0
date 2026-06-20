@@ -1,29 +1,28 @@
 "use client";
 
+import {randomChar} from "@/utils/funct-utils";
 import { useLenis } from "@/context/LenisContext";
 import { useEffect, useState, useRef } from "react";
 
-const CHARS =
-    "!<>-_\\/[]{}—=+*^?#________ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-function randomChar() {
-    return CHARS[Math.floor(Math.random() * CHARS.length)];
-}
-
-export default function GlitchText({ text }) {
+const GlitchText = ({ text }) => {
     const [display, setDisplay] = useState(text);
 
-    const lenis = useLenis();
+    const lenisRef = useLenis();
 
     const speedRef = useRef(40);
     const mouseIntensity = useRef(0);
 
     useEffect(() => {
-        if (!lenis || typeof lenis.on !== "function") return;
+        const lenis = lenisRef?.current;
+
+        if (!lenis) return;
 
         const update = ({ velocity = 0 }) => {
             const v = Math.abs(velocity);
-            speedRef.current = Math.max(15, 40 - v * 0.3);
+            speedRef.current = Math.max(
+                15,
+                40 - v * 0.3
+            );
         };
 
         lenis.on("scroll", update);
@@ -31,11 +30,12 @@ export default function GlitchText({ text }) {
         return () => {
             lenis.off("scroll", update);
         };
-    }, [lenis]);
+    }, [lenisRef]);
 
     useEffect(() => {
         const handleMove = (e) => {
             const xRatio = e.clientX / window.innerWidth;
+
             mouseIntensity.current = Math.abs(xRatio - 0.5);
         };
 
@@ -70,9 +70,10 @@ export default function GlitchText({ text }) {
                 if (frame > text.length) {
                     clearInterval(interval);
 
-                    timeout = setTimeout(() => {
-                        animate();
-                    }, 1000);
+                    timeout = setTimeout(
+                        animate,
+                        1000
+                    );
                 }
             }, speedRef.current);
         };
@@ -91,3 +92,5 @@ export default function GlitchText({ text }) {
         </span>
     );
 }
+
+export default GlitchText;

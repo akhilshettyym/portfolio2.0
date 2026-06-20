@@ -1,12 +1,12 @@
 "use client";
 
 import axios from "axios";
+import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic-utils";
+import { GiRaiseZombie } from "react-icons/gi";
+import { DiCoffeescript } from "react-icons/di";
 import { useEffect, useMemo, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { DiCoffeescript } from "react-icons/di";
-import { FaGitAlt } from "react-icons/fa";
-import { GiRaiseZombie } from "react-icons/gi";
 
 const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
@@ -301,7 +301,7 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
                         <div className="mt-6 flex items-center justify-center text-[12px] text-zinc-500">
                             <div className="flex items-center gap-2">
                                 <span> Less </span>
-                                <div className="flex gap-[3px]">
+                                <div className="flex gap-0.75">
                                     {["#f4f4f5", "#d4d4d8", "#a1a1aa", "#52525b", "#09090b"].map((color) => (
                                         <div key={color} className="h-3 w-3 rounded-xs" style={{ backgroundColor: color }} />
                                     ))}

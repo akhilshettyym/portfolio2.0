@@ -4,6 +4,8 @@ import gsap from "gsap";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { hasLocationPreference } from "@/utils/weather-scene";
+import LocationPreferenceModal from "./LocationPreferenceModal";
 
 const Loader = ({ onFinish, duration = 3000 }) => {
 
@@ -11,6 +13,18 @@ const Loader = ({ onFinish, duration = 3000 }) => {
 
     const [progress, setProgress] = useState(0);
     const [done, setDone] = useState(false);
+
+    const [showLocationModal, setShowLocationModal] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const modalTriggeredRef = useRef(false);
+
+    const progressRef = useRef(0);
+    const pausePointRef = useRef(null);
+
+    useEffect(() => {
+        pausePointRef.current = Math.floor(Math.random() * 30) + 20;
+    }, []);
 
     const [isMobile, setIsMobile] = useState(() => {
         if (typeof window === "undefined") return false;
@@ -25,24 +39,45 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     }, []);
 
     useEffect(() => {
-        const start = Date.now();
+        let frameId;
 
-        const id = setInterval(() => {
-            const p = Math.min(((Date.now() - start) / duration) * 100, 100);
-            setProgress(p);
+        const animate = () => {
 
-            if (p >= 100) {
-                clearInterval(id);
+            if (!isPaused) {
 
-                setTimeout(() => {
-                    setDone(true);
-                    onFinish?.();
-                }, 800);
+                progressRef.current += 100 / (duration / 16);
+
+                const next = Math.min(progressRef.current, 100);
+                setProgress(next);
+
+                const hasPreference = typeof window !== "undefined" && hasLocationPreference();
+
+                if (!hasPreference && !modalTriggeredRef.current && next >= pausePointRef.current) {
+                    modalTriggeredRef.current = true;
+                    setIsPaused(true);
+                    setShowLocationModal(true);
+                    return;
+                }
+
+                if (next >= 100) {
+                    setProgress(100);
+                    setTimeout(() => {
+                        setDone(true);
+                        onFinish?.();
+                    }, 800);
+                    return;
+                }
             }
-        }, 16);
+            frameId = requestAnimationFrame(animate);
+        };
 
-        return () => clearInterval(id);
-    }, [duration, onFinish]);
+        frameId = requestAnimationFrame(animate);
+
+        return () => {
+            cancelAnimationFrame(frameId);
+        };
+
+    }, [duration, isPaused, onFinish]);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -138,6 +173,14 @@ const Loader = ({ onFinish, duration = 3000 }) => {
         });
     }, [done, isMobile]);
 
+    const handleLocationSelected = () => {
+        setShowLocationModal(false);
+
+        setTimeout(() => {
+            setIsPaused(false);
+        }, 300);
+    };
+
     const radius = isMobile ? 70 : 85;
     const stroke = 2;
     const normalizedRadius = radius - stroke * 2;
@@ -220,6 +263,8 @@ const Loader = ({ onFinish, duration = 3000 }) => {
                     )}
                 </div>
             </div>
+
+            <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationSelected} />
 
         </div>
     );

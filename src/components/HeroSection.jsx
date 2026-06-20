@@ -21,7 +21,7 @@ function isSameScene(a, b) {
 }
 
 const HeroSection = () => {
-
+    
     const btnRef = useRef(null);
     const speedRef = useRef(0.8);
     const containerRef = useRef(null);

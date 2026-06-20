@@ -1,4 +1,3 @@
-
 import React from "react";
 import InfoLayout from "@/components/layouts/InfoLayout";
 

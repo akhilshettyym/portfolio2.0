@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "../utils/funct-utils";
 import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "../utils/basic-utils";
 
-const CinematicIntro = () => {
+const CinematicIntro = ({ onComplete }) => {
 
     const [scene, setScene] = useState(0);
     const [aiStage, setAiStage] = useState(0);
@@ -30,6 +30,8 @@ const CinematicIntro = () => {
     const [ready, setReady] = useState(false);
     const [timelineReveal, setTimelineReveal] = useState(false);
     const [darkCurtainDone, setDarkCurtainDone] = useState(false);
+
+    const completedRef = useRef(false);
 
     const [rowWidths, setRowWidths] = useState({});
 
@@ -874,6 +876,20 @@ const CinematicIntro = () => {
         }
         return null;
     };
+
+    useEffect(() => {
+        if (scene !== 13) return;
+        if (finalStage !== 2) return;
+        if (completedRef.current) return;
+
+        completedRef.current = true;
+
+        const timeout = setTimeout(() => {
+            onComplete?.();
+        }, 2500);
+
+        return () => clearTimeout(timeout);
+    }, [scene, finalStage]);
 
     return (
         <div className={`fixed inset-0 overflow-hidden antialiased ${isDarkScene ? "bg-black text-white" : "bg-white text-black"}`}>

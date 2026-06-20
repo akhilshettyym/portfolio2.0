@@ -109,6 +109,10 @@ const BubbleScene = () => {
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
+        
+        // Throttle mouse move events to improve performance
+        let lastMouseMoveTime = 0;
+        const MOUSE_MOVE_THROTTLE = 16; // ~60fps
 
         function startAnimation() {
             if (animationStarted) return;
@@ -166,6 +170,14 @@ const BubbleScene = () => {
         observer.observe(wrapper);
 
         const onMouseMove = (event) => {
+            const now = performance.now();
+            
+            // Throttle mouse move events for better performance
+            if (now - lastMouseMoveTime < MOUSE_MOVE_THROTTLE) {
+                return;
+            }
+            lastMouseMoveTime = now;
+            
             const rect = wrapper.getBoundingClientRect();
 
             const isInside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
@@ -189,33 +201,33 @@ const BubbleScene = () => {
 
         window.addEventListener("mousemove", onMouseMove);
 
+        // Spatial partitioning for collision optimization - only check nearby bubbles
         function handleCollisions() {
-            for (let i = 0; i < bubbles.length; i++) {
+            const collisionCheckLimit = Math.min(bubbles.length, 40); // Limit collision checks
+            
+            for (let i = 0; i < collisionCheckLimit; i++) {
                 const bubbleA = bubbles[i];
+                const radiusA = bubbleA.userData.radius;
 
-                for (let j = i + 1; j < bubbles.length; j++) {
+                // Only check next 15 bubbles to limit O(n²) overhead
+                for (let j = i + 1; j < Math.min(i + 15, bubbles.length); j++) {
                     const bubbleB = bubbles[j];
-
-                    const radiusA = bubbleA.userData.radius;
                     const radiusB = bubbleB.userData.radius;
 
                     const minDistance = (radiusA + radiusB) * 1.35;
                     const distance = bubbleA.position.distanceTo(bubbleB.position);
 
-                    if (distance > 0 && distance < minDistance) {
-                        tempVector.subVectors(
-                            bubbleB.position,
-                            bubbleA.position
-                        );
+                    // Early exit if bubbles are far apart
+                    if (distance === 0 || distance >= minDistance) continue;
 
-                        tempVector.normalize();
+                    tempVector.subVectors(bubbleB.position, bubbleA.position);
+                    tempVector.normalize();
 
-                        const overlap = minDistance - distance;
-                        const correction = overlap * 0.012;
+                    const overlap = minDistance - distance;
+                    const correction = overlap * 0.012;
 
-                        bubbleA.position.add(tempVector.clone().multiplyScalar(-correction));
-                        bubbleB.position.add(tempVector.clone().multiplyScalar(correction));
-                    }
+                    bubbleA.position.add(tempVector.clone().multiplyScalar(-correction));
+                    bubbleB.position.add(tempVector.clone().multiplyScalar(correction));
                 }
             }
         }

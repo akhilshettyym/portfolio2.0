@@ -1,0 +1,17 @@
+@keyframes introEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.intro-enter {
+  animation: introEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

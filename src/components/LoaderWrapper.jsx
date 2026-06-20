@@ -1,6 +1,7 @@
 "use client";
 
 import Loader from "./Loader";
+import "../styles/IntroEntrance.css";
 import PageReveal from "./PageReveal";
 import CinematicIntro from "./CinematicIntro";
 import { createContext, useEffect, useRef, useState } from "react";
@@ -15,6 +16,8 @@ const LoaderWrapper = ({ children }) => {
     const [showIntro, setShowIntro] = useState(false);
     const [revealActive, setRevealActive] = useState(false);
     const [navReady, setNavReady] = useState(false);
+    const [introComplete, setIntroComplete] = useState(false);
+    const [shouldMountChildren, setShouldMountChildren] = useState(false);
 
     const revealTimerRef = useRef(null);
 
@@ -50,7 +53,12 @@ const LoaderWrapper = ({ children }) => {
         window.localStorage.setItem(INTRO_KEY, "true");
         setHasSeenIntro(true);
         setShowIntro(false);
-        startReveal();
+        setIntroComplete(true);
+        // Defer children mounting until next frame to prevent performance jank
+        window.requestAnimationFrame(() => {
+            setShouldMountChildren(true);
+            startReveal();
+        });
     };
 
     return (
@@ -63,7 +71,8 @@ const LoaderWrapper = ({ children }) => {
 
             <PageReveal active={revealActive}>
                 <div className={`relative transition-opacity duration-500 ${revealActive ? "opacity-100" : "opacity-0"}`}>
-                    {children}
+                    {/* Only mount children after intro completes or if intro was already seen */}
+                    {(shouldMountChildren || hasSeenIntro) && children}
                 </div>
             </PageReveal>
         </LoadingContext.Provider>

@@ -54,4 +54,5 @@ const CustomButton = ({ title, onClick, width = 180, height = 56, className = ""
         </button>
     );
 };
+
 export default CustomButton;

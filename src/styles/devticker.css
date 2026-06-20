@@ -1,14 +1,14 @@
 .dev-marquee {
-    width: max-content;
-    animation: devTickerMove 28s linear infinite;
+  width: max-content;
+  animation: devTickerMove 28s linear infinite;
 }
 
 @keyframes devTickerMove {
-    from {
-        transform: translateX(0);
-    }
+  from {
+    transform: translateX(0);
+  }
 
-    to {
-        transform: translateX(-50%);
-    }
+  to {
+    transform: translateX(-50%);
+  }
 }

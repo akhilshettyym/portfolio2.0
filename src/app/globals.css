@@ -1,9 +1,5 @@
 @import "tailwindcss";
-
-@import 'tailwindcss';
-@import 'shadcn/tailwind.css';
-
-@custom-variant dark (&:is(.dark *));
+@import "shadcn/tailwind.css";
 
 :root {
   --background: #ffffff;

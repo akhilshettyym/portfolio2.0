@@ -437,9 +437,6 @@ export default function LiquidBackground({
     }, [backgroundImage]);
 
     return (
-        <div
-            ref={containerRef}
-            className="absolute inset-0 w-full h-full"
-        />
+        <div ref={containerRef} className="absolute inset-0 w-full h-full" />
     );
 }

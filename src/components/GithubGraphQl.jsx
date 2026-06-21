@@ -67,7 +67,6 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
                 setLoading(true);
                 const cacheKey = `contributions_${username}_${range.from}_${range.to}`;
 
-                // Check if data exists in cache
                 const cachedData = getCachedData(cacheKey);
                 if (cachedData) {
                     setWeeks(cachedData.weeks);
@@ -89,7 +88,6 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
                 const fetchedWeeks = calendar?.weeks || [];
                 const totalContributions = calendar?.totalContributions || 0;
 
-                // Cache the data for 24 hours
                 setCachedData(cacheKey, {
                     weeks: fetchedWeeks,
                     total: totalContributions,
@@ -101,7 +99,6 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
             } catch (err) {
                 console.error("GitHub contributions fetch failed :", err.message);
-                // Try to load from cache even if API fails
                 const cacheKey = `contributions_${username}_${range.from}_${range.to}`;
                 const cachedData = getCachedData(cacheKey);
                 if (cachedData) {

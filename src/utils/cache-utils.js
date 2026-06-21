@@ -1,16 +1,6 @@
-/**
- * Cache utility for GitHub API responses with TTL (Time To Live)
- * Stores data in localStorage with expiration timestamps
- */
-
 const CACHE_PREFIX = "github_cache_";
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const CACHE_TTL = 24 * 60 * 60 * 1000;
 
-/**
- * Get cached data if it exists and hasn't expired
- * @param {string} key - Cache key identifier
- * @returns {any|null} - Cached data or null if expired/not found
- */
 export const getCachedData = (key) => {
     try {
         if (typeof window === "undefined") return null;
@@ -23,7 +13,6 @@ export const getCachedData = (key) => {
         const { data, timestamp } = JSON.parse(cachedItem);
         const now = Date.now();
 
-        // Check if cache has expired
         if (now - timestamp > CACHE_TTL) {
             window.localStorage.removeItem(cacheKey);
             return null;
@@ -36,11 +25,6 @@ export const getCachedData = (key) => {
     }
 };
 
-/**
- * Set data in cache with current timestamp
- * @param {string} key - Cache key identifier
- * @param {any} data - Data to cache
- */
 export const setCachedData = (key, data) => {
     try {
         if (typeof window === "undefined") return;
@@ -53,15 +37,12 @@ export const setCachedData = (key, data) => {
 
         window.localStorage.setItem(cacheKey, JSON.stringify(cacheItem));
         console.log("Cache set for key:", key);
+
     } catch (error) {
         console.error("Cache set error:", error);
     }
 };
 
-/**
- * Clear specific cache entry
- * @param {string} key - Cache key identifier
- */
 export const clearCache = (key) => {
     try {
         if (typeof window === "undefined") return;
@@ -69,14 +50,12 @@ export const clearCache = (key) => {
         const cacheKey = `${CACHE_PREFIX}${key}`;
         window.localStorage.removeItem(cacheKey);
         console.log("Cache cleared for key:", key);
+
     } catch (error) {
         console.error("Cache clear error:", error);
     }
 };
 
-/**
- * Clear all GitHub cache entries
- */
 export const clearAllGitHubCache = () => {
     try {
         if (typeof window === "undefined") return;
@@ -88,6 +67,7 @@ export const clearAllGitHubCache = () => {
             }
         });
         console.log("All GitHub cache cleared");
+        
     } catch (error) {
         console.error("Clear all cache error:", error);
     }

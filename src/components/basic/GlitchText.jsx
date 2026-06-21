@@ -19,10 +19,7 @@ const GlitchText = ({ text }) => {
 
         const update = ({ velocity = 0 }) => {
             const v = Math.abs(velocity);
-            speedRef.current = Math.max(
-                15,
-                40 - v * 0.3
-            );
+            speedRef.current = Math.max(15, 40 - v * 0.3);
         };
 
         lenis.on("scroll", update);
@@ -35,7 +32,6 @@ const GlitchText = ({ text }) => {
     useEffect(() => {
         const handleMove = (e) => {
             const xRatio = e.clientX / window.innerWidth;
-
             mouseIntensity.current = Math.abs(xRatio - 0.5);
         };
 
@@ -70,10 +66,7 @@ const GlitchText = ({ text }) => {
                 if (frame > text.length) {
                     clearInterval(interval);
 
-                    timeout = setTimeout(
-                        animate,
-                        1000
-                    );
+                    timeout = setTimeout(animate, 1000);
                 }
             }, speedRef.current);
         };

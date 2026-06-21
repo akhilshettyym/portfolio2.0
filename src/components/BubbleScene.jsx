@@ -110,9 +110,8 @@ const BubbleScene = () => {
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
         
-        // Throttle mouse move events to improve performance
         let lastMouseMoveTime = 0;
-        const MOUSE_MOVE_THROTTLE = 16; // ~60fps
+        const MOUSE_MOVE_THROTTLE = 16;
 
         function startAnimation() {
             if (animationStarted) return;
@@ -132,8 +131,7 @@ const BubbleScene = () => {
                     ease: "power3.out",
                 });
 
-                gsap.fromTo(
-                    bubble.scale,
+                gsap.fromTo(bubble.scale,
                     {
                         x: 0,
                         y: 0,
@@ -172,7 +170,6 @@ const BubbleScene = () => {
         const onMouseMove = (event) => {
             const now = performance.now();
             
-            // Throttle mouse move events for better performance
             if (now - lastMouseMoveTime < MOUSE_MOVE_THROTTLE) {
                 return;
             }
@@ -201,15 +198,13 @@ const BubbleScene = () => {
 
         window.addEventListener("mousemove", onMouseMove);
 
-        // Spatial partitioning for collision optimization - only check nearby bubbles
         function handleCollisions() {
-            const collisionCheckLimit = Math.min(bubbles.length, 40); // Limit collision checks
-            
+            const collisionCheckLimit = Math.min(bubbles.length, 40);
+
             for (let i = 0; i < collisionCheckLimit; i++) {
                 const bubbleA = bubbles[i];
                 const radiusA = bubbleA.userData.radius;
 
-                // Only check next 15 bubbles to limit O(n²) overhead
                 for (let j = i + 1; j < Math.min(i + 15, bubbles.length); j++) {
                     const bubbleB = bubbles[j];
                     const radiusB = bubbleB.userData.radius;
@@ -217,7 +212,6 @@ const BubbleScene = () => {
                     const minDistance = (radiusA + radiusB) * 1.35;
                     const distance = bubbleA.position.distanceTo(bubbleB.position);
 
-                    // Early exit if bubbles are far apart
                     if (distance === 0 || distance >= minDistance) continue;
 
                     tempVector.subVectors(bubbleB.position, bubbleA.position);

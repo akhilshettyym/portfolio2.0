@@ -2,23 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * LazyLoad wrapper component that defers mounting of children until they're visible in viewport
- * Great for heavy 3D scenes, animations, and complex components
- * 
- * @param {React.ReactNode} children - Component to lazy load
- * @param {Object} options - Configuration options
- * @param {string} options.threshold - IntersectionObserver threshold (0-1), default 0.1
- * @param {boolean} options.rootMargin - IntersectionObserver rootMargin, default "100px"
- * @param {boolean} options.once - Only load once, don't unload, default true
- */
-const LazyLoad = ({
-    children,
-    threshold = 0.1,
-    rootMargin = "100px",
-    once = true,
-    placeholder = null
-}) => {
+const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true, placeholder = null }) => {
     const containerRef = useRef(null);
     const observerRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -56,7 +40,6 @@ const LazyLoad = ({
         };
     }, [threshold, rootMargin, once]);
 
-    // If once=true and has been visible, always render
     const shouldRender = once ? hasBeenVisible : isVisible;
 
     return (

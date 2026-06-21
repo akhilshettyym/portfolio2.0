@@ -4,11 +4,10 @@ import Loader from "./Loader";
 import "../styles/IntroEntrance.css";
 import PageReveal from "./PageReveal";
 import CinematicIntro from "./CinematicIntro";
+import { INTRO_KEY } from "@/utils/basic-utils";
 import { createContext, useEffect, useRef, useState } from "react";
 
 export const LoadingContext = createContext();
-
-const INTRO_KEY = "portfolio_intro_seen_v1";
 
 const LoaderWrapper = ({ children }) => {
     const [loading, setLoading] = useState(true);
@@ -54,7 +53,6 @@ const LoaderWrapper = ({ children }) => {
         setHasSeenIntro(true);
         setShowIntro(false);
         setIntroComplete(true);
-        // Defer children mounting until next frame to prevent performance jank
         window.requestAnimationFrame(() => {
             setShouldMountChildren(true);
             startReveal();
@@ -71,7 +69,6 @@ const LoaderWrapper = ({ children }) => {
 
             <PageReveal active={revealActive}>
                 <div className={`relative transition-opacity duration-500 ${revealActive ? "opacity-100" : "opacity-0"}`}>
-                    {/* Only mount children after intro completes or if intro was already seen */}
                     {(shouldMountChildren || hasSeenIntro) && children}
                 </div>
             </PageReveal>

@@ -9,7 +9,8 @@ import WordCarousel from "./basic/WordCarousel";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
 import { getWeatherScene } from "../utils/weather-scene";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/basic-utils";
+import { startTransition, useEffect, useRef, useState, memo } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 function isSameScene(a, b) {
@@ -20,8 +21,8 @@ function isSameScene(a, b) {
     );
 }
 
-const HeroSection = () => {
-    
+const HeroSectionComponent = () => {
+
     const btnRef = useRef(null);
     const speedRef = useRef(0.8);
     const containerRef = useRef(null);
@@ -39,7 +40,7 @@ const HeroSection = () => {
 
     useEffect(() => {
         try {
-            const cachedScene = localStorage.getItem("weatherSceneAssets");
+            const cachedScene = localStorage.getItem(WEATHER_SCENE_ASSETS);
 
             if (cachedScene) {
                 const parsed = JSON.parse(cachedScene);
@@ -50,7 +51,7 @@ const HeroSection = () => {
                 });
             }
 
-            const cloudControl = localStorage.getItem("cloudControl");
+            const cloudControl = localStorage.getItem(CLOUD_CONTROL);
 
             if (cloudControl !== null) {
                 const value = cloudControl === "true";
@@ -89,7 +90,7 @@ const HeroSection = () => {
                         return prev;
                     }
 
-                    localStorage.setItem("weatherSceneAssets", JSON.stringify(nextScene));
+                    localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(nextScene));
                     return nextScene;
                 });
 
@@ -105,7 +106,7 @@ const HeroSection = () => {
                         clouds: "morning_clear",
                     };
 
-                    localStorage.setItem("weatherSceneAssets", JSON.stringify(fallback));
+                    localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(fallback));
 
                     sceneAssetsRef.current = fallback;
                     setSceneAssets(fallback);
@@ -122,27 +123,33 @@ const HeroSection = () => {
 
     useEffect(() => {
         if (!sceneAssets) return;
+
         const container = containerRef.current;
         const btn = btnRef.current;
 
         if (!container) return;
 
-        let mesh;
-        let mesh2;
-        let camera;
-        let texture;
-        let material;
-        let renderer;
-        let threeScene;
+        let mesh = null;
+        let mesh2 = null;
+        let camera = null;
+        let texture = null;
+        let material = null;
+        let renderer = null;
+        let animationId = null;
+
+        let isAnimating = true;
+        let isDisposed = false;
 
         let mouseX = 0;
         let mouseY = 0;
+
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
-        let animationId;
+
+        const scene = new THREE.Scene();
 
         const onMouseMove = (e) => {
-            if (pausedRef.current) return;
+            if (pausedRef.current || !isAnimating) return;
 
             mouseX = (e.clientX - windowHalfX) * 0.25;
             mouseY = (e.clientY - windowHalfY) * 0.15;
@@ -152,30 +159,33 @@ const HeroSection = () => {
             windowHalfX = window.innerWidth / 2;
             windowHalfY = window.innerHeight / 2;
 
-            if (!camera || !renderer) return;
+            if (!camera || !renderer || !isAnimating) return;
 
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
+
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         };
 
         const animate = () => {
+            if (!isAnimating || isDisposed) return;
+
             animationId = requestAnimationFrame(animate);
 
-            if (camera) {
-                const targetSpeed = pausedRef.current ? 0 : 0.8;
-                speedRef.current += (targetSpeed - speedRef.current) * 0.025;
-                tunnelPositionRef.current += speedRef.current;
+            const targetSpeed = pausedRef.current ? 0 : 0.8;
+            speedRef.current += (targetSpeed - speedRef.current) * 0.025;
+            tunnelPositionRef.current += speedRef.current;
 
+            if (camera) {
                 const mouseFactor = pausedRef.current ? 0 : 1;
                 camera.position.x += ((mouseX * mouseFactor) - camera.position.x) * 0.01;
                 camera.position.y += ((-mouseY * mouseFactor) - camera.position.y) * 0.01;
                 camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
             }
 
-            if (renderer && threeScene && camera) {
-                renderer.render(threeScene, camera);
+            if (renderer && camera) {
+                renderer.render(scene, camera);
             }
         };
 
@@ -194,82 +204,109 @@ const HeroSection = () => {
             btn.style.transform = "translate(0px, 0px)";
         };
 
-        threeScene = new THREE.Scene();
+        async function init() {
+            try {
+                camera = new THREE.PerspectiveCamera(
+                    30, window.innerWidth / window.innerHeight, 1, 3000);
 
-        camera = new THREE.PerspectiveCamera(30,
-            window.innerWidth / window.innerHeight,
-            1, 3000
-        );
+                camera.position.z = 6000;
 
-        camera.position.z = 6000;
+                renderer = new THREE.WebGLRenderer({
+                    alpha: true,
+                    antialias: false,
+                    powerPreference: "high-performance",
+                });
 
-        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-        const textureLoader = new THREE.TextureLoader();
+                container.appendChild(renderer.domElement);
 
-        textureLoader.load(`/clouds/${sceneAssets?.clouds}.svg`, (loadedTexture) => {
-            texture = loadedTexture;
+                const textureLoader = new THREE.TextureLoader();
 
-            texture.colorSpace = THREE.SRGBColorSpace;
+                texture = await textureLoader.loadAsync(`/clouds/${sceneAssets.clouds}.svg`);
 
-            texture.generateMipmaps = false;
-            texture.magFilter = THREE.LinearFilter;
-            texture.minFilter = THREE.LinearFilter;
-            texture.needsUpdate = true;
+                if (isDisposed) return;
 
-            const fog = new THREE.Fog(0xffffff, -100, 3000);
-            threeScene.fog = fog;
+                texture.colorSpace = THREE.SRGBColorSpace;
+                texture.generateMipmaps = false;
+                texture.magFilter = THREE.LinearFilter;
+                texture.minFilter = THREE.LinearFilter;
+                texture.needsUpdate = true;
 
-            material = new THREE.ShaderMaterial({
-                uniforms: {
-                    map: { value: texture },
-                    fogColor: { value: fog.color },
-                    fogNear: { value: fog.near },
-                    fogFar: { value: fog.far },
-                },
-                vertexShader: CLOUD_SHADER.vertexShader,
-                fragmentShader: CLOUD_SHADER.fragmentShader,
-                depthWrite: false,
-                depthTest: false,
-                transparent: true,
-            });
+                const fog = new THREE.Fog(0xffffff, -100, 3000);
 
-            const planeGeo = new THREE.PlaneGeometry(64, 64);
-            const planeObj = new THREE.Object3D();
-            const geometries = [];
+                scene.fog = fog;
 
-            for (let i = 0; i < 8000; i++) {
-                planeObj.position.x = Math.random() * 1000 - 500;
-                planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
-                planeObj.position.z = i;
-                planeObj.rotation.z = Math.random() * Math.PI;
-                planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+                material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            map: { value: texture },
+                            fogColor: {
+                                value: fog.color,
+                            },
+                            fogNear: {
+                                value: fog.near,
+                            },
+                            fogFar: {
+                                value: fog.far,
+                            },
+                        },
 
-                planeObj.updateMatrix();
+                        vertexShader: CLOUD_SHADER.vertexShader,
+                        fragmentShader: CLOUD_SHADER.fragmentShader,
 
-                const cloned = planeGeo.clone();
-                cloned.applyMatrix4(planeObj.matrix);
-                geometries.push(cloned);
+                        depthWrite: false,
+                        depthTest: false,
+                        transparent: true,
+                    });
+
+                const planeGeo = new THREE.PlaneGeometry(64, 64);
+                const planeObj = new THREE.Object3D();
+
+                const geometries = [];
+
+                for (let i = 0; i < 8000; i++) {
+                    planeObj.position.x = Math.random() * 1000 - 500;
+                    planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
+                    planeObj.position.z = i;
+                    planeObj.rotation.z = Math.random() * Math.PI;
+                    planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+                    planeObj.updateMatrix();
+
+                    const cloned = planeGeo.clone();
+                    cloned.applyMatrix4(planeObj.matrix);
+                    geometries.push(cloned);
+                }
+
+                const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
+
+                geometries.forEach((g) =>
+                    g.dispose()
+                );
+
+                mesh = new THREE.Mesh(mergedGeo, material);
+                mesh.renderOrder = 2;
+
+                mesh2 = mesh.clone();
+                mesh2.position.z = -8000;
+                mesh2.renderOrder = 1;
+
+                scene.add(mesh);
+                scene.add(mesh2);
+
+                planeGeo.dispose();
+
+                animate();
+
+            } catch (error) {
+                if (!isDisposed) {
+                    console.error("Cloud scene init failed:", error);
+                }
             }
+        }
 
-            const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
-
-            mesh = new THREE.Mesh(mergedGeo, material);
-            mesh.renderOrder = 2;
-
-            mesh2 = mesh.clone();
-            mesh2.position.z = -8000;
-            mesh2.renderOrder = 1;
-
-            threeScene.add(mesh);
-            threeScene.add(mesh2);
-
-            planeGeo.dispose();
-            animate();
-        });
+        init();
 
         window.addEventListener("mousemove", onMouseMove);
         window.addEventListener("resize", onResize);
@@ -280,6 +317,9 @@ const HeroSection = () => {
         }
 
         return () => {
+            isDisposed = true;
+            isAnimating = false;
+
             window.removeEventListener("mousemove", onMouseMove);
             window.removeEventListener("resize", onResize);
 
@@ -289,34 +329,37 @@ const HeroSection = () => {
                 btn.style.transform = "translate(0px, 0px)";
             }
 
-            if (animationId) cancelAnimationFrame(animationId);
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
 
             if (mesh) {
-                threeScene.remove(mesh);
-                mesh.geometry?.dispose?.();
+                scene.remove(mesh);
+                mesh.geometry?.dispose();
             }
 
             if (mesh2) {
-                threeScene.remove(mesh2);
-                mesh2.geometry?.dispose?.();
+                scene.remove(mesh2);
+                mesh2.geometry?.dispose();
             }
 
-            if (material) material.dispose();
-            if (texture) texture.dispose();
+            material?.dispose();
+            texture?.dispose();
 
             if (renderer) {
                 renderer.dispose();
+
                 if (container.contains(renderer.domElement)) {
                     container.removeChild(renderer.domElement);
                 }
             }
         };
     }, [sceneAssets]);
-
+    
     const handleCloudControl = () => {
         setPaused((prev) => {
             const nextState = !prev;
-            localStorage.setItem("cloudControl", nextState);
+            localStorage.setItem(CLOUD_CONTROL, nextState);
             return nextState;
         });
     };
@@ -440,5 +483,7 @@ const HeroSection = () => {
         </section>
     );
 };
+
+const HeroSection = memo(HeroSectionComponent);
 
 export default HeroSection;

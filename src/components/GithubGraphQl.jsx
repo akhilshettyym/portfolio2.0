@@ -7,12 +7,14 @@ import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
 import { useEffect, useMemo, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { getCachedData, setCachedData } from "@/utils/cache-utils";
 
 const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
     const [total, setTotal] = useState(0);
     const [weeks, setWeeks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [fromCache, setFromCache] = useState(false);
 
     const motionTotal = useMotionValue(0);
 
@@ -63,6 +65,16 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
         const fetchContributions = async () => {
             try {
                 setLoading(true);
+                const cacheKey = `contributions_${username}_${range.from}_${range.to}`;
+
+                const cachedData = getCachedData(cacheKey);
+                if (cachedData) {
+                    setWeeks(cachedData.weeks);
+                    setTotal(cachedData.total);
+                    setFromCache(true);
+                    setLoading(false);
+                    return;
+                }
 
                 const response = await axios.get('/api/github', {
                     params: {
@@ -74,12 +86,26 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 
                 const calendar = response.data?.data?.user?.contributionsCollection?.contributionCalendar;
                 const fetchedWeeks = calendar?.weeks || [];
+                const totalContributions = calendar?.totalContributions || 0;
+
+                setCachedData(cacheKey, {
+                    weeks: fetchedWeeks,
+                    total: totalContributions,
+                });
 
                 setWeeks(fetchedWeeks);
-                setTotal(calendar?.totalContributions || 0);
+                setTotal(totalContributions);
+                setFromCache(false);
 
             } catch (err) {
                 console.error("GitHub contributions fetch failed :", err.message);
+                const cacheKey = `contributions_${username}_${range.from}_${range.to}`;
+                const cachedData = getCachedData(cacheKey);
+                if (cachedData) {
+                    setWeeks(cachedData.weeks);
+                    setTotal(cachedData.total);
+                    setFromCache(true);
+                }
             } finally {
                 setLoading(false);
             }

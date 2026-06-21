@@ -631,6 +631,3 @@ This is just a blueprint, I want you to enhance this into a professional level S
 
 
 ---
-
-
-laggy herosection, github api too many calls, cache it

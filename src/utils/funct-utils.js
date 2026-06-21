@@ -162,7 +162,7 @@ export function CodeRain({ active }) {
 
 export function GlitchField({ active, seed }) {
     const [tick, setTick] = useState(0);
-    
+
     const glitchPositions = ERRORBITS.map((_, i) => {
         const seedNum = (seed || 1) * (i + 1);
 

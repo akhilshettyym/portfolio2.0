@@ -1,13 +1,13 @@
 "use client";
 
 import Loader from "./Loader";
+import "../styles/IntroEntrance.css";
 import PageReveal from "./PageReveal";
 import CinematicIntro from "./CinematicIntro";
+import { INTRO_KEY } from "@/utils/basic-utils";
 import { createContext, useEffect, useRef, useState } from "react";
 
 export const LoadingContext = createContext();
-
-const INTRO_KEY = "portfolio_intro_seen_v1";
 
 const LoaderWrapper = ({ children }) => {
     const [loading, setLoading] = useState(true);
@@ -15,6 +15,8 @@ const LoaderWrapper = ({ children }) => {
     const [showIntro, setShowIntro] = useState(false);
     const [revealActive, setRevealActive] = useState(false);
     const [navReady, setNavReady] = useState(false);
+    const [introComplete, setIntroComplete] = useState(false);
+    const [shouldMountChildren, setShouldMountChildren] = useState(false);
 
     const revealTimerRef = useRef(null);
 
@@ -50,7 +52,11 @@ const LoaderWrapper = ({ children }) => {
         window.localStorage.setItem(INTRO_KEY, "true");
         setHasSeenIntro(true);
         setShowIntro(false);
-        startReveal();
+        setIntroComplete(true);
+        window.requestAnimationFrame(() => {
+            setShouldMountChildren(true);
+            startReveal();
+        });
     };
 
     return (
@@ -63,7 +69,7 @@ const LoaderWrapper = ({ children }) => {
 
             <PageReveal active={revealActive}>
                 <div className={`relative transition-opacity duration-500 ${revealActive ? "opacity-100" : "opacity-0"}`}>
-                    {children}
+                    {(shouldMountChildren || hasSeenIntro) && children}
                 </div>
             </PageReveal>
         </LoadingContext.Provider>

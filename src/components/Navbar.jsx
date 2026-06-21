@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo, useCallback } from "react";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -105,7 +105,7 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
     );
 }
 
-const Navbar = () => {
+const NavbarComponent = () => {
     const [time, setTime] = useState("");
     const [consoleOpen, setConsoleOpen] = useState(false);
     const [hovering, setHovering] = useState(false);
@@ -133,7 +133,14 @@ const Navbar = () => {
     const clamp = (num) => Math.max(0, Math.min(255, num));
 
     useEffect(() => {
+        let lastScrollUpdate = 0;
+        const SCROLL_THROTTLE = 100; // Update every 100ms max
+
         const handleScroll = () => {
+            const now = Date.now();
+            if (now - lastScrollUpdate < SCROLL_THROTTLE) return;
+
+            lastScrollUpdate = now;
             const scrollY = window.scrollY;
 
             setIpParts((prev) => {
@@ -147,12 +154,19 @@ const Navbar = () => {
             });
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     useEffect(() => {
+        let lastMouseUpdate = 0;
+        const MOUSE_THROTTLE = 50; // Update every 50ms max
+
         const handleMouseMove = (e) => {
+            const now = Date.now();
+            if (now - lastMouseUpdate < MOUSE_THROTTLE) return;
+
+            lastMouseUpdate = now;
             const xRatio = e.clientX / window.innerWidth;
 
             setIpParts((prev) => {
@@ -164,7 +178,7 @@ const Navbar = () => {
             });
         };
 
-        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mousemove", handleMouseMove, { passive: true });
         return () => window.removeEventListener("mousemove", handleMouseMove);
     }, []);
 
@@ -292,5 +306,7 @@ const Navbar = () => {
         </>
     );
 }
+
+const Navbar = memo(NavbarComponent);
 
 export default Navbar;

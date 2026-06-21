@@ -29,7 +29,7 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
     const shadow = useTransform(
         finalized,
         [0, 1],
-        [ "0 30px 80px rgba(0,0,0,0.08)", "0 40px 120px rgba(0,0,0,0.14)" ]
+        ["0 30px 80px rgba(0,0,0,0.08)", "0 40px 120px rgba(0,0,0,0.14)"]
     );
 
     const isHovered = hoveredCard === index;

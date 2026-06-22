@@ -1,10 +1,10 @@
 import React, { memo } from "react";
-import LazyLoad from "../LazyLoad";
-import EducationLog from "../EducationLog";
+import LazyLoad from "@/components/LazyLoad";
 import DevTicker from "@/components/DevTicker";
-import SubjectProfile from "../SubjectProfile";
 import HeroSection from "@/components/HeroSection";
 import BubbleScene from "@/components/BubbleScene";
+import EducationLog from "@/components/EducationLog";
+import SubjectProfile from "@/components/SubjectProfile";
 import CardStackReveal from "@/components/CardStackReveal";
 
 const InfoLayout = memo(() => {

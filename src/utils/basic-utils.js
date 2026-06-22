@@ -1,3 +1,6 @@
+import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
+import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
+
 export const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export const WORDS = ["CORE JAVA", "DATA STRUCTURES", "MERN STACK", "VERSION CONTROL", "SALESFORCE", "API INTEGRATIONS", "FRAMEWORKS", "ARCHITECTURES", "DEPLOYMENT"];
@@ -42,16 +45,6 @@ export const WEATHER_CODES = {
     SNOW: [71, 73, 75, 77, 85, 86],
     STORM: [95, 96, 99],
 };
-
-export const CACHE_KEY = "weather_scene_cache";
-
-export const LOCATION_MODE_KEY = "weather_location_mode";
-
-export const WEATHER_SCENE_ASSETS = "weather_scene_assets";
-
-export const INTRO_KEY = "portfolio_intro_seen";
-
-export const CLOUD_CONTROL = "cloud_control";
 
 export const CACHE_TTL_MS = 15 * 60 * 1000;
 
@@ -150,7 +143,6 @@ export const POSITIONS = [
 
 
 /* CinematicIntro */
-
 export const TOTAL_SCENES = 14;
 
 export const DARK_START_SCENE = 6;
@@ -229,5 +221,60 @@ export const ERRORBITS = [
 ];
 
 /* GlitchText */
-
 export const CHARS = "!<>-_\\/[]{}—=+*^?#________ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+/* WeatherIcon */
+export const WEATHER_MAP = {
+    clear: {
+        icon: TiWeatherSunny,
+        label: "Clear Sky",
+    },
+
+    cloudy: {
+        icon: TiWeatherCloudy,
+        label: "Cloudy",
+    },
+
+    rain: {
+        icon: TiWeatherShower,
+        label: "Rain",
+    },
+
+    storm: {
+        icon: TiWeatherStormy,
+        label: "Thunderstorm",
+    },
+
+    sunset: {
+        icon: TiWeatherPartlySunny,
+        label: "Sunset",
+    },
+
+    night: {
+        icon: TiWeatherNight,
+        label: "Night",
+    },
+};
+
+export const MOON_MAP = {
+    NEW_MOON: {
+        icon: WiMoonAltNew,
+        label: "New Moon",
+    },
+
+    CRESCENT: {
+        icon: WiMoonAltWaxingCrescent3,
+        label: "Crescent Moon",
+    },
+
+    HALF_MOON: {
+        icon: WiMoonAltFirstQuarter,
+        label: "Half Moon",
+    },
+
+    FULL_MOON: {
+        icon: WiMoonAltFull,
+        label: "Full Moon",
+    },
+};

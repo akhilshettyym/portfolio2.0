@@ -1,4 +1,4 @@
-import { getCardState } from "../../utils/funct-utils";
+import { getCardState } from "@/utils/funct-utils";
 import { motion, useMotionTemplate, useTransform } from "framer-motion";
 
 const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) => {

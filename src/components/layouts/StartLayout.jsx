@@ -1,5 +1,5 @@
 import React from "react";
-import CreateSomething from "../CreateSomething";
+import CreateSomething from "@/components/CreateSomething";
 
 const StartLayout = () => {
   return (

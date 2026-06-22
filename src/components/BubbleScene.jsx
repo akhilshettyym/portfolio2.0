@@ -109,7 +109,7 @@ const BubbleScene = () => {
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
-        
+
         let lastMouseMoveTime = 0;
         const MOUSE_MOVE_THROTTLE = 16;
 
@@ -160,21 +160,19 @@ const BubbleScene = () => {
                     }
                 });
             },
-            {
-                threshold: [0.45],
-            }
+            { threshold: [0.45] }
         );
 
         observer.observe(wrapper);
 
         const onMouseMove = (event) => {
             const now = performance.now();
-            
+
             if (now - lastMouseMoveTime < MOUSE_MOVE_THROTTLE) {
                 return;
             }
             lastMouseMoveTime = now;
-            
+
             const rect = wrapper.getBoundingClientRect();
 
             const isInside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;

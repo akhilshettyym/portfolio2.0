@@ -1,10 +1,10 @@
 "use client";
 
-import Loader from "./Loader";
-import "../styles/IntroEntrance.css";
-import PageReveal from "./PageReveal";
-import CinematicIntro from "./CinematicIntro";
-import { INTRO_KEY } from "@/utils/basic-utils";
+import "@/styles/IntroEntrance.css";
+import Loader from "@/components/Loader";
+import { INTRO_KEY } from "@/utils/localstorage";
+import PageReveal from "@/components/PageReveal";
+import CinematicIntro from "@/components/CinematicIntro";
 import { createContext, useEffect, useRef, useState } from "react";
 
 export const LoadingContext = createContext();

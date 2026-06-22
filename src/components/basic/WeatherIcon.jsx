@@ -1,73 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { getWeatherIconData } from "../../utils/weather-scene";
-import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
-import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
+import { WiMoonAltFull } from "react-icons/wi";
+import { TiWeatherSunny } from "react-icons/ti";
+import { getWeatherIconData } from "@/utils/weather-scene";
+import { MOON_MAP, WEATHER_MAP } from "@/utils/basic-utils";
 
 const WeatherIcon = () => {
     const data = getWeatherIconData();
     const moonPhase = data?.getMoonPhase;
     const sceneCondition = data?.getSceneCondition;
 
-    const weatherMap = {
-        clear: {
-            icon: TiWeatherSunny,
-            label: "Clear Sky",
-        },
-
-        cloudy: {
-            icon: TiWeatherCloudy,
-            label: "Cloudy",
-        },
-
-        rain: {
-            icon: TiWeatherShower,
-            label: "Rain",
-        },
-
-        storm: {
-            icon: TiWeatherStormy,
-            label: "Thunderstorm",
-        },
-
-        sunset: {
-            icon: TiWeatherPartlySunny,
-            label: "Sunset",
-        },
-
-        night: {
-            icon: TiWeatherNight,
-            label: "Night",
-        },
-    };
-
-    const moonMap = {
-        NEW_MOON: {
-            icon: WiMoonAltNew,
-            label: "New Moon",
-        },
-
-        CRESCENT: {
-            icon: WiMoonAltWaxingCrescent3,
-            label: "Crescent Moon",
-        },
-
-        HALF_MOON: {
-            icon: WiMoonAltFirstQuarter,
-            label: "Half Moon",
-        },
-
-        FULL_MOON: {
-            icon: WiMoonAltFull,
-            label: "Full Moon",
-        },
-    };
-
-    const WeatherGlyph = weatherMap[sceneCondition]?.icon || TiWeatherSunny;
-    const MoonGlyph = moonMap[moonPhase]?.icon || WiMoonAltFull;
-    const weatherLabel = weatherMap[sceneCondition]?.label || "Weather";
-    const moonLabel = moonMap[moonPhase]?.label || "Moon";
+    const WeatherGlyph = WEATHER_MAP[sceneCondition]?.icon || TiWeatherSunny;
+    const MoonGlyph = MOON_MAP[moonPhase]?.icon || WiMoonAltFull;
+    const weatherLabel = WEATHER_MAP[sceneCondition]?.label || "Weather";
+    const moonLabel = MOON_MAP[moonPhase]?.label || "Moon";
 
     return (
         <div className="group relative">

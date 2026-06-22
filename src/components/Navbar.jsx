@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import "@/styles/navbar.css";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef, memo, useCallback } from "react";
+import { useEffect, useState, useRef, memo } from "react";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -134,7 +135,7 @@ const NavbarComponent = () => {
 
     useEffect(() => {
         let lastScrollUpdate = 0;
-        const SCROLL_THROTTLE = 100; // Update every 100ms max
+        const SCROLL_THROTTLE = 100;
 
         const handleScroll = () => {
             const now = Date.now();
@@ -160,7 +161,7 @@ const NavbarComponent = () => {
 
     useEffect(() => {
         let lastMouseUpdate = 0;
-        const MOUSE_THROTTLE = 50; // Update every 50ms max
+        const MOUSE_THROTTLE = 50;
 
         const handleMouseMove = (e) => {
             const now = Date.now();

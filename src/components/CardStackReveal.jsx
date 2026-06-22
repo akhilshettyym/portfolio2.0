@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import FloatingCard from "./basic/FloatingCard";
-import { DEFAULT_CARDS } from "../utils/basic-utils";
+import { DEFAULT_CARDS } from "@/utils/basic-utils";
+import FloatingCard from "@/components/basic/FloatingCard";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 
 const CardStackReveal = ({ cards = DEFAULT_CARDS }) => {

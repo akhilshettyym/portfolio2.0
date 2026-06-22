@@ -6,8 +6,8 @@ import { MONTHS } from "@/utils/basic-utils";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
 import { useEffect, useMemo, useState } from "react";
-import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { getCachedData, setCachedData } from "@/utils/cache-utils";
+import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
 const GithubGraphQl = ({ username = "akhilshettyym" }) => {
 

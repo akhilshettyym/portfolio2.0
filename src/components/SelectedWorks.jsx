@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation';
-import CustomButton from './basic/CustomButton';
+import CustomButton from '@/components/basic/CustomButton';
 
 const SelectedWorks = () => {
 
@@ -129,7 +129,6 @@ const SelectedWorks = () => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                 </div>

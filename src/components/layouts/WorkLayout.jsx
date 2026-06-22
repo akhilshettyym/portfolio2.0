@@ -1,6 +1,6 @@
 import React from "react";
-import GithubGraphQl from "../GithubGraphQl";
-import SelectedWorks from "../SelectedWorks";
+import GithubGraphQl from "@/components/GithubGraphQl";
+import SelectedWorks from "@/components/SelectedWorks";
 
 const WorkLayout = () => {
   return (

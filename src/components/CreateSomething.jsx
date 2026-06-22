@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import CustomButton from "./basic/CustomButton";
 import { FiCheck, FiChevronDown } from "react-icons/fi";
-import { SERVICES, BUDGETS } from "../utils/basic-utils";
+import { SERVICES, BUDGETS } from "@/utils/basic-utils";
+import CustomButton from "@/components/basic/CustomButton";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete }) => {
     return (

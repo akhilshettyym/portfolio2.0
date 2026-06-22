@@ -3,7 +3,7 @@
 import "@/styles/devticker.css";
 import { DEV_TICKERS } from "@/utils/basic-utils";
 
-export default function DevTicker() {
+const DevTicker = () => {
 
     const stream = [...DEV_TICKERS, ...DEV_TICKERS];
 
@@ -29,3 +29,5 @@ export default function DevTicker() {
         </section>
     );
 }
+
+export default DevTicker;

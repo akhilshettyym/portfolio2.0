@@ -1,8 +1,8 @@
 "use client";
 
-import CustomButton from "./basic/CustomButton";
 import { AnimatePresence, motion } from "framer-motion";
-import { setLocationMode } from "../utils/weather-scene";
+import { setLocationMode } from "@/utils/weather-scene";
+import CustomButton from "@/components/basic/CustomButton";
 
 function LocationPreferenceModal({ open, onComplete }) {
 

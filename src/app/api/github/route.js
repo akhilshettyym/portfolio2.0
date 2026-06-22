@@ -41,9 +41,7 @@ export async function GET(req) {
             {
                 query,
                 variables: {
-                    username,
-                    from,
-                    to,
+                    username, from, to,
                 },
             },
             {

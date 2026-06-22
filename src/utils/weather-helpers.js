@@ -1,5 +1,5 @@
 import { Moon } from "lunarphase-js";
-import { WEATHER_CODES } from "./basic-utils";
+import { WEATHER_CODES } from "@/utils/basic-utils";
 
 export function getMoonVariant() {
     const phase = Moon.lunarPhase();

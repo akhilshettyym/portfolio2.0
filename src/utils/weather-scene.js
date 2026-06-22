@@ -1,11 +1,10 @@
-import { CACHE_KEY, LOCATION_MODE_KEY, CACHE_TTL_MS } from "./basic-utils";
-import { getMoonVariant, resolveScene } from "./weather-helpers";
+import { CACHE_TTL_MS } from "@/utils/basic-utils";
+import { CACHE_KEY, LOCATION_MODE_KEY } from "@/utils/localstorage";
+import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
 
 async function fetchWeather(latitude, longitude) {
     const response = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`,
-        {
-            cache: "no-store"
-        }
+        { cache: "no-store" }
     );
 
     if (!response.ok) {

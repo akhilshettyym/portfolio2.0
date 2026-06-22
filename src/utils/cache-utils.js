@@ -1,4 +1,5 @@
-const CACHE_PREFIX = "github_cache_";
+import { CACHE_PREFIX } from "@/utils/localstorage";
+
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 
 export const getCachedData = (key) => {
@@ -67,7 +68,7 @@ export const clearAllGitHubCache = () => {
             }
         });
         console.log("All GitHub cache cleared");
-        
+
     } catch (error) {
         console.error("Clear all cache error:", error);
     }

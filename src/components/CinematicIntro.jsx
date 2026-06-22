@@ -1,10 +1,10 @@
 "use client";
 
-import "../styles/CinematicIntro.css";
+import "@/styles/CinematicIntro.css";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "../utils/funct-utils";
-import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "../utils/basic-utils";
+import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct-utils";
+import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic-utils";
 
 const CinematicIntro = ({ onComplete }) => {
 
@@ -28,23 +28,21 @@ const CinematicIntro = ({ onComplete }) => {
     const [carouselProgress, setCarouselProgress] = useState(0);
 
     const [ready, setReady] = useState(false);
+    const [rowWidths, setRowWidths] = useState({});
     const [timelineReveal, setTimelineReveal] = useState(false);
     const [darkCurtainDone, setDarkCurtainDone] = useState(false);
 
     const completedRef = useRef(false);
 
-    const [rowWidths, setRowWidths] = useState({});
+    const rowRefs = useRef({});
+    const carouselRef = useRef(0);
+    const sceneRef = useRef(scene);
+    const readyRef = useRef(ready);
 
     const reversedRewind = useMemo(
         () => [...REWINDLINES].reverse(),
         []
     );
-
-    const rowRefs = useRef({});
-    const carouselRef = useRef(0);
-
-    const sceneRef = useRef(scene);
-    const readyRef = useRef(ready);
 
     useEffect(() => {
         sceneRef.current = scene;
@@ -159,27 +157,25 @@ const CinematicIntro = ({ onComplete }) => {
 
         if (!readyRef.current) return;
         nextScene();
-    },
-        () => {
-            if (sceneRef.current === 3) {
-                if (carouselRef.current > 0) {
-                    setCarouselProgress((p) =>
-                        clamp(p - 0.015, 0, 1)
-                    );
-                    return;
-                }
-                prevScene();
+    }, () => {
+        if (sceneRef.current === 3) {
+            if (carouselRef.current > 0) {
+                setCarouselProgress((p) =>
+                    clamp(p - 0.015, 0, 1)
+                );
                 return;
             }
-
-            if (!readyRef.current) return;
             prevScene();
-        },
+            return;
+        }
+
+        if (!readyRef.current) return;
+        prevScene();
+    },
         true
     );
 
     useEffect(() => {
-
         const timers = [];
         const intervals = [];
 
@@ -636,7 +632,7 @@ const CinematicIntro = ({ onComplete }) => {
                 <SceneShell2 dark={codeStage >= 2} curtain={isFirstDarkScene}>
                     {codeStage >= 2 && (
                         <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
-                            <source src="/scene6.mp4" type="video/mp4" />
+                            <source src="/CinematicIntro/scene6.mp4" type="video/mp4" />
                         </video>
                     )}
 
@@ -707,7 +703,7 @@ const CinematicIntro = ({ onComplete }) => {
         if (scene === 9) {
 
             return (
-                <SceneShell dark>
+                <SceneShell2 dark>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_45%)]" />
 
                     <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
@@ -738,7 +734,7 @@ const CinematicIntro = ({ onComplete }) => {
 
                         </AnimatePresence>
                     </div>
-                </SceneShell>
+                </SceneShell2>
             );
         }
 
@@ -748,7 +744,7 @@ const CinematicIntro = ({ onComplete }) => {
                 <SceneShell2 dark>
 
                     <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
-                        <source src="/scene9.mp4" type="video/mp4" />
+                        <source src="/CinematicIntro/scene9.mp4" type="video/mp4" />
                     </video>
 
                     <div className="absolute inset-0 z-2 bg-black/50" />
@@ -889,7 +885,7 @@ const CinematicIntro = ({ onComplete }) => {
         }, 2500);
 
         return () => clearTimeout(timeout);
-    }, [scene, finalStage]);
+    }, [scene, finalStage, onComplete]);
 
     return (
         <div className={`fixed inset-0 overflow-hidden antialiased ${isDarkScene ? "bg-black text-white" : "bg-white text-black"}`}>
@@ -910,7 +906,7 @@ const CinematicIntro = ({ onComplete }) => {
             <motion.div initial={false}
                 animate={{ opacity: ready ? 0.5 : 0.95 }}
                 transition={{ duration: 0.4 }}
-                className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-[0.5em] text-current/35 backdrop-blur-sm">
+                className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current/35 backdrop-blur-sm">
                 {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
             </motion.div>
         </div>

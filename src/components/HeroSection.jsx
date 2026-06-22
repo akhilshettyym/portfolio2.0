@@ -3,13 +3,13 @@
 import "@/styles/clouds.css";
 import * as THREE from "three";
 import { motion } from "framer-motion";
-import GlitchText from "./basic/GlitchText";
-import WeatherIcon from "./basic/WeatherIcon";
-import WordCarousel from "./basic/WordCarousel";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
-import { getWeatherScene } from "../utils/weather-scene";
+import GlitchText from "@/components/basic/GlitchText";
+import { getWeatherScene } from "@/utils/weather-scene";
+import WeatherIcon from "@/components/basic/WeatherIcon";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
-import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/basic-utils";
+import WordCarousel from "@/components/basic/WordCarousel";
+import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
@@ -240,26 +240,26 @@ const HeroSectionComponent = () => {
                 scene.fog = fog;
 
                 material = new THREE.ShaderMaterial({
-                        uniforms: {
-                            map: { value: texture },
-                            fogColor: {
-                                value: fog.color,
-                            },
-                            fogNear: {
-                                value: fog.near,
-                            },
-                            fogFar: {
-                                value: fog.far,
-                            },
+                    uniforms: {
+                        map: { value: texture },
+                        fogColor: {
+                            value: fog.color,
                         },
+                        fogNear: {
+                            value: fog.near,
+                        },
+                        fogFar: {
+                            value: fog.far,
+                        },
+                    },
 
-                        vertexShader: CLOUD_SHADER.vertexShader,
-                        fragmentShader: CLOUD_SHADER.fragmentShader,
+                    vertexShader: CLOUD_SHADER.vertexShader,
+                    fragmentShader: CLOUD_SHADER.fragmentShader,
 
-                        depthWrite: false,
-                        depthTest: false,
-                        transparent: true,
-                    });
+                    depthWrite: false,
+                    depthTest: false,
+                    transparent: true,
+                });
 
                 const planeGeo = new THREE.PlaneGeometry(64, 64);
                 const planeObj = new THREE.Object3D();
@@ -355,7 +355,7 @@ const HeroSectionComponent = () => {
             }
         };
     }, [sceneAssets]);
-    
+
     const handleCloudControl = () => {
         setPaused((prev) => {
             const nextState = !prev;

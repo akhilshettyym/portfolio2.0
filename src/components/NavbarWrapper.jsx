@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, memo } from "react";
-import { LoadingContext } from "./LoaderWrapper";
+import { LoadingContext } from "@/components/LoaderWrapper";
 
 const NavbarWrapper = ({ children }) => {
 

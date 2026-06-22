@@ -443,134 +443,17 @@ That creates a complete narrative arc from curiosity → discovery → proof →
 
 
 
-------------------------------------
+---
 
 
 
+Subject profile should be improved, 
 
-Am using Next js, React js with tailwind css. You can use framer-motion, shadcn UI, Lottie Lenis threejs any package you want.
-Now create a cenematic experience for me. - 
-Create a single component.jsx which should consist of the entire movie. 
+Experience section should be added.
 
-Let's start with a blank white screen.
-
-And in the middle of the screen let the texts appear with animations, and the text will be -
-"Asking questions is important..." pause for 2seconds and then that sentence should dissappear and then show "Right ?..."
-
-And after 2seconds that dissappears and then - "So let's start with one."
-
-- user scrolls
-
-the earlier message will faint as user scrolls and then another question in middle with immersive typing animation - "WHO AM I ?"
-- the screen remains still, user scrolls. Texts slowly breaks apart into particles.
-
-And reveals with animation - "My name is AKHIL" pause, user scrolls.
-"But that dosen't tell you much." scroll further.
-
-Now I wanna have four horizontal sections in the screen, as in the screen should be divided into four parts horizontally and this should behave as a carousel. As in as the user comes to this section -
-- The top most carousel should slide in from left to right showing - 2018 Learning. Experimenting. Breaking things. ( you can add more to this)
-- The second carousel should slide in from right to left showing - 2020 Building. Failing. Building again. ( you can add more to this)
-- The thrid should slide in from left to right showing - 2022 Understanding systems. Not just code. ( you can add more to this)
-- The fourth should slide in from right to left showing - 2024 Engineering products. Solving real problems. ( you can add more to this)
-
-NOTE - all these carousels should slide as the mouse scroll happens very smoothly and all these carousels should take effect at the same time. 
-
-
-Once this is done the screen should go blank again and then the texts show up - "Building isn't hard." after 2seconds below this text show this  "Knowing what to build is."
-And then the sentence transform to - "Knowing WHY to build it..." "is even harder."
-
-- Now show some animated decision trees, User sees hundreds of paths, Most disappear, - One path remains. and then reveals -
-"Great software isn't written." with animation show 
-"It's discovered."
-
-Now once this is done -
-This section should focus on problem-solving. - Animated puzzle pieces. - Flow diagrams. - Systems connecting. Anything will work.
-Then these msgs - should loop in one by one, the msg should be in middle and then loop one sentence by another say for 1 seconds one sentence should be shown.
-"I don't start with code."
-"I start with questions."
-"Who uses it?"
-"Why does it exist?"
-"What breaks if it fails?"
-"How will it scale?"
-"How will it survive?"
-
-Then as user scrolls -
-"Code is the last step."
-
-
-Now this section should show up saying - "I specialize in tools, They work as I say"
-
-Now once this is done the screen should start generating random codes as in how AI generates the code this should happen in the background, 
-- Background should start generating random codes, Lines appear rapidly, Then suddenly GLITCH, Eveerything should break.
-- Code fragments, Errors, warnings and security alerts should appear. until here the above should happen as if a real simulation happening. No user scroll or anything something liek a video should be playing and then this -  when this happens the screen should stay. 
-
-When user scrolls - 
-"YES" pause 
-"AI can write code" below that after one second "AI can refactor code." below that after one second "AI can deploy code." pause 
-
-Then screen goes blank with the text - "BUT..." pause for 2seconds and then asks these questions it should loop with this 
-Can it understand your business?
-Can it protect your data?
-Can it see what isn't obvious?
-Can it predict what breaks six months later?
-
-And as the user scrolls -
-
-Massive GLITCH with texts here and there scattered around the screen - And these texts in middle -
-## Massive glitch.
-## Hidden vulnerabilities appear.
-## Memory leak.
-## SQL injection.
-## Access control issue.
-## Race condition.
-## Data exposure.
-
-Once this is done show - 
-The most dangerous bugs...
-are the ones nobody sees.
-
-After 2 seconds - 
-Intelligence generates code.
-Experience prevents disasters.
-
-Now the final showdown. The Philosophy - 
-Dark screen with minimal white text, 
-
-This should feel highly cebne
-## I don't build websites.
-## I build experiences.
-
-## I don't write code.
-## I design systems.
-
-## I don't chase trends.
-## I solve problems.
-
-And then the the final reveal, 
-
-## Everything disappears.
-## The journey rewinds. as in scrolls teh texts from first to last and 
-## Now fully revealed.
-
-And at last - the same question - "WHO AM I ?"
-
-come to this point and leave.
-
-With all that I've explained, Create a single standalone component which will be hosting all these what i said and I want you to build this in a nice cenematic immersive experience holding up the viewer. And make sure to keep the whole scene in black and white, Either the screen is black and texts white or vice versa, Start with white background and black text, And end with black background and white text. You can switch these themes in between and make it work. As I told you can use any packages and work on it. 
-
-Finally if you wanna enhance do it and at the end let me know what needs to added, and what package to install. 
-
-
-
-
---------------
-
-
-
-Subject profile should be improved, Experience section should be added.
 Animations for component entering viewport.
 
-Is backend required for teh START section.
+Is backend required for the START section.
 
 
 https://www.rishabh-upadhyay.com/
@@ -631,3 +514,37 @@ This is just a blueprint, I want you to enhance this into a professional level S
 
 
 ---
+
+
+- Update Subject Profile.
+- Create Footer design. - https://chrls.design/
+- Cinematic Intro scene 9 update glitch.
+- Update bubble scene, make it better.
+- Build Experience section. IMP
+
+- Decide wtr to build backend for Contact.
+
+- Clear Linting tests.
+- Improve the performance of the website.
+- Production grade file folder structure.
+
+ - Is there any way that I get to know wtr the users system is powerfull enough to withstand the project ? In the sense wtr the GPU or CPU is capable of handling the site's 3d renders. Before that is there a way to know wats my sites minimum requirement to run smoothly.
+
+
+
+┌───────────────────────────────────────────────────┐
+│ GIF ───── MARQUEE TEXT ───── GIF     				│
+├───────────────────────────────────────────────────┤
+│                                ┌─────────────┐	|
+| A DESIGNER & DEVELOPER...		 │   ABOUT     │	|
+| ┌──────────────────────────┐	 │ Github      │	|
+| │   ABOUT     			 │   │ Linkedin    |    |
+| │ ME      	             │	 | Instagram   |    |
+| └──────────────────────────┘	 └─────────────┘	|
+│                                      				│
+│  text runs behind									|
+│  this box            								|
+│                                      				│
+├───────────────────────────────────────────────────┤
+│ Contact Section                      				│
+└───────────────────────────────────────────────────┘

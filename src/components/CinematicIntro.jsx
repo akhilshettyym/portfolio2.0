@@ -885,7 +885,7 @@ const CinematicIntro = ({ onComplete }) => {
         }, 2500);
 
         return () => clearTimeout(timeout);
-    }, [scene, finalStage]);
+    }, [scene, finalStage, onComplete]);
 
     return (
         <div className={`fixed inset-0 overflow-hidden antialiased ${isDarkScene ? "bg-black text-white" : "bg-white text-black"}`}>

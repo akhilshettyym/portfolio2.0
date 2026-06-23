@@ -1,42 +1,21 @@
 "use client";
 
+import Image from "next/image";
+import { FaFileAlt } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
+import CustomButton from "./basic/CustomButton";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FaInstagram, FaGithub, FaLinkedin, FaSalesforce } from "react-icons/fa6";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 
-import { TbCircleArrowUpFilled } from "react-icons/tb";
-import { SiPerplexity } from "react-icons/si";
-import { IoIosMail } from "react-icons/io";
-import { FaMapPin, FaGithub, FaLinkedin } from "react-icons/fa6";
-
-const awardsLeft = [
-    {
-        label: "Awwwards",
-        items: ["5x Honorable Mentions", "1x Mobile Excellence"],
-    },
-    {
-        label: "Muzli",
-        items: ["1x Featured Project"],
-    },
-];
-
-const awardsRight = [
-    {
-        label: "CSSDA",
-        items: ["2x UI Design Awards", "2x UX Design Awards", "2x Innovation Awards", "2x Special Kudos", "1x Site Of The Day"],
-    },
-    {
-        label: "CSS Winner",
-        items: ["1x Site Of The Day"],
-    },
-    {
-        label: "WD",
-        items: ["1x Site Of The Day"],
-    },
-];
 
 const socials = [
     { icon: FaGithub, label: "GitHub", href: "#" },
     { icon: FaLinkedin, label: "LinkedIn", href: "#" },
+    { icon: FaInstagram, label: "Instagram", href: "#" },
+    { icon: FaFileAlt, label: "Resume", href: "#" },
+    { icon: FaSalesforce, label: "Salesforce", href: "#" },
+    { icon: SiLeetcode, label: "LeetCode", href: "#" },
 ];
 
 function splitLetters(text) {
@@ -49,15 +28,13 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
     return (
         <span className={className} aria-label={text}>
             {chars.map((char, index) => (
-                <motion.span
-                    key={`${char}-${index}`}
+                <motion.span key={`${char}-${index}`}
                     initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true, amount: 0.8 }}
                     transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: delay + index * 0.015 }}
                     className="inline-block"
-                    style={{ whiteSpace: char === " " ? "pre" : "normal" }}
-                >
+                    style={{ whiteSpace: char === " " ? "pre" : "normal" }}>
                     {char === " " ? "\u00A0" : char}
                 </motion.span>
             ))}
@@ -67,17 +44,11 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
 
 function MarqueeLine({ text }) {
     return (
-        <div className="relative overflow-hidden py-2 sm:py-3">
-            <motion.div
-                className="flex w-max items-center gap-6 whitespace-nowrap"
-                animate={{ x: [0, -2400] }}
-                transition={{ duration: 46, ease: "linear", repeat: Infinity }}
-            >
+        <div className="relative overflow-hidden py-2">
+            <motion.div className="flex w-max items-center gap-6 whitespace-nowrap" animate={{ x: [0, -2400] }} transition={{ duration: 46, ease: "linear", repeat: Infinity }}>
                 {Array.from({ length: 12 }).map((_, i) => (
                     <div key={i} className="flex items-center gap-6">
-                        <span className="text-[2.65rem] font-semibold tracking-[-0.08em] text-black/90 sm:text-[4.2rem] lg:text-[5.8rem]">
-                            {text}
-                        </span>
+                        <span className="text-[5.0rem] font-bold tracking-[-0.08em] text-black/90"> {text} </span>
                         <span className="h-3 w-3 rounded-full bg-black/90 sm:h-4 sm:w-4" />
                     </div>
                 ))}
@@ -86,22 +57,22 @@ function MarqueeLine({ text }) {
     );
 }
 
-function AwardBlock({ title, items }) {
+function MarqueeLine2({ text }) {
     return (
-        <div className="space-y-2 border-l border-black/10 pl-4 sm:pl-5">
-            <h5 className="text-xs font-semibold uppercase tracking-[0.28em] text-black/55">{title}</h5>
-            <div className="space-y-2">
-                {items.map((item) => (
-                    <p key={item} className="text-sm leading-none text-black/88 sm:text-base">
-                        {item}
-                    </p>
+        <div className="relative overflow-hidden py-2">
+            <motion.div className="flex w-max items-center gap-6 whitespace-nowrap" animate={{ x: [-2400, 0] }} transition={{ duration: 46, ease: "linear", repeat: Infinity }}>
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-6">
+                        <span className="text-[2.0rem] font-bold tracking-normal text-black/90"> {text} </span>
+                        <span className="h-3 w-3 rounded-full bg-black/90" />
+                    </div>
                 ))}
-            </div>
+            </motion.div>
         </div>
     );
 }
 
-export default function Footer() {
+const Footer = () => {
     const sectionRef = useRef(null);
     const [shouldSnap, setShouldSnap] = useState(false);
     const prefersReducedMotion = useReducedMotion();
@@ -151,206 +122,179 @@ export default function Footer() {
             transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
         };
 
+    const handleNavigation = () => {
+        console.log("navigate to start page")
+    }
+
     return (
         <section ref={sectionRef} className="relative w-full bg-white text-black">
+
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                <motion.div
-                    style={{ opacity: opacityGlow }}
-                    className="absolute left-1/2 top-12 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-black/5 blur-3xl sm:h-[38rem] sm:w-[38rem]"
-                />
+                <motion.div style={{ opacity: opacityGlow }}
+                    className="absolute left-1/2 top-12 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-black/5 blur-3xl sm:h-[38rem] sm:w-[38rem]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.03),transparent_45%),linear-gradient(to_bottom,rgba(0,0,0,0.03),transparent_18%)]" />
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:64px_64px] opacity-[0.15] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_78%)]" />
             </div>
 
 
+            <div className="relative flex flex-row items-center overflow-hidden py-5 w-full">
+                <div className="flex-1 rounded-lg text-sm p-4 flex items-center justify-start min-w-0">
+                    <Image src="/QR-Border-Icon.gif" alt="QR Border Graphic Left" width={200} height={56} priority unoptimized style={{ width: 'auto' }} className="z-10 h-14 object-contain mix-blend-multiply" />
+                </div>
 
-            <div className="relative flex items-center overflow-hidden border-y border-black/10 py-4">
-                <img
-                    src="/QR-Border-Icon.gif"
-                    alt=""
-                    className="absolute left-4 z-10 h-15 w-100"
-                />
-                <div className="w-full overflow-hidden">
+                <div className="flex-1 rounded-lg text-sm p-4 overflow-hidden min-w-0 flex items-center">
                     <div className="animate-marquee flex whitespace-nowrap">
                         {Array.from({ length: 6 }).map((_, i) => (
-                            <span
-                                key={i}
-                                className="mx-8 text-xs md:text-sm uppercase tracking-[0.3em]"
-                            >
+                            <span key={i} className="mx-8 text-xs md:text-sm uppercase tracking-[0.3em] font-medium text-black">
                                 IN CASE OF EMERGENCY. PLEASE GO BACK AND VIEW ALL PROJECTS
                             </span>
                         ))}
                     </div>
                 </div>
-                <img
-                    src="/QR-Border-Icon.gif"
-                    alt=""
-                    className="absolute right-4 z-10 h-15 w-100"
-                />
+
+                <div className="flex-1 rounded-lg text-sm p-4 flex items-center justify-end min-w-0">
+                    <Image src="/QR-Border-Icon.gif" alt="QR Border Graphic Right" width={200} height={56} priority unoptimized style={{ width: 'auto' }} className="z-10 h-14 object-contain mix-blend-multiply" />
+                </div>
             </div>
 
 
+            <motion.div style={prefersReducedMotion ? undefined : { scale: snapScale, y: snapY, borderRadius: snapRadius }} animate={prefersReducedMotion ? undefined : { boxShadow: shouldSnap ? "0 30px 80px rgba(0,0,0,0.12)" : "0 10px 32px rgba(0,0,0,0.06)" }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto min-h-[100svh] w-full overflow-hidden bg-white">
 
+                <div className="mx-auto flex min-h-[100svh] w-full max-w-[1600px] flex-col justify-between px-4 py-5">
+                    <div className="flex flex-col md:flex-row h-[75vh] w-full gap-4 mb-5">
 
-            <motion.div
-                style={prefersReducedMotion ? undefined : { scale: snapScale, y: snapY, borderRadius: snapRadius }}
-                animate={
-                    prefersReducedMotion
-                        ? undefined
-                        : {
-                            boxShadow: shouldSnap ? "0 30px 80px rgba(0,0,0,0.12)" : "0 10px 32px rgba(0,0,0,0.06)",
-                        }
-                }
-                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-                className="relative mx-auto min-h-[100svh] w-full overflow-hidden bg-white"
-            >
+                        <div className="w-full md:w-[60%] text-white">
+                            <div className="flex flex-col gap-4 h-full w-full">
+                                <div className="flex-1 p-4 flex items-center justify-center text-indigo-900">
+                                    <div className="overflow-hidden">
+                                        <MarqueeLine text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
+                                        <MarqueeLine2 text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
+                                    </div>
+                                </div>
 
-                <div className="mx-auto flex min-h-[100svh] w-full max-w-[1600px] flex-col justify-between px-4 py-5 sm:px-6 sm:py-6 lg:px-10 lg:py-8">
-                    <div className="flex items-center justify-between gap-3 border-b border-black/10 pb-4 text-[10px] uppercase tracking-[0.35em] text-black/55 sm:text-xs">
-                        <div className="flex items-center gap-2">
-                            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-black" />
-                            <span>Footer / Immersive snap section</span>
+                                <div className="relative flex-1 overflow-hidden rounded-xl bg-gray-200 p-6 text-black">
+                                    <div className="flex h-full w-full flex-col gap-4">
+                                        <div className="flex-1 rounded-lg">
+                                            <div className="flex flex-row gap-4 h-full w-full">
+                                                <div className="flex-1 bg-gray-300 rounded-md p-4">
+                                                    This section is built to feel alive
+                                                </div>
+
+                                                <div className="flex-1 bg-gray-200 rounded-md p-4">
+                                                    <div className="absolute top-4 right-5 z-10 bg-gray-200 pt-3">
+                                                        <Image src="/ZIGZAG_ANI.gif" alt="Animated zigzag pattern" width={380} height={30} priority unoptimized className="object-contain mix-blend-multiply" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 rounded-lg">
+                                            <motion.p {...animatedCard} className="text-balance text-[clamp(1rem,1.15vw,1.25rem)] leading-[1.85] text-black/80 sm:text-[clamp(1.05rem,1.1vw,1.35rem)]">
+                                                <AnimatedWord delay={0.06} text="This section is built to feel alive: the footer peeks into the viewport, then smoothly expands to fill the screen with a clean white background, subtle grain, repeated typography, and an award-inspired content layout that feels both playful and intentional." />
+                                            </motion.p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <a href="#top" className="inline-flex items-center gap-2 transition hover:text-black">
-                            Back to top <TbCircleArrowUpFilled size={20} />
-                        </a>
+
+
+                        <div className="w-full md:w-[40%] bg-white p-6 border border-slate-200 shadow-sm flex flex-col gap-4 h-full">
+                            <div className="h-[35%] bg-slate-50 rounded-xl p-4 flex flex-row gap-4 w-full">
+                                <div className="w-[50%] p-3">
+                                    <Image src="/Blob-Gloop-Icon.gif" alt="Animated zigzag pattern" width={380} height={35} priority unoptimized className="object-contain mix-blend-multiply" />
+                                </div>
+
+                                <div className="w-[50%] bg-white rounded-lg p-3 border border-slate-100">
+                                    ABOUT
+                                </div>
+                            </div>
+
+
+                            <div className="h-[65%] rounded-2xl border border-slate-200 p-5 flex flex-col justify-between overflow-hidden relative">
+
+                                <div className="absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl pointer-events-none" />
+                                <div className="relative z-10 flex flex-col gap-2">
+
+                                    <div className="grid grid-cols-2 gap-3">
+
+                                        {socials.map((social) => {
+                                            const Icon = social.icon;
+
+                                            return (
+                                                <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-white px-4 py-1 transition-all duration-300 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/10  hover:-translate-y-1">
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/5 to-indigo-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                                                    <div className="relative flex items-center gap-3">
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100">
+                                                            <Icon className="text-base text-slate-600 group-hover:text-indigo-600" />
+                                                        </div>
+
+                                                        <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                                                            {social.label}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end">
+                                    <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div className="grid flex-1 grid-rows-[auto_auto_auto] gap-8 py-6 lg:grid-rows-[auto_1fr_auto] lg:gap-10 lg:py-10">
-                        <div className="space-y-1">
-                            <div className="flex items-center justify-between gap-4">
-                                <div className="inline-flex items-center gap-2 rounded-full border border-black/10 px-3 py-1 text-[10px] uppercase tracking-[0.34em] text-black/55 sm:text-xs">
-                                    <SiPerplexity size={20} />
-                                    In case of emergency
-                                </div>
-                                <div className="hidden items-center gap-2 rounded-full border border-black/10 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-black/45 sm:flex">
-                                    <FaMapPin size={20} />
-                                    Scroll-triggered full-screen mode
-                                </div>
+                    <div className="flex flex-row h-[20vh] w-full gap-2 bg-gray-300 p-2 mb-5">
+                        <div className="w-[20%] text-black bg-white p-4 rounded-xl flex flex-col h-full border border-slate-200 shadow-sm">
+                            <p className="uppercase tracking-normal text-xs font-semibold text-slate-500">
+                                Made in india
+                            </p>
+
+                            <div className="mt-auto flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400">
+                                <span>2026</span> <span>v1.0</span>
                             </div>
-                            <div className="overflow-hidden">
-                                <motion.p
-                                    initial={{ y: 16, opacity: 0 }}
-                                    whileInView={{ y: 0, opacity: 1 }}
-                                    viewport={{ once: true, amount: 0.9 }}
-                                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                                    className="mt-3 max-w-[70ch] text-sm leading-[1.7] text-black/75 sm:text-base lg:text-lg"
-                                >
-                                    <AnimatedWord
-                                        text="Please go back and view all projects. This footer expands from a partial peek into a full-screen immersive panel, keeping the same soft white canvas, bold typography, and layered motion language from the pasted reference."
-                                    />
-                                </motion.p>
-                            </div>
+
+                            <Image src="/Binary-Code-Icon.gif" alt="Animated zigzag pattern" width={300} height={100} priority unoptimized className="object-contain mix-blend-multiply mt-auto" />
                         </div>
 
-                        <div className="grid items-end gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
-                            <div className="space-y-6">
-                                <div className="overflow-hidden">
-                                    <MarqueeLine text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
-                                    <MarqueeLine text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
-                                </div>
-
-                                <div className="max-w-3xl">
-                                    <motion.p
-                                        {...animatedCard}
-                                        className="text-balance text-[clamp(1rem,1.15vw,1.25rem)] leading-[1.85] text-black/80 sm:text-[clamp(1.05rem,1.1vw,1.35rem)]"
-                                    >
-                                        <AnimatedWord
-                                            delay={0.06}
-                                            text="This section is built to feel alive: the footer peeks into the viewport, then smoothly expands to fill the screen with a clean white background, subtle grain, repeated type, and an award-style content layout."
-                                        />
-                                    </motion.p>
-                                </div>
-
-                                <motion.div
-                                    {...animatedCard}
-                                    className="flex flex-wrap items-center gap-3 pt-1"
-                                >
-                                    {socials.map(({ icon: Icon, label, href }) => (
-                                        <a
-                                            key={label}
-                                            href={href}
-                                            className="group inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-black/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-black/20 hover:text-black"
-                                        >
-                                            <Icon className="h-4 w-4 transition group-hover:scale-110" />
-                                            {label}
-                                        </a>
-                                    ))}
-                                </motion.div>
+                        <div className="flex w-[80%] flex-col gap-2">
+                            <div className="group relative flex-[2] overflow-hidden border border-slate-200 bg-white p-2 shadow-sm">
+                                <p className="text-sm leading-relaxed text-slate-700">
+                                    Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with coffee, curiosity, and a dash of skepticism.
+                                </p>
                             </div>
 
-                            <motion.div
-                                {...animatedCard}
-                                className="grid gap-5 rounded-[28px] border border-black/10 bg-white/80 p-5 shadow-[0_30px_100px_rgba(0,0,0,0.06)] backdrop-blur-xl sm:rounded-[34px] sm:p-6 lg:p-7"
-                            >
-                                <div className="flex items-center justify-between border-b border-black/10 pb-4">
-                                    <div>
-                                        <h2 className="text-xl font-semibold tracking-[-0.05em] sm:text-2xl">ABOUT</h2>
-                                        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-black/45">Selected recognition</p>
-                                    </div>
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-lg shadow-black/10">
-                                        <SiPerplexity size={20} />
-                                    </div>
+                            <div className="flex flex-1 items-center justify-between overflow-hidden border border-slate-50 px-4 shadow-sm">
+                                <div className="flex flex-col">
+                                    <span className="text-sm text-slate-600 font-semibold uppercase"> Independent Developer </span>
                                 </div>
 
-                                <div className="grid gap-6 md:grid-cols-2">
-                                    <div className="space-y-6">
-                                        {awardsLeft.map((group) => (
-                                            <AwardBlock key={group.label} title={group.label} items={group.items} />
-                                        ))}
-                                    </div>
-                                    <div className="space-y-6">
-                                        {awardsRight.map((group) => (
-                                            <AwardBlock key={group.label} title={group.label} items={group.items} />
-                                        ))}
-                                    </div>
+                                <Image src="/dashes.gif" alt="Decorative Dashes" width={280} height={32} priority unoptimized className="h-6 w-auto object-contain mix-blend-multiply opacity-80" />
+
+                                <div className="flex flex-col">
+                                    <span className="text-sm uppercase"> akhil@2026 </span>
                                 </div>
-                            </motion.div>
+                            </div>
                         </div>
-
-                        <motion.div
-                            {...animatedCard}
-                            className="grid gap-4 rounded-[24px] border border-black/10 bg-black/[0.03] p-4 sm:grid-cols-2 sm:items-center sm:gap-6 sm:p-5"
-                        >
-                            <div className="space-y-1">
-                                <p className="text-xs uppercase tracking-[0.34em] text-black/45">Contact</p>
-                                <div className="flex flex-wrap items-center gap-4 text-sm text-black/72 sm:text-base">
-                                    <a className="inline-flex items-center gap-2 transition hover:text-black" href="mailto:hello@example.com">
-                                        <IoIosMail size={20} /> hello@example.com
-                                    </a>
-                                    <span className="hidden h-4 w-px bg-black/10 sm:block" />
-                                    <span className="text-black/55">Available for product, motion, and interaction design.</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center justify-start gap-3 sm:justify-end">
-                                <motion.div
-                                    initial={{ scale: 0.9, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    viewport={{ once: true, amount: 0.8 }}
-                                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                                    className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs uppercase tracking-[0.32em] text-black/55"
-                                >
-                                    Designed to snap at ~80%
-                                </motion.div>
-                                <motion.div
-                                    initial={{ scale: 0.92, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    viewport={{ once: true, amount: 0.8 }}
-                                    transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                                    className="rounded-full bg-black px-4 py-2 text-xs uppercase tracking-[0.32em] text-white shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
-                                >
-                                    Full screen on reveal
-                                </motion.div>
-                            </div>
-                        </motion.div>
-                    </div>
-
-                    <div className="flex items-center justify-between border-t border-black/10 pt-4 text-[10px] uppercase tracking-[0.34em] text-black/45 sm:text-xs">
-                        <span>© {new Date().getFullYear()} Footer concept</span>
-                        <span>Next.js · React · Tailwind · Framer Motion</span>
                     </div>
                 </div>
+
+
+                <div className="relative w-full h-[150px] overflow-hidden bg-white">
+                    <h2 className="absolute left-1/2 bottom-[-0.35em] -translate-x-1/2 whitespace-nowrap select-none text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] text-black flex items-baseline">
+                        AKHIL{"\u00A0"} SHETTY{"\u00A0"}{"\u00A0"}
+
+                        <Image src="/akhil2.svg" alt="Animated zigzag pattern" width={30} height={100} priority unoptimized className="inline-block w-[0.2em] h-[0.95em] object-contain mix-blend-multiply translate-y-[0.05em]" />
+                    </h2>
+                </div>
+
             </motion.div>
         </section>
     );
 }
+
+export default Footer;

@@ -5,11 +5,11 @@ import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic-utils";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { getCachedData, setCachedData } from "@/utils/cache-utils";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
-const GithubGraphQl = ({ username = "akhilshettyym" }) => {
+const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
 
     const [total, setTotal] = useState(0);
     const [weeks, setWeeks] = useState([]);
@@ -341,5 +341,7 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
         </motion.div>
     );
 }
+
+const GithubGraphQl = memo(GithubGraphQlComponent);
 
 export default GithubGraphQl;

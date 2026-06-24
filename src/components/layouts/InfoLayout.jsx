@@ -13,9 +13,9 @@ const InfoLayout = memo(function InfoLayout() {
 
     return (
         <div>
-            {/* <HeroSection />
-            <SubjectProfile />
-            <DevTicker /> */}
+            {/* <HeroSection /> */}
+            {/* <SubjectProfile /> */}
+            {/* <DevTicker /> */}
 
             {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
                 <BubbleScene />
@@ -28,7 +28,7 @@ const InfoLayout = memo(function InfoLayout() {
             </LazyLoad> */}
 
             {/* <EmergencyCTA /> */}
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 

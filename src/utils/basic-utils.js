@@ -1,3 +1,6 @@
+import { FaFileAlt } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
+import { FaInstagram, FaGithub, FaLinkedin, FaSalesforce } from "react-icons/fa6";
 import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
 import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
 
@@ -278,3 +281,14 @@ export const MOON_MAP = {
         label: "Full Moon",
     },
 };
+
+
+/* Footer */
+export const SOCIALS = [
+    { icon: FaGithub, label: "GitHub", href: "https://github.com/akhilshettyym" },
+    { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com/in/akhilshettym" },
+    { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/akhil_shetty_m" },
+    { icon: FaFileAlt, label: "Resume", href: "#" },
+    { icon: FaSalesforce, label: "Salesforce", href: "https://www.salesforce.com/trailblazer/akhilshettym" },
+    { icon: SiLeetcode, label: "LeetCode", href: "https://leetcode.com/u/akhil_shetty_m" },
+];

@@ -2,11 +2,13 @@ import React from "react";
 import StartLayout from "@/components/layouts/StartLayout";
 
 const page = () => {
+
   return (
-    <div className='p-10'>
+    <div>
       <StartLayout />
     </div>
   )
+
 }
 
 export default page;

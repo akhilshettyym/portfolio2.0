@@ -1,6 +1,6 @@
 "use client";
 
-import "@/styles/CinematicIntro.css";
+import "@/styles/cinematic_intro.css";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct-utils";
@@ -632,7 +632,7 @@ const CinematicIntro = ({ onComplete }) => {
                 <SceneShell2 dark={codeStage >= 2} curtain={isFirstDarkScene}>
                     {codeStage >= 2 && (
                         <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
-                            <source src="/CinematicIntro/scene6.mp4" type="video/mp4" />
+                            <source src="/cinematic_intro/scene6.mp4" type="video/mp4" />
                         </video>
                     )}
 
@@ -744,7 +744,7 @@ const CinematicIntro = ({ onComplete }) => {
                 <SceneShell2 dark>
 
                     <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
-                        <source src="/CinematicIntro/scene9.mp4" type="video/mp4" />
+                        <source src="/cinematic_intro/scene9.mp4" type="video/mp4" />
                     </video>
 
                     <div className="absolute inset-0 z-2 bg-black/50" />

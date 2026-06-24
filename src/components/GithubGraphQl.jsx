@@ -210,7 +210,7 @@ const GithubGraphQl = ({ username = "akhilshettyym" }) => {
     }, []);
 
     return (
-        <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="w-full p-8">
+        <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="w-full p-8 pt-15">
 
             <div className="mb-5 grid grid-cols-3 gap-4 uppercase">
                 <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">

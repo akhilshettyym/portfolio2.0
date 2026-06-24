@@ -63,3 +63,17 @@ Scroll effects - https://azizkhaldi.com/
 
 
 - Landonorris for SOCIALS
+
+
+
+Here I have this section where on hover of these section I'll be showing popups related to my project, But then this is not feeling lively, So I want it to feel interactive, So this modal should be moving a bit with mouse movement, So let it be little immersive.
+- Also since the visit site is at the bottom of the pop up if I move the mouse to catch that then I'll be moved to another project that shouldn't happen. So What I want is when this popup opens up remove the visit buton from the popup and make another button popup with visit site button and this button should move with the mouse pointer and this should point to that particular project.
+- Also while I switch from one project to another there is delay or you can say a bit of a animation lacking, It dosen't look right fix that too.
+Give me the complete updated component.
+
+
+
+
+Now the whole projects section is moving with mouse movement but what I wanted was just the button to be interactive with the mouse and the outer pop up just should stay alive a bit.
+And the button now is at the bottom of the pop and not at the mouse's pointer.
+Give me the complete updated component.

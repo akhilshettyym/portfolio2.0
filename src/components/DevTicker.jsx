@@ -1,6 +1,6 @@
 "use client";
 
-import "@/styles/devticker.css";
+import "@/styles/dev_ticker.css";
 import { DEV_TICKERS } from "@/utils/basic-utils";
 
 const DevTicker = () => {

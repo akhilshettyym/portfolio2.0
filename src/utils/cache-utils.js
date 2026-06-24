@@ -37,7 +37,6 @@ export const setCachedData = (key, data) => {
         };
 
         window.localStorage.setItem(cacheKey, JSON.stringify(cacheItem));
-        console.log("Cache set for key:", key);
 
     } catch (error) {
         console.error("Cache set error:", error);
@@ -50,7 +49,6 @@ export const clearCache = (key) => {
 
         const cacheKey = `${CACHE_PREFIX}${key}`;
         window.localStorage.removeItem(cacheKey);
-        console.log("Cache cleared for key:", key);
 
     } catch (error) {
         console.error("Cache clear error:", error);
@@ -67,7 +65,6 @@ export const clearAllGitHubCache = () => {
                 window.localStorage.removeItem(key);
             }
         });
-        console.log("All GitHub cache cleared");
 
     } catch (error) {
         console.error("Clear all cache error:", error);

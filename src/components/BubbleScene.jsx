@@ -2,13 +2,13 @@
 
 import gsap from "gsap";
 import * as THREE from "three";
-import "@/styles/bubblescene.css";
+import "@/styles/bubble_scene.css";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-const BubbleScene = () => {
+const BubbleSceneComponent = () => {
 
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
@@ -416,5 +416,7 @@ const BubbleScene = () => {
         </section>
     );
 }
+
+const BubbleScene = memo(BubbleSceneComponent);
 
 export default BubbleScene;

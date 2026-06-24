@@ -1,3 +1,6 @@
+import { FaFileAlt } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
+import { FaInstagram, FaGithub, FaLinkedin, FaSalesforce } from "react-icons/fa6";
 import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
 import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
 
@@ -54,7 +57,7 @@ export const DEFAULT_CARDS = [
         caption: "Milestones That Made a Difference",
         description:
             "A curated collection of results, contributions, and outcomes that reflect consistent execution, ownership, and measurable impact across academic and personal initiatives.",
-        year: "2021–2025",
+        year: "2021-2025",
         href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/01_ImpactHighlights",
         cta: "View highlights",
     },
@@ -63,7 +66,7 @@ export const DEFAULT_CARDS = [
         caption: "Continuous Learning, Verified Skills",
         description:
             "Formal certifications that validate practical technical knowledge, hands-on learning, and the ability to apply modern tools and frameworks with confidence.",
-        year: "2024–2025",
+        year: "2024-2025",
         href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/02_TechnicalCertifications",
         cta: "See certificates",
     },
@@ -72,7 +75,7 @@ export const DEFAULT_CARDS = [
         caption: "Leadership Beyond Academics",
         description:
             "Recognition earned through leadership, teamwork, communication, and active participation in activities that strengthen both character and collaboration.",
-        year: "2022–2025",
+        year: "2022-2025",
         href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/03_Co-CurricularRecognition",
         cta: "Explore recog.",
     },
@@ -81,7 +84,7 @@ export const DEFAULT_CARDS = [
         caption: "A Foundation of Excellence",
         description:
             "A strong academic journey supported by consistency, discipline, and a long-term focus on building a reliable foundation for future growth.",
-        year: "2019–2026",
+        year: "2019-2026",
         href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/04_AcademicRecords",
         cta: "Open record",
     },
@@ -278,3 +281,14 @@ export const MOON_MAP = {
         label: "Full Moon",
     },
 };
+
+
+/* Footer */
+export const SOCIALS = [
+    { icon: FaGithub, label: "GitHub", href: "https://github.com/akhilshettyym" },
+    { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com/in/akhilshettym" },
+    { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/akhil_shetty_m" },
+    { icon: FaFileAlt, label: "Resume", href: "#" },
+    { icon: FaSalesforce, label: "Salesforce", href: "https://www.salesforce.com/trailblazer/akhilshettym" },
+    { icon: SiLeetcode, label: "LeetCode", href: "https://leetcode.com/u/akhil_shetty_m" },
+];

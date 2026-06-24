@@ -44,7 +44,7 @@ const CreateSomething = () => {
     };
 
     const handleSubmit = () => {
-        console.log("CLICKED")
+        console.log("handle submit")
     };
 
     return (

@@ -1,12 +1,16 @@
-import React from "react";
+import React, { memo } from "react";
+import Footer from "@/components/Footer";
 import CreateSomething from "@/components/CreateSomething";
 
-const StartLayout = () => {
-  return (
+const StartLayout = memo(function StartLayout() {
+
+    return (
     <div>
-      <CreateSomething />
+      {/* <CreateSomething /> */}
+      {/* <Footer /> */}
     </div>
   )
-}
+
+}, () => true);
 
 export default StartLayout;

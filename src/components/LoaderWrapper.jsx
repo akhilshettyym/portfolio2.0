@@ -1,6 +1,6 @@
 "use client";
 
-import "@/styles/IntroEntrance.css";
+import "@/styles/intro_entrance.css";
 import Loader from "@/components/Loader";
 import { INTRO_KEY } from "@/utils/localstorage";
 import PageReveal from "@/components/PageReveal";

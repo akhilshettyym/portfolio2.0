@@ -112,7 +112,7 @@ const SubjectProfile = () => {
 
                             <motion.div {...FADEUP} transition={{ ...FADEUP.transition, delay: 0.12 }} className="mt-14 border-t border-black/10 pt-6 space-y-4 text-[11px] uppercase tracking-[0.22em] text-black/50">
                                 <div className="flex items-center justify-between gap-4 border-b border-black/5 pb-4">
-                                    <span> 01. React �� Next.js • Node.js • Three.js • Firebase </span>
+                                    <span> 01. React • Next.js • Node.js • Three.js • Firebase </span>
                                     <span className="w-2 h-2 rounded-full bg-black/40 shrink-0" />
                                 </div>
 

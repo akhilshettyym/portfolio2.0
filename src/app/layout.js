@@ -28,11 +28,11 @@ export default function RootLayout({ children }) {
         <LenisProvider>
           {/* <LoaderWrapper> */}
 
-            {/* <NavbarWrapper>
+          {/* <NavbarWrapper>
               <Navbar />
             </NavbarWrapper> */}
 
-            <main className="relative pt-25"> {children} </main>
+          <main className="relative pt-25"> {children} </main>
 
           {/* </LoaderWrapper> */}
         </LenisProvider>

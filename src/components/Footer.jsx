@@ -1,11 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { SOCIALS } from "@/utils/basic-utils";
 import CustomButton from "./basic/CustomButton";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import Link from "next/link";
+import { FaRegCopyright } from "react-icons/fa6";
 
 function splitLetters(text) {
     return Array.from(text);
@@ -138,6 +139,14 @@ const Footer = () => {
         console.log("navigate to start page");
     };
 
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+
     return (
         <motion.section ref={sectionRef}
             style={prefersReducedMotion ? undefined : { padding: sectionPadding }} className="relative w-full bg-white text-black p-[50px]">
@@ -255,27 +264,35 @@ const Footer = () => {
                                     </p>
                                 </div>
 
-                                <div className="flex flex-1 items-center justify-between overflow-hidden border border-slate-50 px-4 shadow-sm">
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-semibold uppercase text-slate-600">
-                                            Independent Developer
-                                        </span>
+                                <div className="flex w-full items-center justify-between gap-4 overflow-hidden border border-slate-50 px-4 py-1/2 bg-white shadow-sm whitespace-nowrap">
+                                    <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-600 shrink">
+                                        Independent Developer
+                                    </span>
+
+                                    <div className="min-w-0 shrink">
+                                        <Image src="/footer/animated_decorative_dashes.gif" alt="animated decorative dashes" width={100} height={24} priority unoptimized className="h-5 w-auto object-contain mix-blend-multiply opacity-80" />
                                     </div>
 
-                                    <Image src="/footer/animated_decorative_dashes.gif" alt="animated decorative dashes" width={280} height={32} priority unoptimized className="h-6 w-auto object-contain mix-blend-multiply opacity-80" style={{ width: "auto", height: "auto" }} />
-
-                                    <div className="flex flex-col">
-                                        <span className="text-sm uppercase">akhil@2026</span>
-                                    </div>
+                                    <span className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-500 shrink-0">
+                                        <FaRegCopyright className="shrink-0" />
+                                        <span>2026 Akhil Shetty M.</span>
+                                    </span>
                                 </div>
+
                             </div>
                         </div>
                     </div>
 
                     <div className="relative h-[150px] w-full overflow-hidden bg-white">
-                        <h2 className="absolute left-1/2 bottom-[-0.35em] flex items-baseline -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] text-black origin-center scale-x-[1.2]">
+                        <div className="absolute top-3 right-5 z-10">
+                            <button onClick={scrollToTop} className="flex items-center gap-1.5 text-sm font-medium text-black hover:opacity-70 transition-opacity cursor-pointer">
+                                <span className="uppercase"> Back To Top </span>
+                                <Image src="/footer/barcode_name.svg" alt="barcode name" width={30} height={14} priority unoptimized className="h-[0.95em] w-auto object-contain mix-blend-multiply opacity-80" />
+                            </button>
+                        </div>
+
+                        <h2 className="absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] text-black origin-center scale-x-[1.2]">
                             AKHIL SHETTY{"\u00A0"}
-                            {/* <Image src="/footer/barcode_name.svg" alt="barcode name" width={30} height={80} priority unoptimized className="inline-block h-[0.95em] w-auto translate-y-[0.05em] object-contain  mix-blend-multiply" style={{ width: "auto", height: "0.95em" }} /> */}
                         </h2>
                     </div>
 

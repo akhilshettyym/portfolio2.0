@@ -238,9 +238,7 @@ const NavbarComponent = () => {
                             <div className="w-12 h-12 flex items-center justify-center relative group cursor-default">
                                 <div className="relative w-full h-full overflow-hidden rounded-md">
                                     <Image src="/akhil.svg" alt="Akhil" fill priority className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5" />
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
                                 </div>
-                                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
                             </div>
                         </div>
 

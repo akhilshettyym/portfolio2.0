@@ -287,8 +287,64 @@ export const MOON_MAP = {
 export const SOCIALS = [
     { icon: FaGithub, label: "GitHub", href: "https://github.com/akhilshettyym" },
     { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com/in/akhilshettym" },
-    { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/akhil_shetty_m" },
-    { icon: FaFileAlt, label: "Resume", href: "#" },
     { icon: FaSalesforce, label: "Salesforce", href: "https://www.salesforce.com/trailblazer/akhilshettym" },
     { icon: SiLeetcode, label: "LeetCode", href: "https://leetcode.com/u/akhil_shetty_m" },
+    { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/akhil_shetty_m" },
+    { icon: FaFileAlt, label: "Resume", href: "#" },
 ];
+
+
+/* SelectedWorks */
+export const PROJECTS = [
+    {
+        id: 1,
+        title: "Nova Commerce",
+        tagline: "Headless eCommerce Experience",
+        when: "2025",
+        type: "Web Platform",
+        image: "/bumpImage.svg",
+        url: "https://example.com",
+        stack: ["Next.js", "Node", "Stripe", "Postgres"],
+        description: "A modern commerce experience with high performance architecture.",
+    },
+    {
+        id: 2,
+        title: "Staffle",
+        tagline: "Employee Management System",
+        when: "2026",
+        type: "Management",
+        image: "/globeImage.svg",
+        url: "https://example.com",
+        stack: ["MongoDb", "Express", "React", "Node"],
+        description:
+            "Staffle is a full-stack Employee & Organization Management System built using the MERN stack. It supports multi-organization workflows with Super Admin, Admin, and Employee role-based control, task lifecycle management, and centralized organization governance.",
+    },
+    {
+        id: 3,
+        title: "Vision AI",
+        tagline: "Computer Vision Dashboard",
+        when: "2024",
+        type: "AI Platform",
+        image: "/globeImage.svg",
+        url: "https://example.com",
+        stack: ["React", "Python", "OpenCV"],
+        description: "Real-time AI insights and visual analytics for enterprise teams.",
+    },
+    {
+        id: 4,
+        title: "Selected Work",
+        tagline: "New project in progress",
+        when: "2026",
+        type: "Experimental",
+        image: "",
+        url: "",
+        stack: [],
+        description: "",
+    },
+];
+
+export const CARD_WIDTH = 850;
+export const CARD_HEIGHT = 520;
+export const CTA_WIDTH = 175;
+export const CTA_HEIGHT = 52;
+export const EDGE_PADDING = 24;

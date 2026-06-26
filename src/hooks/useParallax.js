@@ -44,9 +44,6 @@ export const useParallax = (factor = 0.5) => {
     return {
         ref,
         offset,
-        style: {
-            transform: `translateY(${offset}px)`,
-            willChange: "transform",
-        },
+        style: { transform: `translateY(${offset}px)`, willChange: "transform" },
     };
 };

@@ -261,7 +261,6 @@ export function SceneShell2({ dark, curtain = false, children }) {
 }
 
 /* GlitchText */
-
 export function randomChar() {
     return CHARS[Math.floor(Math.random() * CHARS.length)];
 }

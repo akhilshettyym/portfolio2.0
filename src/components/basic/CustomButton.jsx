@@ -12,12 +12,12 @@ const ArrowIcon = () => {
     );
 };
 
-const CustomButton = ({ title, onClick, width = 180, height = 56, className = "" }) => {
+const CustomButton = ({ title, onClick, width = 180, height = 56, className = "", disabled = false }) => {
 
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <button type="button" onClick={onClick} className={`inline-block ${className}`}>
+        <button type="button" onClick={onClick} disabled={disabled} className={`inline-block disabled:cursor-not-allowed disabled:opacity-60 ${className}`}>
             <motion.div onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)}
                 whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
                 className="relative cursor-pointer overflow-hidden border border-zinc-300 bg-white"

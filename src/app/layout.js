@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import GlobalCursor from "@/components/GlobalCursor";
 import LoaderWrapper from "@/components/LoaderWrapper";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
@@ -25,16 +26,19 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
-        <LenisProvider>
-          {/* <LoaderWrapper> */}
 
-          {/* <NavbarWrapper>
+        <GlobalCursor />
+        
+        <LenisProvider>
+          <LoaderWrapper>
+
+          <NavbarWrapper>
               <Navbar />
-            </NavbarWrapper> */}
+            </NavbarWrapper>
 
           <main className="relative pt-25"> {children} </main>
 
-          {/* </LoaderWrapper> */}
+          </LoaderWrapper>
         </LenisProvider>
       </body>
     </html>

@@ -18,6 +18,7 @@ const CreateSomething = () => {
 
     const [budget, setBudget] = useState("");
     const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState({ type: "", message: "" });
     const [selectedServices, setSelectedServices] = useState([]);
 
     const [formData, setFormData] = useState({
@@ -43,8 +44,47 @@ const CreateSomething = () => {
         }));
     };
 
-    const handleSubmit = () => {
-        console.log("handle submit")
+    const handleSubmit = async (event) => {
+        event?.preventDefault();
+
+        if (loading) return;
+
+        setLoading(true);
+        setStatus({ type: "", message: "" });
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    ...formData,
+                    budget,
+                    services: selectedServices,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "Unable to send your request right now.");
+            }
+
+            setFormData({
+                name: "",
+                email: "",
+                organization: "",
+                role: "",
+                deadline: "",
+                details: "",
+            });
+            setBudget("");
+            setSelectedServices([]);
+            setStatus({ type: "success", message: "Request sent. I will get back to you soon." });
+        } catch (error) {
+            setStatus({ type: "error", message: error.message });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -135,7 +175,14 @@ const CreateSomething = () => {
                                     <textarea rows={8} name="details" value={formData.details} onChange={handleInputChange} placeholder="Tell me a bit about your project..." className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none  transition-colors focus:border-black" />
                                 </div>
                                 <div className="mt-10 flex justify-end">
-                                    <CustomButton title={loading ? "Sending..." : "Send Project Request"} onClick={handleSubmit} width={270} height={50} />
+                                    <div className="flex flex-col items-end gap-4">
+                                        {status.message && (
+                                            <p className={`max-w-md text-right text-sm ${status.type === "success" ? "text-emerald-700" : "text-red-700"}`} aria-live="polite">
+                                                {status.message}
+                                            </p>
+                                        )}
+                                        <CustomButton title={loading ? "Sending..." : "Send Project Request"} onClick={handleSubmit} width={270} height={50} disabled={loading} />
+                                    </div>
                                 </div>
                             </div>
                         </form>

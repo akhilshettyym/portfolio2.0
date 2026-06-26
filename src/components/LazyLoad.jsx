@@ -27,6 +27,7 @@ const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true
             { threshold, rootMargin }
         );
 
+        observerRef.current = observer;
         observer.observe(containerRef.current);
 
         return () => {

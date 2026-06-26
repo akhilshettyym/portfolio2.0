@@ -7,6 +7,7 @@ import { CLOUD_SHADER } from "@/utils/shader-utils";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
+import LiquidGlass from "@/components/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
 import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
@@ -16,8 +17,7 @@ import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUti
 function isSameScene(a, b) {
     if (!a || !b) return false;
     return (
-        a.background === b.background &&
-        a.clouds === b.clouds
+        a.background === b.background && a.clouds === b.clouds
     );
 }
 
@@ -368,57 +368,41 @@ const HeroSectionComponent = () => {
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
+                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} /> */}
 
-                <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="absolute top-60 right-8 z-9999 flex items-center justify-center h-12 w-12 group ">
-                    <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
+                <div className="absolute top-60 right-2 z-[9999]">
+                    <LiquidGlass width="65px" height="175px" className="p-0">
+                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="group absolute top-5 left-1/2 -translate-x-1/2 h-14 w-14 z-20">
+                            <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
+                                <defs>
+                                    <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+                                </defs>
+                                <text fill="rgba(0,0,0,0.3)" fontSize="10" letterSpacing="2.5" className="uppercase">
+                                    <textPath href="#hero-control-ring" startOffset="0%">
+                                        CONTROL THE CLOUDS • CONTROL THE CLOUDS •
+                                    </textPath>
+                                </text>
+                            </svg>
 
-                        <defs>
-                            <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
-                        </defs>
+                            <div className="relative z-10 flex h-9 w-9 ml-[10px] items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110  group-hover:border-white/30">
+                                {paused ? (
+                                    <HiMiniPlay size={20} className="translate-x-px text-black/50" />
+                                ) : (
+                                    <HiMiniPause size={20} className="text-black/50" />
+                                )}
+                            </div>
 
-                        <text fill="rgba(0,0,0,0.3)" fontSize="10" letterSpacing="2.5" className="uppercase">
-                            <textPath href="#hero-control-ring" startOffset="0%">
-                                CONTROL THE CLOUDS • CONTROL THE CLOUDS •
-                            </textPath>
-                        </text>
-                    </svg>
+                            <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border-1 group-hover:border-slate-100 group-hover:opacity-100 shadow-xl">
+                                {paused ? "Run Clouds" : "Stall Clouds"}
+                            </div>
+                        </button>
 
-                    <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/25">
-                        {paused ? (
-                            <>
-                                <HiMiniPlay size={18} className="translate-x-px text-white/90" />
-                                <div className="absolute right-full top-1/2 -translate-y-1/2 hidden group-hover:block pointer-events-none drop-shadow-md">
-                                    <svg width="40" height="100" viewBox="0 0 2 100" className="overflow-visible">
-                                        <defs>
-                                            <path id="leftTextCurve" d="M 40,89 A 40,40 0 0,1 35,10" fill="transparent" />
-                                        </defs>
-                                        <text className="fill-slate-700 font-bold text-[8px] uppercase">
-                                            <textPath href="#leftTextCurve" startOffset="50%" textAnchor="middle"> Run Clouds </textPath>
-                                        </text>
-                                    </svg>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <HiMiniPause size={18} className="text-white/90" />
-                                <div className="absolute right-full top-1/2 -translate-y-1/2 hidden group-hover:block pointer-events-none drop-shadow-md">
-                                    <svg width="40" height="100" viewBox="0 0 2 100" className="overflow-visible">
-                                        <defs>
-                                            <path id="leftTextCurve" d="M 39,89 A 40,40 0 0,1 35,10" fill="transparent" />
-                                        </defs>
-                                        <text className="fill-slate-700 font-bold text-[8px] uppercase">
-                                            <textPath href="#leftTextCurve" startOffset="50%" textAnchor="middle"> Stall Clouds </textPath>
-                                        </text>
-                                    </svg>
-                                </div>
-                            </>
+                        {sceneAssets && (
+                            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
+                                <WeatherIcon />
+                            </div>
                         )}
-                    </div>
-                </button>
-
-                <div className="absolute top-80 right-8 z-9999 flex items-center justify-center h-12 w-12 group">
-                    {sceneAssets && (<WeatherIcon />)}
+                    </LiquidGlass>
                 </div>
 
                 <div className="hero-text">

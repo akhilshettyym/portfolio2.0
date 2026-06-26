@@ -1,17 +1,21 @@
 import React, { memo } from "react";
 import Footer from "@/components/Footer";
+import MyExperience from "../MyExperience";
 import GithubGraphQl from "@/components/GithubGraphQl";
 import SelectedWorks from "@/components/SelectedWorks";
-import MyExperience from "../MyExperience";
+import Navbar from "../Navbar";
+import EmergencyCTA from "../EmergencyCTA";
 
 const WorkLayout = memo(function WorkLayout() {
 
   return (
     <div>
-      {/* <SelectedWorks />
+      <Navbar />
+      <SelectedWorks />
       <MyExperience />
       <GithubGraphQl />
-      <Footer /> */}
+      <EmergencyCTA />
+      <Footer />
     </div>
   )
 

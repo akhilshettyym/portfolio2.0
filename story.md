@@ -1,6 +1,8 @@
 - Build Experience section.
 This should be in WRK layout. along side add education logs
 
+update createSomething component
+
 IMMERSIVE CTA
 
 https://dumemearts.com/ - Add images to cards
@@ -14,18 +16,14 @@ And this subject profile component is not fine as well, it is somewhat odd, the 
 
 - Update bubble scene, make it better, Update texts areas. 
 Checkout this component where I have a BubbleScene, And this component brings up all my tech stack into a 3d scene where on entering the viewport these bubbles pop into the screen with animations. And on mouse movement this could be controlled or it is interactive. 
-So what i want it is this feels very basic and looks as if this has been thrown to the place just like that. I want some really good enhancements with the animations and how this component enters the viewport. It should have some purpose while entering the viewport and it should come up with really good animation. You can use any package to make this better. I am currently using next react tailwind framer motion and so on. You are free to use any, and make this better and also KEEP IN MIND NOT TO OPTIMIZE THIS and the performance should be improved than break anything.
+So what i want it is this feels very basic and looks as if this has been thrown to the place just like that. I want some really good enhancements with the animations and how this component enters the viewport. It should have some purpose while entering the viewport and it should come up with really good animation. You can use any package to make this better. I am currently using next react tailwind framer motion and so on. You are free to use any, and make this better and also KEEP IN MIND NOT TO DE-OPTIMIZE THIS and the performance should be improved than break anything.
 
 
 - Animations for component entering viewport.
 - Decide wtr to build backend for Contact.
 
 
-
-
-Hero - 
-- Glass effect enclosing the widgets in hero.
-I want a glassmorphic effect what apple ios 26 has on mac and other devices, I want it as a component with a div and one text saying hello. The background will be white so this should have all the appropriate conditioning to work right. You can add blurs frosts and anything you want, you can use any packages to achieve this, am using next react and tailwind. Create a div or you can create a component itself.
+- SKIP for intro
 
 
 General -

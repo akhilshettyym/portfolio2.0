@@ -13,7 +13,7 @@ const InfoLayout = memo(function InfoLayout() {
 
     return (
         <div>
-            {/* <HeroSection /> */}
+            <HeroSection />
             {/* <SubjectProfile /> */}
             {/* <DevTicker /> */}
 

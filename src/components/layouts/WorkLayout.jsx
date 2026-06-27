@@ -3,14 +3,12 @@ import Footer from "@/components/Footer";
 import MyExperience from "../MyExperience";
 import GithubGraphQl from "@/components/GithubGraphQl";
 import SelectedWorks from "@/components/SelectedWorks";
-import Navbar from "../Navbar";
 import EmergencyCTA from "../EmergencyCTA";
 
 const WorkLayout = memo(function WorkLayout() {
 
   return (
     <div>
-      <Navbar />
       <SelectedWorks />
       <MyExperience />
       <GithubGraphQl />

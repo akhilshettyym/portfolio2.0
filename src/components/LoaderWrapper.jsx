@@ -11,7 +11,7 @@ export const LoadingContext = createContext();
 
 const LoaderWrapper = ({ children }) => {
     const [loading, setLoading] = useState(true);
-    const [hasSeenIntro, setHasSeenIntro] = useState(false);
+    const [hasSeenIntro, setHasSeenIntro] = useState(null);
     const [showIntro, setShowIntro] = useState(false);
     const [revealActive, setRevealActive] = useState(false);
     const [navReady, setNavReady] = useState(false);
@@ -21,8 +21,12 @@ const LoaderWrapper = ({ children }) => {
     const revealTimerRef = useRef(null);
 
     useEffect(() => {
-        const seen = window.localStorage.getItem(INTRO_KEY) === "true";
-        setHasSeenIntro(seen);
+        const frame = window.requestAnimationFrame(() => {
+            const seen = window.localStorage.getItem(INTRO_KEY) === "true";
+            setHasSeenIntro(seen);
+        });
+
+        return () => window.cancelAnimationFrame(frame);
     }, []);
 
     const startReveal = () => {
@@ -35,13 +39,17 @@ const LoaderWrapper = ({ children }) => {
     };
 
     useEffect(() => {
-        if (loading) return;
+        if (loading || hasSeenIntro === null) return;
 
-        if (hasSeenIntro) {
-            startReveal();
-        } else {
-            setShowIntro(true);
-        }
+        const frame = window.requestAnimationFrame(() => {
+            if (hasSeenIntro) {
+                startReveal();
+            } else {
+                setShowIntro(true);
+            }
+        });
+
+        return () => window.cancelAnimationFrame(frame);
     }, [loading, hasSeenIntro]);
 
     useEffect(() => {

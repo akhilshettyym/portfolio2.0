@@ -20,7 +20,7 @@ const EmergencyCTA = () => {
         <div className="px-10">
             <div className="relative flex flex-row items-center overflow-hidden w-full">
                 <div className="flex-1 rounded-lg text-sm px-4 flex items-center justify-start min-w-0">
-                    <Image src="/footer/animated_qr_border.gif" alt="animated qr border" width={200} height={56} priority unoptimized style={{ width: 'auto' }} className="z-10 h-14 object-contain mix-blend-multiply" />
+                    <Image src="/footer/animated_qr_border.gif" alt="animated qr border" width={200} height={56} priority unoptimized style={{ width: 'auto' }} className="w-auto h-auto z-10 object-contain mix-blend-multiply" />
                 </div>
 
                 <div className="flex-1 rounded-lg text-sm px-4 overflow-hidden min-w-0 flex items-center">
@@ -36,7 +36,7 @@ const EmergencyCTA = () => {
                 </div>
 
                 <div className="flex-1 rounded-lg text-sm px-4 flex items-center justify-end min-w-0">
-                    <Image src="/footer/animated_qr_border.gif" alt="animated qr border" width={200} height={56} priority unoptimized style={{ width: 'auto' }} className="z-10 h-14 object-contain mix-blend-multiply" />
+                    <Image src="/footer/animated_qr_border.gif" alt="animated qr border" width={200} height={56} priority unoptimized style={{ width: 'auto' }} className="w-auto h-auto z-10 object-contain mix-blend-multiply" />
                 </div>
             </div>
         </div>

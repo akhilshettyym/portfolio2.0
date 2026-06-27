@@ -245,14 +245,14 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
                     <motion.div initial={{ y: 6 }}
                         animate={{ y: [0, -6, 0] }}
                         transition={{ y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" } }}
-                        className="relative h-[520px] w-[850px] overflow-hidden border border-white/10 bg-black shadow-[0_60px_140px_rgba(0,0,0,0.42)]">
+                        className="relative h-130 w-212.5 overflow-hidden border border-white/10 bg-black shadow-[0_60px_140px_rgba(0,0,0,0.42)]">
                         {hasContent ? (
                             <>
                                 <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
                                     <Image src={project.image} alt={project.title} fill priority className="object-cover" />
                                 </motion.div>
 
-                                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/90" />
+                                <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/30 to-black/90" />
                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_30%)]" />
 
                                 <div className="absolute inset-0 flex flex-col justify-between p-7 text-white">
@@ -265,7 +265,7 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
 
                                     <div>
                                         <h3 className="text-3xl font-medium">{project.title}</h3>
-                                        <p className="mt-4 max-w-[580px] text-sm leading-relaxed text-white/80"> {project.description} </p>
+                                        <p className="mt-4 max-w-145 text-sm leading-relaxed text-white/80"> {project.description} </p>
 
                                         <div className="mt-6 flex flex-wrap gap-2">
                                             {project.stack.map((item) => (
@@ -299,10 +299,10 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.94 }}
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="pointer-events-none fixed left-0 top-0 z-[60] hidden lg:block"
+                    className="pointer-events-none fixed left-0 top-0 z-60 hidden lg:block"
                     style={{ x: springButtonX, y: springButtonY }}>
                     <div onPointerEnter={onHold} onPointerLeave={onRelease} className="pointer-events-auto">
-                        <Link href={project.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-[52px] items-center gap-2 rounded-full border-2 border-white bg-[#f97316] px-5 py-3 text-sm font-semibold text-black shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]">
+                        <Link href={project.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-13 items-center gap-2 rounded-full border-2 border-white bg-[#f97316] px-5 py-3 text-sm font-semibold text-black shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]">
                             Visit Live Site
                             <FaArrowUpRightFromSquare size={16} />
                         </Link>

@@ -370,7 +370,7 @@ const HeroSectionComponent = () => {
 
                 <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
-                <div className="absolute top-60 right-2 z-[9999]">
+                <div className="absolute top-60 right-2 z-9999">
                     <LiquidGlass width="65px" height="175px" className="p-0">
                         <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="group absolute top-5 left-1/2 -translate-x-1/2 h-14 w-14 z-20">
                             <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
@@ -384,7 +384,7 @@ const HeroSectionComponent = () => {
                                 </text>
                             </svg>
 
-                            <div className="relative z-10 flex h-9 w-9 ml-[10px] items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110  group-hover:border-white/30">
+                            <div className="relative z-10 flex h-9 w-9 ml-2.5 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110  group-hover:border-white/30">
                                 {paused ? (
                                     <HiMiniPlay size={20} className="translate-x-px text-black/50" />
                                 ) : (
@@ -392,7 +392,7 @@ const HeroSectionComponent = () => {
                                 )}
                             </div>
 
-                            <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border-1 group-hover:border-slate-100 group-hover:opacity-100 shadow-xl">
+                            <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl">
                                 {paused ? "Run Clouds" : "Stall Clouds"}
                             </div>
                         </button>

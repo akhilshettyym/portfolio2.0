@@ -97,7 +97,7 @@ const SubjectProfile = () => {
                     className="mx-auto grid max-w-8xl grid-cols-1 gap-8 border-y border-black/10 py-8 md:grid-cols-12 md:gap-10 md:py-12">
                     <motion.div variants={revealItem} className="md:col-span-5 lg:col-span-4">
                         <div className="relative overflow-hidden border border-black/10 bg-neutral-100">
-                            <Image src="/my-image.png" alt="Akhil Shetty" width={1141} height={1379} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 40vw, 100vw" className="aspect-4/5 h-full w-full object-cover object-top grayscale" priority={false} />
+                            <Image src="/my-image.png" alt="Akhil Shetty" width={1141} height={1379} unoptimized sizes="(min-width: 1024px) 28vw, (min-width: 768px) 40vw, 100vw" className="aspect-4/5 h-full w-full object-cover object-top grayscale" priority={false} />
                             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/20 to-transparent p-5 text-white">
                                 <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/55">Available for focused builds</p>
                                 <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em]">Systems, interfaces, motion</p>

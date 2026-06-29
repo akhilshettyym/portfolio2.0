@@ -9,11 +9,11 @@ const WorkLayout = memo(function WorkLayout() {
 
   return (
     <div>
-      <SelectedWorks />
+      {/* <SelectedWorks /> */}
       <MyExperience />
-      <GithubGraphQl />
-      <EmergencyCTA />
-      <Footer />
+      {/* <GithubGraphQl /> */}
+      {/* <EmergencyCTA /> */}
+      {/* <Footer /> */}
     </div>
   )
 

@@ -23,23 +23,42 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
+  // const cores = navigator.hardwareConcurrency;
+  // console.log(`Logical Cores: ${cores}`);
+
+  // function getCPUSpeedScore() {
+  //   const iterations = 100000000;
+  //   const start = performance.now();
+
+  //   for (let i = 0; i < iterations; i++) {
+  //     Math.sqrt(i);
+  //   }
+
+  //   const duration = performance.now() - start;
+  //   return iterations / duration;
+  // }
+
+  // console.log(`Relative CPU Score: ${getCPUSpeedScore().toFixed(2)} ops/ms`);
+
+
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
 
         <GlobalCursor />
-        
-        <LenisProvider>
-          <LoaderWrapper>
 
-          <NavbarWrapper>
+        {/* <LenisProvider> */}
+        {/* <LoaderWrapper> */}
+
+        {/* <NavbarWrapper>
               <Navbar />
-            </NavbarWrapper>
+            </NavbarWrapper> */}
 
-          <main className="relative pt-25"> {children} </main>
+        <main className="relative pt-25"> {children} </main>
 
-          </LoaderWrapper>
-        </LenisProvider>
+        {/* </LoaderWrapper> */}
+        {/* </LenisProvider> */}
       </body>
     </html>
   );

@@ -1,14 +1,16 @@
 "use client";
 
-import "@/styles/my_experience.css";
-import LiquidGlass from './LiquidGlass';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { SlDirections } from 'react-icons/sl';
 import { GrPowerReset } from 'react-icons/gr';
 import { FaPause, FaPlay } from 'react-icons/fa6';
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import LiquidGlass from './LiquidGlass';
+import "@/styles/my_experience.css";
+import Image from 'next/image';
 
 const COMPONENT_HEIGHT = '480px';
 const UNIQUE_CARD_COUNT = 3;
+const SCANNER_POSITION_RATIO = 0.75;
 
 const generateMachineCode = (width, height) => {
   const hexChars = "0123456789ABCDEF";
@@ -19,7 +21,6 @@ const generateMachineCode = (width, height) => {
     let line = "";
     while (line.length < width) {
       const distribution = Math.random();
-
       if (distribution < 0.45) {
         for (let b = 0; b < 6; b++) line += Math.random() > 0.5 ? "1" : "0";
         line += " ";
@@ -71,8 +72,15 @@ export default function MyExperience() {
     );
   }, []);
 
+  const duplicatedCards = useMemo(() => [...Array(UNIQUE_CARD_COUNT * 3)], []);
+
   const isAnimatingRef = useRef(true);
   const isVisibleRef = useRef(false);
+  const containerRef = useRef(null);
+  const cardLineRef = useRef(null);
+  const reqRef = useRef(null);
+  const particleCanvasRef = useRef(null);
+  const scannerCanvasRef = useRef(null);
 
   const stateRef = useRef({
     position: 0,
@@ -88,13 +96,6 @@ export default function MyExperience() {
     hasInitializedPosition: false,
     lastSpeedUI: 120
   });
-
-  const containerRef = useRef(null);
-  const cardLineRef = useRef(null);
-  const reqRef = useRef(null);
-
-  const particleCanvasRef = useRef(null);
-  const scannerCanvasRef = useRef(null);
 
   const handleSpeedSliderChange = (e) => {
     const val = Number(e.target.value);
@@ -166,16 +167,18 @@ export default function MyExperience() {
       cardLineRef.current.style.transform = `translateX(${s.position}px)`;
 
       const containerRect = containerRef.current.getBoundingClientRect();
-      const center = containerRect.left + (containerRect.width / 2);
+      // Calculated alignment shifted specifically to the right side
+      const scannerX = containerRect.left + (containerRect.width * SCANNER_POSITION_RATIO);
       const cards = cardLineRef.current.children;
 
       for (let i = 0; i < cards.length; i++) {
-        const rect = cards[i].getBoundingClientRect();
-        let pct = ((center - rect.left) / rect.width) * 100;
+        const cardEl = cards[i];
+        const rect = cardEl.getBoundingClientRect();
+        let pct = ((scannerX - rect.left) / rect.width) * 100;
         pct = Math.max(0, Math.min(100, pct));
 
-        cards[i].style.setProperty('--clip-right', `${100 - pct}%`);
-        cards[i].style.setProperty('--clip-left', `${pct}%`);
+        cardEl.style.setProperty('--clip-right', `${100 - pct}%`);
+        cardEl.style.setProperty('--clip-left', `${pct}%`);
       }
     }
 
@@ -204,12 +207,12 @@ export default function MyExperience() {
       stateRef.current.lastTime = performance.now();
       reqRef.current = requestAnimationFrame(animate);
     } else {
-      cancelAnimationFrame(reqRef.current);
+      if (reqRef.current) cancelAnimationFrame(reqRef.current);
     }
 
     return () => {
       window.removeEventListener('resize', handleLayoutCalculations);
-      cancelAnimationFrame(reqRef.current);
+      if (reqRef.current) cancelAnimationFrame(reqRef.current);
     };
   }, [animate, isVisible]);
 
@@ -222,6 +225,7 @@ export default function MyExperience() {
         this.particleCount = 400;
         this.particles = [];
         this.running = false;
+        this.rafId = null;
         this.ctx = this.canvas.getContext('2d');
       }
       init() {
@@ -244,12 +248,12 @@ export default function MyExperience() {
         if (this.rafId) cancelAnimationFrame(this.rafId);
       }
       getSpawnProperties(isInitial = false) {
-        const midPoint = this.canvas.width / 2;
+        const midPoint = this.canvas.width * SCANNER_POSITION_RATIO;
         let xCoord;
         if (Math.random() < 0.80) {
           xCoord = isInitial ? Math.random() * midPoint : Math.random() * 120;
         } else {
-          xCoord = isInitial ? midPoint + Math.random() * midPoint : midPoint + Math.random() * midPoint;
+          xCoord = isInitial ? midPoint + Math.random() * (this.canvas.width - midPoint) : midPoint + Math.random() * (this.canvas.width - midPoint);
         }
         return {
           x: Math.floor(xCoord),
@@ -297,12 +301,13 @@ export default function MyExperience() {
         this.h = 320;
         this.particles = [];
         this.maxParticles = 1500;
-        this.lightBarX = this.w / 2;
         this.running = false;
+        this.rafId = null;
       }
       start() {
         if (this.running) return;
         this.running = true;
+        this.w = window.innerWidth;
         this.canvas.width = this.w;
         this.canvas.height = this.h;
         this.animate();
@@ -314,8 +319,9 @@ export default function MyExperience() {
       createParticle() {
         const isWhite = Math.random() > 0.45;
         const explodeLeft = Math.random() < 0.75;
+        const lightBarX = this.w * SCANNER_POSITION_RATIO;
         return {
-          x: this.lightBarX + (Math.random() - 0.5) * 10,
+          x: lightBarX + (Math.random() - 0.5) * 10,
           y: Math.random() * this.h,
           vx: explodeLeft ? -(Math.random() * 6.0 + 2.0) : (Math.random() * 3.5 + 0.5),
           vy: (Math.random() - 0.5) * 5.0,
@@ -373,6 +379,15 @@ export default function MyExperience() {
     if (particleCanvasRef.current) particleSystem = new ParticleSystem(particleCanvasRef.current);
     if (scannerCanvasRef.current) particleScanner = new ParticleScanner(scannerCanvasRef.current);
 
+    const handleResize = () => {
+      if (particleSystem?.running) particleSystem.init();
+      if (particleScanner?.running) {
+        particleScanner.w = window.innerWidth;
+        particleScanner.canvas.width = window.innerWidth;
+      }
+    };
+    window.addEventListener('resize', handleResize);
+
     if (isVisible) {
       if (particleSystem) particleSystem.start();
       if (particleScanner) particleScanner.start();
@@ -382,6 +397,7 @@ export default function MyExperience() {
     }
 
     return () => {
+      window.removeEventListener('resize', handleResize);
       if (particleSystem) particleSystem.stop();
       if (particleScanner) particleScanner.stop();
     };
@@ -443,11 +459,8 @@ export default function MyExperience() {
     setActiveLog(prev => prev === 'experience' ? 'education' : 'experience');
   };
 
-  const duplicatedCards = [...Array(UNIQUE_CARD_COUNT * 3)];
-
   return (
     <div className="experience-wrapper" style={{ height: `${COMPONENT_HEIGHT}` }}>
-
       <div className="controls">
         <LiquidGlass width="65px" height="40px" padding="p-0">
           <button className="flex items-center justify-center w-full h-full text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700 pb-6" onClick={toggleAnimation}>
@@ -469,15 +482,13 @@ export default function MyExperience() {
           </button>
         </LiquidGlass>
 
-        <LiquidGlass width="220px" height="40px" padding="p-0">
-          <div className="slider-container w-full h-full flex items-center justify-center pb-6">
-            <span> Speed: </span>
-            <input type="range" min="30" max="150" value={speedSetting} onChange={handleSpeedSliderChange} />
-            <span> {speedSetting} px/s </span>
-          </div>
-        </LiquidGlass>
+        <div className="slider-container w-full h-full flex items-center justify-center pb-6">
+          <span> Speed: </span>
+          <input type="range" min="30" max="150" value={speedSetting} onChange={handleSpeedSliderChange} />
+          <span> {speedSetting} px/s </span>
+        </div>
 
-        <LiquidGlass width="180px" height="40px" padding="p-0">
+        <LiquidGlass width="200px" height="40px" padding="p-0">
           <button className="flex items-center justify-center w-full h-full text-xs font-bold tracking-wider text-zinc-600 transition-colors duration-200 hover:text-zinc-900 uppercase pb-6" onClick={toggleLogSource}>
             <span>{activeLog === 'experience' ? 'Work Experience' : 'Education Log'}</span>
           </button>
@@ -492,7 +503,14 @@ export default function MyExperience() {
         <canvas id="particleCanvas" ref={particleCanvasRef} style={{ mixBlendMode: 'multiply' }} />
         <canvas id="scannerCanvas" ref={scannerCanvasRef} style={{ mixBlendMode: 'normal' }} />
 
-        <div className="scanner-glow-container">
+        <div
+          className="scanner-glow-container"
+          style={{
+            left: `${SCANNER_POSITION_RATIO * 100}%`,
+            transform: 'translate(-50%, -50%)',
+            position: 'absolute'
+          }}
+        >
           <div className="glossy-reflection" />
           <div className="scanner-core" />
         </div>
@@ -512,10 +530,26 @@ export default function MyExperience() {
               const currentCardIndex = idx % UNIQUE_CARD_COUNT;
               return (
                 <div key={idx} className="card-wrapper">
-
                   <div className="card card-normal">
-                    <img src={experience_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === 'experience' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`} alt="Experience Stream View" />
-                    <img src={education_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === 'education' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`} alt="Education Stream View" />
+                    <Image
+                      src={experience_cards[currentCardIndex]}
+                      className={`card-image transition-opacity duration-500 ${activeLog === 'experience' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`}
+                      alt="Experience Stream View"
+                      fill
+                      sizes="400px"
+                      priority={idx < UNIQUE_CARD_COUNT}
+                      style={{ objectFit: 'cover' }}
+                    />
+
+                    <Image
+                      src={education_cards[currentCardIndex]}
+                      className={`card-image transition-opacity duration-500 ${activeLog === 'education' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`}
+                      alt="Education Stream View"
+                      fill
+                      sizes="400px"
+                      priority={idx < UNIQUE_CARD_COUNT}
+                      style={{ objectFit: 'cover' }}
+                    />
                   </div>
 
                   <div className="card card-ascii">
@@ -526,7 +560,6 @@ export default function MyExperience() {
                       {educationAsciiCards[currentCardIndex]}
                     </div>
                   </div>
-
                 </div>
               );
             })}

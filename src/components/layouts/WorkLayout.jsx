@@ -1,21 +1,29 @@
 import React, { memo } from "react";
-import Footer from "@/components/Footer";
-import MyExperience from "../MyExperience";
-import GithubGraphQl from "@/components/GithubGraphQl";
+import LazyLoad from "@/components/LazyLoad";
+import MyExperienceLazy from "@/components/LazyComponents/MyExperienceLazy";
+import GithubGraphQlLazy from "@/components/LazyComponents/GithubGraphQlLazy";
 import SelectedWorks from "@/components/SelectedWorks";
-import EmergencyCTA from "../EmergencyCTA";
+import EmergencyCTA from "@/components/EmergencyCTA";
+import Footer from "@/components/Footer";
 
 const WorkLayout = memo(function WorkLayout() {
 
   return (
     <div>
-      {/* <SelectedWorks /> */}
-      <MyExperience />
-      {/* <GithubGraphQl /> */}
-      {/* <EmergencyCTA /> */}
-      {/* <Footer /> */}
+      <SelectedWorks />
+
+      <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+        <MyExperienceLazy />
+      </LazyLoad>
+
+      <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+        <GithubGraphQlLazy />
+      </LazyLoad>
+
+      <EmergencyCTA />
+      <Footer />
     </div>
-  )
+  );
 
 }, () => true);
 

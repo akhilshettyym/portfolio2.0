@@ -6,11 +6,11 @@ const StartLayout = memo(function StartLayout() {
 
   return (
     <div>
-      {/* <CreateSomething /> */}
-      {/* <Footer /> */}
+      <CreateSomething />
+      <Footer />
     </div>
   )
 
-}, () => true);
+});
 
 export default StartLayout;

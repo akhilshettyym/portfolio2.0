@@ -198,7 +198,7 @@ const NavbarComponent = () => {
 
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 relative">
-                            <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" priority />
+                            <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" unoptimized priority />
                         </div>
 
                         <nav className="flex gap-2">
@@ -237,7 +237,7 @@ const NavbarComponent = () => {
                         <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
                             <div className="w-12 h-12 flex items-center justify-center relative group cursor-default">
                                 <div className="relative w-full h-full overflow-hidden rounded-md">
-                                    <Image src="/akhil.svg" alt="Akhil" fill priority className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5" />
+                                    <Image src="/akhil.svg" alt="Akhil" unoptimized fill priority className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5" />
                                 </div>
                             </div>
                         </div>

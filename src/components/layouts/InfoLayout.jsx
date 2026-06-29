@@ -13,22 +13,22 @@ const InfoLayout = memo(function InfoLayout() {
 
     return (
         <div>
-            <HeroSection />
-            <SubjectProfile />
-            <DevTicker />
+            {/* <HeroSection /> */}
+            {/* <SubjectProfile /> */}
+            {/* <DevTicker /> */}
 
-            <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
                 <BubbleScene />
-            </LazyLoad>
+            </LazyLoad> */}
 
-            <CardStackReveal />
+            {/* <CardStackReveal /> */}
 
-            <LazyLoad threshold={0.05} rootMargin="300px" once={true}>
+            {/* <LazyLoad threshold={0.05} rootMargin="300px" once={true}>
                 <EducationLog />
-            </LazyLoad>
+            </LazyLoad> */}
 
-            <EmergencyCTA />
-            <Footer />
+            {/* <EmergencyCTA /> */}
+            {/* <Footer /> */}
         </div>
     );
 

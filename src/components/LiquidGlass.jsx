@@ -5,10 +5,10 @@ import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
-const LiquidGlass = ({ children, width = "460px", height = "300px", className = "", ...props }) => {
+const LiquidGlass = ({ children, width = "460px", height = "300px", className = "", padding = "p-8", ...props }) => {
 
     return (
-        <div className={`flex items-center justify-center p-8 ${className}`} {...props}>
+        <div className={`flex items-center justify-center ${padding} ${className}`} {...props}>
             <div className="relative rounded-[2.5rem] shadow-2xl border border-white/40 backdrop-blur-md" style={{ width, height }}>
                 <div className="absolute inset-0 overflow-hidden rounded-[2.5rem]">
 

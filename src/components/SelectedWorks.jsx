@@ -249,7 +249,7 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
                         {hasContent ? (
                             <>
                                 <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
-                                    <Image src={project.image} alt={project.title} fill priority className="object-cover" />
+                                    <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
                                 </motion.div>
 
                                 <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/30 to-black/90" />

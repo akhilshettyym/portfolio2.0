@@ -21,21 +21,9 @@ export const createAdmin = async () => {
                 role: "ADMIN"
             });
             console.log("Main Admin account initialized successfully.");
-        } else {
-            if (
-                existingAdmin.name !== nameFromEnv ||
-                existingAdmin.email !== emailFromEnv ||
-                passwordFromEnv
-            ) {
-                existingAdmin.name = nameFromEnv;
-                existingAdmin.email = emailFromEnv;
-                existingAdmin.password = passwordFromEnv;
-
-                await existingAdmin.save();
-                console.log("Admin credentials synchronized with current .env file.");
-            }
         }
+        // Removed the automated 'else' update block to prevent continuous overwriting and unexpected data resets on restart.
     } catch (error) {
-        console.error("Error creating/updating admin setup:", error);
+        console.error("Error creating admin setup:", error);
     }
 };

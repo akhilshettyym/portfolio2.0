@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import Image from 'next/image';
+import "@/styles/my_experience.css";
+import LiquidGlass from './LiquidGlass';
 import { SlDirections } from 'react-icons/sl';
 import { GrPowerReset } from 'react-icons/gr';
 import { FaPause, FaPlay } from 'react-icons/fa6';
-import LiquidGlass from './LiquidGlass';
-import "@/styles/my_experience.css";
-import Image from 'next/image';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 
 const COMPONENT_HEIGHT = '480px';
 const UNIQUE_CARD_COUNT = 3;
@@ -46,11 +46,9 @@ const education_cards = [
 ];
 
 const experience_cards = [
-  "https://cdn.prod.website-files.com/68789c86c8bc802d61932544/689f20b55e654d1341fb06f8_4.1.png",
-  "https://cdn.prod.website-files.com/68789c86c8bc802d61932544/689f20b5a080a31ee7154b19_1.png",
-  "https://cdn.prod.website-files.com/68789c86c8bc802d61932544/689f20b5c1e4919fd69672b8_3.png",
-  "https://cdn.prod.website-files.com/68789c86c8bc802d61932544/689f20b5f6a5e232e7beb4be_2.png",
-  "https://cdn.prod.website-files.com/68789c86c8bc802d61932544/689f20b5bea2f1b07392d936_4.png",
+  "/my_experience/education/edu_sslc.svg",
+  "/my_experience/education/edu_puc.svg",
+  "/my_experience/education/edu_be.svg",
 ];
 
 export default function MyExperience() {
@@ -167,7 +165,6 @@ export default function MyExperience() {
       cardLineRef.current.style.transform = `translateX(${s.position}px)`;
 
       const containerRect = containerRef.current.getBoundingClientRect();
-      // Calculated alignment shifted specifically to the right side
       const scannerX = containerRect.left + (containerRect.width * SCANNER_POSITION_RATIO);
       const cards = cardLineRef.current.children;
 
@@ -503,14 +500,7 @@ export default function MyExperience() {
         <canvas id="particleCanvas" ref={particleCanvasRef} style={{ mixBlendMode: 'multiply' }} />
         <canvas id="scannerCanvas" ref={scannerCanvasRef} style={{ mixBlendMode: 'normal' }} />
 
-        <div
-          className="scanner-glow-container"
-          style={{
-            left: `${SCANNER_POSITION_RATIO * 100}%`,
-            transform: 'translate(-50%, -50%)',
-            position: 'absolute'
-          }}
-        >
+        <div className="scanner-glow-container" style={{ left: `${SCANNER_POSITION_RATIO * 100}%`, transform: 'translate(-50%, -50%)', position: 'absolute' }}>
           <div className="glossy-reflection" />
           <div className="scanner-core" />
         </div>
@@ -531,25 +521,10 @@ export default function MyExperience() {
               return (
                 <div key={idx} className="card-wrapper">
                   <div className="card card-normal">
-                    <Image
-                      src={experience_cards[currentCardIndex]}
-                      className={`card-image transition-opacity duration-500 ${activeLog === 'experience' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`}
-                      alt="Experience Stream View"
-                      fill
-                      sizes="400px"
-                      priority={idx < UNIQUE_CARD_COUNT}
-                      style={{ objectFit: 'cover' }}
-                    />
+                    <Image src={experience_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === 'experience' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`} alt="Experience Stream View" fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: 'cover' }} />
 
-                    <Image
-                      src={education_cards[currentCardIndex]}
-                      className={`card-image transition-opacity duration-500 ${activeLog === 'education' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`}
-                      alt="Education Stream View"
-                      fill
-                      sizes="400px"
-                      priority={idx < UNIQUE_CARD_COUNT}
-                      style={{ objectFit: 'cover' }}
-                    />
+                    <Image src={education_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === 'education' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`} alt="Education Stream View"
+                      fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: 'cover' }} />
                   </div>
 
                   <div className="card card-ascii">

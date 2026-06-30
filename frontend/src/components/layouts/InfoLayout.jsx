@@ -12,20 +12,20 @@ const InfoLayout = memo(function InfoLayout() {
 
     return (
         <div>
-            <HeroSection />
-            <SubjectProfile />
-            <DevTicker />
+            {/* <HeroSection /> */}
+            {/* <SubjectProfile /> */}
+            {/* <DevTicker /> */}
 
-            <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
                 <BubbleSceneLazy />
-            </LazyLoad>
+            </LazyLoad> */}
 
-            <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
                 <CardStackRevealLazy />
-            </LazyLoad>
+            </LazyLoad> */}
 
-            <EmergencyCTA />
-            <Footer />
+            {/* <EmergencyCTA /> */}
+            {/* <Footer /> */}
         </div>
     );
 

@@ -7,7 +7,7 @@ const StartLayout = memo(function StartLayout() {
   return (
     <div>
       <CreateSomething />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 

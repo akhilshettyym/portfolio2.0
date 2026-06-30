@@ -46,19 +46,19 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
 
-        <GlobalCursor />
+        {/* <GlobalCursor /> */}
 
-        <LenisProvider>
-        <LoaderWrapper>
+        {/* <LenisProvider> */}
+        {/* <LoaderWrapper> */}
 
-        <NavbarWrapper>
+        {/* <NavbarWrapper>
               <Navbar />
-            </NavbarWrapper>
+            </NavbarWrapper> */}
 
         <main className="relative pt-25"> {children} </main>
 
-        </LoaderWrapper>
-        </LenisProvider>
+        {/* </LoaderWrapper> */}
+        {/* </LenisProvider> */}
       </body>
     </html>
   );

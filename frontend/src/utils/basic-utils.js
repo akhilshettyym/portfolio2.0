@@ -19,16 +19,6 @@ export const FADEUP = {
     viewport: { once: true, amount: 0.15 },
 };
 
-export const SERVICES = ["Say Hi", "Website", "Ecommerce", "Web App", "Splash Page", "Other"];
-
-export const BUDGETS = [
-    "Less than $1,000",
-    "$1,000 - $3,000",
-    "$3,000 - $5,000",
-    "$5,000 - $10,000",
-    "$10,000+",
-];
-
 export const CLAMP = (value, min, max) => {
     return Math.max(min, Math.min(max, value));
 }

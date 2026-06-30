@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+body {
+ background-color: #ffffff;
+ color: #000000;
+ font-family: sans-serif;
+}
+
+/* Custom crisp selections */
+::selection {
+ background-color: #000000;
+ color: #ffffff;
+}

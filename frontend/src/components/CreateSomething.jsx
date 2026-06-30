@@ -1,25 +1,45 @@
 "use client";
 
+import axios from "axios";
 import React, { useState } from "react";
-import { FiCheck, FiChevronDown } from "react-icons/fi";
-import { SERVICES, BUDGETS } from "@/utils/basic-utils";
 import CustomButton from "@/components/basic/CustomButton";
+import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
 
-const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete }) => {
+const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
     return (
         <div>
-            <label className="field-label"> {label} </label>
-            <input type={type} name={name} value={value} onChange={onChange} autoComplete={autoComplete} placeholder={placeholder} className="mt-2 w-full border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black" />
+            <label className="text-xs font-mono uppercase tracking-wide text-neutral-500">
+                {label} {required && <span className="text-red-600">*</span>}
+            </label>
+            <input type={type} name={name} value={value} onChange={onChange} autoComplete={autoComplete} placeholder={placeholder} className="mt-2 w-full border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm" />
         </div>
     );
 };
 
 const CreateSomething = () => {
-
+    const [purpose, setPurpose] = useState("say_hi");
     const [budget, setBudget] = useState("");
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ type: "", message: "" });
     const [selectedServices, setSelectedServices] = useState([]);
+
+    const SERVICES = [
+        { id: "frontend", label: "Frontend Development" },
+        { id: "backend", label: "Backend Engineering" },
+        { id: "fullstack", label: "Fullstack Solutions" },
+        { id: "mobile_app", label: "Mobile Applications" },
+        { id: "cms", label: "CMS Integration" },
+        { id: "ci_cd", label: "DevOps & CI/CD" },
+        { id: "other", label: "Other Systems" }
+    ];
+
+    const BUDGET_OPTIONS = [
+        { id: "under_1k", label: "Under $1,000" },
+        { id: "1k_5k", label: "$1,000 - $5,000" },
+        { id: "5k_10k", label: "$5,000 - $10,000" },
+        { id: "10k_plus", label: "$10,000+" },
+        { id: "not_sure", label: "Not Sure / Deciding" }
+    ];
 
     const [formData, setFormData] = useState({
         name: "",
@@ -27,12 +47,12 @@ const CreateSomething = () => {
         organization: "",
         role: "",
         deadline: "",
-        details: "",
+        message: "",
     });
 
-    const toggleService = (service) => {
+    const toggleService = (serviceId) => {
         setSelectedServices((prev) =>
-            prev.includes(service) ? prev.filter((item) => item !== service) : [...prev, service]
+            prev.includes(serviceId) ? prev.filter((item) => item !== serviceId) : [...prev, serviceId]
         );
     };
 
@@ -49,147 +69,213 @@ const CreateSomething = () => {
 
         if (loading) return;
 
+        if (!formData.name.trim() || !formData.email.trim()) {
+            setStatus({ type: "error", message: "Name and Email are required fields." });
+            return;
+        }
+        if (formData.message.trim().length < 10) {
+            setStatus({ type: "error", message: "Your message body must be at least 10 characters long." });
+            return;
+        }
+
+        if (purpose === "work") {
+            if (!formData.organization.trim() || !formData.role.trim()) {
+                setStatus({ type: "error", message: "Please fill out your Organization and Role details." });
+                return;
+            }
+            if (selectedServices.length === 0) {
+                setStatus({ type: "error", message: "Please select at least one engineering project service type." });
+                return;
+            }
+            if (!budget) {
+                setStatus({ type: "error", message: "Please select an estimated allocation budget option." });
+                return;
+            }
+        }
+
         setLoading(true);
         setStatus({ type: "", message: "" });
 
         try {
-            const response = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "content-type": "application/json" },
-                body: JSON.stringify({
-                    ...formData,
-                    budget,
-                    services: selectedServices,
-                }),
-            });
+            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
-            const result = await response.json();
+            let payload = {
+                name: formData.name.trim(),
+                email: formData.email.trim().toLowerCase(),
+                message: formData.message.trim(),
+                purpose: purpose
+            };
 
-            if (!response.ok) {
-                throw new Error(result.error || "Unable to send your request right now.");
+            if (purpose === "work") {
+                payload.organization = formData.organization.trim();
+                payload.role = formData.role.trim();
+                payload.projectType = selectedServices[0];
+                payload.budget = budget;
+
+                if (formData.deadline.trim()) {
+                    payload.deadline = formData.deadline;
+                }
             }
 
-            setFormData({
-                name: "",
-                email: "",
-                organization: "",
-                role: "",
-                deadline: "",
-                details: "",
+            console.log("Transmitting Sanitized Payload Matrix:", payload);
+
+            const response = await axios.post(`${baseUrl}/api/user/contact-inquiry`, payload, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
             });
-            setBudget("");
-            setSelectedServices([]);
-            setStatus({ type: "success", message: "Request sent. I will get back to you soon." });
+
+            if (response.data.success || response.status === 200 || response.status === 201) {
+                setFormData({
+                    name: "",
+                    email: "",
+                    organization: "",
+                    role: "",
+                    deadline: "",
+                    message: "",
+                });
+                setBudget("");
+                setSelectedServices([]);
+                setStatus({ type: "success", message: "Inquiry successfully recorded!" });
+            }
+
         } catch (error) {
-            setStatus({ type: "error", message: error.message });
+            console.error("Submission Error Pipeline Logs:", error.response?.data || error);
+            const errorMessage = error.response?.data?.message || error.message || "Validation Error detected.";
+            setStatus({ type: "error", message: errorMessage });
+
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <section className="w-full bg-white py-5 text-black">
-            <div className="mx-auto max-w-450 px-6">
-                <div className="grid gap-12 grid-cols-[20%_70%_10%]">
+        <section className="w-full bg-white py-12 text-black">
+            <div className="mx-auto max-w-7xl px-6">
+                <div className="grid gap-12 grid-cols-1 md:grid-cols-[25%_75%] lg:grid-cols-[20%_70%_10%]">
 
-                    <div>
-                        <div className="sticky top-32">
-                            <span className="text-sm font-semibold tracking-wider text-neutral-500">
-                                01_INQUIRY_FORM
+                    <div className="space-y-8 md:space-y-0">
+                        <div className="md:sticky md:top-32">
+                            <span className="text-xs font-mono font-bold tracking-widest text-neutral-400 block mb-2">
+                                01 // INQUIRY_FORM
                             </span>
                         </div>
-
-                        <div className="sticky top-125 flex flex-col">
-                            <span className="text-[10px] font-semibold uppercase tracking-normal text-neutral-500">
-                                Contact me directly
+                        <div className="md:sticky md:top-60 flex flex-col pt-4 border-t border-neutral-200 md:border-none">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400">
+                                Direct Channel
                             </span>
-                            <span className="text-xs font-semibold tracking-normal text-neutral-500">
+                            <a href="mailto:akhilshettym2003@gmail.com" className="text-xs font-mono text-neutral-600 hover:text-black transition-colors">
                                 akhilshettym2003@gmail.com
-                            </span>
+                            </a>
                         </div>
                     </div>
 
-                    <div className="max-w-5xl">
-                        <p className="max-w-5xl indent-16 text-justify text-2xl font-medium text-neutral-600">
-                            Interested in working with me? I&apos;d love to hear a bit more about
-                            your project! Fill out the form below and I&apos;ll get back to you as
-                            soon as possible.
+                    <div className="w-full">
+
+                        <div className="mb-12">
+                            <label className="text-xs font-mono uppercase tracking-widest text-neutral-400 block mb-3">
+                                Select Form Purpose Track
+                            </label>
+                            <div className="grid grid-cols-2 gap-4 max-w-md">
+                                <button type="button" onClick={() => { setPurpose("say_hi"); setStatus({ type: "", message: "" }); }} className={`py-4 px-5 text-xs font-mono uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                                    👋 Just Say Hi
+                                </button>
+                                <button type="button" onClick={() => { setPurpose("work"); setStatus({ type: "", message: "" }); }} className={`py-4 px-5 text-xs font-mono uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                                    💼 Build A Project
+                                </button>
+                            </div>
+                        </div>
+
+                        <p className="text-left text-xl md:text-2xl font-light leading-relaxed text-neutral-700 border-t border-neutral-100 pt-6">
+                            {purpose === "say_hi"
+                                ? "Drop your details below to say hello, ask a general question, or just connect!"
+                                : "Let's turn your idea into code. Tell me about your organization and project requirements below."
+                            }
                         </p>
-                        <form onSubmit={handleSubmit} className="mt-10">
-                            <div className="mb-10">
-                                <h3 className="mb-5 text-xl font-semibold uppercase tracking-normal">
+
+                        <form onSubmit={handleSubmit} className="mt-12 space-y-12">
+                            <div>
+                                <h3 className="mb-6 font-mono text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
                                     About You
                                 </h3>
-                                <div className="grid gap-x-10 gap-y-8 md:grid-cols-2">
-                                    <InputField label="Your Name" name="name" value={formData.name} onChange={handleInputChange} placeholder="What should I call you?" autoComplete="name" />
-                                    <InputField label="Your Email Address" name="email" type="email" value={formData.email} onChange={handleInputChange} placeholder="How I'll contact you" autoComplete="email" />
-                                    <InputField label="Your Organization" name="organization" value={formData.organization} onChange={handleInputChange} placeholder="What company are you with?" autoComplete="organization" />
-                                    <InputField label="Your Role" name="role" value={formData.role} onChange={handleInputChange} placeholder="Are you the client?" />
+                                <div className="grid gap-x-10 gap-y-8 grid-cols-1 sm:grid-cols-2">
+                                    <InputField label="Your Name" name="name" value={formData.name} onChange={handleInputChange} placeholder="What should I call you?" required={true} />
+                                    <InputField label="Your Email Address" name="email" type="email" value={formData.email} onChange={handleInputChange} placeholder="How I'll reach you" required={true} />
+
+                                    {purpose === "work" && (
+                                        <>
+                                            <InputField label="Your Organization" name="organization" value={formData.organization} onChange={handleInputChange} placeholder="Company or project name" required={true} />
+                                            <InputField label="Your Role" name="role" value={formData.role} onChange={handleInputChange} placeholder="e.g. Founder, Product Lead" required={true} />
+                                        </>
+                                    )}
                                 </div>
                             </div>
 
-                            <hr className="my-6 border-t border-gray-300" />
+                            {purpose === "work" && (
+                                <div className="animate-fadeIn">
+                                    <h3 className="mb-2 font-mono text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
+                                        About The Project
+                                    </h3>
+                                    <label className="mb-6 block text-[11px] font-mono uppercase tracking-wider text-neutral-400">
+                                        What development service model do you need? <span className="text-red-600">*</span>
+                                    </label>
 
-                            <div className="mt-10">
-                                <h3 className="mb-2 text-xl font-semibold uppercase tracking-normal">
-                                    About The Project
-                                </h3>
-                                <label className="mb-6 block text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                                    What development services do you need?
-                                </label>
+                                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                                        {SERVICES.map((service) => {
+                                            const checked = selectedServices.includes(service.id);
+                                            return (
+                                                <button key={service.id} type="button" onClick={() => toggleService(service.id)} className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-200 rounded-none text-xs font-mono uppercase tracking-wide ${checked ? "border-black bg-black text-white" : "border-neutral-200 bg-white text-black  hover:border-black"}`}>
+                                                    <span>{service.label}</span>
+                                                    {checked && <CheckIcon className="text-sm shrink-0 ml-2" />}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
 
-                                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                                    {SERVICES.map((service) => {
-                                        const checked = selectedServices.includes(service);
-                                        return (
-                                            <button key={service} type="button" onClick={() => toggleService(service)} className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-300 ${checked ? "border-black bg-black text-white" : "border-neutral-300 bg-white text-black hover:border-black"}`}>
+                                    <div className="mt-10 grid gap-10 grid-cols-1 sm:grid-cols-2">
+                                        <div>
+                                            <label className="text-xs font-mono uppercase tracking-wide text-neutral-500">
+                                                Project Budget Allocation <span className="text-red-600">*</span>
+                                            </label>
 
-                                                <span> {service} </span>
-                                                {checked && <FiCheck className="text-lg" />}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                                <div className="mt-10 grid gap-10 md:grid-cols-2">
-                                    <div>
-                                        <label className="field-label">
-                                            Project Budget
-                                        </label>
-
-                                        <div className="relative mt-2 border border-neutral-300 transition-colors focus-within:border-black">
-                                            <select value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full appearance-none bg-transparent px-5 py-4 outline-none">
-
-                                                <option value=""> Select allocation </option>
-                                                {BUDGETS.map((item) => (
-                                                    <option key={item} value={item}> {item} </option>
-                                                ))}
-                                            </select>
-                                            <FiChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-xl" />
+                                            <div className="relative mt-2 border border-neutral-300 transition-colors focus-within:border-black bg-white">
+                                                <select value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full appearance-none bg-transparent px-5 py-4 outline-none text-xs font-mono uppercase tracking-wider rounded-none pr-12 cursor-pointer text-black">
+                                                    <option value="" className="bg-white text-black">Select range allocation</option>
+                                                    {BUDGET_OPTIONS.map((item) => (
+                                                        <option key={item.id} value={item.id} className="bg-white text-black">
+                                                            {item.label}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <ChevronIcon className="absolute right-5 top-1/2 -translate-y-1/2 text-base pointer-events-none text-neutral-500" />
+                                            </div>
                                         </div>
+                                        <InputField label="Target Deadline" name="deadline" type="date" value={formData.deadline} onChange={handleInputChange} />
                                     </div>
-                                    <InputField label="Target Deadline" name="deadline" value={formData.deadline} onChange={handleInputChange} placeholder="Is there a timeframe?" />
                                 </div>
+                            )}
 
-                                <div className="mt-10">
-                                    <label className="field-label"> Project Details </label>
-                                    <textarea rows={8} name="details" value={formData.details} onChange={handleInputChange} placeholder="Tell me a bit about your project..." className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none  transition-colors focus:border-black" />
-                                </div>
-                                <div className="mt-10 flex justify-end">
-                                    <div className="flex flex-col items-end gap-4">
-                                        {status.message && (
-                                            <p className={`max-w-md text-right text-sm ${status.type === "success" ? "text-emerald-700" : "text-red-700"}`} aria-live="polite">
-                                                {status.message}
-                                            </p>
-                                        )}
-                                        <CustomButton title={loading ? "Sending..." : "Send Project Request"} onClick={handleSubmit} width={270} height={50} disabled={loading} />
-                                    </div>
+                            <div>
+                                <h3 className="mb-6 font-mono text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
+                                    {purpose === "work" ? "Project Details" : "Your Message"} <span className="text-red-600">*</span>
+                                </h3>
+                                <textarea rows={6} name="message" value={formData.message} onChange={handleInputChange} placeholder={purpose === "work" ? "Provide an overview of objectives, tech requirements, scope..." : "Write your message here..."} className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm font-sans" />
+                            </div>
+
+                            <div className="mt-10 flex flex-col sm:flex-row justify-end items-center gap-6">
+                                {status.message && (
+                                    <p className={`text-xs font-mono tracking-wide w-full sm:w-auto text-center sm:text-right ${status.type === "success" ? "text-emerald-700" : "text-red-700 font-bold"}`} aria-live="polite">
+                                        {status.message}
+                                    </p>
+                                )}
+                                <div className="w-full sm:w-auto flex justify-end">
+                                    <CustomButton title={loading ? "Processing..." : purpose === "work" ? "Submit Project Request" : "Send Message"} onClick={handleSubmit} width={270} height={50} disabled={loading} />
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div />
+
+                    <div className="hidden lg:block" />
                 </div>
-                <hr className="my-6 border-t border-gray-300" />
             </div>
         </section>
     );

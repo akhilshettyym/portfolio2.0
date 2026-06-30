@@ -10,7 +10,7 @@ export async function adminLoginController(req, res) {
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "email and password are required"
+                message: "Email and Password are required"
             });
         }
 
@@ -23,7 +23,7 @@ export async function adminLoginController(req, res) {
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "email or password is invalid"
+                message: "Email or Password is invalid"
             });
         }
 
@@ -32,7 +32,7 @@ export async function adminLoginController(req, res) {
         if (!isValidPassword) {
             return res.status(401).json({
                 success: false,
-                message: "email or password is invalid"
+                message: "Email or Password is invalid"
             });
         }
 

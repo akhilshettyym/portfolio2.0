@@ -8,21 +8,24 @@ import userRoute from "./routes/user.route.js";
 const app = express();
 
 app.use(cors({
-    origin: (origin, callback) => {
-        const allowedOrigins = [
-            "http://localhost:3000",
-            process.env.CLIENT_URL
-        ].filter(Boolean);
+   origin: (origin, callback) => {
 
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+       const allowedOrigins = [
+           "http://localhost:3001",
+           "http://localhost:3002", 
+           process.env.CLIENT_URL
+       ].filter(Boolean);
+       
+       if (!origin || allowedOrigins.includes(origin)) {
+           callback(null, true);
+       } else {
+           console.warn(`CORS Blocked Request from Origin: "${origin}"`);
+           callback(new Error("Not allowed by CORS"));
+       }
+   },
+   credentials: true,
+   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
 
 app.use(express.json());

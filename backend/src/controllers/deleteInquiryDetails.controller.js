@@ -3,10 +3,11 @@ import ContactInquiry from "../models/userModel.js";
 
 /**
 * @desc    Delete a specific contact inquiry/lead
-* @route   DELETE /api/user/contact-enquiry/:id
+* @route   DELETE /api/user/delete-details/:id
 * @access  Private (Admin Only)
 */
 export const deleteInquiryDetails = async (req, res) => {
+    
     try {
         const { id } = req.params;
 
@@ -36,8 +37,8 @@ export const deleteInquiryDetails = async (req, res) => {
         console.error("Error in deleteInquiryDetails Controller:", error);
         return res.status(500).json({
             success: false,
-            message: "Server error trying to delete the inquiry details.",
-            error: error.message
+            message: "Server error trying to delete the inquiry details."
         });
     }
+
 };

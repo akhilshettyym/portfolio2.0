@@ -1,9 +1,9 @@
 import ContactInquiry from "../models/userModel.js";
 
 /**
-* @desc    Get all inquiries (Useful later if you build an admin dashboard)
-* @route   GET /api/contact
-* @access  Private (You should protect this route with auth middleware later)
+* @desc    Get all inquiries
+* @route   GET /api/admin/get-all-inquiries
+* @access  Private (Admin Only)
 */
 export const getAllInquiries = async (req, res) => {
 

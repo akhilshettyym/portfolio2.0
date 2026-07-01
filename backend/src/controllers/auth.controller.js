@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
 import AdminModel from "../models/adminModel.js";
 
-/* admin login */
+/**
+* @desc    Login Admin UI
+* @route   POST /api/auth/login
+* @access  Private (Admin Only)
+*/
 export async function adminLoginController(req, res) {
-
     try {
         const { email, password } = req.body;
 
@@ -15,7 +18,6 @@ export async function adminLoginController(req, res) {
         }
 
         const normalizedEmail = email.toLowerCase();
-
         const user = await AdminModel
             .findOne({ email: normalizedEmail })
             .select("+password");
@@ -36,18 +38,21 @@ export async function adminLoginController(req, res) {
             });
         }
 
-        const token = jwt.sign({
-            userId: user._id,
-            role: user.role,
-        },
+        const token = jwt.sign(
+            {
+                userId: user._id,
+                role: user.role,
+            },
             process.env.JWT_SECRET,
             { expiresIn: "3d" }
         );
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 3 * 24 * 60 * 60 * 1000,
         });
 
@@ -59,21 +64,25 @@ export async function adminLoginController(req, res) {
                 email: user.email,
                 role: user.role,
             },
-            token
         });
 
     } catch (error) {
+        console.error("Login Controller Error:", error);
         return res.status(500).json({
             success: false,
-            message: "Server error during login",
-            error: error.message
+            message: "An unexpected server error occurred during login."
         });
     }
 };
 
 
-/* admin logout */
+/**
+* @desc    Logout Admin UI
+* @route   POST /api/auth/logout
+* @access  Amdin Only
+*/
 export async function adminLogoutController(req, res) {
+
     try {
         const isProduction = process.env.NODE_ENV === "production";
 
@@ -89,10 +98,11 @@ export async function adminLogoutController(req, res) {
         });
 
     } catch (error) {
+        console.error("Logout Controller Error:", error);
         return res.status(500).json({
             success: false,
-            message: "Server error during logout",
-            error: error.message,
+            message: "An unexpected server error occurred during logout.",
         });
     }
+
 };

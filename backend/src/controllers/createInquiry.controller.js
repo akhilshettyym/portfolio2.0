@@ -2,8 +2,8 @@ import ContactInquiry from "../models/userModel.js";
 
 /**
 * @desc    Submit a new contact inquiry (Say Hi or Project Request)
-* @route   POST /api/contact
-* @access  Public
+* @route   POST /api/user/contact-inquiry
+* @access  Public (Any user)
 */
 export const createInquiry = async (req, res) => {
 

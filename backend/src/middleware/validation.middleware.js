@@ -3,7 +3,6 @@ import validator from 'validator';
 export const validateContactInquiry = (req, res, next) => {
     const { name, email, purpose, message, projectType, budget } = req.body;
 
-    // Validate name
     if (!name || typeof name !== 'string' || name.length === 0 || name.length > 100) {
         return res.status(400).json({
             success: false,
@@ -11,7 +10,6 @@ export const validateContactInquiry = (req, res, next) => {
         });
     }
 
-    // Validate email
     if (!email || !validator.isEmail(email)) {
         return res.status(400).json({
             success: false,
@@ -19,7 +17,6 @@ export const validateContactInquiry = (req, res, next) => {
         });
     }
 
-    // Validate message
     if (!message || typeof message !== 'string' || message.length < 10 || message.length > 5000) {
         return res.status(400).json({
             success: false,
@@ -27,7 +24,6 @@ export const validateContactInquiry = (req, res, next) => {
         });
     }
 
-    // Validate purpose
     if (!purpose || !['say_hi', 'work'].includes(purpose)) {
         return res.status(400).json({
             success: false,
@@ -35,7 +31,6 @@ export const validateContactInquiry = (req, res, next) => {
         });
     }
 
-    // If work, validate project details
     if (purpose === 'work') {
         const validProjectTypes = ['frontend', 'backend', 'fullstack', 'mobile_app', 'cms', 'ci_cd', 'other'];
         const validBudgets = ['under_1k', '1k_5k', '5k_10k', '10k_plus', 'not_sure'];
@@ -55,7 +50,6 @@ export const validateContactInquiry = (req, res, next) => {
         }
     }
 
-    // Validate optional fields
     if (req.body.organization && typeof req.body.organization === 'string' && req.body.organization.length > 200) {
         return res.status(400).json({
             success: false,

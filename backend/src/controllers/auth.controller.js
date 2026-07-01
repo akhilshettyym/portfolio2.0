@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken";
 import AdminModel from "../models/adminModel.js";
 
-/* admin login */
+/**
+* @desc    Login Admin UI
+* @route   POST /api/auth/login
+* @access  Private (Admin Only)
+*/
 export async function adminLoginController(req, res) {
     try {
         const { email, password } = req.body;
@@ -48,9 +52,7 @@ export async function adminLoginController(req, res) {
         res.cookie("token", token, {
             httpOnly: true,
             secure: isProduction,
-            // If frontend & backend are on completely different domains, use "none" in prod.
-            // If they share a root domain (e.g. app.yoursite.com & api.yoursite.com), "lax" is perfect.
-            sameSite: isProduction ? "none" : "lax", 
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 3 * 24 * 60 * 60 * 1000,
         });
 
@@ -65,20 +67,25 @@ export async function adminLoginController(req, res) {
         });
 
     } catch (error) {
-        console.error("Login Controller Error:", error); 
+        console.error("Login Controller Error:", error);
         return res.status(500).json({
             success: false,
-            message: "An unexpected server error occurred during login." 
+            message: "An unexpected server error occurred during login."
         });
     }
-}
+};
 
-/* admin logout */
+
+/**
+* @desc    Logout Admin UI
+* @route   POST /api/auth/logout
+* @access  Amdin Only
+*/
 export async function adminLogoutController(req, res) {
+
     try {
         const isProduction = process.env.NODE_ENV === "production";
 
-        // Must strictly match the configuration used during login to be wiped successfully
         res.clearCookie("token", {
             httpOnly: true,
             secure: isProduction,
@@ -97,4 +104,5 @@ export async function adminLogoutController(req, res) {
             message: "An unexpected server error occurred during logout.",
         });
     }
-}
+
+};

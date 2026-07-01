@@ -1,4 +1,4 @@
-# 🚀 Production Deployment Guide
+# Production Deployment Guide
 
 ## Pre-Deployment Checklist
 
@@ -95,81 +95,6 @@ Add all variables from your .env file
 # Manual deployment:
 npm install -g vercel
 vercel --prod
-```
-
----
-
-### Option 2: AWS EC2
-
-1. **Create EC2 Instance**
-   - Ubuntu 22.04 LTS
-   - t3.medium or larger
-   - Security group: Allow ports 80, 443, 22
-
-2. **Install Dependencies**
-```bash
-sudo apt-get update
-sudo apt-get install -y nodejs npm git nginx certbot python3-certbot-nginx
-
-# Install Node version manager
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-nvm install 18
-```
-
-3. **Deploy Application**
-```bash
-# Clone repository
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
-
-# Install dependencies
-npm install
-
-# Create .env file
-nano .env  # Add all environment variables
-
-# Run production build/start
-npm start
-```
-
-4. **Set Up PM2 (Process Manager)**
-```bash
-npm install -g pm2
-
-# Start application
-pm2 start server.js --name "portfolio-backend"
-
-# Auto-restart on server reboot
-pm2 startup
-pm2 save
-```
-
-5. **Configure Nginx (Reverse Proxy)**
-```bash
-sudo nano /etc/nginx/sites-available/default
-```
-
-Add:
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com;
-
-    location / {
-        proxy_pass http://localhost:5000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-6. **Enable HTTPS**
-```bash
-sudo certbot --nginx -d yourdomain.com
-sudo systemctl restart nginx
 ```
 
 ---

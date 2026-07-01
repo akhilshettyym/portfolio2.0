@@ -7,4 +7,5 @@ const router = express.Router();
 /* POST /api/user/contact-inquiry */
 router.post("/contact-inquiry", validateContactInquiry, createInquiry);
 
+
 export default router;

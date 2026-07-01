@@ -1,6 +1,7 @@
 import AdminModel from "../models/adminModel.js";
 
 export const createAdmin = async () => {
+
     try {
         const nameFromEnv = process.env.ADMIN_NAME;
         const emailFromEnv = process.env.ADMIN_EMAIL?.toLowerCase();
@@ -22,8 +23,8 @@ export const createAdmin = async () => {
             });
             console.log("Main Admin account initialized successfully.");
         }
-        // Removed the automated 'else' update block to prevent continuous overwriting and unexpected data resets on restart.
     } catch (error) {
         console.error("Error creating admin setup:", error);
     }
+
 };

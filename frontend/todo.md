@@ -289,10 +289,14 @@ Based on the tier level stored in localStorage we can set on what settings shoul
 * **Tier 2 (Mid-Range):** Look for **"GTX"**, **"Radeon Vega"**, or base **"Apple M1/M2"**.
 * *Action:* Standard settings, monitor FPS.
 
-
+ 
 * **Tier 3 (Low-End / Integrated):** Look for **"Intel HD"**, **"Intel UHD"**, **"Iris"**, **"Mali"**, **"Adreno"**.
 * *Action:* Default to lower settings immediately upon load to prevent the browser from freezing.
 
 This is just the random thing I found while surfing. I want you to thoroughly check and let me know the setup for this. 
 
 ---
+
+
+
+

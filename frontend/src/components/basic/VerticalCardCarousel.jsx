@@ -5,96 +5,96 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const cardsData = [
-    {
-        number: '01',
-        title: 'Performance First',
-        description:
-            'I focus on building websites that load fast and feel smooth from the first interaction. Performance is considered at every stage, from structure and assets to code quality and optimization, ensuring reliable results on real devices and networks.',
-        linkText: 'Learn more',
-        linkHref: '/about',
-        isGreen: false,
-    },
-    {
-        number: '02',
-        title: 'Clean & Scalable Code',
-        description:
-            'I write clean, well-structured, and maintainable code with a strong focus on clarity and long-term scalability. This approach makes projects easier to understand, update, and extend over time, while reducing complexity and keeping the codebase reliable as it grows.',
-        linkText: 'My workflow',
-        linkHref: '/projects',
-        isGreen: true,
-    },
-    {
-        number: '03',
-        title: 'Modern UI & UX',
-        description:
-            'I design and build interfaces with clarity, usability, and consistency in mind. Layouts, interactions, and responsive behavior are carefully crafted to provide an intuitive experience that works seamlessly across all devices and screen sizes.',
-        linkText: 'View approach',
-        linkHref: '/projects',
-        isGreen: false,
-    },
-    {
-        number: '04',
-        title: 'SEO & Best Practices',
-        description:
-            'Websites are built using modern best practices and strong technical SEO foundations from the very beginning of the project. This includes clean structure, accessibility, semantic markup, and optimization techniques that support visibility, performance, and long-term growth.',
-        linkText: 'See details',
-        linkHref: '/about',
-        isGreen: true,
-    },
-    {
-        number: '05',
-        title: 'Reliable Delivery',
-        description:
-            'From the initial idea to the final launch, I focus on clear communication, thoughtful planning, and reliable delivery at every stage of the process. Each project is carefully tested and refined to ensure stability, quality, and confidence when the product goes live.',
-        linkText: 'How I work',
-        linkHref: '/about',
-        isGreen: false,
-    },
+  {
+    number: '01',
+    title: 'Performance First',
+    description:
+      'I focus on building websites that load fast and feel smooth from the first interaction. Performance is considered at every stage, from structure and assets to code quality and optimization, ensuring reliable results on real devices and networks.',
+    linkText: 'Learn more',
+    linkHref: '/about',
+    isGreen: false,
+  },
+  {
+    number: '02',
+    title: 'Clean & Scalable Code',
+    description:
+      'I write clean, well-structured, and maintainable code with a strong focus on clarity and long-term scalability. This approach makes projects easier to understand, update, and extend over time, while reducing complexity and keeping the codebase reliable as it grows.',
+    linkText: 'My workflow',
+    linkHref: '/projects',
+    isGreen: true,
+  },
+  {
+    number: '03',
+    title: 'Modern UI & UX',
+    description:
+      'I design and build interfaces with clarity, usability, and consistency in mind. Layouts, interactions, and responsive behavior are carefully crafted to provide an intuitive experience that works seamlessly across all devices and screen sizes.',
+    linkText: 'View approach',
+    linkHref: '/projects',
+    isGreen: false,
+  },
+  {
+    number: '04',
+    title: 'SEO & Best Practices',
+    description:
+      'Websites are built using modern best practices and strong technical SEO foundations from the very beginning of the project. This includes clean structure, accessibility, semantic markup, and optimization techniques that support visibility, performance, and long-term growth.',
+    linkText: 'See details',
+    linkHref: '/about',
+    isGreen: true,
+  },
+  {
+    number: '05',
+    title: 'Reliable Delivery',
+    description:
+      'From the initial idea to the final launch, I focus on clear communication, thoughtful planning, and reliable delivery at every stage of the process. Each project is carefully tested and refined to ensure stability, quality, and confidence when the product goes live.',
+    linkText: 'How I work',
+    linkHref: '/about',
+    isGreen: false,
+  },
 ];
 
 const VerticalCardCarousel = () => {
-    const containerRef = useRef(null);
-    const cardsRef = useRef([]);
+  const containerRef = useRef(null);
+  const cardsRef = useRef([]);
 
-    useEffect(() => {
-        ScrollTrigger.getAll().forEach((st) => st.kill());
+  useEffect(() => {
+    ScrollTrigger.getAll().forEach((st) => st.kill());
 
-        const cards = cardsRef.current;
-        const movingCards = cards.slice(1);
+    const cards = cardsRef.current;
+    const movingCards = cards.slice(1);
 
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: true,
-                pin: true,
-                anticipatePin: 1,
-            },
-        });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        pin: true,
+        anticipatePin: 1,
+      },
+    });
 
-        tl.fromTo(
-            movingCards,
-            { yPercent: 100, opacity: 0.9 },
-            {
-                yPercent: 0,
-                opacity: 1,
-                stagger: 1,
-                ease: 'none',
-            }
-        );
+    tl.fromTo(
+      movingCards,
+      { yPercent: 100, opacity: 0.9 },
+      {
+        yPercent: 0,
+        opacity: 1,
+        stagger: 1,
+        ease: 'none',
+      }
+    );
 
-        return () => {
-            ScrollTrigger.getAll().forEach((st) => st.kill());
-        };
-    }, []);
+    return () => {
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
+  }, []);
 
-    return (
-        <>
-            <style jsx>{`
+  return (
+    <>
+      <style jsx>{`
        .carousel-container {
          width: 100%;
-         height: 400vh; /* Controlled scroll duration track */
+         height: 400vh;
          position: relative;
        }
 
@@ -224,35 +224,39 @@ const VerticalCardCarousel = () => {
        }
      `}</style>
 
-            <div ref={containerRef} className="carousel-container">
-                <div className="carousel-viewport">
-                    <div className="cards-wrapper">
-                        {cardsData.map((card, index) => (
-                            <div
-                                key={index}
-                                ref={(el) => { if (el) cardsRef.current[index] = el; }}
-                                className={`card ${card.isGreen ? 'card-green' : 'card-white'}`}
-                                style={{ zIndex: index + 1 }}
-                            >
-                                <div className="card-content">
-                                    <h3 className="card-title">{card.title}</h3>
-                                    <p className="card-description">{card.description}</p>
-                                    <a
-                                        href={card.linkHref}
-                                        className="card-link"
-                                        style={{ color: card.isGreen ? '#7df2b5' : 'inherit' }}
-                                    >
-                                        {card.linkText}
-                                    </a>
-                                </div>
-                                <div className="card-number">{card.number}</div>
-                            </div>
-                        ))}
-                    </div>
+      <div ref={containerRef} className="carousel-container">
+        <div className="carousel-viewport">
+          <div className="cards-wrapper">
+            {cardsData.map((card, index) => (
+              <div key={index} ref={(el) => { if (el) cardsRef.current[index] = el; }}
+                className={`card ${card.isGreen ? 'card-green' : 'card-white'}`}
+                style={{ zIndex: index + 1 }}>
+                <div className="card-content">
+                  <h3 className="card-title">{card.title}</h3>
+                  <p className="card-description">{card.description}</p>
+                  <a href={card.linkHref}
+                    className="card-link"
+                    style={{ color: card.isGreen ? '#7df2b5' : 'inherit' }}>
+                    {card.linkText}
+                  </a>
                 </div>
-            </div>
-        </>
-    );
+                <div className="card-number">{card.number}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default VerticalCardCarousel;
+
+
+
+
+
+
+{/* <div className="py-20">
+                    <VerticalCardCarousel />
+                </div> */}

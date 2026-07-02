@@ -1,38 +1,106 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
+import Image from 'next/image';
 import { FADEUP } from "@/utils/basic-utils";
-import { useScrollParallax } from "@/hooks/useScrollParallax";
-import VerticalCardCarousel from "./basic/VerticalCardCarousel";
+import { IoIdCardOutline } from 'react-icons/io5';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useVelocity, AnimatePresence } from 'framer-motion';
 
-const revealGroup = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.08,
-            delayChildren: 0.08,
-        },
-    },
-};
-
-const revealItem = {
-    hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
+const fadeInContainer = {
+    hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
-        transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
-    },
+        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.15 }
+    }
 };
 
-const SubjectProfile = () => {
-    const parallax = useScrollParallax(0.035);
+const itemReveal = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+};
+
+const ScrollMarquee = ({ texts = ["DEFAULT TEXT"], baseSpeed = 1, variant = "large", showIcon = false, className = "", direct = false }) => {
+
+    const { scrollY } = useScroll();
+    const scrollVelocity = useVelocity(scrollY);
+    const [direction, setDirection] = useState(-1);
+
+    const [currentTextIndex, setCurrentTextIndex] = useState(0);
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        if (texts.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentTextIndex(prev => (prev + 1) % texts.length);
+        }, 3500);
+        return () => clearInterval(interval);
+    }, [texts]);
+
+    useEffect(() => {
+        return scrollVelocity.on("change", (latest) => {
+            if (latest > 15) setDirection(1);
+            else if (latest < -15) setDirection(-1);
+        });
+    }, [scrollVelocity]);
+
+    const currentText = texts[currentTextIndex];
+
+    const speed = Math.max(0.5, baseSpeed);
+    const duration = 25 / speed;
 
     return (
-        <section className="relative z-20 -mt-20 w-full overflow-hidden bg-white text-black md:-mt-25">
-            <div className="relative z-10 px-8 md:px-16">
+        <div className={`w-full overflow-hidden whitespace-nowrap flex items-center select-none ${className}`}>
+            <motion.div ref={containerRef} className="flex items-center gap-10 will-change-transform" animate={{ x: direct ? ["0%", "-50%"] : ["-50%", "0%"] }} transition={{ duration: duration, ease: "linear", repeat: Infinity, repeatType: "loop" }} style={{ transformOrigin: "left center" }}>
+                <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
+                <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
+            </motion.div>
+        </div>
+    );
+};
+
+const MarqueeContent = ({ text, variant, showIcon }) => (
+    <div className="flex items-center gap-10 shrink-0">
+        <AnimatePresence mode="wait">
+            <motion.h2 key={text} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className={`font-black uppercase tracking-tight text-slate-900 bg-clip-text ${variant === "large" ? "text-[clamp(3.5rem,6vw,5.5rem)]" : "text-[clamp(1.1rem,4vw,1.4rem)]"}`}>
+                {text}
+            </motion.h2>
+        </AnimatePresence>
+        {showIcon && <IoIdCardOutline size={40} className="text-black/80" />}
+    </div>
+);
+
+const SubjectProfile = () => {
+
+    const [carouselIndex, setCarouselIndex] = useState(0);
+    const carouselData = [
+        "I build fast, smooth websites where performance is baked in from the start — delivering excellent results on any device and network.",
+        "I write clean, well-structured, and maintainable code focused on clarity, scalability, and long-term reliability.",
+        "I design intuitive, consistent, and responsive interfaces that feel natural across all devices and screen sizes.",
+        "Strong technical SEO, accessibility, and modern best practices are built in from day one — not added later.",
+        "From concept to launch, I ensure clear communication, thoughtful planning, and reliable delivery with rigorous testing."
+    ];
+
+    const welcomeTexts = [
+        "HELLO, GLAD YOU'RE HERE.",
+        "WELCOME TO MY CREATIVE SPACE.",
+        "LET'S CREATE SOMETHING REMARKABLE.",
+        "CRAFTING DIGITAL EXPERIENCES FOR YOU.",
+        "READY TO BRING IDEAS TO LIFE?"
+    ];
+
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCarouselIndex((prev) => (prev + 1) % carouselData.length);
+        }, 4500);
+        return () => clearInterval(interval);
+    }, [carouselData.length]);
+
+    return (
+        <section className="relative w-full min-h-screen bg-slate-50/50 text-slate-900 font-sans selection:bg-slate-900 selection:text-white py-16 px-4 md:px-12 overflow-hidden">
+
+            <div className="relative z-10">
                 <div className="mt-5 grid grid-cols-1 items-end gap-y-14 md:grid-cols-12 md:gap-x-8">
                     <motion.div {...FADEUP} className="md:col-span-8">
                         <div className="overflow-hidden">
@@ -60,20 +128,20 @@ const SubjectProfile = () => {
                 </div>
             </div>
 
-            <motion.div {...FADEUP} className="relative z-20 px-6 pt-10 pb-5 md:px-16">
+            <motion.div {...FADEUP} className="relative z-20 pt-3 pb-3">
                 <div className="mx-auto max-w-8xl">
                     <div className="relative flex items-center justify-between gap-6">
-                        <span className="text-[12px] uppercase tracking-[0.25em] text-black/50">
+                        <span className="text-[12px] uppercase tracking-normal text-black/50">
                             / Subject Profile
                         </span>
 
-                        <div className="hidden items-center gap-5 font-mono text-[10px] uppercase tracking-[0.38em] text-black/35 md:flex">
+                        <div className="hidden items-center gap-5 font-mono text-[10px] uppercase tracking-normal text-black/35 md:flex">
                             <span>12.8761 N</span>
                             <span>74.8316 E</span>
                         </div>
 
                         <div className="flex items-center gap-4 font-mono">
-                            <span className="text-[10px] uppercase tracking-[0.32em] text-black/45">
+                            <span className="text-[10px] uppercase tracking-normal text-black/45">
                                 @03-29
                             </span>
 
@@ -82,7 +150,7 @@ const SubjectProfile = () => {
                                 <motion.div className="absolute top-0 h-px w-6 bg-black/40 blur-[0.5px]" animate={{ x: ["-120%", "250%"] }} transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }} />
                             </div>
 
-                            <span className="text-[10px] uppercase tracking-[0.38em] text-black/70">2026</span>
+                            <span className="text-[10px] uppercase tracking-normal text-black/70">2026</span>
                         </div>
                     </div>
 
@@ -92,41 +160,103 @@ const SubjectProfile = () => {
                 </div>
             </motion.div>
 
-            <div className="relative z-10 px-6 pb-16 md:px-16">
-                <motion.div style={{ ...parallax.style, willChange: "transform" }} variants={revealGroup} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }}
-                    className="mx-auto grid max-w-8xl grid-cols-1 gap-8 border-y border-black/10 py-8 md:grid-cols-12 md:gap-10 md:py-12">
-                    <motion.div variants={revealItem} className="md:col-span-5 lg:col-span-4">
-                        <div className="relative overflow-hidden border border-black/10 bg-neutral-100">
-                            {/* <Image src="/my-image.png" alt="Akhil Shetty" width={1141} height={1379} unoptimized sizes="(min-width: 1024px) 28vw, (min-width: 768px) 40vw, 100vw" className="aspect-4/5 h-full w-full object-cover object-top grayscale" priority={false} /> */}
-                            <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/20 to-transparent p-5 text-white">
-                                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/55">Available for focused builds</p>
-                                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em]">Systems, interfaces, motion</p>
-                            </div>
+            <div className="absolute inset-0 z-0 opacity-15 pointer-events-none" style={{ backgroundImage: 'linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
+
+            <motion.div variants={fadeInContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="max-w-[1440px] mx-auto relative z-10 flex flex-col gap-10">
+                <div className="w-full flex flex-col lg:flex-row gap-8">
+
+                    <motion.div variants={itemReveal} className="flex-1 border border-slate-200/80 bg-white p-8 md:p-10 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group" >
+
+                        <ScrollMarquee texts={["ABOUT ME"]} baseSpeed={1.5} variant="large" showIcon={true} direct={true} className="border-b border-slate-200/80" />
+                        <ScrollMarquee texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />
+
+                        <div className="mt-4">
+                            <p className="text-slate-600 text-lg leading-relaxed font-light text-justify">
+                                I am a multidisciplinary creator <span className="text-slate-900 font-semibold underline decoration-slate-300 decoration-2 underline-offset-4">engineering high-impact digital experiences</span> at the intersection of robust code and beautiful design. My methodology is inherently systematic, architectural, and scalable.
+                            </p>
                         </div>
                     </motion.div>
 
-                    <div className="flex flex-col justify-between md:col-span-7 lg:col-span-8">
-                        <motion.div variants={revealItem} className="mt-8 grid gap-5 text-sm leading-7 text-black/62 md:grid-cols-2">
-                            <p>
-                                I am Akhil Shetty, a full-stack developer who likes the point where engineering taste meets product clarity. I build with React, Next.js, Node.js, Three.js, Firebase, and the tooling needed to ship work that feels sharp without becoming fragile.
-                            </p>
-                            <p>
-                                My best work starts with the reason a system exists, then moves into architecture, interaction, and performance. The goal is simple: make the experience feel effortless for the user and maintainable for the person who has to keep it alive.
-                            </p>
-                        </motion.div>
-                    </div>
-                </motion.div>
+                    <motion.div variants={itemReveal} className="flex-1 border border-slate-200/80 bg-white p-6 md:p-8 flex flex-col justify-between shadow-sm rounded-2xl">
+                        <div className="relative w-full h-48 md:h-40 mb-6 border border-slate-100 bg-slate-950 overflow-hidden rounded-xl group shadow-inner">
+                            {/* <Image src="/akhil.svg" alt="System visualization workflow" fill unoptimized className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out mix-blend-luminosity group-hover:mix-blend-normal"
+                            /> */}
+                            <div className="absolute top-3 left-3 bg-black/60 backdrop-blur px-2 py-1 text-[10px] font-mono text-slate-300 tracking-wider rounded border border-white/10 uppercase">
+                                live_node_status // active
+                            </div>
+                        </div>
 
-
-                <div className="py-20">
-                    <VerticalCardCarousel />
+                        <p className="text-slate-600 text-sm md:text-base leading-relaxed font-light text-justify">
+                            Every project I build intentionally bridges <span className="text-slate-900 font-medium">user psychology with comprehensive engineering strategy</span>. I build web ecosystems that are visually striking and structurally bulletproof. By leveraging contemporary headless stacks, tailored APIs, and purposeful interactions, I unlock flawless deployment performance.
+                        </p>
+                    </motion.div>
                 </div>
 
+                <motion.div variants={itemReveal} className="w-full border border-slate-900 bg-white p-8 md:p-12 relative shadow-xl rounded-2xl">
+                    <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-slate-900 -translate-x-3 translate-y-3" />
+                    <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-slate-900 translate-x-3 -translate-y-3" />
 
-            </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+                        <div className="lg:col-span-8 flex flex-col justify-between gap-10">
+                            <div>
+                                <h3 className="text-xl font-light leading-relaxed text-slate-800 tracking-tight text-justify">
+                                    I craft technical design solutions that help forward-thinking brands truly differentiate. With over <span className="text-slate-950 font-semibold bg-slate-100 px-2 py-0.5 rounded">3-4 years of tech experience</span>, I specialize in designing beautiful software interfaces and transforming them into high-performing reality—spanning frontend architectures, comprehensive backend infrastructures, headless CMS ecosystems, automated CI/CD automation pipelines, and specialized Salesforce CRM logic integrations.
+                                </h3>
+                            </div>
 
+                            <div className="min-h-[6.5rem] border-l-4 border-slate-900 pl-6 relative flex flex-col justify-center bg-slate-50/80 py-2 pr-4 shadow-sm">
+                                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 flex items-center gap-2">
+                                    Operational Workflow Ethos
+                                </div>
+                                <div className="relative min-h-[3rem] w-full flex items-center">
+                                    <AnimatePresence mode="popLayout">
+                                        <motion.div key={carouselIndex} initial={{ y: 25, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -25, opacity: 0 }} transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }} className="absolute w-full">
+                                            <p className="text-sm md:text-base font-medium text-slate-700 leading-relaxed">
+                                                <span className="text-black/60 font-bold mr-1.5">&gt;</span>{carouselData[carouselIndex % carouselData.length]}
+                                            </p>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-auto">
+                                <motion.div whileHover={{ y: -4, boxShadow: "0 12px 30px -10px rgba(0,0,0,0.08)" }} className="border border-slate-200 bg-slate-50/40 p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group hover:border-slate-400">
+                                    <p className="text-xs font-medium text-slate-600 group-hover:text-slate-900 transition-colors text-justify">
+                                        I design spaces with structural intention, merging the precise creative layouts of <span className="text-slate-950 font-semibold">Figma</span>, code flexibility of modern frameworks, and advanced scroll magic driven by <span className="text-slate-950 font-semibold">GSAP / Framer Motion</span>. These are strategic tools configured to capture complete market attention.
+                                    </p>
+                                </motion.div>
+
+                                <motion.div whileHover={{ y: -4, boxShadow: "0 12px 30px -10px rgba(0,0,0,0.08)" }} className="border  border-slate-200 bg-slate-50/40 p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group hover:border-slate-400">
+                                    <p className="text-xs font-medium text-slate-600 group-hover:text-slate-900 transition-colors text-justify">
+                                        Available for select freelance contracts, engineering high-tier enterprise modules, standalone applications, and automated deployments. I maximize client trust through direct accountability, transparency, and scalable architecture buildouts.
+                                    </p>
+                                </motion.div>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-4 relative h-full min-h-[400px] border border-slate-200 p-2 group rounded-xl bg-slate-50 shadow-inner">
+                            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-slate-900 rounded-tl -translate-x-[2px] -translate-y-[2px]" />
+                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-slate-900 rounded-br translate-x-[2px] translate-y-[2px]" />
+
+                            <div className="relative w-full h-[400px] bg-slate-200 overflow-hidden rounded-lg">
+                                {/* <Image src="/akhil.svg" alt="Professional Profile Visual Representation" fill unoptimized priority className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-700 ease-out" /> */}
+                            </div>
+
+                            <div className="w-[280px] absolute bottom-4 left-4 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/50 p-3 shadow-xl font-mono select-none rounded-lg">
+                                <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        <p className="text-[10px] text-slate-200 font-bold tracking-wider">CORE_SYS // ENGR.AV2</p>
+                                    </div>
+                                </div>
+                                <p className="text-[9px] text-slate-400 tracking-wide">LATENCY: OPTIMAL // LOC: GLOBAL</p>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            </motion.div>
         </section>
     );
-};
+}
 
 export default SubjectProfile;

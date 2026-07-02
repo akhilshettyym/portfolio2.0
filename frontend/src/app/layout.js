@@ -5,6 +5,7 @@ import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -55,7 +56,10 @@ export default function RootLayout({ children }) {
               <Navbar />
             </NavbarWrapper> */}
 
-        <main className="relative pt-25"> {children} </main>
+        <main className="relative pt-25">
+          {children}
+          <ToastContainer />
+        </main>
 
         {/* </LoaderWrapper> */}
         {/* </LenisProvider> */}

@@ -3,10 +3,10 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
-import { motion, useReducedMotion } from "framer-motion";
 import { memo, useEffect, useRef } from "react";
-import { BUBBLE_STATUS_ITEMS, BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
+import { motion, useReducedMotion } from "framer-motion";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
+import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
 
 const BubbleSceneComponent = () => {
     const canvasRef = useRef(null);
@@ -351,13 +351,7 @@ const BubbleSceneComponent = () => {
     }, [shouldReduceMotion]);
 
     return (
-        <motion.section
-            className="bubble-wrapper"
-            initial={{ opacity: 0, y: 72 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true, amount: 0.18 }}
-        >
+        <motion.section className="bubble-wrapper" initial={{ opacity: 0, y: 72 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.18 }}>
             <div ref={wrapperRef} className="bubble-scene-panel">
                 <div className="bubble-grid" aria-hidden="true" />
                 <div className="bubble-radial-bg" aria-hidden="true" />
@@ -366,43 +360,20 @@ const BubbleSceneComponent = () => {
 
                 <canvas ref={canvasRef} />
 
-                <motion.div
-                    initial={{ opacity: 0, y: 34, filter: "blur(10px)" }}
-                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    className="bubble-content"
-                >
+                <motion.div initial={{ opacity: 0, y: 34, filter: "blur(10px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content">
                     <div className="bubble-content-inner">
-                        <div className="bubble-kicker">
-                            <span>Stack constellation</span>
-                            <span>Interactive scene</span>
-                        </div>
-
-                        <div className="bubble-copy-grid">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
                             {BUBBLE_TEXT_GROUPS.map((group) => (
-                                <div key={group.title} className="bubble-copy-row">
-                                    <span className="bubble-copy-index">{group.index}</span>
-                                    <div>
-                                        <h3>{group.title}</h3>
-                                        <p>{group.summary}</p>
-                                        <div className="bubble-chip-row">
-                                            {group.items.map((item) => (
-                                                <span key={item}>{item}</span>
-                                            ))}
-                                        </div>
-                                    </div>
+                                <div key={group.summary} className="flex flex-col space-y-2 p-4 border border-neutral-200 bg-white shadow-[2px_2px_0px_#000000]">
+                                    <p className="text-sm font-sans text-neutral-600 leading-relaxed">
+                                        {group.summary}
+                                    </p>
                                 </div>
-                            ))}
-                        </div>
-
-                        <div className="bubble-status-row" aria-label="Technology highlights">
-                            {BUBBLE_STATUS_ITEMS.map((item) => (
-                                <span key={item}>{item}</span>
                             ))}
                         </div>
                     </div>
                 </motion.div>
+
             </div>
         </motion.section>
     );

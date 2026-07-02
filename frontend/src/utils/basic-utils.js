@@ -344,22 +344,37 @@ export const EDGE_PADDING = 24;
 export const BUBBLE_TEXT_GROUPS = [
     {
         index: "01",
-        title: "Interface Layer",
-        summary: "Tools I use to make products feel fast, responsive, and alive.",
-        items: ["React surfaces", "Motion systems", "3D interactions"],
+        summary: "Engineering responsive interface layers optimized for sub-millisecond execution, fluid transitions, and deterministic state synchronization.",
     },
     {
         index: "02",
-        title: "Service Layer",
-        summary: "The backend pieces that keep the experience stable after the first impression.",
-        items: ["APIs", "Data models", "Auth flows"],
+        summary: "Architecting resilient distributed systems, data processing layers, and scalable APIs that maintain consistency under peak traffic volumes.",
     },
     {
         index: "03",
-        title: "Delivery Layer",
-        summary: "Shipping habits for work that can survive real users, not only demos.",
-        items: ["CI/CD", "Cloud deploys", "Monitoring mindset"],
+        summary: "Enforcing rigorous deployment criteria, continuous observability pipelines, and fallback strategies designed to withstand real-world enterprise workloads.",
+    },
+    {
+        index: "04",
+        summary: "Profiling execution bottlenecks, managing asset overhead, and tuning bundle delivery to guarantee exceptional core web vitals globally.",
     },
 ];
 
-export const BUBBLE_STATUS_ITEMS = ["React", "Next", "Node", "Three", "Firebase", "Docker"];
+/* CreateSomething */
+export const SERVICES = [
+    { id: "frontend", label: "Frontend Development" },
+    { id: "backend", label: "Backend Engineering" },
+    { id: "fullstack", label: "Fullstack Solutions" },
+    { id: "mobile_app", label: "Mobile Applications" },
+    { id: "cms", label: "CMS Integration" },
+    { id: "ci_cd", label: "DevOps & CI/CD" },
+    { id: "other", label: "Other Systems" }
+];
+
+export const BUDGET_OPTIONS = [
+    { id: "under_1k", label: "Under $1,000" },
+    { id: "1k_5k", label: "$1,000 - $5,000" },
+    { id: "5k_10k", label: "$5,000 - $10,000" },
+    { id: "10k_plus", label: "$10,000+" },
+    { id: "not_sure", label: "Not Sure / Deciding" }
+];

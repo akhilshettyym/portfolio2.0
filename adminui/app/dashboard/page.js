@@ -1,15 +1,15 @@
 "use client";
 
 import { CgHello } from "react-icons/cg";
+import { showToast } from "@/utils/toast";
 import { apiFetch } from "../../utils/api";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LuWorkflow } from "react-icons/lu";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
     const router = useRouter();
     const [leads, setLeads] = useState([]);
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,10 +26,9 @@ export default function DashboardPage() {
             setLeads(res.data || []);
 
         } catch (err) {
-            setError(err.message || "Failed to load dashboard data.");
-            if (err.message?.toLowerCase().includes("denied") || err.message?.toLowerCase().includes("failed")) {
-                router.push("/login");
-            }
+            const errorMsg = err.message || "Failed to load dashboard data.";
+
+            showToast.error(errorMsg);
 
         } finally {
             setLoading(false);
@@ -47,8 +46,10 @@ export default function DashboardPage() {
             await apiFetch(`/api/admin/delete-details/${leadToDelete}`, { method: "DELETE" });
             setLeads(leads.filter((lead) => lead._id !== leadToDelete));
 
+            showToast.success("Lead Deleted Successfully");
+
         } catch (err) {
-            alert("Deletion failed: " + err.message);
+            showToast.error("Deletion failed: " + err.message);
 
         } finally {
             setIsModalOpen(false);
@@ -72,12 +73,6 @@ export default function DashboardPage() {
                     Count: {leads.length}
                 </span>
             </div>
-
-            {error && (
-                <div className="border border-black bg-black text-white text-xs p-3 mb-6 font-mono">
-                    {error}
-                </div>
-            )}
 
             {leads.length === 0 ? (
                 <div className="border border-dashed border-black p-12 text-center text-sm font-mono text-gray-500">
@@ -145,7 +140,7 @@ export default function DashboardPage() {
 
                         <div className="mt-6 flex justify-end gap-3">
                             <button onClick={() => setIsModalOpen(false)} className="border border-black/60 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"> Cancel </button>
-                            <button onClick={handleConfirmDelete} className="px-4 py-2 text-sm font-medium bg-white border border-black text-blacl/60 hover:bg-black hover:text-white transition-colors shadow-sm"> Delete </button>
+                            <button onClick={handleConfirmDelete} className="px-4 py-2 text-sm font-medium bg-white border border-black text-black/60 hover:bg-black hover:text-white transition-colors shadow-sm"> Delete </button>
                         </div>
                     </div>
                 </div>

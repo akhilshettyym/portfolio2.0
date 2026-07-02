@@ -1,7 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import GlobalCursor from "@/components/GlobalCursor";
-import LoaderWrapper from "@/components/LoaderWrapper";
+import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
 import { Montserrat, Geist_Mono } from "next/font/google";

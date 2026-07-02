@@ -7,7 +7,7 @@ import { CLOUD_SHADER } from "@/utils/shader-utils";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
-import LiquidGlass from "@/components/LiquidGlass";
+import LiquidGlass from "@/components/basic/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
 import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";

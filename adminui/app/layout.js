@@ -2,6 +2,9 @@
 
 import "./globals.css";
 import { apiFetch } from "../utils/api";
+import { showToast } from "@/utils/toast";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function RootLayout({ children }) {
@@ -15,8 +18,10 @@ export default function RootLayout({ children }) {
       await apiFetch("/api/auth/logout", { method: "POST" });
       router.push("/login");
 
+      showToast.success("Logged out Successfully");
+
     } catch (error) {
-      alert("Logout failed: " + error.message);
+      showToast.error("Logout failed: " + error.message);
     }
   };
 
@@ -40,6 +45,7 @@ export default function RootLayout({ children }) {
 
         <main className="flex-1 flex flex-col">
           {children}
+          <ToastContainer />
         </main>
 
       </body>

@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import LazyLoad from "@/components/LazyLoad";
+import LazyLoad from "@/components/basic/LazyLoad";
 import MyExperienceLazy from "@/components/LazyComponents/MyExperienceLazy";
 import GithubGraphQlLazy from "@/components/LazyComponents/GithubGraphQlLazy";
 import SelectedWorks from "@/components/SelectedWorks";
-import EmergencyCTA from "@/components/EmergencyCTA";
+import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import Footer from "@/components/Footer";
 
 const WorkLayout = memo(function WorkLayout() {

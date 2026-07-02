@@ -5,7 +5,7 @@ import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { motion, useReducedMotion } from "framer-motion";
 import { memo, useEffect, useRef } from "react";
-import { BUBBLE_STATUS_ITEMS, BUBBLE_TEXT_GROUPS } from "@/data/bubble-scene";
+import { BUBBLE_STATUS_ITEMS, BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 
 const BubbleSceneComponent = () => {

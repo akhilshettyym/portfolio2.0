@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import Footer from "@/components/Footer";
-import LazyLoad from "@/components/LazyLoad";
+import LazyLoad from "@/components/basic/LazyLoad";
 import DevTicker from "@/components/DevTicker";
 import HeroSection from "@/components/HeroSection";
-import EmergencyCTA from "@/components/EmergencyCTA";
+import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import SubjectProfile from "@/components/SubjectProfile";
 import BubbleSceneLazy from "@/components/LazyComponents/BubbleSceneLazy";
 import CardStackRevealLazy from "@/components/LazyComponents/CardStackRevealLazy";
@@ -13,7 +13,7 @@ const InfoLayout = memo(function InfoLayout() {
     return (
         <div>
             {/* <HeroSection /> */}
-            {/* <SubjectProfile /> */}
+            <SubjectProfile />
             {/* <DevTicker /> */}
 
             {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>

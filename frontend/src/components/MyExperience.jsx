@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import "@/styles/my_experience.css";
-import LiquidGlass from './LiquidGlass';
+import LiquidGlass from './basic/LiquidGlass';
 import { SlDirections } from 'react-icons/sl';
 import { GrPowerReset } from 'react-icons/gr';
 import { FaPause, FaPlay } from 'react-icons/fa6';

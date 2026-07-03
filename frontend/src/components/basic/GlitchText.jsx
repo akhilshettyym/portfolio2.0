@@ -5,9 +5,9 @@ import { useLenis } from "@/context/LenisContext";
 import { useEffect, useState, useRef } from "react";
 
 const GlitchText = ({ text }) => {
-    const [display, setDisplay] = useState(text);
-
     const lenisRef = useLenis();
+
+    const [display, setDisplay] = useState(text);
 
     const speedRef = useRef(40);
     const mouseIntensity = useRef(0);
@@ -84,6 +84,6 @@ const GlitchText = ({ text }) => {
             {display}
         </span>
     );
-}
+};
 
 export default GlitchText;

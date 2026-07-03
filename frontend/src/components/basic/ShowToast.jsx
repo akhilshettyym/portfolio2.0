@@ -24,7 +24,6 @@ const brutalistOptions = (customOptions = {}) => ({
 });
 
 export const ShowToast = {
-
     success: (message, options = {}) => {
         toast.success(message, brutalistOptions({ icon: "✓", ...options }));
     },
@@ -34,10 +33,10 @@ export const ShowToast = {
     },
 
     info: (message, options = {}) => {
-        toast.info(message, brutalistOptions({ icon: "ℹ", ...options }));
+        toast.info(message, brutalistOptions({ icon: "i", ...options }));
     },
 
     warning: (message, options = {}) => {
         toast.warn(message, brutalistOptions({ icon: "⚠", ...options }));
-    }
+    },
 };

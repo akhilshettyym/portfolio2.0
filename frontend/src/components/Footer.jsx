@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { SOCIALS } from "@/utils/basic-utils";
-import CustomButton from "./basic/CustomButton";
+import { FaRegCopyright } from "react-icons/fa6";
+import CustomButton from "@/components/basic/CustomButton";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { FaRegCopyright } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
 
 function splitLetters(text) {
     return Array.from(text);
@@ -19,7 +19,13 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
     return (
         <span className={className} aria-label={text}>
             {chars.map((char, index) => (
-                <motion.span key={`${char}-${index}`} initial={{ opacity: 0, y: 24, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, amount: 0.8 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: delay + index * 0.015 }} className="inline-block" style={{ whiteSpace: char === " " ? "pre" : "normal" }}>
+                <motion.span key={`${char}-${index}`}
+                    initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.8 }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: delay + index * 0.015 }}
+                    className="inline-block"
+                    style={{ whiteSpace: char === " " ? "pre" : "normal" }}>
                     {char === " " ? "\u00A0" : char}
                 </motion.span>
             ))}
@@ -27,35 +33,27 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
     );
 }
 
-function MarqueeLine({ text }) {
+const MarqueeLine = ({ text, large }) => {
+    const marqueeAnimation = large ? { x: [0, -2400] } : { x: [-2400, 0] };
+
     return (
         <div className="relative overflow-hidden py-2">
-            <motion.div className="flex w-max items-center gap-6 whitespace-nowrap" animate={{ x: [0, -2400] }} transition={{ duration: 46, ease: "linear", repeat: Infinity }}>
+            <motion.div className="flex w-max items-center gap-6 whitespace-nowrap"
+                transition={{ duration: 46, ease: "linear", repeat: Infinity }}
+                animate={marqueeAnimation}>
+
                 {Array.from({ length: 8 }).map((_, i) => (
                     <div key={i} className="flex items-center gap-6">
-                        <span className="text-[5rem] font-bold tracking-[-0.08em] text-black/90"> {text} </span>
+                        <span className={`font-bold text-black/90 ${large ? "text-[5rem]" : "text-[2rem]"}`}>
+                            {" "}{text}{" "}
+                        </span>
                         <span className="h-3 w-3 rounded-full bg-black/90 sm:h-4 sm:w-4" />
                     </div>
                 ))}
             </motion.div>
         </div>
     );
-}
-
-function MarqueeLine2({ text }) {
-    return (
-        <div className="relative overflow-hidden py-2">
-            <motion.div className="flex w-max items-center gap-6 whitespace-nowrap" animate={{ x: [-2400, 0] }} transition={{ duration: 46, ease: "linear", repeat: Infinity }}>
-                {Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className="flex items-center gap-6">
-                        <span className="text-[2rem] font-bold tracking-normal text-black/90"> {text} </span>
-                        <span className="h-3 w-3 rounded-full bg-black/90" />
-                    </div>
-                ))}
-            </motion.div>
-        </div>
-    );
-}
+};
 
 const Footer = () => {
     const router = useRouter();
@@ -69,46 +67,40 @@ const Footer = () => {
     });
 
     const sectionPadding = useSpring(
-        useTransform(
-            scrollYProgress,
-            [0, 0.28, 0.42, 0.56, 1],
-            [50, 50, 30, 0, 0]
-        ),
-        { stiffness: 72, damping: 20, mass: 0.9 }
+        useTransform(scrollYProgress, [0, 0.28, 0.42, 0.56, 1], [50, 50, 30, 0, 0]),
+        { stiffness: 72, damping: 20, mass: 0.9 },
     );
 
     const revealLift = useSpring(
         useTransform(scrollYProgress, [0, 0.28, 0.55, 1], [16, 10, 0, 0]),
-        { stiffness: 80, damping: 22, mass: 0.8 }
+        { stiffness: 80, damping: 22, mass: 0.8 },
     );
 
     const shellShadow = useTransform(
         scrollYProgress,
         [0, 0.16, 0.42, 1],
-        [
-            "0 10px 32px rgba(0,0,0,0.08)",
+        ["0 10px 32px rgba(0,0,0,0.08)",
             "0 18px 48px rgba(0,0,0,0.12)",
             "0 28px 70px rgba(0,0,0,0.16)",
-            "0 36px 90px rgba(0,0,0,0.20)",
-        ]
+            "0 36px 90px rgba(0,0,0,0.20)"],
     );
 
     const curtainOpacity = useTransform(
         scrollYProgress,
         [0, 0.12, 0.3, 0.56, 1],
-        [1, 0.96, 0.84, 0.42, 0]
+        [1, 0.96, 0.84, 0.42, 0],
     );
 
     const gridOpacity = useTransform(
         scrollYProgress,
         [0, 0.18, 0.5, 1],
-        [0.18, 0.14, 0.08, 0]
+        [0.18, 0.14, 0.08, 0],
     );
 
     const glowOpacity = useTransform(
         scrollYProgress,
         [0, 0.12, 0.34, 0.7, 1],
-        [0.32, 0.22, 0.12, 0.04, 0]
+        [0.32, 0.22, 0.12, 0.04, 0],
     );
 
     useEffect(() => {
@@ -122,14 +114,15 @@ const Footer = () => {
                 const ratio = entry.intersectionRatio;
                 setShouldSnap(ratio > 0.38);
             },
-            { threshold: 0.4 }
+            { threshold: 0.4 },
         );
 
         observer.observe(el);
         return () => observer.disconnect();
     }, [prefersReducedMotion]);
 
-    const animatedCard = prefersReducedMotion ? {}
+    const animatedCard = prefersReducedMotion
+        ? {}
         : {
             initial: { opacity: 0, y: 24, filter: "blur(10px)" },
             whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -140,7 +133,6 @@ const Footer = () => {
     const handleNavigation = () => {
         console.log("navigate to start page");
     };
-
 
     const scrollToTop = () => {
         window.scrollTo({
@@ -153,36 +145,49 @@ const Footer = () => {
         router.push("/start");
 
         window.scrollTo({
-            top: 0, left: 0, behavior: "smooth",
+            top: 0,
+            left: 0,
+            behavior: "smooth",
         });
     };
 
     const topOverlayOpacity = useTransform(
         scrollYProgress,
         [0, 0.2, 0.5, 1],
-        [0.7, 0.5, 0.2, 0]
+        [0.7, 0.5, 0.2, 0],
     );
 
     const topBorderOpacity = useTransform(
         scrollYProgress,
         [0, 0.18, 0.45, 1],
-        [0.85, 0.5, 0.18, 0]
+        [0.85, 0.5, 0.18, 0],
     );
 
     return (
         <motion.section ref={sectionRef}
-            style={prefersReducedMotion ? undefined : { padding: sectionPadding }} className="relative w-full bg-white text-black p-12.5">
+            style={prefersReducedMotion ? undefined : { padding: sectionPadding }}
+            className="relative w-full bg-white text-black p-12.5">
+
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                <motion.div style={{ opacity: glowOpacity }} className="absolute left-1/2 top-10 h-128 w-lg -translate-x-1/2 rounded-full bg-white blur-3xl sm:h-184 sm:w-184" />
-                <motion.div style={{ opacity: gridOpacity }} className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-size-[64px_64px]" />
-                <motion.div style={{ opacity: curtainOpacity }} className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_52%)]" />
+                <motion.div style={{ opacity: glowOpacity }}
+                    className="absolute left-1/2 top-10 h-128 w-lg -translate-x-1/2 rounded-full bg-white blur-3xl sm:h-184 sm:w-184" />
+
+                <motion.div style={{ opacity: gridOpacity }}
+                    className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-size-[64px_64px]" />
+
+                <motion.div style={{ opacity: curtainOpacity }}
+                    className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_52%)]" />
             </div>
 
-            <motion.div style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }} className="relative mx-auto min-h-svh w-full overflow-hidden rounded-none bg-white">
-                <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_20%,transparent_45%)]"
+            <motion.div style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }}
+                className="relative mx-auto min-h-svh w-full overflow-hidden rounded-none bg-white">
+
+                <motion.div aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_20%,transparent_45%)]"
                     style={{ opacity: topOverlayOpacity }} />
 
-                <motion.div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-black/10"
+                <motion.div aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-black/10"
                     style={{ opacity: topBorderOpacity }} />
 
                 <div className="relative z-40">
@@ -192,8 +197,8 @@ const Footer = () => {
                                 <div className="flex h-full w-full flex-col gap-4">
                                     <div className="flex flex-1 items-center justify-center p-4 text-indigo-900">
                                         <div className="overflow-hidden">
+                                            <MarqueeLine large={true} text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
                                             <MarqueeLine text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
-                                            <MarqueeLine2 text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
                                         </div>
                                     </div>
 
@@ -210,14 +215,7 @@ const Footer = () => {
                                                             <Image src="/footer/animated_zigzag.gif" alt="Animated zigzag pattern" width={350} height={20} priority unoptimized className="w-full h-auto object-contain mix-blend-multiply" />
                                                         </div> */}
                                                         <div className="absolute top-4 right-5 z-10 bg-gray-200 mt-1">
-                                                            <Image
-                                                                src="/footer/animated_zigzag.gif"
-                                                                alt="Animated zigzag pattern"
-                                                                width={200}
-                                                                height={80}
-                                                                unoptimized
-                                                                className="h-20 w-auto object-contain mix-blend-multiply"
-                                                            />
+                                                            <Image src="/footer/animated_zigzag.gif" alt="Animated zigzag pattern" width={200} height={80} unoptimized className="h-20 w-auto object-contain mix-blend-multiply" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,7 +270,6 @@ const Footer = () => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -311,7 +308,6 @@ const Footer = () => {
                                         <span>2026 Akhil Shetty M.</span>
                                     </span>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -326,7 +322,9 @@ const Footer = () => {
 
                         <div className="absolute top-8 left-15 z-10">
                             <button onClick={handleHitMeUp}>
-                                <span className="uppercase text-xs font-bold text-black/50 hover:text-black cursor-pointer"> Am probably not sleeping, Hit me up </span>
+                                <span className="uppercase text-xs font-bold text-black/50 hover:text-black cursor-pointer">
+                                    {" "} Am probably not sleeping, Hit me up{" "}
+                                </span>
                             </button>
                         </div>
 
@@ -334,7 +332,6 @@ const Footer = () => {
                             AKHIL SHETTY{"\u00A0"}
                         </h2>
                     </div>
-
                 </div>
             </motion.div>
         </motion.section>

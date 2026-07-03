@@ -1,14 +1,14 @@
 "use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import "@/styles/my_experience.css";
-import LiquidGlass from './basic/LiquidGlass';
-import { SlDirections } from 'react-icons/sl';
-import { GrPowerReset } from 'react-icons/gr';
-import { FaPause, FaPlay } from 'react-icons/fa6';
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { SlDirections } from "react-icons/sl";
+import { GrPowerReset } from "react-icons/gr";
+import { FaPause, FaPlay } from "react-icons/fa6";
+import LiquidGlass from "@/components/basic/LiquidGlass";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
-const COMPONENT_HEIGHT = '480px';
+const COMPONENT_HEIGHT = "480px";
 const UNIQUE_CARD_COUNT = 3;
 const SCANNER_POSITION_RATIO = 0.75;
 
@@ -29,7 +29,8 @@ const generateMachineCode = (width, height) => {
         line += hexChars[Math.floor(Math.random() * 16)];
         line += " ";
       } else if (distribution < 0.92) {
-        line += statusTokens[Math.floor(Math.random() * statusTokens.length)] + " ";
+        line +=
+          statusTokens[Math.floor(Math.random() * statusTokens.length)] + " ";
       } else {
         line += "   ";
       }
@@ -51,22 +52,22 @@ const experience_cards = [
   "/my_experience/education/edu_be.svg",
 ];
 
-export default function MyExperience() {
+const MyExperience = () => {
   const [isAnimating, setIsAnimating] = useState(true);
   const [speedSetting, setSpeedSetting] = useState(120);
   const [speedUI, setSpeedUI] = useState(120);
-  const [activeLog, setActiveLog] = useState('experience');
+  const [activeLog, setActiveLog] = useState("experience");
   const [isVisible, setIsVisible] = useState(false);
 
   const experienceAsciiCards = useMemo(() => {
     return [...Array(UNIQUE_CARD_COUNT)].map(() =>
-      generateMachineCode(Math.floor(400 / 6), Math.floor(250 / 13))
+      generateMachineCode(Math.floor(400 / 6), Math.floor(250 / 13)),
     );
   }, []);
 
   const educationAsciiCards = useMemo(() => {
     return [...Array(UNIQUE_CARD_COUNT)].map(() =>
-      generateMachineCode(Math.floor(400 / 6), Math.floor(250 / 13))
+      generateMachineCode(Math.floor(400 / 6), Math.floor(250 / 13)),
     );
   }, []);
 
@@ -86,13 +87,13 @@ export default function MyExperience() {
     baseSpeed: 120,
     direction: -1,
     isDragging: false,
-    lastTime: typeof performance !== 'undefined' ? performance.now() : 0,
+    lastTime: typeof performance !== "undefined" ? performance.now() : 0,
     lastMouseX: 0,
     mouseVelocity: 0,
     containerWidth: 0,
     singleLoopWidth: 0,
     hasInitializedPosition: false,
-    lastSpeedUI: 120
+    lastSpeedUI: 120,
   });
 
   const handleSpeedSliderChange = (e) => {
@@ -105,14 +106,14 @@ export default function MyExperience() {
   };
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !containerRef.current) return;
+    if (typeof window === "undefined" || !containerRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
         isVisibleRef.current = entry.isIntersecting;
       },
-      { threshold: 0.05 }
+      { threshold: 0.05 },
     );
 
     observer.observe(containerRef.current);
@@ -165,7 +166,8 @@ export default function MyExperience() {
       cardLineRef.current.style.transform = `translateX(${s.position}px)`;
 
       const containerRect = containerRef.current.getBoundingClientRect();
-      const scannerX = containerRect.left + (containerRect.width * SCANNER_POSITION_RATIO);
+      const scannerX =
+        containerRect.left + containerRect.width * SCANNER_POSITION_RATIO;
       const cards = cardLineRef.current.children;
 
       for (let i = 0; i < cards.length; i++) {
@@ -174,8 +176,8 @@ export default function MyExperience() {
         let pct = ((scannerX - rect.left) / rect.width) * 100;
         pct = Math.max(0, Math.min(100, pct));
 
-        cardEl.style.setProperty('--clip-right', `${100 - pct}%`);
-        cardEl.style.setProperty('--clip-left', `${pct}%`);
+        cardEl.style.setProperty("--clip-right", `${100 - pct}%`);
+        cardEl.style.setProperty("--clip-left", `${pct}%`);
       }
     }
 
@@ -198,7 +200,7 @@ export default function MyExperience() {
     };
 
     handleLayoutCalculations();
-    window.addEventListener('resize', handleLayoutCalculations);
+    window.addEventListener("resize", handleLayoutCalculations);
 
     if (isVisible) {
       stateRef.current.lastTime = performance.now();
@@ -208,7 +210,7 @@ export default function MyExperience() {
     }
 
     return () => {
-      window.removeEventListener('resize', handleLayoutCalculations);
+      window.removeEventListener("resize", handleLayoutCalculations);
       if (reqRef.current) cancelAnimationFrame(reqRef.current);
     };
   }, [animate, isVisible]);
@@ -223,7 +225,7 @@ export default function MyExperience() {
         this.particles = [];
         this.running = false;
         this.rafId = null;
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext("2d");
       }
       init() {
         this.canvas.width = window.innerWidth;
@@ -247,10 +249,12 @@ export default function MyExperience() {
       getSpawnProperties(isInitial = false) {
         const midPoint = this.canvas.width * SCANNER_POSITION_RATIO;
         let xCoord;
-        if (Math.random() < 0.80) {
+        if (Math.random() < 0.8) {
           xCoord = isInitial ? Math.random() * midPoint : Math.random() * 120;
         } else {
-          xCoord = isInitial ? midPoint + Math.random() * (this.canvas.width - midPoint) : midPoint + Math.random() * (this.canvas.width - midPoint);
+          xCoord = isInitial
+            ? midPoint + Math.random() * (this.canvas.width - midPoint)
+            : midPoint + Math.random() * (this.canvas.width - midPoint);
         }
         return {
           x: Math.floor(xCoord),
@@ -258,7 +262,7 @@ export default function MyExperience() {
           baseVx: (Math.random() - 0.7) * 1.8,
           baseVy: (Math.random() - 0.5) * 0.4,
           size: Math.floor(Math.random() * 5) + 2,
-          alpha: Math.random() * 0.35 + 0.15
+          alpha: Math.random() * 0.35 + 0.15,
         };
       }
       animate() {
@@ -278,12 +282,17 @@ export default function MyExperience() {
           p.x += p.baseVx * speedFactor;
           p.y += p.baseVy * speedFactor;
 
-          if (p.x < -10 || p.x > this.canvas.width + 10 || p.y < -10 || p.y > this.canvas.height + 10) {
+          if (
+            p.x < -10 ||
+            p.x > this.canvas.width + 10 ||
+            p.y < -10 ||
+            p.y > this.canvas.height + 10
+          ) {
             this.particles[index] = this.getSpawnProperties(false);
           }
 
           this.ctx.globalAlpha = p.alpha;
-          this.ctx.fillStyle = '#000000';
+          this.ctx.fillStyle = "#000000";
           this.ctx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
         });
         this.rafId = requestAnimationFrame(() => this.animate());
@@ -293,7 +302,7 @@ export default function MyExperience() {
     class ParticleScanner {
       constructor(canvas) {
         this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
+        this.ctx = canvas.getContext("2d");
         this.w = window.innerWidth;
         this.h = 320;
         this.particles = [];
@@ -320,13 +329,13 @@ export default function MyExperience() {
         return {
           x: lightBarX + (Math.random() - 0.5) * 10,
           y: Math.random() * this.h,
-          vx: explodeLeft ? -(Math.random() * 6.0 + 2.0) : (Math.random() * 3.5 + 0.5),
+          vx: explodeLeft ? -(Math.random() * 6.0 + 2.0) : Math.random() * 3.5 + 0.5,
           vy: (Math.random() - 0.5) * 5.0,
           size: Math.floor(Math.random() * 4) + 1.5,
-          color: isWhite ? '#ffffff' : '#000000',
+          color: isWhite ? "#ffffff" : "#000000",
           alpha: Math.random() * 0.9 + 0.1,
           life: 1.0,
-          decay: Math.random() * 0.04 + 0.02
+          decay: Math.random() * 0.04 + 0.02,
         };
       }
       animate() {
@@ -334,7 +343,8 @@ export default function MyExperience() {
         this.ctx.clearRect(0, 0, this.w, this.h);
 
         let visualVelocity = stateRef.current.velocity;
-        if (!isAnimatingRef.current && !stateRef.current.isDragging) visualVelocity = 0;
+        if (!isAnimatingRef.current && !stateRef.current.isDragging)
+          visualVelocity = 0;
         const speedFactor = Math.max(0.1, visualVelocity / 120);
 
         for (let i = 0; i < this.particles.length; i++) {
@@ -347,7 +357,10 @@ export default function MyExperience() {
           p.alpha = p.life;
 
           if (p.life <= 0 || p.x < -20 || p.x > this.w + 20) {
-            if (visualVelocity > 0 && this.particles.length <= this.maxParticles) {
+            if (
+              visualVelocity > 0 &&
+              this.particles.length <= this.maxParticles
+            ) {
               this.particles[i] = this.createParticle();
             } else {
               this.particles.splice(i, 1);
@@ -373,8 +386,10 @@ export default function MyExperience() {
       }
     }
 
-    if (particleCanvasRef.current) particleSystem = new ParticleSystem(particleCanvasRef.current);
-    if (scannerCanvasRef.current) particleScanner = new ParticleScanner(scannerCanvasRef.current);
+    if (particleCanvasRef.current)
+      particleSystem = new ParticleSystem(particleCanvasRef.current);
+    if (scannerCanvasRef.current)
+      particleScanner = new ParticleScanner(scannerCanvasRef.current);
 
     const handleResize = () => {
       if (particleSystem?.running) particleSystem.init();
@@ -383,7 +398,7 @@ export default function MyExperience() {
         particleScanner.canvas.width = window.innerWidth;
       }
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     if (isVisible) {
       if (particleSystem) particleSystem.start();
@@ -394,7 +409,7 @@ export default function MyExperience() {
     }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       if (particleSystem) particleSystem.stop();
       if (particleScanner) particleScanner.stop();
     };
@@ -404,7 +419,7 @@ export default function MyExperience() {
     stateRef.current.isDragging = true;
     stateRef.current.lastMouseX = clientX;
     stateRef.current.mouseVelocity = 0;
-    if (cardLineRef.current) cardLineRef.current.style.cursor = 'grabbing';
+    if (cardLineRef.current) cardLineRef.current.style.cursor = "grabbing";
   };
 
   const handleDragMove = (clientX) => {
@@ -418,7 +433,7 @@ export default function MyExperience() {
   const handleDragEnd = () => {
     if (!stateRef.current.isDragging) return;
     stateRef.current.isDragging = false;
-    if (cardLineRef.current) cardLineRef.current.style.cursor = 'grab';
+    if (cardLineRef.current) cardLineRef.current.style.cursor = "grab";
 
     if (Math.abs(stateRef.current.mouseVelocity) > stateRef.current.baseSpeed) {
       stateRef.current.velocity = Math.abs(stateRef.current.mouseVelocity);
@@ -453,7 +468,9 @@ export default function MyExperience() {
   };
 
   const toggleLogSource = () => {
-    setActiveLog(prev => prev === 'experience' ? 'education' : 'experience');
+    setActiveLog((prev) =>
+      prev === "experience" ? "education" : "experience",
+    );
   };
 
   return (
@@ -469,13 +486,19 @@ export default function MyExperience() {
 
         <LiquidGlass width="65px" height="40px" padding="p-0">
           <button className="flex items-center justify-center w-full h-full text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700 pb-6" onClick={resetPosition}>
-            <span className="animate-pulse-slow"> <GrPowerReset size={18} /> </span>
+            <span className="animate-pulse-slow">
+              {" "}
+              <GrPowerReset size={18} />{" "}
+            </span>
           </button>
         </LiquidGlass>
 
         <LiquidGlass width="65px" height="40px" padding="p-0">
           <button className="flex items-center justify-center w-full h-full text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700 pb-6" onClick={changeDirection}>
-            <span className="animate-pulse-slow"> <SlDirections size={18} /> </span>
+            <span className="animate-pulse-slow">
+              {" "}
+              <SlDirections size={18} />{" "}
+            </span>
           </button>
         </LiquidGlass>
 
@@ -487,7 +510,9 @@ export default function MyExperience() {
 
         <LiquidGlass width="200px" height="40px" padding="p-0">
           <button className="flex items-center justify-center w-full h-full text-xs font-bold tracking-wider text-zinc-600 transition-colors duration-200 hover:text-zinc-900 uppercase pb-6" onClick={toggleLogSource}>
-            <span>{activeLog === 'experience' ? 'Work Experience' : 'Education Log'}</span>
+            <span>
+              {activeLog === "experience" ? "Work Experience" : "Education Log"}
+            </span>
           </button>
         </LiquidGlass>
       </div>
@@ -497,10 +522,10 @@ export default function MyExperience() {
       </div>
 
       <div className="container" ref={containerRef}>
-        <canvas id="particleCanvas" ref={particleCanvasRef} style={{ mixBlendMode: 'multiply' }} />
-        <canvas id="scannerCanvas" ref={scannerCanvasRef} style={{ mixBlendMode: 'normal' }} />
+        <canvas id="particleCanvas" ref={particleCanvasRef} style={{ mixBlendMode: "multiply" }} />
+        <canvas id="scannerCanvas" ref={scannerCanvasRef} style={{ mixBlendMode: "normal" }} />
 
-        <div className="scanner-glow-container" style={{ left: `${SCANNER_POSITION_RATIO * 100}%`, transform: 'translate(-50%, -50%)', position: 'absolute' }}>
+        <div className="scanner-glow-container" style={{ left: `${SCANNER_POSITION_RATIO * 100}%`, transform: "translate(-50%, -50%)", position: "absolute", }}>
           <div className="glossy-reflection" />
           <div className="scanner-core" />
         </div>
@@ -521,17 +546,16 @@ export default function MyExperience() {
               return (
                 <div key={idx} className="card-wrapper">
                   <div className="card card-normal">
-                    <Image src={experience_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === 'experience' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`} alt="Experience Stream View" fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: 'cover' }} />
+                    <Image src={experience_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === "experience" ? "opacity-100 style-visible" : "opacity-0 absolute hidden-layer"}`} alt="Experience Stream View" fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: "cover" }} />
 
-                    <Image src={education_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === 'education' ? 'opacity-100 style-visible' : 'opacity-0 absolute hidden-layer'}`} alt="Education Stream View"
-                      fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: 'cover' }} />
+                    <Image src={education_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === "education" ? "opacity-100 style-visible" : "opacity-0 absolute hidden-layer"}`} alt="Education Stream View" fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: "cover" }} />
                   </div>
 
                   <div className="card card-ascii">
-                    <div className={`ascii-content transition-opacity duration-500 ${activeLog === 'experience' ? 'opacity-100' : 'opacity-0 absolute pointer-events-none'}`}>
+                    <div className={`ascii-content transition-opacity duration-500 ${activeLog === "experience" ? "opacity-100" : "opacity-0 absolute pointer-events-none"}`}>
                       {experienceAsciiCards[currentCardIndex]}
                     </div>
-                    <div className={`ascii-content transition-opacity duration-500 ${activeLog === 'education' ? 'opacity-100' : 'opacity-0 absolute pointer-events-none'}`}>
+                    <div className={`ascii-content transition-opacity duration-500 ${activeLog === "education" ? "opacity-100" : "opacity-0 absolute pointer-events-none"}`}>
                       {educationAsciiCards[currentCardIndex]}
                     </div>
                   </div>
@@ -543,4 +567,6 @@ export default function MyExperience() {
       </div>
     </div>
   );
-}
+};
+
+export default MyExperience;

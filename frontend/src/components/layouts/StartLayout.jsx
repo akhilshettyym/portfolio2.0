@@ -4,15 +4,13 @@ import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import CreateSomething from "@/components/CreateSomething";
 
 const StartLayout = memo(function StartLayout() {
-
   return (
     <div>
-      <CreateSomething />
+      {/* <CreateSomething /> */}
       {/* <EmergencyCTA /> */}
       {/* <Footer /> */}
     </div>
-  )
-
+  );
 });
 
 export default StartLayout;

@@ -15,7 +15,10 @@ export async function POST(request) {
     try {
         body = await request.json();
     } catch {
-        return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+        return NextResponse.json(
+            { error: "Invalid request body." },
+            { status: 400 },
+        );
     }
 
     const payload = {
@@ -27,7 +30,10 @@ export async function POST(request) {
         details: cleanString(body.details, 2000),
         budget: cleanString(body.budget, 80),
         services: Array.isArray(body.services)
-            ? body.services.map((item) => cleanString(item, 80)).filter(Boolean).slice(0, 8)
+            ? body.services
+                .map((item) => cleanString(item, 80))
+                .filter(Boolean)
+                .slice(0, 8)
             : [],
         source: "portfolio-contact",
         submittedAt: new Date().toISOString(),
@@ -35,8 +41,10 @@ export async function POST(request) {
 
     if (!payload.name || !EMAIL_PATTERN.test(payload.email) || !payload.details) {
         return NextResponse.json(
-            { error: "Please include your name, a valid email, and project details." },
-            { status: 422 }
+            {
+                error: "Please include your name, a valid email, and project details.",
+            },
+            { status: 422 },
         );
     }
 
@@ -46,7 +54,7 @@ export async function POST(request) {
         if (process.env.NODE_ENV === "production") {
             return NextResponse.json(
                 { error: "Contact delivery is not configured yet." },
-                { status: 503 }
+                { status: 503 },
             );
         }
 
@@ -63,7 +71,7 @@ export async function POST(request) {
     if (!response.ok) {
         return NextResponse.json(
             { error: "Unable to deliver the contact request right now." },
-            { status: 502 }
+            { status: 502 },
         );
     }
 

@@ -1,11 +1,11 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { ToastContainer } from "react-toastify";
 import GlobalCursor from "@/components/GlobalCursor";
-import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
-import { ToastContainer } from "react-toastify";
+import LoaderWrapper from "@/components/basic/LoaderWrapper";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -24,7 +24,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
   // const cores = navigator.hardwareConcurrency;
   // console.log(`Logical Cores: ${cores}`);
 
@@ -42,11 +41,12 @@ export default function RootLayout({ children }) {
 
   // console.log(`Relative CPU Score: ${getCPUSpeedScore().toFixed(2)} ops/ms`);
 
-
   return (
-    <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${montserrat.variable} ${geistMono.variable} antialiased`}
+    >
       <body className="bg-white text-black">
-
         <GlobalCursor />
 
         {/* <LenisProvider> */}

@@ -3,8 +3,9 @@ import { CACHE_KEY, LOCATION_MODE_KEY } from "@/utils/localstorage";
 import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
 
 async function fetchWeather(latitude, longitude) {
-    const response = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`,
-        { cache: "no-store" }
+    const response = await fetch(
+        `/api/weather?latitude=${latitude}&longitude=${longitude}`,
+        { cache: "no-store" },
     );
 
     if (!response.ok) {
@@ -26,15 +27,11 @@ async function fetchWeather(latitude, longitude) {
 
 function getCurrentPosition() {
     return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-            resolve,
-            reject,
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 300000,
-            }
-        );
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 300000,
+        });
     });
 }
 
@@ -66,7 +63,6 @@ async function getCoordinates() {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
             };
-
         } catch (error) {
             console.warn("GPS failed. Falling back to IP.", error);
             return await getLocationFromIP();
@@ -101,7 +97,6 @@ function readCachedScene() {
         }
 
         return parsed.data;
-
     } catch {
         return null;
     }
@@ -113,13 +108,13 @@ function writeCachedScene(data) {
     }
 
     try {
-        localStorage.setItem(CACHE_KEY,
+        localStorage.setItem(
+            CACHE_KEY,
             JSON.stringify({
                 timestamp: Date.now(),
                 data,
-            })
+            }),
         );
-
     } catch (error) {
         console.error("Failed to cache weather scene", error);
     }
@@ -152,7 +147,6 @@ export function getWeatherIconData() {
             getMoonPhase: innerData?.renderMoonPhase || "MOON",
             getSceneCondition: innerData?.sceneCondition || "SCENE",
         };
-
     } catch {
         return {
             getMoonPhase: "MOON",
@@ -195,7 +189,6 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
 
         writeCachedScene(result);
         return result;
-
     } catch (error) {
         console.error("Weather Scene Error:", error);
         const cached = readCachedScene();
@@ -216,7 +209,6 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
         };
     }
 }
-
 
 export function hasLocationPreference() {
     return !!localStorage.getItem(LOCATION_MODE_KEY);

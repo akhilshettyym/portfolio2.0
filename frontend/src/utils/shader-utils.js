@@ -1,5 +1,4 @@
 export const CLOUD_SHADER = {
-
   vertexShader: `
     varying vec2 vUv;
     void main() {
@@ -22,5 +21,4 @@ export const CLOUD_SHADER = {
       gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
       gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
     }`,
-
 };

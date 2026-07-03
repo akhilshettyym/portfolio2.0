@@ -130,313 +130,196 @@ void main() {
 }
 `;
 
-export default function LiquidBackground({
-    backgroundImage,
-}) {
-    const containerRef = useRef(null);
+export default function LiquidBackground({ backgroundImage }) {
+  const containerRef = useRef(null);
 
-    useEffect(() => {
-        if (!containerRef.current) return;
-        if (!backgroundImage) return;
+  useEffect(() => {
+    if (!containerRef.current) return;
+    if (!backgroundImage) return;
 
-        const container = containerRef.current;
+    const container = containerRef.current;
 
-        const renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: true,
-        });
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+    });
 
-        renderer.setPixelRatio(
-            Math.min(window.devicePixelRatio, 2)
-        );
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-        renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor(0x000000, 0);
 
-        container.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
-        const scene = new THREE.Scene();
-        const simScene = new THREE.Scene();
+    const scene = new THREE.Scene();
+    const simScene = new THREE.Scene();
 
-        const camera =
-            new THREE.OrthographicCamera(
-                -1,
-                1,
-                1,
-                -1,
-                0,
-                1
-            );
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-        const mouse = new THREE.Vector2();
+    const mouse = new THREE.Vector2();
 
-        let frame = 0;
-        let rafId;
+    let frame = 0;
+    let rafId;
 
-        const dpr = Math.min(
-            window.devicePixelRatio,
-            2
-        );
+    const dpr = Math.min(window.devicePixelRatio, 2);
 
-        let width = Math.floor(
-            window.innerWidth * dpr
-        );
+    let width = Math.floor(window.innerWidth * dpr);
 
-        let height = Math.floor(
-            window.innerHeight * dpr
-        );
+    let height = Math.floor(window.innerHeight * dpr);
 
-        const options = {
-            format: THREE.RGBAFormat,
-            type: THREE.FloatType,
-            minFilter: THREE.LinearFilter,
-            magFilter: THREE.LinearFilter,
-            depthBuffer: false,
-            stencilBuffer: false,
-        };
+    const options = {
+      format: THREE.RGBAFormat,
+      type: THREE.FloatType,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      depthBuffer: false,
+      stencilBuffer: false,
+    };
 
-        let rtA =
-            new THREE.WebGLRenderTarget(
-                width,
-                height,
-                options
-            );
+    let rtA = new THREE.WebGLRenderTarget(width, height, options);
 
-        let rtB =
-            new THREE.WebGLRenderTarget(
-                width,
-                height,
-                options
-            );
+    let rtB = new THREE.WebGLRenderTarget(width, height, options);
 
-        const screenshotTexture =
-            new THREE.TextureLoader().load(
-                backgroundImage
-            );
+    const screenshotTexture = new THREE.TextureLoader().load(backgroundImage);
 
-        screenshotTexture.minFilter =
-            THREE.LinearFilter;
+    screenshotTexture.minFilter = THREE.LinearFilter;
 
-        screenshotTexture.magFilter =
-            THREE.LinearFilter;
+    screenshotTexture.magFilter = THREE.LinearFilter;
 
-        screenshotTexture.needsUpdate = true;
+    screenshotTexture.needsUpdate = true;
 
-        const simMaterial =
-            new THREE.ShaderMaterial({
-                uniforms: {
-                    textureA: {
-                        value: null,
-                    },
-                    mouse: {
-                        value: mouse,
-                    },
-                    resolution: {
-                        value: new THREE.Vector2(
-                            width,
-                            height
-                        ),
-                    },
-                    time: {
-                        value: 0,
-                    },
-                    frame: {
-                        value: 0,
-                    },
-                },
-                vertexShader:
-                    simulationVertexShader,
-                fragmentShader:
-                    simulationFragmentShader,
-            });
+    const simMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        textureA: {
+          value: null,
+        },
+        mouse: {
+          value: mouse,
+        },
+        resolution: {
+          value: new THREE.Vector2(width, height),
+        },
+        time: {
+          value: 0,
+        },
+        frame: {
+          value: 0,
+        },
+      },
+      vertexShader: simulationVertexShader,
+      fragmentShader: simulationFragmentShader,
+    });
 
-        const renderMaterial =
-            new THREE.ShaderMaterial({
-                uniforms: {
-                    textureA: {
-                        value: null,
-                    },
-                    textureB: {
-                        value: screenshotTexture,
-                    },
-                },
-                vertexShader:
-                    renderVertexShader,
-                fragmentShader:
-                    renderFragmentShader,
-                transparent: true,
-            });
+    const renderMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        textureA: {
+          value: null,
+        },
+        textureB: {
+          value: screenshotTexture,
+        },
+      },
+      vertexShader: renderVertexShader,
+      fragmentShader: renderFragmentShader,
+      transparent: true,
+    });
 
-        const plane =
-            new THREE.PlaneGeometry(2, 2);
+    const plane = new THREE.PlaneGeometry(2, 2);
 
-        const simQuad = new THREE.Mesh(
-            plane,
-            simMaterial
-        );
+    const simQuad = new THREE.Mesh(plane, simMaterial);
 
-        const renderQuad = new THREE.Mesh(
-            plane,
-            renderMaterial
-        );
+    const renderQuad = new THREE.Mesh(plane, renderMaterial);
 
-        simScene.add(simQuad);
-        scene.add(renderQuad);
+    simScene.add(simQuad);
+    scene.add(renderQuad);
 
-        const resize = () => {
-            const dpr = Math.min(
-                window.devicePixelRatio,
-                2
-            );
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio, 2);
 
-            width = Math.floor(
-                window.innerWidth * dpr
-            );
+      width = Math.floor(window.innerWidth * dpr);
 
-            height = Math.floor(
-                window.innerHeight * dpr
-            );
+      height = Math.floor(window.innerHeight * dpr);
 
-            renderer.setPixelRatio(dpr);
+      renderer.setPixelRatio(dpr);
 
-            renderer.setSize(
-                window.innerWidth,
-                window.innerHeight
-            );
+      renderer.setSize(window.innerWidth, window.innerHeight);
 
-            rtA.dispose();
-            rtB.dispose();
+      rtA.dispose();
+      rtB.dispose();
 
-            rtA =
-                new THREE.WebGLRenderTarget(
-                    width,
-                    height,
-                    options
-                );
+      rtA = new THREE.WebGLRenderTarget(width, height, options);
 
-            rtB =
-                new THREE.WebGLRenderTarget(
-                    width,
-                    height,
-                    options
-                );
+      rtB = new THREE.WebGLRenderTarget(width, height, options);
 
-            simMaterial.uniforms.resolution.value.set(
-                width,
-                height
-            );
-        };
+      simMaterial.uniforms.resolution.value.set(width, height);
+    };
 
-        const handleMouseMove = (e) => {
-            mouse.x = e.clientX * dpr;
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX * dpr;
 
-            mouse.y =
-                (window.innerHeight -
-                    e.clientY) *
-                dpr;
-        };
+      mouse.y = (window.innerHeight - e.clientY) * dpr;
+    };
 
-        const handleMouseLeave = () => {
-            mouse.set(0, 0);
-        };
+    const handleMouseLeave = () => {
+      mouse.set(0, 0);
+    };
 
-        window.addEventListener(
-            "resize",
-            resize
-        );
+    window.addEventListener("resize", resize);
 
-        renderer.domElement.addEventListener(
-            "mousemove",
-            handleMouseMove
-        );
+    renderer.domElement.addEventListener("mousemove", handleMouseMove);
 
-        renderer.domElement.addEventListener(
-            "mouseleave",
-            handleMouseLeave
-        );
+    renderer.domElement.addEventListener("mouseleave", handleMouseLeave);
 
-        const animate = () => {
-            simMaterial.uniforms.frame.value =
-                frame++;
+    const animate = () => {
+      simMaterial.uniforms.frame.value = frame++;
 
-            simMaterial.uniforms.time.value =
-                performance.now() * 0.001;
+      simMaterial.uniforms.time.value = performance.now() * 0.001;
 
-            simMaterial.uniforms.textureA.value =
-                rtA.texture;
+      simMaterial.uniforms.textureA.value = rtA.texture;
 
-            renderer.setRenderTarget(rtB);
-            renderer.render(
-                simScene,
-                camera
-            );
+      renderer.setRenderTarget(rtB);
+      renderer.render(simScene, camera);
 
-            renderMaterial.uniforms.textureA.value =
-                rtB.texture;
+      renderMaterial.uniforms.textureA.value = rtB.texture;
 
-            renderer.setRenderTarget(null);
+      renderer.setRenderTarget(null);
 
-            renderer.render(
-                scene,
-                camera
-            );
+      renderer.render(scene, camera);
 
-            [rtA, rtB] = [rtB, rtA];
+      [rtA, rtB] = [rtB, rtA];
 
-            rafId =
-                requestAnimationFrame(
-                    animate
-                );
-        };
+      rafId = requestAnimationFrame(animate);
+    };
 
-        animate();
+    animate();
 
-        return () => {
-            cancelAnimationFrame(rafId);
+    return () => {
+      cancelAnimationFrame(rafId);
 
-            window.removeEventListener(
-                "resize",
-                resize
-            );
+      window.removeEventListener("resize", resize);
 
-            renderer.domElement.removeEventListener(
-                "mousemove",
-                handleMouseMove
-            );
+      renderer.domElement.removeEventListener("mousemove", handleMouseMove);
 
-            renderer.domElement.removeEventListener(
-                "mouseleave",
-                handleMouseLeave
-            );
+      renderer.domElement.removeEventListener("mouseleave", handleMouseLeave);
 
-            plane.dispose();
+      plane.dispose();
 
-            simMaterial.dispose();
-            renderMaterial.dispose();
+      simMaterial.dispose();
+      renderMaterial.dispose();
 
-            screenshotTexture.dispose();
+      screenshotTexture.dispose();
 
-            rtA.dispose();
-            rtB.dispose();
+      rtA.dispose();
+      rtB.dispose();
 
-            renderer.dispose();
+      renderer.dispose();
 
-            if (
-                renderer.domElement.parentNode ===
-                container
-            ) {
-                container.removeChild(
-                    renderer.domElement
-                );
-            }
-        };
-    }, [backgroundImage]);
+      if (renderer.domElement.parentNode === container) {
+        container.removeChild(renderer.domElement);
+      }
+    };
+  }, [backgroundImage]);
 
-    return (
-        <div ref={containerRef} className="absolute inset-0 w-full h-full" />
-    );
+  return <div ref={containerRef} className="absolute inset-0 w-full h-full" />;
 }

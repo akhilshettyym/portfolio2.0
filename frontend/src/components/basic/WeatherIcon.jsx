@@ -21,11 +21,16 @@ const WeatherIcon = () => {
             <motion.div whileHover={{ scale: 1.05, y: -2 }}
                 transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 className="flex h-18 w-10.5 flex-col items-center justify-between rounded-full border border-black/10 bg-white/55 px-2 py-2 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
-                <motion.div animate={{ rotate: sceneCondition === "storm" ? [-5, 5, -5] : 0 }} transition={{ duration: 1.5, repeat: sceneCondition === "storm" ? Infinity : 0 }}>
+
+                <motion.div animate={{ rotate: sceneCondition === "storm" ? [-5, 5, -5] : 0 }}
+                    transition={{ duration: 1.5, repeat: sceneCondition === "storm" ? Infinity : 0 }}>
                     <WeatherGlyph size={20} className="text-black/50" />
                 </motion.div>
+
                 <div className="h-px w-4 bg-black/15" />
-                <motion.div animate={{ y: moonPhase === "FULL_MOON" ? [0, -1, 0] : 0 }} transition={{ duration: 2.5, repeat: Infinity }}>
+
+                <motion.div animate={{ y: moonPhase === "FULL_MOON" ? [0, -1, 0] : 0 }}
+                    transition={{ duration: 2.5, repeat: Infinity }}>
                     <MoonGlyph size={22} className="text-black/50" />
                 </motion.div>
             </motion.div>

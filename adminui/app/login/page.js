@@ -36,16 +36,16 @@ export default function LoginPage() {
     return (
         <div className="flex-1 flex items-center justify-center p-4 bg-white">
             <div className="w-full max-w-sm border border-black p-6 bg-white">
-                <h2 className="font-mono font-bold uppercase tracking-normal text-center mb-6 text-lg"> Admin Login </h2>
+                <h2 className="font-mono font-bold uppercase tracking-normal text-center mb-6 text-lg"> {" "}Admin Login{" "} </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block font-mono text-xs uppercase mb-1"> Email Address </label>
+                        <label className="block font-mono text-xs uppercase mb-1"> {" "} Email Address{" "} </label>
                         <input type="email" required className="w-full border border-black p-2 text-sm rounded-none focus:outline-none focus:bg-gray-50" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                     </div>
 
                     <div>
-                        <label className="block font-mono text-xs uppercase mb-1">Password</label>
+                        <label className="block font-mono text-xs uppercase mb-1"> Password </label>
                         <input type="password" required className="w-full border border-black p-2 text-sm rounded-none focus:outline-none focus:bg-gray-50" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                     </div>
 

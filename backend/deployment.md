@@ -3,6 +3,7 @@
 ## Pre-Deployment Checklist
 
 ### Security Fixes (CRITICAL)
+
 - [ ] Apply all fixes from SECURITY_AUDIT_REPORT.md
 - [ ] Update dependencies with new packages (helmet, express-rate-limit, express-validator, morgan)
 - [ ] Implement input validation middleware
@@ -12,6 +13,7 @@
 - [ ] Add security headers (Helmet.js)
 
 ### Configuration
+
 - [ ] Set `NODE_ENV=production`
 - [ ] Generate strong `JWT_SECRET`: `openssl rand -base64 32`
 - [ ] Configure HTTPS/SSL certificates
@@ -20,6 +22,7 @@
 - [ ] Set `COOKIE_DOMAIN` to your actual domain
 
 ### Environment Variables
+
 ```bash
 # Copy and populate these values
 NODE_ENV=production
@@ -36,6 +39,7 @@ HTTPS_ENABLED=true
 ### Testing Before Deployment
 
 1. **Local Testing**
+
 ```bash
 # Install dependencies
 npm install
@@ -48,6 +52,7 @@ npm run dev
 ```
 
 2. **Staging Environment**
+
 - Deploy to staging first
 - Test all authentication flows
 - Test admin dashboard functionality
@@ -56,6 +61,7 @@ npm run dev
 - Monitor error logs
 
 3. **Performance Testing**
+
 ```bash
 # Basic load testing
 npm install -g artillery
@@ -69,6 +75,7 @@ artillery quick --count 100 --num 10 http://localhost:5000/api/health
 ### Option 1: Vercel (Recommended for Node.js)
 
 1. **Push to GitHub**
+
 ```bash
 git init
 git add .
@@ -79,17 +86,20 @@ git push -u origin main
 ```
 
 2. **Connect to Vercel**
+
 - Go to [vercel.com](https://vercel.com)
 - Click "New Project"
 - Import from GitHub repository
 - Configure environment variables in Settings
 
 3. **Environment Variables**
+
 ```
 Add all variables from your .env file
 ```
 
 4. **Deploy**
+
 ```bash
 # Automatic deployment on push to main
 # Manual deployment:
@@ -102,6 +112,7 @@ vercel --prod
 ### Option 3: Docker Deployment
 
 Create `Dockerfile`:
+
 ```dockerfile
 FROM node:18-alpine
 
@@ -118,8 +129,9 @@ CMD ["node", "server.js"]
 ```
 
 Create `docker-compose.yml`:
+
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   app:
     build: .
@@ -133,6 +145,7 @@ services:
 ```
 
 Deploy:
+
 ```bash
 docker-compose up -d
 ```
@@ -144,6 +157,7 @@ docker-compose up -d
 ### Monitoring
 
 1. **Set Up Error Tracking**
+
 ```bash
 npm install @sentry/node
 ```
@@ -153,20 +167,21 @@ npm install @sentry/node
 import * as Sentry from "@sentry/node";
 
 Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
 });
 ```
 
 2. **Enable Request Logging**
+
 ```javascript
 // In app.js
-import morgan from 'morgan';
+import morgan from "morgan";
 
 // Log to file in production
-import fs from 'fs';
-const accessLogStream = fs.createWriteStream('logs/access.log', { flags: 'a' });
-app.use(morgan('combined', { stream: accessLogStream }));
+import fs from "fs";
+const accessLogStream = fs.createWriteStream("logs/access.log", { flags: "a" });
+app.use(morgan("combined", { stream: accessLogStream }));
 ```
 
 3. **Set Up Alerts**
@@ -184,6 +199,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 ### Security Hardening
 
 1. **Firewall Rules**
+
 ```bash
 sudo ufw allow 22
 sudo ufw allow 80
@@ -192,12 +208,14 @@ sudo ufw enable
 ```
 
 2. **SSL/TLS Configuration**
+
 ```bash
 # Strong SSL configuration
 sudo certbot install --nginx --redirect
 ```
 
 3. **Automated Dependency Updates**
+
 ```bash
 # Enable dependabot on GitHub
 # Settings > Security & analysis > Enable Dependabot
@@ -208,6 +226,7 @@ sudo certbot install --nginx --redirect
 ## Troubleshooting
 
 ### Application Won't Start
+
 ```bash
 # Check logs
 pm2 logs portfolio-backend
@@ -220,6 +239,7 @@ cat .env
 ```
 
 ### Database Connection Issues
+
 ```bash
 # Test MongoDB connection
 mongosh "mongodb+srv://username:password@cluster.mongodb.net/database"
@@ -229,11 +249,13 @@ mongosh "mongodb+srv://username:password@cluster.mongodb.net/database"
 ```
 
 ### CORS Errors
+
 - Verify `CLIENT_URL` in environment variables
 - Check `Origin` header in request matches `allowedOrigins`
 - Ensure `credentials: true` is set in CORS config
 
 ### Rate Limiting Too Strict
+
 - Adjust `windowMs` and `max` values in `app.js`
 - Consider per-user limits instead of per-IP
 
@@ -262,12 +284,14 @@ docker-compose up -d
 ## Performance Optimization
 
 1. **Enable Compression**
+
 ```javascript
-import compression from 'compression';
+import compression from "compression";
 app.use(compression());
 ```
 
 2. **Database Query Optimization**
+
 ```javascript
 // Add indexes to frequently queried fields
 // In userModel.js:
@@ -276,12 +300,14 @@ inquirySchema.index({ createdAt: -1 });
 ```
 
 3. **Implement Caching**
+
 ```javascript
-import redis from 'redis';
+import redis from "redis";
 const redisClient = redis.createClient();
 ```
 
 4. **Monitor Performance**
+
 - Use New Relic or Datadog
 - Monitor database query times
 - Track response times
@@ -308,6 +334,7 @@ const redisClient = redis.createClient();
 ## Support & Escalation
 
 For production issues:
+
 1. Check error logs immediately
 2. Run `npm audit` to identify vulnerabilities
 3. Check MongoDB connection
@@ -320,9 +347,7 @@ For production issues:
 **Document Version:** 1.0  
 **Last Updated:** June 30, 2026
 
-
----------------------------------------
-
+---
 
 # 🔧 Implementation Guide - Applying Security Fixes
 
@@ -333,58 +358,74 @@ This guide walks you through implementing all the security fixes from the audit 
 ## Quick Start (30 minutes)
 
 ### Step 1: Install New Dependencies
+
 ```bash
 npm install express-rate-limit express-validator helmet morgan
 ```
 
 ### Step 2: Update package.json
+
 Compare your `package.json` with `FIXES/package.json.FIXED` and ensure you have:
+
 - `express-rate-limit`
 - `express-validator`
 - `helmet`
 - `morgan`
 
 ### Step 3: Update app.js
+
 Replace your `src/app.js` with the fixed version from `FIXES/app.FIXED.js`
 
 Key changes:
+
 - Added Helmet.js for security headers
 - Added rate limiting for `/api/auth/login`
 - Better error handling
 - Health check endpoint
 
 ### Step 4: Update Auth Controller
+
 Replace your `src/controllers/auth.controller.js` with `FIXES/auth.controller.FIXED.js`
 
 Key changes:
+
 - Removed JWT from response body
 - Fixed cookie configuration (sameSite: "strict")
 - Better error handling
 - Input validation
 
 ### Step 5: Update Auth Middleware
+
 Replace your `src/middleware/auth.middleware.js` with `FIXES/auth.middleware.FIXED.js`
 
 Key changes:
+
 - Better error handling
 - Token expiration handling
 - Security logging
 
 ### Step 6: Add Validation Middleware
+
 Copy `FIXES/validation.middleware.js` to `src/middleware/validation.middleware.js`
 
 ### Step 7: Update Create Inquiry Controller
+
 Replace `src/controllers/createInquiry.controller.js` with `FIXES/createInquiry.controller.FIXED.js`
 
 ### Step 8: Update Routes
+
 Update your route files to use validation middleware:
 
 **src/routes/auth.route.js:**
+
 ```javascript
 import express from "express";
 import { validateAdminLogin } from "../middleware/validation.middleware.js";
 import { protectAdminRoute } from "../middleware/auth.middleware.js";
-import { adminLoginController, adminLogoutController } from "../controllers/auth.controller.js";
+import {
+  adminLoginController,
+  adminLogoutController,
+} from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -395,6 +436,7 @@ export default router;
 ```
 
 **src/routes/user.route.js:**
+
 ```javascript
 import express from "express";
 import { validateCreateInquiry } from "../middleware/validation.middleware.js";
@@ -408,6 +450,7 @@ export default router;
 ```
 
 **src/routes/admin.route.js:**
+
 ```javascript
 import express from "express";
 import { protectAdminRoute } from "../middleware/auth.middleware.js";
@@ -418,27 +461,37 @@ import { deleteInquiryDetails } from "../controllers/deleteInquiryDetails.contro
 const router = express.Router();
 
 router.get("/get-all-inquiries", protectAdminRoute, getAllInquiries);
-router.delete("/delete-details/:id", protectAdminRoute, validateObjectId, deleteInquiryDetails);
+router.delete(
+  "/delete-details/:id",
+  protectAdminRoute,
+  validateObjectId,
+  deleteInquiryDetails,
+);
 
 export default router;
 ```
 
 ### Step 9: Update Models
+
 Replace `src/models/adminModel.js` with `FIXES/adminModel.FIXED.js`
 
 Key improvements:
+
 - Better password validation
 - Login tracking
 - Brute force protection
 
 ### Step 10: Update .env
+
 Copy `FIXES/.env.example` to `.env` and fill in your actual values:
+
 ```bash
 cp FIXES/.env.example .env
 # Then edit .env with your actual configuration
 ```
 
 ### Step 11: Test Everything
+
 ```bash
 npm install
 npm run dev
@@ -456,9 +509,11 @@ curl -X POST http://localhost:5000/api/auth/login \
 ### Priority 1: CRITICAL (Do First)
 
 #### Fix 1: Remove JWT from Response
+
 **File:** `src/controllers/auth.controller.js`
 
 Before:
+
 ```javascript
 return res.status(200).json({
     success: true,
@@ -468,6 +523,7 @@ return res.status(200).json({
 ```
 
 After:
+
 ```javascript
 return res.status(200).json({
     success: true,
@@ -477,89 +533,101 @@ return res.status(200).json({
 ```
 
 #### Fix 2: Add Rate Limiting
+
 **File:** `src/app.js`
 
 ```javascript
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // 5 attempts per IP
-    message: 'Too many login attempts. Please try again later.',
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts per IP
+  message: "Too many login attempts. Please try again later.",
 });
 
 app.use("/api/auth/login", authLimiter);
 ```
 
 #### Fix 3: Fix Email Validation
+
 **File:** `src/models/adminModel.js` and `src/models/userModel.js`
 
 Before:
+
 ```javascript
-match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, '...']
+match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "..."];
 ```
 
 After:
+
 ```javascript
-match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email']
+match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please provide a valid email"];
 ```
 
 #### Fix 4: Add Helmet.js
+
 **File:** `src/app.js`
 
 ```javascript
-import helmet from 'helmet';
+import helmet from "helmet";
 
-app.use(helmet({
+app.use(
+  helmet({
     contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
-        },
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+      },
     },
     hsts: {
-        maxAge: 31536000,
-        includeSubDomains: true,
-        preload: true,
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
     },
-}));
+  }),
+);
 ```
 
 ### Priority 2: HIGH (Do Next)
 
 #### Fix 5: Add Input Validation
+
 **File:** Create `src/middleware/validation.middleware.js`
 
 Use the complete validation middleware from `FIXES/validation.middleware.js`
 
 #### Fix 6: Fix Cookie Configuration
+
 **File:** `src/controllers/auth.controller.js`
 
 ```javascript
 res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",  // Changed from "lax"
-    path: "/",
-    maxAge: 3 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict", // Changed from "lax"
+  path: "/",
+  maxAge: 3 * 24 * 60 * 60 * 1000,
 });
 ```
 
 #### Fix 7: Split Model Files
+
 **File:** `src/models/`
 
 The `adminModel.js` has userModel code appended. Split into separate files:
 
 Create `src/models/userModel.js`:
+
 ```javascript
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const contactInquirySchema = new mongoose.Schema({
-    // ... schema definition
+  // ... schema definition
 });
 
-const ContactInquiry = mongoose.models.ContactInquiry || 
-    mongoose.model('ContactInquiry', contactInquirySchema);
+const ContactInquiry =
+  mongoose.models.ContactInquiry ||
+  mongoose.model("ContactInquiry", contactInquirySchema);
 
 export default ContactInquiry;
 ```
@@ -567,64 +635,67 @@ export default ContactInquiry;
 ### Priority 3: MEDIUM (Do Before Production)
 
 #### Fix 8: Add Request Logging
+
 **File:** `src/app.js`
 
 ```javascript
-import morgan from 'morgan';
+import morgan from "morgan";
 
 // For production, log to file
-const accessLogStream = fs.createWriteStream('logs/access.log', { flags: 'a' });
-app.use(morgan('combined', { stream: accessLogStream }));
+const accessLogStream = fs.createWriteStream("logs/access.log", { flags: "a" });
+app.use(morgan("combined", { stream: accessLogStream }));
 ```
 
 #### Fix 9: Improve Error Handling
+
 All controllers should follow this pattern:
 
 ```javascript
 catch (error) {
     console.error("Error:", error);
-    
+
     return res.status(500).json({
         success: false,
         message: "Something went wrong. Please try again later.",
         // Only in development:
-        ...(process.env.NODE_ENV === 'development' && { 
-            error: error.message 
+        ...(process.env.NODE_ENV === 'development' && {
+            error: error.message
         })
     });
 }
 ```
 
 #### Fix 10: Add Pagination
+
 **File:** `src/controllers/getInquiredDetails.controller.js`
 
 ```javascript
 export const getAllInquiries = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = 20;
-        const skip = (page - 1) * limit;
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 20;
+    const skip = (page - 1) * limit;
 
-        const inquiries = await ContactInquiry.find()
-            .sort({ createdAt: -1 })
-            .limit(limit)
-            .skip(skip);
+    const inquiries = await ContactInquiry.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip);
 
-        const total = await ContactInquiry.countDocuments();
+    const total = await ContactInquiry.countDocuments();
 
-        return res.status(200).json({
-            success: true,
-            data: inquiries,
-            pagination: {
-                page,
-                limit,
-                total,
-                pages: Math.ceil(total / limit)
-            }
-        });
-    } catch (error) {
-        // ...
-    }
+    return res.status(200).json({
+      success: true,
+      data: inquiries,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    // ...
+  }
 };
 ```
 
@@ -633,6 +704,7 @@ export const getAllInquiries = async (req, res) => {
 ## Configuration Checklist
 
 ### Environment Variables
+
 ```bash
 # Create .env file with these variables:
 NODE_ENV=production
@@ -648,6 +720,7 @@ HTTPS_ENABLED=true
 ```
 
 ### Generate Strong JWT_SECRET
+
 ```bash
 openssl rand -base64 32
 # Copy the output to your .env JWT_SECRET
@@ -658,6 +731,7 @@ openssl rand -base64 32
 ## Testing After Implementation
 
 ### 1. Test Authentication Flow
+
 ```bash
 # Login
 curl -X POST http://localhost:5000/api/auth/login \
@@ -669,6 +743,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```
 
 ### 2. Test Rate Limiting
+
 ```bash
 # Run 6 login attempts quickly
 for i in {1..6}; do
@@ -681,6 +756,7 @@ done
 ```
 
 ### 3. Test Input Validation
+
 ```bash
 # Test with invalid email
 curl -X POST http://localhost:5000/api/user/contact-inquiry \
@@ -691,6 +767,7 @@ curl -X POST http://localhost:5000/api/user/contact-inquiry \
 ```
 
 ### 4. Test Security Headers
+
 ```bash
 curl -I http://localhost:5000/health
 
@@ -702,6 +779,7 @@ curl -I http://localhost:5000/health
 ```
 
 ### 5. Run Security Audit
+
 ```bash
 npm audit
 
@@ -714,24 +792,28 @@ npm audit
 ## Troubleshooting
 
 ### "module not found" errors
+
 ```bash
 npm install
 npm list  # Check all dependencies are installed
 ```
 
 ### Validation errors on valid input
+
 ```bash
 # Check validation rules in validation.middleware.js
 # Might need to adjust regex patterns or length limits
 ```
 
 ### CORS errors
+
 ```bash
 # Verify CLIENT_URL in .env matches your frontend domain
 # Check CORS config in app.js allows your origin
 ```
 
 ### Rate limiting too strict
+
 ```javascript
 // In app.js, adjust these values:
 max: 5,              // Increase this for more attempts
@@ -755,5 +837,4 @@ windowMs: 15 * 60 * 1000,  // Or increase this duration
 **Document Version:** 1.0  
 **Last Updated:** June 30, 2026
 
-
-------------------------------------
+---

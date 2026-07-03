@@ -24,7 +24,7 @@ const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true
                     setIsVisible(false);
                 }
             },
-            { threshold, rootMargin }
+            { threshold, rootMargin },
         );
 
         observerRef.current = observer;
@@ -40,11 +40,7 @@ const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true
 
     const shouldRender = once ? hasBeenVisible : isVisible;
 
-    return (
-        <div ref={containerRef}>
-            {shouldRender ? children : placeholder}
-        </div>
-    );
+    return <div ref={containerRef}>{shouldRender ? children : placeholder}</div>;
 };
 
 export default LazyLoad;

@@ -36,7 +36,9 @@ const CreateSomething = () => {
 
     const toggleService = (serviceId) => {
         setSelectedServices((prev) =>
-            prev.includes(serviceId) ? prev.filter((item) => item !== serviceId) : [...prev, serviceId]
+            prev.includes(serviceId)
+                ? prev.filter((item) => item !== serviceId)
+                : [...prev, serviceId],
         );
     };
 
@@ -54,25 +56,41 @@ const CreateSomething = () => {
         if (loading) return;
 
         if (!formData.name.trim() || !formData.email.trim()) {
-            setStatus({ type: "error", message: "Name and Email are required fields." });
+            setStatus({
+                type: "error",
+                message: "Name and Email are required fields.",
+            });
             return;
         }
         if (formData.message.trim().length < 10) {
-            setStatus({ type: "error", message: "Your message body must be at least 10 characters long." });
+            setStatus({
+                type: "error",
+                message: "Your message body must be at least 10 characters long.",
+            });
             return;
         }
 
         if (purpose === "work") {
             if (!formData.organization.trim() || !formData.role.trim()) {
-                setStatus({ type: "error", message: "Please fill out your Organization and Role details." });
+                setStatus({
+                    type: "error",
+                    message: "Please fill out your Organization and Role details.",
+                });
                 return;
             }
             if (selectedServices.length === 0) {
-                setStatus({ type: "error", message: "Please select at least one engineering project service type." });
+                setStatus({
+                    type: "error",
+                    message:
+                        "Please select at least one engineering project service type.",
+                });
                 return;
             }
             if (!budget) {
-                setStatus({ type: "error", message: "Please select an estimated allocation budget option." });
+                setStatus({
+                    type: "error",
+                    message: "Please select an estimated allocation budget option.",
+                });
                 return;
             }
         }
@@ -87,7 +105,7 @@ const CreateSomething = () => {
                 name: formData.name.trim(),
                 email: formData.email.trim().toLowerCase(),
                 message: formData.message.trim(),
-                purpose: purpose
+                purpose: purpose,
             };
 
             if (purpose === "work") {
@@ -101,10 +119,14 @@ const CreateSomething = () => {
                 }
             }
 
-            const response = await axios.post(`${baseUrl}/api/user/contact-inquiry`, payload, {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            });
+            const response = await axios.post(
+                `${baseUrl}/api/user/contact-inquiry`,
+                payload,
+                {
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                },
+            );
 
             if (response.data.success || response.status === 200 || response.status === 201) {
                 setFormData({
@@ -117,7 +139,10 @@ const CreateSomething = () => {
                 });
                 setBudget("");
                 setSelectedServices([]);
-                setStatus({ type: "success", message: "Inquiry successfully recorded!" });
+                setStatus({
+                    type: "success",
+                    message: "Inquiry successfully recorded!",
+                });
             }
             ShowToast.success(response?.data?.message);
 
@@ -136,18 +161,27 @@ const CreateSomething = () => {
         <section className="w-full bg-white py-12 text-black p-10">
             <div className="mx-auto max-w-7xl px-6">
                 <div className="gap-12">
-
                     <div className="w-full">
-
                         <div className="mb-12">
                             <label className="text-xs uppercase tracking-widest text-neutral-400 block mb-3">
                                 Select Form Purpose Track
                             </label>
                             <div className="grid grid-cols-2 gap-4 max-w-md">
-                                <button type="button" onClick={() => { setPurpose("say_hi"); setStatus({ type: "", message: "" }); }} className={`py-4 px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                                <button type="button"
+                                    onClick={() => {
+                                        setPurpose("say_hi");
+                                        setStatus({ type: "", message: "" })
+                                    }}
+                                    className={`py-4 px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
                                     Just Say Hi
                                 </button>
-                                <button type="button" onClick={() => { setPurpose("work"); setStatus({ type: "", message: "" }); }} className={`py-4 px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+
+                                <button type="button"
+                                    onClick={() => {
+                                        setPurpose("work");
+                                        setStatus({ type: "", message: "" })
+                                    }}
+                                    className={`py-4 px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
                                     Build A Project
                                 </button>
                             </div>
@@ -156,15 +190,16 @@ const CreateSomething = () => {
                         <p className="text-left text-xl md:text-2xl font-light leading-relaxed text-neutral-700 border-t border-neutral-100 pt-6">
                             {purpose === "say_hi"
                                 ? "Drop your details below to say hello, ask a general question, or just connect!"
-                                : "Let's turn your idea into code. Tell me about your organization and project requirements below."
-                            }
+                                : "Let's turn your idea into code. Tell me about your organization and project requirements below."}
                         </p>
 
                         <form onSubmit={handleSubmit} className="mt-12 space-y-12">
                             <div>
                                 <h3 className="mb-6 text-sm font-bold uppercase tracking-widest border-b border-black pb-2 flex justify-between items-baseline w-full">
                                     <span> About You </span>
-                                    <span className="text-[10px] font-normal tracking-normal text-red-500 text-neutral-500 capitalize"> * Required Details </span>
+                                    <span className="text-[10px] font-normal tracking-normal text-red-500 text-neutral-500 capitalize">
+                                        {" "} * Required Details{" "}
+                                    </span>
                                 </h3>
 
                                 <div className="grid gap-x-10 gap-y-8 grid-cols-1 sm:grid-cols-2">
@@ -172,7 +207,7 @@ const CreateSomething = () => {
 
                                     <div className="flex flex-col space-y-1.5">
                                         <InputField label="Your Email Address" name="email" type="email" value={formData.email} onChange={handleInputChange} placeholder="How I'll reach you" required={true} />
-                                        <p className="text-[10px] text-neutral-400 tracking-wide pl-0.5">
+                                        <p className="text-[10px] text-neutral-400 tracking-widest pl-0.5">
                                             Please enter a valid email address so I can reliably get back to you.
                                         </p>
                                     </div>
@@ -192,7 +227,8 @@ const CreateSomething = () => {
                                         About The Project
                                     </h3>
                                     <label className="mb-6 block text-[11px] uppercase tracking-wider text-neutral-400">
-                                        What development service model do you need? <span className="text-red-600">*</span>
+                                        What development service model do you need?{" "}
+                                        <span className="text-red-600">*</span>
                                     </label>
 
                                     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -200,8 +236,10 @@ const CreateSomething = () => {
                                             const checked = selectedServices.includes(service.id);
                                             return (
                                                 <button key={service.id} type="button" onClick={() => toggleService(service.id)} className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-200 rounded-none text-xs uppercase tracking-wide ${checked ? "border-black bg-black text-white" : "border-neutral-200 bg-white text-black  hover:border-black"}`}>
-                                                    <span>{service.label}</span>
-                                                    {checked && <CheckIcon className="text-sm shrink-0 ml-2" />}
+                                                    <span> {service.label} </span>
+                                                    {checked && (
+                                                        <CheckIcon className="text-sm shrink-0 ml-2" />
+                                                    )}
                                                 </button>
                                             );
                                         })}
@@ -210,12 +248,15 @@ const CreateSomething = () => {
                                     <div className="mt-10 grid gap-10 grid-cols-1 sm:grid-cols-2">
                                         <div>
                                             <label className="text-xs uppercase tracking-wide text-neutral-500">
-                                                Project Budget Allocation <span className="text-red-600">*</span>
+                                                Project Budget Allocation{" "}
+                                                <span className="text-red-600">*</span>
                                             </label>
 
                                             <div className="relative mt-2 border border-neutral-300 transition-colors focus-within:border-black bg-white">
                                                 <select value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full appearance-none bg-transparent px-5 py-4 outline-none text-xs uppercase tracking-wider rounded-none pr-12 cursor-pointer text-black">
-                                                    <option value="" className="bg-white text-black">Select range allocation</option>
+                                                    <option value="" className="bg-white text-black">
+                                                        Select range allocation
+                                                    </option>
                                                     {BUDGET_OPTIONS.map((item) => (
                                                         <option key={item.id} value={item.id} className="bg-white text-black">
                                                             {item.label}
@@ -232,9 +273,10 @@ const CreateSomething = () => {
 
                             <div>
                                 <h3 className="mb-6 text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
-                                    {purpose === "work" ? "Project Details" : "Your Message"} <span className="text-red-600">*</span>
+                                    {purpose === "work" ? "Project Details" : "Your Message"}{" "}
+                                    <span className="text-red-600">*</span>
                                 </h3>
-                                <textarea rows={6} name="message" value={formData.message} onChange={handleInputChange} placeholder={purpose === "work" ? "Provide an overview of objectives, tech requirements, scope..." : "Write your message here..."} className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm font-sans" />
+                                <textarea rows={6} name="message" value={formData.message} onChange={handleInputChange} placeholder={purpose === "work" ? "Provide an overview of objectives, tech requirements, scope..." : "Write your message here..."}  className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm font-sans" />
                             </div>
 
                             <div className="mt-10 flex flex-col sm:flex-row justify-end items-center gap-6">
@@ -253,6 +295,8 @@ const CreateSomething = () => {
                     <div className="hidden lg:block" />
                 </div>
             </div>
+
+            <p className="border-b border-black mt-10" />
         </section>
     );
 };

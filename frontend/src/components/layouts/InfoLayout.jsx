@@ -5,11 +5,11 @@ import LazyLoad from "@/components/basic/LazyLoad";
 import HeroSection from "@/components/HeroSection";
 import SubjectProfile from "@/components/SubjectProfile";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
+import MySocialsLazy from "@/components/LazyComponents/MySocialsLazy";
 import BubbleSceneLazy from "@/components/LazyComponents/BubbleSceneLazy";
 import CardStackRevealLazy from "@/components/LazyComponents/CardStackRevealLazy";
 
 const InfoLayout = memo(function InfoLayout() {
-
     return (
         <div>
             {/* <HeroSection /> */}
@@ -24,11 +24,14 @@ const InfoLayout = memo(function InfoLayout() {
                 <CardStackRevealLazy />
             </LazyLoad> */}
 
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+                <MySocialsLazy />
+            </LazyLoad> */}
+
             {/* <EmergencyCTA /> */}
             {/* <Footer /> */}
         </div>
     );
-
 });
 
 export default InfoLayout;

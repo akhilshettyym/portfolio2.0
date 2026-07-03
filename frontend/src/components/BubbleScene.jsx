@@ -30,7 +30,12 @@ const BubbleSceneComponent = () => {
         const scene = new THREE.Scene();
         scene.fog = new THREE.Fog("#ffffff", 20, 52);
 
-        const camera = new THREE.PerspectiveCamera(30, wrapper.clientWidth / wrapper.clientHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(
+            30,
+            wrapper.clientWidth / wrapper.clientHeight,
+            0.1,
+            1000,
+        );
         camera.position.set(0, 0.3, 24);
 
         const renderer = new THREE.WebGLRenderer({
@@ -83,7 +88,7 @@ const BubbleSceneComponent = () => {
             bubble.position.set(
                 Math.cos(entryAngle) * entryRadius,
                 -6 + Math.sin(entryAngle) * 1.2,
-                -6 - (index % 7) * 0.2
+                -6 - (index % 7) * 0.2,
             );
 
             bubble.userData = {
@@ -161,9 +166,12 @@ const BubbleSceneComponent = () => {
                 });
             });
 
-            window.setTimeout(() => {
-                loadingComplete = true;
-            }, shouldReduceMotion ? 420 : 1650);
+            window.setTimeout(
+                () => {
+                    loadingComplete = true;
+                },
+                shouldReduceMotion ? 420 : 1650,
+            );
         }
 
         function handleCollisions() {
@@ -178,9 +186,12 @@ const BubbleSceneComponent = () => {
                     const bubbleB = bubbles[j];
                     const radiusB = bubbleB.userData.radius;
                     const minDistance = (radiusA + radiusB) * 1.3;
-                    const distanceSquared = bubbleA.position.distanceToSquared(bubbleB.position);
+                    const distanceSquared = bubbleA.position.distanceToSquared(
+                        bubbleB.position,
+                    );
 
-                    if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance) continue;
+                    if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance)
+                        continue;
 
                     const distance = Math.sqrt(distanceSquared);
                     tempVector.subVectors(bubbleB.position, bubbleA.position).normalize();
@@ -289,7 +300,7 @@ const BubbleSceneComponent = () => {
                     stopLoop();
                 }
             },
-            { threshold: [0, 0.12, 0.32] }
+            { threshold: [0, 0.12, 0.32] },
         );
 
         observer.observe(wrapper);
@@ -351,7 +362,12 @@ const BubbleSceneComponent = () => {
     }, [shouldReduceMotion]);
 
     return (
-        <motion.section className="bubble-wrapper" initial={{ opacity: 0, y: 72 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.18 }}>
+        <motion.section className="bubble-wrapper"
+            initial={{ opacity: 0, y: 72 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true, amount: 0.18 }}>
+
             <div ref={wrapperRef} className="bubble-scene-panel">
                 <div className="bubble-grid" aria-hidden="true" />
                 <div className="bubble-radial-bg" aria-hidden="true" />
@@ -360,7 +376,12 @@ const BubbleSceneComponent = () => {
 
                 <canvas ref={canvasRef} />
 
-                <motion.div initial={{ opacity: 0, y: 34, filter: "blur(10px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, amount: 0.4 }} className="bubble-content">
+                <motion.div initial={{ opacity: 0, y: 34, filter: "blur(10px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    className="bubble-content">
+
                     <div className="bubble-content-inner">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
                             {BUBBLE_TEXT_GROUPS.map((group) => (
@@ -373,7 +394,6 @@ const BubbleSceneComponent = () => {
                         </div>
                     </div>
                 </motion.div>
-
             </div>
         </motion.section>
     );

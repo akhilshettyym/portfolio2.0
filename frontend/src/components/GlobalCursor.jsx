@@ -37,7 +37,10 @@ const GlobalCursor = () => {
 
         return () => {
             window.removeEventListener("pointermove", onPointerMove);
-            document.documentElement.removeEventListener("mouseleave", onPointerLeave);
+            document.documentElement.removeEventListener(
+                "mouseleave",
+                onPointerLeave,
+            );
 
             if (frameRef.current) {
                 cancelAnimationFrame(frameRef.current);
@@ -45,7 +48,9 @@ const GlobalCursor = () => {
         };
     }, []);
 
-    return <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" />;
+    return (
+        <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" />
+    );
 };
 
 export default GlobalCursor;

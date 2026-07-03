@@ -16,13 +16,10 @@ import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUti
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
-    return (
-        a.background === b.background && a.clouds === b.clouds
-    );
+    return a.background === b.background && a.clouds === b.clouds;
 }
 
 const HeroSectionComponent = () => {
-
     const btnRef = useRef(null);
     const speedRef = useRef(0.8);
     const containerRef = useRef(null);
@@ -93,14 +90,11 @@ const HeroSectionComponent = () => {
                     localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(nextScene));
                     return nextScene;
                 });
-
             } catch (error) {
-
                 console.error("Failed to load weather scene:", error);
 
                 if (!mounted) return;
                 if (!sceneAssetsRef.current) {
-
                     const fallback = {
                         background: "morning_clear",
                         clouds: "morning_clear",
@@ -179,8 +173,8 @@ const HeroSectionComponent = () => {
 
             if (camera) {
                 const mouseFactor = pausedRef.current ? 0 : 1;
-                camera.position.x += ((mouseX * mouseFactor) - camera.position.x) * 0.01;
-                camera.position.y += ((-mouseY * mouseFactor) - camera.position.y) * 0.01;
+                camera.position.x += (mouseX * mouseFactor - camera.position.x) * 0.01;
+                camera.position.y += (-mouseY * mouseFactor - camera.position.y) * 0.01;
                 camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
             }
 
@@ -207,7 +201,11 @@ const HeroSectionComponent = () => {
         async function init() {
             try {
                 camera = new THREE.PerspectiveCamera(
-                    30, window.innerWidth / window.innerHeight, 1, 3000);
+                    30,
+                    window.innerWidth / window.innerHeight,
+                    1,
+                    3000,
+                );
 
                 camera.position.z = 6000;
 
@@ -225,7 +223,9 @@ const HeroSectionComponent = () => {
 
                 const textureLoader = new THREE.TextureLoader();
 
-                texture = await textureLoader.loadAsync(`/clouds/${sceneAssets.clouds}.svg`);
+                texture = await textureLoader.loadAsync(
+                    `/clouds/${sceneAssets.clouds}.svg`,
+                );
 
                 if (isDisposed) return;
 
@@ -281,9 +281,7 @@ const HeroSectionComponent = () => {
 
                 const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
 
-                geometries.forEach((g) =>
-                    g.dispose()
-                );
+                geometries.forEach((g) => g.dispose());
 
                 mesh = new THREE.Mesh(mergedGeo, material);
                 mesh.renderOrder = 2;
@@ -298,7 +296,6 @@ const HeroSectionComponent = () => {
                 planeGeo.dispose();
 
                 animate();
-
             } catch (error) {
                 if (!isDisposed) {
                     console.error("Cloud scene init failed:", error);
@@ -367,10 +364,12 @@ const HeroSectionComponent = () => {
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
+                <div ref={containerRef} className="canvas-bg" style={{
+                    backgroundImage: sceneAssets
+                        ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none"
+                }} />
 
-                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
-
-                <div className="absolute top-60 right-2 z-9999">
+                <div className="absolute top-60 right-0 z-9999">
                     <LiquidGlass width="65px" height="175px" className="p-0">
                         <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="group absolute top-5 left-1/2 -translate-x-1/2 h-14 w-14 z-20">
                             <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
@@ -439,7 +438,10 @@ const HeroSectionComponent = () => {
                     <span className="dot br" />
                 </div>
 
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.3 }} className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
+
                     <div className="relative px-10 py-4 text-xs tracking-widest">
                         <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
                             ©001

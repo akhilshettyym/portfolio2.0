@@ -117,7 +117,7 @@ const SubjectProfile = () => {
                 <div className="mt-5 grid grid-cols-1 items-end gap-y-14 md:grid-cols-12 md:gap-x-8">
                     <motion.div {...FADEUP} className="md:col-span-8">
                         <div className="overflow-hidden">
-                            <h1 className="text-[clamp(3rem,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-[-0.05em] md:tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
+                            <h1 className="text-[clamp(3rem,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                                 FULL STACK
                             </h1>
                         </div>
@@ -183,7 +183,7 @@ const SubjectProfile = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
-                className="max-w-[1440px] mx-auto relative z-10 flex flex-col gap-10">
+                className="max-w-360 mx-auto relative z-10 flex flex-col gap-10">
 
                 <div className="w-full flex flex-col lg:flex-row gap-8">
                     <motion.div variants={itemReveal}
@@ -248,11 +248,11 @@ const SubjectProfile = () => {
                                 </h3>
                             </div>
 
-                            <div className="min-h-[6.5rem] border-l-4 border-slate-900 pl-6 relative flex flex-col justify-center bg-slate-50/80 py-2 pr-4 shadow-sm">
+                            <div className="min-h-26 border-l-4 border-slate-900 pl-6 relative flex flex-col justify-center bg-slate-50/80 py-2 pr-4 shadow-sm">
                                 <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 flex items-center gap-2">
                                     Operational Workflow Ethos
                                 </div>
-                                <div className="relative min-h-[3rem] w-full flex items-center">
+                                <div className="relative min-h-12 w-full flex items-center">
                                     <AnimatePresence mode="popLayout">
                                         <motion.div key={carouselIndex}
                                             initial={{ y: 25, opacity: 0 }}
@@ -301,15 +301,15 @@ const SubjectProfile = () => {
                             </div>
                         </div>
 
-                        <div className="lg:col-span-4 relative h-full min-h-[400px] border border-slate-200 p-2 group bg-slate-50 shadow-inner">
-                            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-slate-900 rounded-tl -translate-x-[2px] -translate-y-[2px]" />
-                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-slate-900 rounded-br translate-x-[2px] translate-y-[2px]" />
+                        <div className="lg:col-span-4 relative h-full min-h-100 border border-slate-200 p-2 group bg-slate-50 shadow-inner">
+                            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-slate-900 rounded-tl -translate-x-0.5 -translate-y-0.5" />
+                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-slate-900 rounded-br translate-x-0.5 translate-y-0.5" />
 
-                            <div className="relative w-full h-[400px] bg-slate-200 overflow-hidden rounded-lg">
+                            <div className="relative w-full h-100 bg-slate-200 overflow-hidden rounded-lg">
                                 {/* <Image src="/akhil.svg" alt="Professional Profile Visual Representation" fill unoptimized priority className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-700 ease-out" /> */}
                             </div>
 
-                            <div className="w-[280px] absolute bottom-4 left-4 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/50 p-3 shadow-xl font-mono select-none rounded-lg">
+                            <div className="w-70 absolute bottom-4 left-4 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/50 p-3 shadow-xl font-mono select-none rounded-lg">
                                 <div className="flex items-center justify-between gap-2 mb-1.5">
                                     <div className="flex items-center gap-1.5">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

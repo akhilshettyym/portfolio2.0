@@ -121,7 +121,7 @@ export default function DashboardPage() {
                                     </div>
                                 )}
 
-                                <p className="text-sm pt-1 leading-relaxed break-words whitespace-pre-wrap font-sans text-black">
+                                <p className="text-sm pt-1 leading-relaxed wrap-break-word whitespace-pre-wrap font-sans text-black">
                                     {lead.message}
                                 </p>
 

@@ -6,6 +6,8 @@ const contactInquirySchema = new mongoose.Schema(
       type: String,
       required: [true, "Name is required"],
       trim: true,
+      minlength: [1, "Name is required"],
+      maxlength: [100, "Name must be less than 100 characters"],
     },
 
     email: {
@@ -13,22 +15,26 @@ const contactInquirySchema = new mongoose.Schema(
       required: [true, "Email is required"],
       trim: true,
       lowercase: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please fill a valid email address",
-      ],
+      validate: {
+        validator: function (v) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: "Please provide a valid email address",
+      },
     },
 
     organization: {
       type: String,
       trim: true,
       default: "",
+      maxlength: [200, "Organization name must be less than 200 characters"],
     },
 
     role: {
       type: String,
       trim: true,
       default: "",
+      maxlength: [100, "Role must be less than 100 characters"],
     },
 
     purpose: {
@@ -80,10 +86,13 @@ const contactInquirySchema = new mongoose.Schema(
       required: [true, "Message body is required"],
       trim: true,
       minlength: [10, "Your message should be at least 10 characters long."],
+      maxlength: [5000, "Message must be less than 5000 characters"],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
+
+contactInquirySchema.index({ email: 1, createdAt: -1 });
 
 const ContactInquiry = mongoose.models.ContactInquiry || mongoose.model("ContactInquiry", contactInquirySchema);
 

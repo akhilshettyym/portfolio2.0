@@ -13,13 +13,27 @@ const loginLimiter = rateLimit({
     message: "Too many login attempts. Please try again in 15 minutes.",
   },
   skipSuccessfulRequests: true,
-  standardHeaders: false,
+  skipFailedRequests: false,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: undefined,
+});
+
+const logoutLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: {
+    success: false,
+    message: "Too many logout requests. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 /* POST /api/auth/login */
 router.post("/login", loginLimiter, adminLoginController);
 
 /* POST /api/auth/logout */
-router.post("/logout", protectAdminRoute, adminLogoutController);
+router.post("/logout", protectAdminRoute, logoutLimiter, adminLogoutController);
 
 export default router;

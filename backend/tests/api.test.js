@@ -9,13 +9,20 @@ describe("Backend API Suite", () => {
   beforeEach(() => {
     jest.restoreAllMocks();
     process.env.JWT_SECRET = "test-secret-key-at-least-32-characters-long";
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ success: true }),
+    });
   });
 
   describe("GET /ping", () => {
     it("should return 200 OK and say 'pong'", async () => {
       const res = await request(app).get("/ping");
       expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("pong");
+      expect(res.body.success).toBe(true);
+      expect(res.body.message).toBe("pong");
     });
   });
 
@@ -28,9 +35,14 @@ describe("Backend API Suite", () => {
         message: "Hey! Just wanted to reach out and look at your work.",
       };
 
-      jest
-        .spyOn(ContactInquiry.prototype, "save")
-        .mockResolvedValue(validPayload);
+      ContactInquiry.findOne = jest.fn().mockResolvedValue(null);
+
+      const mockSavedInstance = {
+        ...validPayload,
+        _id: "inquiry_mock_id_123",
+        createdAt: new Date().toISOString(),
+      };
+      jest.spyOn(ContactInquiry.prototype, "save").mockResolvedValue(mockSavedInstance);
 
       const res = await request(app)
         .post("/api/user/contact-inquiry")

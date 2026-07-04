@@ -7,6 +7,8 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: [true, "Name is required"],
       trim: true,
+      minlength: [2, "Name must be at least 2 characters"],
+      maxlength: [100, "Name must be less than 100 characters"],
     },
     email: {
       type: String,
@@ -14,10 +16,12 @@ const adminSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       unique: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please fill a valid email address",
-      ],
+      validate: {
+        validator: function (v) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: "Please provide a valid email address",
+      },
     },
     password: {
       type: String,
@@ -29,9 +33,10 @@ const adminSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "ADMIN",
+      enum: ["ADMIN", "SUPER_ADMIN"],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 adminSchema.pre("save", async function () {

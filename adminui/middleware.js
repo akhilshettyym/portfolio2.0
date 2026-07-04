@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
-  
+
   console.log("Middleware intercepted request to:", request.nextUrl.pathname);
   const { pathname } = request.nextUrl;
 

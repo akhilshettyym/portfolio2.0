@@ -3,7 +3,7 @@
 import { CgHello } from "react-icons/cg";
 import { showToast } from "@/utils/toast";
 import { apiFetch } from "../../utils/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { LuWorkflow } from "react-icons/lu";
 
 export default function DashboardPage() {
@@ -18,21 +18,21 @@ export default function DashboardPage() {
         setIsModalOpen(true);
     };
 
-    const fetchLeads = async () => {
-        try {
-            const res = await apiFetch("/api/admin/get-all-inquiries");
-            setLeads(res.data || []);
-
-        } catch (err) {
-            const errorMsg = err.message || "Failed to load dashboard data.";
-            showToast.error(errorMsg);
-
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    // Fix: Move the core fetch logic inside useEffect, or wrap the function in useCallback 
+    // if it needs to live outside. Let's handle it directly inside useEffect to keep it clean.
     useEffect(() => {
+        const fetchLeads = async () => {
+            try {
+                const res = await apiFetch("/api/admin/get-all-inquiries");
+                setLeads(res.data || []);
+            } catch (err) {
+                const errorMsg = err.message || "Failed to load dashboard data.";
+                showToast.error(errorMsg);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchLeads();
     }, []);
 

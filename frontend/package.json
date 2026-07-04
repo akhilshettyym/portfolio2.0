@@ -32,5 +32,9 @@
     "eslint-config-next": "16.2.4",
     "prettier": "3.9.4",
     "tailwindcss": "^4"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.12.2": true
   }
 }

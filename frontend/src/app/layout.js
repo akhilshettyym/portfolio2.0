@@ -42,27 +42,24 @@ export default function RootLayout({ children }) {
   // console.log(`Relative CPU Score: ${getCPUSpeedScore().toFixed(2)} ops/ms`);
 
   return (
-    <html
-      lang="en"
-      className={`${montserrat.variable} ${geistMono.variable} antialiased`}
-    >
+    <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
         <GlobalCursor />
 
-        {/* <LenisProvider> */}
-        {/* <LoaderWrapper> */}
+        <LenisProvider>
+          <LoaderWrapper>
 
-        {/* <NavbarWrapper>
+            <NavbarWrapper>
               <Navbar />
-            </NavbarWrapper> */}
+            </NavbarWrapper>
 
-        <main className="relative pt-25">
-          {children}
-          <ToastContainer />
-        </main>
+            <main className="relative pt-25">
+              {children}
+              <ToastContainer />
+            </main>
 
-        {/* </LoaderWrapper> */}
-        {/* </LenisProvider> */}
+          </LoaderWrapper>
+        </LenisProvider>
       </body>
     </html>
   );

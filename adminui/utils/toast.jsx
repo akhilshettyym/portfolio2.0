@@ -33,7 +33,7 @@ export const showToast = {
   },
 
   info: (message, options = {}) => {
-    toast.info(message, brutalistOptions({ icon: "ℹ", ...options }));
+    toast.info(message, brutalistOptions({ icon: "i", ...options }));
   },
 
   warning: (message, options = {}) => {

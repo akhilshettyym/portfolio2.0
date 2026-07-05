@@ -1,33 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { showToast } from "@/utils/toast";
 import { apiFetch } from "../../utils/api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (searchParams.get("error") === "session_expired") {
+            showToast.warning("Session expired. Please log in again.");
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            await apiFetch("/api/auth/login", {
+            const res = await apiFetch("/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
 
-            router.push("/dashboard");
+            if (res.token) {
+                localStorage.setItem("authToken", res.token);
+                document.cookie = `adminSession=1; path=/; max-age=${24 * 60 * 60}; SameSite=Lax`;
+            }
+
             showToast.success("Login Successful");
-
+            router.push("/dashboard");
         } catch (err) {
-            const errorMsg = err.message || "Invalid credentials";
-            showToast.error(errorMsg);
-
+            showToast.error(err.message || "Invalid credentials");
         } finally {
             setLoading(false);
         }
@@ -36,16 +45,16 @@ export default function LoginPage() {
     return (
         <div className="flex-1 flex items-center justify-center p-4 bg-white">
             <div className="w-full max-w-sm border border-black p-6 bg-white">
-                <h2 className="font-mono font-bold uppercase tracking-normal text-center mb-6 text-lg"> {" "}Admin Login{" "} </h2>
+                <h2 className="font-mono font-bold uppercase tracking-normal text-center mb-6 text-lg">Admin Login</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block font-mono text-xs uppercase mb-1"> {" "} Email Address{" "} </label>
+                        <label className="block font-mono text-xs uppercase mb-1">Email Address</label>
                         <input type="email" required className="w-full border border-black p-2 text-sm rounded-none focus:outline-none focus:bg-gray-50" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                     </div>
 
                     <div>
-                        <label className="block font-mono text-xs uppercase mb-1"> Password </label>
+                        <label className="block font-mono text-xs uppercase mb-1">Password</label>
                         <input type="password" required className="w-full border border-black p-2 text-sm rounded-none focus:outline-none focus:bg-gray-50" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                     </div>
 
@@ -55,5 +64,13 @@ export default function LoginPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={null}>
+            <LoginForm />
+        </Suspense>
     );
 }

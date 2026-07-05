@@ -46,11 +46,6 @@ Enhancements -
 
 ---
 
-I'll add my backend folder here now, I want you check for any vulnerabilities which could affect the system, or so on. If anything could possibly break, or if there is no safe fallback, Check everything in detailed and give me fix for the same.
-
----
-
-
 Reliability comes from consistency - Consistency comes from clarity
 
 https://hackfirst.io/
@@ -67,7 +62,30 @@ Take points from this - https://chkstepan.com/
 
 ---
 
+Now I'll be deploying this backend in render, so what are the steps I should follow. I am having a monorepo setup where, I have - 
+protfolio2.0
+  /adminui
+  /backend
+  /frontend
+Now I wanna deploy just the backend.
 
+And the entry point for this is server.js
+
+What are the options I should be selecting, how and where should i be adding my secret keys give me a detailed breakdown
+
+
+ADMIN_PASSWORd=Akhilsmp@2003
+
+
+
+
+
+
+Check this out, I have deplpyed my backend and it is running on - https://portfolio-backend-cjvf.onrender.com
+Now what is happening is when i try to use this and run it on my localhost:3000 the project which runs adminui am not able to fetch or do anything am getting errors.
+
+Also Should I need to deploy the adminui too inorder for this to work ? Tell me whats the issue and how can I fix this.
+---
 
 ## PERFORMANCE OPT.
 

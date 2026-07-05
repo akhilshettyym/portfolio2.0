@@ -15,11 +15,13 @@ export default function RootLayout({ children }) {
   const handleLogout = async () => {
     try {
       await apiFetch("/api/auth/logout", { method: "POST" });
-      router.push("/login");
       showToast.success("Logged out Successfully");
-
     } catch (error) {
       showToast.error("Logout failed: " + error.message);
+    } finally {
+      localStorage.removeItem("authToken");
+      document.cookie = "adminSession=; path=/; max-age=0; SameSite=Lax";
+      router.replace("/login");
     }
   };
 

@@ -4,7 +4,7 @@ export function proxy(request) {
   console.log("Proxy intercepted request to:", request.nextUrl.pathname);
   const { pathname } = request.nextUrl;
 
-  const isAuthenticated = request.cookies.has("token");
+  const isAuthenticated = request.cookies.has("adminSession");
 
   if (pathname.startsWith("/dashboard") && !isAuthenticated) {
     return NextResponse.redirect(new URL("/login", request.url));

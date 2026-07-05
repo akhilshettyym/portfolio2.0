@@ -21,8 +21,25 @@ export const createAdmin = async () => {
         role: "ADMIN",
       });
       console.log("Main Admin account initialized successfully.");
+    } else {
+      const isNameDifferent = existingAdmin.name !== nameFromEnv;
+      const isEmailDifferent = existingAdmin.email !== emailFromEnv;
+
+      const isPasswordDifferent = existingAdmin.password !== passwordFromEnv;
+
+      if (isNameDifferent || isEmailDifferent || isPasswordDifferent) {
+        existingAdmin.name = nameFromEnv;
+        existingAdmin.email = emailFromEnv;
+
+        if (isPasswordDifferent) {
+          existingAdmin.password = passwordFromEnv;
+        }
+
+        await existingAdmin.save();
+        console.log("Main Admin account updated to match environment variables.");
+      }
     }
   } catch (error) {
-    console.error("Error creating admin setup:", error);
+    console.error("Error creating/updating admin setup:", error);
   }
 };

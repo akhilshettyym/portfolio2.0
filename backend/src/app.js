@@ -11,6 +11,12 @@ const app = express();
 
 app.set("trust proxy", 1);
 
+const parseOrigins = (value) =>
+  value
+    ?.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean) || [];
+
 app.use(
   helmet({
     hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
@@ -39,8 +45,21 @@ app.use(
       const isProduction = process.env.NODE_ENV === "production";
 
       const allowedOrigins = isProduction
-        ? [process.env.CLIENT_URL, process.env.ADMIN_URL].filter(Boolean)
-        : ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", process.env.CLIENT_URL].filter(Boolean);
+        ? [
+          process.env.CLIENT_URL,
+          process.env.ADMIN_URL,
+          ...parseOrigins(process.env.CLIENT_URLS),
+          ...parseOrigins(process.env.ADMIN_URLS),
+        ].filter(Boolean)
+        : [
+          "http://localhost:3000",
+          "http://localhost:3001",
+          "http://localhost:3002",
+          process.env.CLIENT_URL,
+          process.env.ADMIN_URL,
+          ...parseOrigins(process.env.CLIENT_URLS),
+          ...parseOrigins(process.env.ADMIN_URLS),
+        ].filter(Boolean);
 
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);

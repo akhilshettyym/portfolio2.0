@@ -54,7 +54,7 @@ export async function adminLoginController(req, res) {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "24h" }
     );
 
     const isProduction = process.env.NODE_ENV === "production";
@@ -63,18 +63,19 @@ export async function adminLoginController(req, res) {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
-      maxAge: 2 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
       success: true,
+      token: token,
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
       },
-      expiresIn: 2 * 60 * 60 * 1000,
+      expiresIn: 24 * 60 * 60 * 1000,
     });
   } catch (error) {
     console.error("Login Controller Error:", error);

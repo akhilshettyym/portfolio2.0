@@ -5,7 +5,6 @@ import { createAdmin } from "./src/utils/createAdmin.js";
 import mongoose from "mongoose";
 
 const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD"];
-
 const missingVars = requiredEnvVars.filter((v) => !process.env[v]);
 
 if (missingVars.length > 0) {
@@ -28,7 +27,7 @@ try {
   process.exit(1);
 }
 
-const PORT = process.env.SERVER_PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   console.log(`Server running at port ${PORT}`);
@@ -37,10 +36,8 @@ const server = app.listen(PORT, () => {
 
 const gracefulShutdown = (signal) => {
   console.log(`\n${signal} received. Starting graceful shutdown...`);
-
   server.close(async () => {
     console.log("HTTP server closed");
-
     try {
       await mongoose.connection.close();
       console.log("MongoDB connection closed cleanly");

@@ -11,8 +11,11 @@ import LiquidGlass from "@/components/basic/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
 import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
-import { startTransition, useEffect, useRef, useState, memo } from "react";
+import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { SiRevealdotjs } from "react-icons/si";
+
+import { LoadingContext } from "@/components/basic/LoaderWrapper";
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
@@ -27,6 +30,8 @@ const HeroSectionComponent = () => {
 
     const [paused, setPaused] = useState(false);
     const [sceneAssets, setSceneAssets] = useState(null);
+
+    const { triggerIntroRestart } = useContext(LoadingContext);
 
     const pausedRef = useRef(false);
     const sceneAssetsRef = useRef(null);
@@ -361,17 +366,19 @@ const HeroSectionComponent = () => {
         });
     };
 
+    const handleRestartIntroScene = () => {
+        triggerIntroRestart();
+    }
+
     return (
         <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
-                <div ref={containerRef} className="canvas-bg" style={{
-                    backgroundImage: sceneAssets
-                        ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none"
-                }} />
+
+                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} /> */}
 
                 <div className="absolute top-60 right-0 z-9999">
-                    <LiquidGlass width="65px" height="175px" className="p-0">
-                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="group absolute top-5 left-1/2 -translate-x-1/2 h-14 w-14 z-20">
+                    <LiquidGlass width="50px" height="190px" className="p-0">
+                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="group absolute top-5 left-1/2 -translate-x-1/2 h-11 w-11 z-20">
                             <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
                                 <defs>
                                     <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
@@ -383,28 +390,42 @@ const HeroSectionComponent = () => {
                                 </text>
                             </svg>
 
-                            <div className="relative z-10 flex h-9 w-9 ml-2.5 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110  group-hover:border-white/30">
-                                {paused ? (
-                                    <HiMiniPlay size={20} className="translate-x-px text-black/50" />
-                                ) : (
-                                    <HiMiniPause size={20} className="text-black/50" />
-                                )}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
+                                    {paused ? (
+                                        <HiMiniPlay size={14} className="translate-x-[0.5px] text-black/50" />
+                                    ) : (
+                                        <HiMiniPause size={14} className="text-black/50" />
+                                    )}
+                                </div>
                             </div>
 
-                            <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl">
+                            <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
                                 {paused ? "Run Clouds" : "Stall Clouds"}
                             </div>
                         </button>
 
+
+                        <button type="button" onClick={handleRestartIntroScene} className="group absolute top-16 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="mr-1/2 relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
+                                    <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
+                                </div>
+                            </div>
+                            <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
+                                Run Intro
+                            </div>
+                        </button>
+
                         {sceneAssets && (
-                            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
+                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10">
                                 <WeatherIcon />
                             </div>
                         )}
                     </LiquidGlass>
                 </div>
 
-                <div className="hero-text">
+                {/* <div className="hero-text">
                     <span className="line dim uppercase">
                         BUILD SYSTEMS <br />
                     </span>
@@ -422,11 +443,11 @@ const HeroSectionComponent = () => {
                             <span className="alt"> Explore our work → </span>
                         </span>
                     </button>
-                </div>
+                </div> */}
 
-                <div className="hero-name"> AKHIL SHETTY </div>
+                {/* <div className="hero-name"> AKHIL SHETTY </div> */}
 
-                <div className="hero-subtext-wrap">
+                {/* <div className="hero-subtext-wrap">
                     <p className="hero-subtext">
                         Design and code, refined until <br />
                         nothing feels unnecessary.
@@ -436,9 +457,9 @@ const HeroSectionComponent = () => {
                     <span className="dot tr" />
                     <span className="dot bl" />
                     <span className="dot br" />
-                </div>
+                </div> */}
 
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                {/* <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
 
@@ -455,12 +476,12 @@ const HeroSectionComponent = () => {
                             <GlitchText text="SCROLL_MORE__" />
                         </div>
                     </div>
-                </motion.div>
+                </motion.div> */}
 
-                <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
+                {/* <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
                     <span className="scroll-text"> DISCOVER </span>
                     <div className="scroll-indicator" />
-                </div>
+                </div> */}
 
                 <div className="corner" style={{ top: "120px", left: "40px" }} />
                 <div className="corner" style={{ bottom: "40px", left: "40px" }} />

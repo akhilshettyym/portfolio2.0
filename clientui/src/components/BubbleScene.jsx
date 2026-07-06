@@ -80,7 +80,7 @@ const BubbleSceneComponent = () => {
             });
 
             const bubble = new THREE.Sprite(material);
-            const scale = radius * 2.55;
+            const scale = radius * 3.0;
             const entryAngle = index * 0.62;
             const entryRadius = 2.5 + (index % 9) * 0.32;
 
@@ -370,7 +370,7 @@ const BubbleSceneComponent = () => {
 
             <div ref={wrapperRef} className="bubble-scene-panel">
                 <div className="bubble-grid" aria-hidden="true" />
-                <div className="bubble-radial-bg" aria-hidden="true" />
+                {/* <div className="bubble-radial-bg" aria-hidden="true" /> */}
                 <div className="bubble-orbit bubble-orbit-one" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-two" aria-hidden="true" />
 
@@ -385,7 +385,7 @@ const BubbleSceneComponent = () => {
                     <div className="bubble-content-inner">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
                             {BUBBLE_TEXT_GROUPS.map((group) => (
-                                <div key={group.summary} className="flex flex-col space-y-2 p-4 border border-neutral-200 bg-white shadow-[2px_2px_0px_#000000]">
+                                <div key={group.summary} className="flex flex-col space-y-2 p-3 border border-neutral-200 bg-white shadow-[2px_2px_0px_#000000]">
                                     <p className="text-sm font-sans text-neutral-600 leading-relaxed">
                                         {group.summary}
                                     </p>

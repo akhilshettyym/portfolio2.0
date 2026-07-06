@@ -7,7 +7,7 @@ const DevTicker = () => {
   const stream = [...DEV_TICKERS, ...DEV_TICKERS];
 
   return (
-    <section className="w-full border-y border-black/8 bg-white overflow-hidden">
+    <section className="relative w-full border-y border-black/8 bg-slate-50/50 text-slate-900 font-sans selection:bg-slate-900 selection:text-white overflow-hidden">
       <div className="relative h-9 flex items-center">
         <div className="absolute left-0 top-0 h-full w-24 bg-linear-to-r from-white via-white/95 to-transparent z-10 pointer-events-none" />
 

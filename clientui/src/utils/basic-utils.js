@@ -360,6 +360,8 @@ export const PHILOSOPHY = [
   "I design systems.",
   "I don't chase trends.",
   "I solve problems.",
+  "Reliability comes from consistency",
+  "Consistency comes from clarity"
 ];
 
 export const REWINDLINES = [
@@ -391,22 +393,22 @@ export const REWINDLINES = [
 export const HISTORYBANDS = [
   {
     year: "2018",
-    text: "Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.",
+    text: "Learning. Experimenting. Breaking things. Building taste. Asking why. Shipping small.Learning. Experimenting. Breaking things.",
     dir: "left",
   },
   {
     year: "2020",
-    text: "Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.",
+    text: "Building. Failing. Building again. Learning resilience. Reading systems. Staying curious.Building. Failing. Building again.",
     dir: "right",
   },
   {
     year: "2022",
-    text: "Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.",
+    text: "Understanding systems. Not just code. Thinking in flows. Constraints. Tradeoffs. Outcomes.Understanding systems. Not just code.",
     dir: "left",
   },
   {
     year: "2024",
-    text: "Engineering products. Solving real problems. Designing trust. Making things work beautifully.Engineering products. Solving real problems. Designing trust. Making things work beautifully.",
+    text: "Engineering products. Solving real problems. Designing trust. Making things work beautifully.Engineering products. Solving real problems.",
     dir: "right",
   },
 ];
@@ -594,12 +596,7 @@ export const BUBBLE_TEXT_GROUPS = [
     index: "03",
     summary:
       "Enforcing rigorous deployment criteria, continuous observability pipelines, and fallback strategies designed to withstand real-world enterprise workloads.",
-  },
-  {
-    index: "04",
-    summary:
-      "Profiling execution bottlenecks, managing asset overhead, and tuning bundle delivery to guarantee exceptional core web vitals globally.",
-  },
+  }
 ];
 
 /* CreateSomething */

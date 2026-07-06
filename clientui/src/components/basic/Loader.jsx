@@ -4,7 +4,7 @@ import gsap from "gsap";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
 import { hasLocationPreference } from "@/utils/weather-scene";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import LocationPreferenceModal from "@/components/basic/LocationPreferenceModal";
 
 const Loader = ({ onFinish, duration = 3000 }) => {

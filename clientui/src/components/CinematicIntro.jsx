@@ -139,7 +139,7 @@ const CinematicIntro = ({ onComplete }) => {
     () => {
       if (sceneRef.current === 3) {
         if (carouselRef.current < 1) {
-          setCarouselProgress((p) => clamp(p + 0.015, 0, 1));
+          setCarouselProgress((p) => clamp(p + 0.045, 0, 1));
           return;
         }
         nextScene();
@@ -152,7 +152,7 @@ const CinematicIntro = ({ onComplete }) => {
     () => {
       if (sceneRef.current === 3) {
         if (carouselRef.current > 0) {
-          setCarouselProgress((p) => clamp(p - 0.015, 0, 1));
+          setCarouselProgress((p) => clamp(p - 0.045, 0, 1));
           return;
         }
         prevScene();
@@ -361,6 +361,7 @@ const CinematicIntro = ({ onComplete }) => {
   }, [scene, reversedRewind]);
 
   const renderScene = () => {
+
     if (scene === 0) {
       const displayed = INTROLINES[introStep] ?? INTROLINES[0];
 
@@ -918,6 +919,14 @@ const CinematicIntro = ({ onComplete }) => {
     return null;
   };
 
+  const handleSkipToLastScene = () => {
+    resetSceneState();
+
+    setTimeout(() => {
+      setScene(13);
+    }, 80);
+  };
+
   useEffect(() => {
     if (scene !== 13) return;
     if (finalStage !== 2) return;
@@ -938,6 +947,12 @@ const CinematicIntro = ({ onComplete }) => {
         <AnimatePresence mode="wait">{renderScene()}</AnimatePresence>
       </div>
 
+      {scene !== 13 && (
+        <button onClick={handleSkipToLastScene} className="fixed bottom-8 right-8 z-50 flex items-center gap-2 rounded-full border border-current/30 bg-white/90 px-5 py-2.5 text-xs uppercase tracking-normal text-black backdrop-blur-md transition-all hover:bg-white hover:border-white/60 active:scale-95 dark:bg-black/90 dark:text-white dark:hover:bg-black">
+          <span> Skip Intro </span>
+        </button>
+      )}
+
       <motion.div initial={false}
         animate={{ opacity: scene === 3 ? 1 : 0 }}
         transition={{ duration: 0.35 }}
@@ -951,7 +966,7 @@ const CinematicIntro = ({ onComplete }) => {
       <motion.div initial={false}
         animate={{ opacity: ready ? 0.5 : 0.95 }}
         transition={{ duration: 0.4 }}
-        className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current/35 backdrop-blur-sm">
+        className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current backdrop-blur-sm">
         {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
       </motion.div>
     </div>

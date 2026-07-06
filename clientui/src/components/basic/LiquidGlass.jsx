@@ -27,7 +27,7 @@ const LiquidGlass = ({ children, width = "460px", height = "300px", className = 
                     <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/5 via-transparent to-white/10 rounded-[2.5rem]" />
                 </div>
 
-                <div className="absolute inset-0 flex items-center justify-center z-10 p-8 text-center pointer-events-auto">
+                <div className="absolute inset-0 flex items-center justify-center z-10 p-5 text-center pointer-events-auto">
                     {children}
                 </div>
             </div>

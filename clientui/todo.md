@@ -1,9 +1,19 @@
+BACKEND - https://portfolio-backend-cjvf.onrender.com
+
+ADMINUI - https://portfolio-adminui.vercel.app
+
 - Improve efficeincy of the GlobalCursor.
 - If not enough processing power then fallback to normal cursor.
 
-- Fix footer for sm, md, lg devices
 
-update createSomething component
+- Fix footer for sm, md, lg devices
+- Animations for component entering viewport.
+- Animations while routing into other page.
+
+- Add photo to footer about
+- Cinematic Intro scene 9 update glitch.
+- Improve - on mouse movement photo dumps
+
 
 IMMERSIVE CTA
 
@@ -11,37 +21,19 @@ https://dumemearts.com/ - Add images to cards
 
 https://www.spasoje.dev/ - Add to Projects
 
-- Animations for component entering viewport.
-- Animations while routing into other page.
-- Decide wtr to build backend for Contact.
+
 
 - THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. (clear warning)
+
 - My experience cards update.
 
 - On devticker entering the viewport I need to pause the HeroSection clouds automatically, and on coming back to the viewport in the sense on scrolling back up the HeroSection and passing devticker this scene should run. So what I want is unless and until the stall and run clouds is not cliced I shouldn't be updating the localStorage.
 
-- Design a logo
-  Designing and generating a logo -
-  So I wanna create a logo for my site, my name is akhil shetty m, So I wanna incorporate this in the logo any initial will do no issues. But then i wanna give a touch of hanuman's gadha. I want you to subtly incorporate that into the design and create a logo. Keep the background transparent and keep in mind that these will be having a white background so let the logo be in black, and make sure to make it really cool and professional.
-
-- Add photo to footer about
-
-- Go back to Cinematic scene.
-- SKIP for intro
-- Cinematic Intro scene 9 update glitch.
-
-Socials -
-
-- Landonorris for SOCIALS
-- CAN - on mouse movement photo dumps
 
 Enhancements -
-
 - Theme Modes.
 - Responsiveness.
-- Clear Linting tests.
 - Improve the performance of the website.
-- Production grade file folder structure.
 - AI VOICE CHAT
 
 ---
@@ -50,41 +42,10 @@ Reliability comes from consistency - Consistency comes from clarity
 
 https://hackfirst.io/
 
-The Hidden Vulnerabilities can destroy you
-
-Do we need code..? or solutions ?
-
-Adapting to pace of development environments. Sounds Interesting ?
-
 Scroll effects - https://azizkhaldi.com/
 
 Take points from this - https://chkstepan.com/
 
----
-
-Now I'll be deploying this backend in render, so what are the steps I should follow. I am having a monorepo setup where, I have - 
-protfolio2.0
-  /adminui
-  /backend
-  /frontend
-Now I wanna deploy just the backend.
-
-And the entry point for this is server.js
-
-What are the options I should be selecting, how and where should i be adding my secret keys give me a detailed breakdown
-
-
-ADMIN_PASSWORd=Akhilsmp@2003
-
-
-
-
-
-
-Check this out, I have deplpyed my backend and it is running on - https://portfolio-backend-cjvf.onrender.com
-Now what is happening is when i try to use this and run it on my localhost:3000 the project which runs adminui am not able to fetch or do anything am getting errors.
-
-Also Should I need to deploy the adminui too inorder for this to work ? Tell me whats the issue and how can I fix this.
 ---
 
 ## PERFORMANCE OPT.
@@ -833,3 +794,221 @@ Optional but useful
 If you want more measurable profiling later, EXT_disjoint_timer_query can measure command duration without stalling the pipeline, which is useful for diagnosing heavy shader passes. stats-gl is also useful if you want a richer dashboard with FPS, CPU, and GPU timing. stats.js is simpler and gives the classic FPS / MS / memory panels.
 WebGL best practices also mention estimating a per-pixel VRAM budget, which is a better way to think about texture and render-target budgets than trying to detect “GPU memory” directly, because browsers do not expose that cleanly.
 If you want, I can turn this into a Next.js-ready drop-in implementation for your exact BubbleScene / CinematicIntrostructure with the files laid out exactly as they should sit in your project.
+
+---
+
+That is a massive and beautifully complex orchestration for a cinematic intro! Managing that many specific timeouts and state transitions for a sequence is no small feat.
+
+However, looking at how your CinematicIntro and PerformanceBootstrap are currently built, there is a major synchronization issue waiting to happen.
+
+What Needs to Change
+If you wrap CinematicIntro directly inside PerformanceBootstrap, your intro sequence (Scene 0) will begin executing its timers the exact millisecond the component mounts. Meanwhile, the PerformanceBootstrap takes 5 seconds to calibrate the GPU. By the time the loading screen disappears, your user will be 5 seconds late to their own intro sequence.
+
+Here is exactly what needs to be adjusted and how to wire them together.
+Integration Strategy
+Component
+Required Change
+Reason
+page.jsx (Wrapper)
+Act as the orchestrator. Hold the tierstate and block CinematicIntro from mounting until calibration finishes.
+Prevents timers from firing behind a loading screen.
+PerformanceBootstrap
+Feed it a dummy onDrawFramefunction.
+The benchmarking function needs a loop to measure FPS accurately.
+CinematicIntro
+Accept a tier prop.
+So it can pass QUALITY_PRESETS[tier] down to your Three.js canvas or heavy components.
+Step 1: The Wrapper / Page Component
+Create a parent component (like a Next.js page.jsx) to handle the handoff. By conditionally rendering CinematicIntro based on the presence of the tier, we guarantee that scene === 0 starts exactly when the user is actually looking at the screen.
+JavaScript
+
+// app/page.jsx (or whatever your routing structure is)
+"use client";
+
+import { useState } from "react";
+import PerformanceBootstrap from "@/components/PerformanceBootstrap";
+import CinematicIntro from "@/components/CinematicIntro";
+import { QUALITY_PRESETS } from "@/lib/performance/performanceTier";
+
+export default function CinematicExperience() {
+const [performanceTier, setPerformanceTier] = useState(null);
+
+// A lightweight dummy function for the calibrator to measure FPS against.
+// If you have a specific heavy Three.js scene, you'd trigger its render here.
+const handleDrawFrame = () => {
+const x = Math.random() * 100;
+};
+
+const handleIntroComplete = () => {
+console.log("Cinematic Intro Finished! Moving to main site...");
+// Handle your routing or unmounting here
+};
+
+return (
+   <main className="relative h-screen w-full bg-black overflow-hidden">
+     <PerformanceBootstrap
+       onDrawFrame={handleDrawFrame}
+       onReady={(tier) => setPerformanceTier(tier)}
+     >
+       {/* Only mount the intro sequence AFTER calibration provides a tier */}
+       {performanceTier ? (
+         <CinematicIntro 
+           tier={performanceTier} 
+           presets={QUALITY_PRESETS[performanceTier]}
+           onComplete={handleIntroComplete} 
+         />
+       ) : (
+         <div className="absolute inset-0 flex items-center justify-center text-white/50 tracking-widest text-sm">
+           INITIALIZING EXPERIENCE...
+         </div>
+       )}
+     </PerformanceBootstrap>
+   </main>
+ );
+}
+Step 2: Update CinematicIntro to Consume the Tier
+Now, update your CinematicIntro so it accepts the tier prop and utilizes it. You don't need to change your massive useEffect timer block—because we delayed the mount, the timers are now perfectly safe!
+JavaScript
+
+// components/CinematicIntro.jsx
+"use client";
+
+import { useState, useEffect, useRef, useMemo } from "react";
+// Assuming you have your custom hooks imported here:
+// import { useBodyLock, useWheelDeck } from "@/hooks/..."
+// import { REWINDLINES, TOTAL_SCENES, DARK_START_SCENE, PROBLEMQUESTIONS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY } from "@/lib/constants"
+
+const CinematicIntro = ({ onComplete, tier, presets }) => {
+// --- All your original state variables remain exactly the same ---
+const [scene, setScene] = useState(0);
+const [aiStage, setAiStage] = useState(0);
+const [butStage, setButStage] = useState(0);
+const [vulnTick, setVulnTick] = useState(0);
+const [whoChars, setWhoChars] = useState(0);
+const [nameStage, setNameStage] = useState(0);
+const [introStep, setIntroStep] = useState(0);
+const [codeStage, setCodeStage] = useState(0);
+const [treeStage, setTreeStage] = useState(0);
+const [treePulse, setTreePulse] = useState(0);
+const [finalStage, setFinalStage] = useState(0);
+const [glitchSeed, setGlitchSeed] = useState(0);
+const [rewindIndex, setRewindIndex] = useState(0);
+const [dangerStage, setDangerStage] = useState(0);
+const [questionIndex, setQuestionIndex] = useState(0);
+const [buildingStage, setBuildingStage] = useState(0);
+const [philosophyStage, setPhilosophyStage] = useState(0);
+const [carouselProgress, setCarouselProgress] = useState(0);
+const [ready, setReady] = useState(false);
+const [rowWidths, setRowWidths] = useState({});
+const [timelineReveal, setTimelineReveal] = useState(false);
+const [darkCurtainDone, setDarkCurtainDone] = useState(false);
+
+const completedRef = useRef(false);
+const rowRefs = useRef({});
+const carouselRef = useRef(0);
+const sceneRef = useRef(scene);
+const readyRef = useRef(ready);
+
+// Example of using the performance tier for DOM elements
+// If tier_2 (low end), you might disable heavy backdrop-filters or box-shadows
+const isHighEnd = tier === "tier_1";
+
+const reversedRewind = useMemo(() => [...REWINDLINES].reverse(), []);
+
+// --- Keep all your useEffect blocks exactly as they were! ---
+// They are now protected because scene 0 won't run until calibration is done.
+
+useEffect(() => {
+sceneRef.current = scene;
+}, [scene]);
+
+useEffect(() => {
+readyRef.current = ready;
+}, [ready]);
+
+// ... (Paste the rest of your gigantic scene/timer useEffect here) ...
+
+useEffect(() => {
+if (scene !== 13) return;
+if (finalStage !== 2) return;
+if (completedRef.current) return;
+
+completedRef.current = true;
+
+const timeout = setTimeout(() => {
+onComplete?.();
+}, 2500);
+
+return () => clearTimeout(timeout);
+}, [scene, finalStage, onComplete]);
+
+return (
+   <div className="relative w-full h-full text-white">
+     {/* Pass your 'presets' down into your Three.js Canvas or heavy DOM elements here.
+       Example:
+       <MyThreeJsCanvas quality={presets} />
+     */}
+
+     <div className="absolute top-4 left-4 text-xs opacity-30">
+       Current Performance Profile: {tier}
+     </div>
+
+     {/* Your scene rendering logic goes here based on 'scene' state */}
+
+   </div>
+ );
+};
+
+export default CinematicIntro;
+A Quick Note on the Next.js App Router
+Because your performance tools use window.localStorage and navigator, ensure that you keep "use client"; at the very top of all three of these files (the page, the intro component, and the performance hook). Server-side rendering (SSR) will crash if it tries to read the GPU before the component hits the browser.
+
+
+---
+
+
+I have few files with me ready here right now, As you can see - 
+src/lib/performance/applyQualityTier.js 
+src/lib/performance/performanceTier.js
+src/hooks/usePerformanceTier.js
+src/components/PerformanceBootstrap.jsx 
+
+These are the files what I have. So what I am expecting here is, I'll be running the CinematicIntro scene for the first time, When this happens I want to get the users system's perfromance or machines state so that I can render only what is necessary. In the sense, I should be checking the performance and whats necessary to run the appplication. So if the users system is older or not capable of handling the full animated site then - the concept is, depending on this we will seperate into tiers, as in tier_1 being the highest quality and highest setting run of the application. Whereas the tier_2 being the downgraded version of the same. 
+
+Also I have one major insight, before the CinematicIntro runs The Loader will be running, So if the performance tier categorization is possible in this section then lets try that if not then wll do it in CinematicIntro. 
+
+- I want you to store the tier in the localStorage and then use that later on.
+- I want to be categorizing this into two tiers and based on that render the scenes.
+
+- Also I want you to enhance the MySocials.jsx component and make it more cooler and better.  
+
+I want you to check everything and in the application which ever consumes the higher processing and heavy renders with shaders and so on. I want you to render the lighter version of it for the tier_2.
+
+So say if a component is making heavy renders and affects the performance or feels laggy and the animations are not crisp, In that case I want you to cut down the animations and reduce the shaders so that everything renders normally and feels faster even on low end machines. 
+
+- I'll say what I think are heavy renders you can check and add on to it.
+BubbleScene.jsx, CardStackReveal.jsx, GithubGraphQlLazy.jsx, MyExperience.jsx, MySocials.jsx.
+These are the few files which I think might effect the performance. You check for urself.
+
+- Also if the user's system falls under tier_2 then dont render the GlobalCursor, use the normal cursor for this. 
+
+- And one more improvement was required -  When ever the component enters the viewport, then it feels very basic, I want you to add good immersive animation to this.
+
+- Also in CinematicIntro, we have scene 9, here a video is being rendered and then there are texts in the middle, Also there are few smaller texts at the background, I want these texts to be random all over the screen and not on particular line or something.
+
+- I am getting this warning when ever i run the application, saying : THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. Even though am not using THREE.Clock am getting this, clear this issue and use THREE.Timer. Make sure this is implemented properly.
+
+- Also when I switch to other page I need good animations. I need effect something like reveal. 
+
+- NOTE : If you feel the animations are heavy the renders are heavy or anything then cut it down for the tier_2 systems.
+		 And don't restrict anything for the tier_1 systems. Render everything with good performance.
+		 
+	If anything could improve the performance if cut down then feel free to do it, And make sure for the tier_1 we are rendering the best quality possible.
+	
+- Also note this -  if the user's system falls under tier_2 category then once the home page loads and HeroSection is in viewport, Show a glitchy effect modal popup, which will say, Your system falls under tier_2 category, and for optimized viewing experince the application will load in a lower downgraded setup, something like this more professional and cleaner.
+		 
+- If there are any vulnerabilities or anything with the code or performance improvements which could be possible and make it better, then do that. Make sure every component runs only and only when they enter to the viewport. Make sure not to run anything in behind and make the renders slower. Make sure whatever enhancements are possible use them, Advanced techniques or if any extra package could be helpful then use it. 
+
+- Make sure to make the file/folder structure production level and production ready. 
+
+- Make these changes and give me the final output. Make sure not to break anything.

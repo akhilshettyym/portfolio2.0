@@ -46,12 +46,12 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-black">
         <GlobalCursor />
 
-        <LenisProvider>
+        {/* <LenisProvider> */}
           <LoaderWrapper>
 
-            <NavbarWrapper>
+            {/* <NavbarWrapper>
               <Navbar />
-            </NavbarWrapper>
+            </NavbarWrapper> */}
 
             <main className="relative pt-25">
               {children}
@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
             </main>
 
           </LoaderWrapper>
-        </LenisProvider>
+        {/* </LenisProvider> */}
       </body>
     </html>
   );

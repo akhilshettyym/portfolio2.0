@@ -13,12 +13,12 @@ const WorkLayout = memo(
         <SelectedWorks />
 
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-        <MyExperienceLazy />
-      </LazyLoad>
+          <MyExperienceLazy />
+        </LazyLoad>
 
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-        <GithubGraphQlLazy />
-      </LazyLoad>
+          <GithubGraphQlLazy />
+        </LazyLoad>
 
         <EmergencyCTA />
         <Footer />

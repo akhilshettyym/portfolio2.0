@@ -35,7 +35,7 @@ const WeatherIcon = () => {
                 </motion.div>
             </motion.div>
 
-            <div className="pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[10px] font-medium text-black/50 opacity-0 translate-x-0 transition-all duration-200 group-hover:-translate-x-3 group-hover:border-1 group-hover:border-slate-100 group-hover:opacity-100 z-[10000] shadow-xl">
+            <div className="pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[10px] font-medium text-black/50 opacity-0 translate-x-0 transition-all duration-200 group-hover:-translate-x-3 group-hover:border-1 group-hover:border-slate-100 group-hover:opacity-100 z-[10000] shadow-xl uppercase">
                 {weatherLabel} • {moonLabel}
             </div>
         </div>

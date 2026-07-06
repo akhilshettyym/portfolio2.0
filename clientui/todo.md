@@ -4,7 +4,16 @@ ADMINUI - https://portfolio-adminui.vercel.app
 
 - Improve efficeincy of the GlobalCursor.
 - If not enough processing power then fallback to normal cursor.
+
+
 - Fix footer for sm, md, lg devices
+- Animations for component entering viewport.
+- Animations while routing into other page.
+
+- Add photo to footer about
+- Cinematic Intro scene 9 update glitch.
+- Improve - on mouse movement photo dumps
+
 
 IMMERSIVE CTA
 
@@ -12,23 +21,16 @@ https://dumemearts.com/ - Add images to cards
 
 https://www.spasoje.dev/ - Add to Projects
 
-- Animations for component entering viewport.
-- Animations while routing into other page.
+
 
 - THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. (clear warning)
+
 - My experience cards update.
 
 - On devticker entering the viewport I need to pause the HeroSection clouds automatically, and on coming back to the viewport in the sense on scrolling back up the HeroSection and passing devticker this scene should run. So what I want is unless and until the stall and run clouds is not cliced I shouldn't be updating the localStorage.
 
-- Add photo to footer about
-
-- Go back to Cinematic scene.
-- SKIP for intro
-- Cinematic Intro scene 9 update glitch.
-- Improve - on mouse movement photo dumps
 
 Enhancements -
-
 - Theme Modes.
 - Responsiveness.
 - Improve the performance of the website.
@@ -39,12 +41,6 @@ Enhancements -
 Reliability comes from consistency - Consistency comes from clarity
 
 https://hackfirst.io/
-
-The Hidden Vulnerabilities can destroy you
-
-Do we need code..? or solutions ?
-
-Adapting to pace of development environments. Sounds Interesting ?
 
 Scroll effects - https://azizkhaldi.com/
 
@@ -966,3 +962,53 @@ return (
 export default CinematicIntro;
 A Quick Note on the Next.js App Router
 Because your performance tools use window.localStorage and navigator, ensure that you keep "use client"; at the very top of all three of these files (the page, the intro component, and the performance hook). Server-side rendering (SSR) will crash if it tries to read the GPU before the component hits the browser.
+
+
+---
+
+
+I have few files with me ready here right now, As you can see - 
+src/lib/performance/applyQualityTier.js 
+src/lib/performance/performanceTier.js
+src/hooks/usePerformanceTier.js
+src/components/PerformanceBootstrap.jsx 
+
+These are the files what I have. So what I am expecting here is, I'll be running the CinematicIntro scene for the first time, When this happens I want to get the users system's perfromance or machines state so that I can render only what is necessary. In the sense, I should be checking the performance and whats necessary to run the appplication. So if the users system is older or not capable of handling the full animated site then - the concept is, depending on this we will seperate into tiers, as in tier_1 being the highest quality and highest setting run of the application. Whereas the tier_2 being the downgraded version of the same. 
+
+Also I have one major insight, before the CinematicIntro runs The Loader will be running, So if the performance tier categorization is possible in this section then lets try that if not then wll do it in CinematicIntro. 
+
+- I want you to store the tier in the localStorage and then use that later on.
+- I want to be categorizing this into two tiers and based on that render the scenes.
+
+- Also I want you to enhance the MySocials.jsx component and make it more cooler and better.  
+
+I want you to check everything and in the application which ever consumes the higher processing and heavy renders with shaders and so on. I want you to render the lighter version of it for the tier_2.
+
+So say if a component is making heavy renders and affects the performance or feels laggy and the animations are not crisp, In that case I want you to cut down the animations and reduce the shaders so that everything renders normally and feels faster even on low end machines. 
+
+- I'll say what I think are heavy renders you can check and add on to it.
+BubbleScene.jsx, CardStackReveal.jsx, GithubGraphQlLazy.jsx, MyExperience.jsx, MySocials.jsx.
+These are the few files which I think might effect the performance. You check for urself.
+
+- Also if the user's system falls under tier_2 then dont render the GlobalCursor, use the normal cursor for this. 
+
+- And one more improvement was required -  When ever the component enters the viewport, then it feels very basic, I want you to add good immersive animation to this.
+
+- Also in CinematicIntro, we have scene 9, here a video is being rendered and then there are texts in the middle, Also there are few smaller texts at the background, I want these texts to be random all over the screen and not on particular line or something.
+
+- I am getting this warning when ever i run the application, saying : THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. Even though am not using THREE.Clock am getting this, clear this issue and use THREE.Timer. Make sure this is implemented properly.
+
+- Also when I switch to other page I need good animations. I need effect something like reveal. 
+
+- NOTE : If you feel the animations are heavy the renders are heavy or anything then cut it down for the tier_2 systems.
+		 And don't restrict anything for the tier_1 systems. Render everything with good performance.
+		 
+	If anything could improve the performance if cut down then feel free to do it, And make sure for the tier_1 we are rendering the best quality possible.
+	
+- Also note this -  if the user's system falls under tier_2 category then once the home page loads and HeroSection is in viewport, Show a glitchy effect modal popup, which will say, Your system falls under tier_2 category, and for optimized viewing experince the application will load in a lower downgraded setup, something like this more professional and cleaner.
+		 
+- If there are any vulnerabilities or anything with the code or performance improvements which could be possible and make it better, then do that. Make sure every component runs only and only when they enter to the viewport. Make sure not to run anything in behind and make the renders slower. Make sure whatever enhancements are possible use them, Advanced techniques or if any extra package could be helpful then use it. 
+
+- Make sure to make the file/folder structure production level and production ready. 
+
+- Make these changes and give me the final output. Make sure not to break anything.

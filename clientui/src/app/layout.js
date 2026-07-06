@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
         <GlobalCursor />
 
         {/* <LenisProvider> */}
-          {/* <LoaderWrapper> */}
+          <LoaderWrapper>
 
             {/* <NavbarWrapper>
               <Navbar />
@@ -58,7 +58,7 @@ export default function RootLayout({ children }) {
               <ToastContainer />
             </main>
 
-          {/* </LoaderWrapper> */}
+          </LoaderWrapper>
         {/* </LenisProvider> */}
       </body>
     </html>

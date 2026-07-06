@@ -949,7 +949,7 @@ const CinematicIntro = ({ onComplete }) => {
 
       {scene !== 13 && (
         <button onClick={handleSkipToLastScene} className="fixed bottom-8 right-8 z-50 flex items-center gap-2 rounded-full border border-current/30 bg-white/90 px-5 py-2.5 text-xs uppercase tracking-normal text-black backdrop-blur-md transition-all hover:bg-white hover:border-white/60 active:scale-95 dark:bg-black/90 dark:text-white dark:hover:bg-black">
-          <span>SKIP INTRO</span>
+          <span> Skip Intro </span>
         </button>
       )}
 
@@ -966,7 +966,7 @@ const CinematicIntro = ({ onComplete }) => {
       <motion.div initial={false}
         animate={{ opacity: ready ? 0.5 : 0.95 }}
         transition={{ duration: 0.4 }}
-        className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current/35 backdrop-blur-sm">
+        className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current backdrop-blur-sm">
         {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
       </motion.div>
     </div>

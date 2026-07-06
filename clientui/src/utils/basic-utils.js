@@ -360,6 +360,8 @@ export const PHILOSOPHY = [
   "I design systems.",
   "I don't chase trends.",
   "I solve problems.",
+  "Reliability comes from consistency",
+  "Consistency comes from clarity"
 ];
 
 export const REWINDLINES = [

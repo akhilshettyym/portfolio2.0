@@ -67,8 +67,20 @@ const LoaderWrapper = ({ children }) => {
         });
     };
 
+    const triggerIntroRestart = () => {
+        window.localStorage.removeItem(INTRO_KEY);
+        setRevealActive(false);
+        setNavReady(false);
+        setIntroComplete(false);
+
+        setTimeout(() => {
+            setShouldMountChildren(false);
+            setHasSeenIntro(false);
+        }, 500);
+    };
+
     return (
-        <LoadingContext.Provider value={{ isLoading: loading, navReady }}>
+        <LoadingContext.Provider value={{ isLoading: loading, navReady, triggerIntroRestart }}>
             {loading && <Loader onFinish={() => setLoading(false)} />}
 
             {!loading && showIntro && (

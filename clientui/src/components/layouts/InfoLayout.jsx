@@ -1,0 +1,38 @@
+import React, { memo } from "react";
+import Footer from "@/components/Footer";
+import DevTicker from "@/components/DevTicker";
+import LazyLoad from "@/components/basic/LazyLoad";
+import HeroSection from "@/components/HeroSection";
+import SubjectProfile from "@/components/SubjectProfile";
+import EmergencyCTA from "@/components/basic/EmergencyCTA";
+import MySocialsLazy from "@/components/LazyComponents/MySocialsLazy";
+import BubbleSceneLazy from "@/components/LazyComponents/BubbleSceneLazy";
+import CardStackRevealLazy from "@/components/LazyComponents/CardStackRevealLazy";
+import CinematicIntro from "../CinematicIntro";
+
+const InfoLayout = memo(function InfoLayout() {
+    return (
+        <div>
+            <HeroSection />
+            {/* <SubjectProfile /> */}
+            {/* <DevTicker /> */}
+
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+                <BubbleSceneLazy />
+            </LazyLoad> */}
+
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+                <CardStackRevealLazy />
+            </LazyLoad> */}
+
+            {/* <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+                <MySocialsLazy />
+            </LazyLoad> */}
+
+            {/* <EmergencyCTA /> */}
+            {/* <Footer /> */}
+        </div>
+    );
+});
+
+export default InfoLayout;

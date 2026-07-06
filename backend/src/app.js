@@ -48,8 +48,8 @@ app.use(
         ? [
           process.env.CLIENT_URL,
           process.env.ADMIN_URL,
-          ...parseOrigins(process.env.CLIENT_URLS),
-          ...parseOrigins(process.env.ADMIN_URLS),
+          ...parseOrigins(process.env.CLIENT_URL),
+          ...parseOrigins(process.env.ADMIN_URL),
         ].filter(Boolean)
         : [
           "http://localhost:3000",
@@ -57,8 +57,8 @@ app.use(
           "http://localhost:3002",
           process.env.CLIENT_URL,
           process.env.ADMIN_URL,
-          ...parseOrigins(process.env.CLIENT_URLS),
-          ...parseOrigins(process.env.ADMIN_URLS),
+          ...parseOrigins(process.env.CLIENT_URL),
+          ...parseOrigins(process.env.ADMIN_URL),
         ].filter(Boolean);
 
       if (!origin || allowedOrigins.includes(origin)) {

@@ -4,14 +4,17 @@ import "@/styles/clouds.css";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
+import { createThreeTimer } from "@/lib/performance/threeTimer";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
 import LiquidGlass from "@/components/basic/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { SiRevealdotjs } from "react-icons/si";
 
@@ -24,14 +27,18 @@ function isSameScene(a, b) {
 
 const HeroSectionComponent = () => {
     const btnRef = useRef(null);
+    const sectionRef = useRef(null);
     const speedRef = useRef(0.8);
     const containerRef = useRef(null);
     const tunnelPositionRef = useRef(0);
 
     const [paused, setPaused] = useState(false);
     const [sceneAssets, setSceneAssets] = useState(null);
+    const [showTierNotice, setShowTierNotice] = useState(false);
 
     const { triggerIntroRestart } = useContext(LoadingContext);
+    const { tier, ready, isTier2 } = usePerformanceTier();
+    const quality = getQualityPreset(tier);
 
     const pausedRef = useRef(false);
     const sceneAssetsRef = useRef(null);
@@ -72,6 +79,26 @@ const HeroSectionComponent = () => {
     useEffect(() => {
         sceneAssetsRef.current = sceneAssets;
     }, [sceneAssets]);
+
+    useEffect(() => {
+        if (!ready || !isTier2 || !sectionRef.current) return undefined;
+
+        const dismissed = sessionStorage.getItem("tier_2_notice_seen") === "true";
+        if (dismissed) return undefined;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) return;
+                setShowTierNotice(true);
+                sessionStorage.setItem("tier_2_notice_seen", "true");
+                observer.disconnect();
+            },
+            { threshold: 0.35 },
+        );
+
+        observer.observe(sectionRef.current);
+        return () => observer.disconnect();
+    }, [isTier2, ready]);
 
     useEffect(() => {
         let mounted = true;
@@ -164,17 +191,21 @@ const HeroSectionComponent = () => {
             camera.updateProjectionMatrix();
 
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(getRendererPixelRatio(tier));
         };
+
+        const timer = createThreeTimer();
 
         const animate = () => {
             if (!isAnimating || isDisposed) return;
 
             animationId = requestAnimationFrame(animate);
+            const delta = Math.min(timer.update(), 0.033);
+            const frameSpeed = delta * 60;
 
             const targetSpeed = pausedRef.current ? 0 : 0.8;
             speedRef.current += (targetSpeed - speedRef.current) * 0.025;
-            tunnelPositionRef.current += speedRef.current;
+            tunnelPositionRef.current += speedRef.current * frameSpeed;
 
             if (camera) {
                 const mouseFactor = pausedRef.current ? 0 : 1;
@@ -216,12 +247,12 @@ const HeroSectionComponent = () => {
 
                 renderer = new THREE.WebGLRenderer({
                     alpha: true,
-                    antialias: false,
-                    powerPreference: "high-performance",
+                    antialias: quality.antialias,
+                    powerPreference: tier === "tier_1" ? "high-performance" : "default",
                 });
 
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.setPixelRatio(getRendererPixelRatio(tier));
                 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
                 container.appendChild(renderer.domElement);
@@ -271,10 +302,10 @@ const HeroSectionComponent = () => {
 
                 const geometries = [];
 
-                for (let i = 0; i < 8000; i++) {
+                for (let i = 0; i < quality.cloudPlanes; i++) {
                     planeObj.position.x = Math.random() * 1000 - 500;
                     planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
-                    planeObj.position.z = i;
+                    planeObj.position.z = i * (8000 / quality.cloudPlanes);
                     planeObj.rotation.z = Math.random() * Math.PI;
                     planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
                     planeObj.updateMatrix();
@@ -356,7 +387,7 @@ const HeroSectionComponent = () => {
                 }
             }
         };
-    }, [sceneAssets]);
+    }, [quality.antialias, quality.cloudPlanes, sceneAssets, tier]);
 
     const handleCloudControl = () => {
         setPaused((prev) => {
@@ -371,10 +402,10 @@ const HeroSectionComponent = () => {
     }
 
     return (
-        <section className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
+        <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-                {/* <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} /> */}
+                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <div className="absolute top-60 right-0 z-9999">
                     <LiquidGlass width="50px" height="190px" className="p-0">
@@ -425,7 +456,7 @@ const HeroSectionComponent = () => {
                     </LiquidGlass>
                 </div>
 
-                {/* <div className="hero-text">
+                <div className="hero-text">
                     <span className="line dim uppercase">
                         BUILD SYSTEMS <br />
                     </span>
@@ -443,11 +474,11 @@ const HeroSectionComponent = () => {
                             <span className="alt"> Explore our work → </span>
                         </span>
                     </button>
-                </div> */}
+                </div>
 
-                {/* <div className="hero-name"> AKHIL SHETTY </div> */}
+                <div className="hero-name"> AKHIL SHETTY </div>
 
-                {/* <div className="hero-subtext-wrap">
+                <div className="hero-subtext-wrap">
                     <p className="hero-subtext">
                         Design and code, refined until <br />
                         nothing feels unnecessary.
@@ -457,9 +488,9 @@ const HeroSectionComponent = () => {
                     <span className="dot tr" />
                     <span className="dot bl" />
                     <span className="dot br" />
-                </div> */}
+                </div>
 
-                {/* <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
 
@@ -476,17 +507,48 @@ const HeroSectionComponent = () => {
                             <GlitchText text="SCROLL_MORE__" />
                         </div>
                     </div>
-                </motion.div> */}
+                </motion.div>
 
-                {/* <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
+                <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
                     <span className="scroll-text"> DISCOVER </span>
                     <div className="scroll-indicator" />
-                </div> */}
+                </div>
 
                 <div className="corner" style={{ top: "120px", left: "40px" }} />
                 <div className="corner" style={{ bottom: "40px", left: "40px" }} />
                 <div className="corner" style={{ bottom: "40px", right: "40px" }} />
             </div>
+
+            {showTierNotice && (
+                <motion.div
+                    initial={{ opacity: 0, y: 28, filter: "blur(12px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="fixed inset-0 z-9999 flex items-end justify-center px-4 pb-6 pointer-events-none sm:items-center sm:pb-0">
+                    <div className="relative max-w-md overflow-hidden rounded-lg border border-white/25 bg-black/85 p-5 text-white shadow-2xl backdrop-blur-xl pointer-events-auto">
+                        <div className="absolute inset-x-0 top-0 h-px bg-white/60" />
+                        <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(0deg,transparent_0px,transparent_7px,white_8px)]" />
+                        <div className="relative">
+                            <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.28em] text-white/55">
+                                optimized render mode
+                            </div>
+                            <h2 className="text-lg font-semibold tracking-tight">
+                                Your device is running the lightweight experience.
+                            </h2>
+                            <p className="mt-3 text-sm leading-6 text-white/70">
+                                We detected limited graphics headroom, so the site has reduced shader density, background loops, and cursor effects for smoother viewing.
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => setShowTierNotice(false)}
+                                className="mt-5 rounded-md border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition hover:border-white/50 hover:text-white">
+                                Continue
+                            </button>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
         </section>
     );
 };

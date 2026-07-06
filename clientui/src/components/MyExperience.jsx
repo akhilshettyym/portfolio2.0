@@ -6,6 +6,7 @@ import { SlDirections } from "react-icons/sl";
 import { GrPowerReset } from "react-icons/gr";
 import { FaPause, FaPlay } from "react-icons/fa6";
 import LiquidGlass from "@/components/basic/LiquidGlass";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
 const COMPONENT_HEIGHT = "480px";
@@ -53,23 +54,25 @@ const experience_cards = [
 ];
 
 const MyExperience = () => {
+  const { isTier2 } = usePerformanceTier();
+  const baseSpeed = isTier2 ? 76 : 120;
   const [isAnimating, setIsAnimating] = useState(true);
-  const [speedSetting, setSpeedSetting] = useState(120);
-  const [speedUI, setSpeedUI] = useState(120);
+  const [speedSetting, setSpeedSetting] = useState(baseSpeed);
+  const [speedUI, setSpeedUI] = useState(baseSpeed);
   const [activeLog, setActiveLog] = useState("experience");
   const [isVisible, setIsVisible] = useState(false);
 
   const experienceAsciiCards = useMemo(() => {
     return [...Array(UNIQUE_CARD_COUNT)].map(() =>
-      generateMachineCode(Math.floor(400 / 6), Math.floor(250 / 13)),
+      generateMachineCode(Math.floor(400 / 6), Math.floor((isTier2 ? 180 : 250) / 13)),
     );
-  }, []);
+  }, [isTier2]);
 
   const educationAsciiCards = useMemo(() => {
     return [...Array(UNIQUE_CARD_COUNT)].map(() =>
-      generateMachineCode(Math.floor(400 / 6), Math.floor(250 / 13)),
+      generateMachineCode(Math.floor(400 / 6), Math.floor((isTier2 ? 180 : 250) / 13)),
     );
-  }, []);
+  }, [isTier2]);
 
   const duplicatedCards = useMemo(() => [...Array(UNIQUE_CARD_COUNT * 3)], []);
 
@@ -83,8 +86,8 @@ const MyExperience = () => {
 
   const stateRef = useRef({
     position: 0,
-    velocity: 120,
-    baseSpeed: 120,
+    velocity: baseSpeed,
+    baseSpeed,
     direction: -1,
     isDragging: false,
     lastTime: typeof performance !== "undefined" ? performance.now() : 0,
@@ -93,8 +96,16 @@ const MyExperience = () => {
     containerWidth: 0,
     singleLoopWidth: 0,
     hasInitializedPosition: false,
-    lastSpeedUI: 120,
+    lastSpeedUI: baseSpeed,
   });
+
+  useEffect(() => {
+    stateRef.current.baseSpeed = baseSpeed;
+    stateRef.current.velocity = baseSpeed;
+    stateRef.current.lastSpeedUI = baseSpeed;
+    setSpeedSetting(baseSpeed);
+    setSpeedUI(baseSpeed);
+  }, [baseSpeed]);
 
   const handleSpeedSliderChange = (e) => {
     const val = Number(e.target.value);
@@ -221,7 +232,7 @@ const MyExperience = () => {
     class ParticleSystem {
       constructor(canvas) {
         this.canvas = canvas;
-        this.particleCount = 400;
+        this.particleCount = isTier2 ? 140 : 400;
         this.particles = [];
         this.running = false;
         this.rafId = null;
@@ -306,7 +317,7 @@ const MyExperience = () => {
         this.w = window.innerWidth;
         this.h = 320;
         this.particles = [];
-        this.maxParticles = 1500;
+        this.maxParticles = isTier2 ? 420 : 1500;
         this.running = false;
         this.rafId = null;
       }
@@ -375,7 +386,7 @@ const MyExperience = () => {
         }
 
         if (visualVelocity > 0) {
-          const dynamicSpawnRate = stateRef.current.isDragging ? 24 : 14;
+          const dynamicSpawnRate = isTier2 ? 5 : stateRef.current.isDragging ? 24 : 14;
           for (let k = 0; k < dynamicSpawnRate; k++) {
             if (this.particles.length < this.maxParticles) {
               this.particles.push(this.createParticle());
@@ -413,7 +424,7 @@ const MyExperience = () => {
       if (particleSystem) particleSystem.stop();
       if (particleScanner) particleScanner.stop();
     };
-  }, [isVisible]);
+  }, [isTier2, isVisible]);
 
   const handleDragStart = (clientX) => {
     stateRef.current.isDragging = true;
@@ -504,7 +515,7 @@ const MyExperience = () => {
 
         <div className="slider-container w-full h-full flex items-center justify-center pb-6">
           <span> Speed: </span>
-          <input type="range" min="30" max="150" value={speedSetting} onChange={handleSpeedSliderChange} />
+          <input type="range" min="30" max={isTier2 ? "110" : "150"} value={speedSetting} onChange={handleSpeedSliderChange} />
           <span> {speedSetting} px/s </span>
         </div>
 

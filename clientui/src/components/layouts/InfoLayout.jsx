@@ -8,7 +8,6 @@ import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import MySocialsLazy from "@/components/LazyComponents/MySocialsLazy";
 import BubbleSceneLazy from "@/components/LazyComponents/BubbleSceneLazy";
 import CardStackRevealLazy from "@/components/LazyComponents/CardStackRevealLazy";
-import CinematicIntro from "../CinematicIntro";
 
 const InfoLayout = memo(function InfoLayout() {
     return (

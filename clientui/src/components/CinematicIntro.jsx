@@ -2,6 +2,7 @@
 
 import "@/styles/cinematic_intro.css";
 import { AnimatePresence, motion } from "framer-motion";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct-utils";
 import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic-utils";
@@ -39,6 +40,29 @@ const CinematicIntro = ({ onComplete }) => {
   const readyRef = useRef(ready);
 
   const reversedRewind = useMemo(() => [...REWINDLINES].reverse(), []);
+  const { isTier2 } = usePerformanceTier();
+  const floatingBusinessTexts = useMemo(() => {
+    const source = [
+      ...BUSINESSQUESTIONS,
+      "conversion risk",
+      "signal loss",
+      "execution gap",
+      "latency cost",
+      "market drift",
+      "trust layer",
+    ];
+
+    return Array.from({ length: isTier2 ? 14 : 30 }, (_, index) => ({
+      id: `${source[index % source.length]}-${index}`,
+      text: source[index % source.length],
+      left: 6 + ((index * 37) % 88),
+      top: 8 + ((index * 53) % 82),
+      delay: (index % 8) * 0.18,
+      duration: 5 + (index % 6),
+      scale: 0.72 + (index % 5) * 0.08,
+      opacity: 0.08 + (index % 4) * 0.035,
+    }));
+  }, [isTier2]);
 
   useEffect(() => {
     sceneRef.current = scene;
@@ -726,9 +750,44 @@ const CinematicIntro = ({ onComplete }) => {
     if (scene === 9) {
       return (
         <SceneShell2 dark>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_45%)]" />
+          {!isTier2 && (
+            <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 z-1 h-full w-full object-cover scale-105">
+              <source src="/cinematic_intro/scene9-2.mp4" type="video/mp4" />
+            </video>
+          )}
 
-          <div className="relative flex h-full w-full items-center justify-center px-6 text-center">
+          <div className="absolute inset-0 z-2 bg-black/55" />
+          <div className="absolute inset-0 z-2 bg-linear-to-b from-black/35 via-black/10 to-black/80" />
+          <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.10),transparent_45%)]" />
+
+          <div className="absolute inset-0 z-3 overflow-hidden">
+            {floatingBusinessTexts.map((item) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 16, rotate: -2 }}
+                animate={{
+                  opacity: item.opacity,
+                  y: isTier2 ? 0 : [0, -18, 10, 0],
+                  rotate: isTier2 ? 0 : [-2, 2, -1],
+                }}
+                transition={{
+                  duration: isTier2 ? 0.4 : item.duration,
+                  delay: item.delay,
+                  repeat: isTier2 ? 0 : Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute max-w-[18rem] text-left font-mono text-[10px] uppercase leading-4 tracking-[0.22em] text-white/70"
+                style={{
+                  left: `${item.left}%`,
+                  top: `${item.top}%`,
+                  transform: `scale(${item.scale})`,
+                }}>
+                {item.text}
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="relative z-4 flex h-full w-full items-center justify-center px-6 text-center">
             <AnimatePresence mode="wait">
               {butStage < 2 ? (
                 <motion.div key="but"

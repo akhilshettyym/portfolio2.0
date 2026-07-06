@@ -5,7 +5,8 @@ import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic-utils";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getCachedData, setCachedData } from "@/utils/cache-utils";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
@@ -14,6 +15,9 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fromCache, setFromCache] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const panelRef = useRef(null);
+  const { isTier2 } = usePerformanceTier();
 
   const motionTotal = useMotionValue(0);
 
@@ -176,6 +180,20 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   };
 
   useEffect(() => {
+    if (!panelRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.12 },
+    );
+
+    observer.observe(panelRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible || isTier2) return undefined;
+
     const createNotification = (setter, max) => {
       const value = Math.floor(Math.random() * max) + 1;
       setter({ id: Date.now() + Math.random(), value });
@@ -202,13 +220,13 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
       clearInterval(coffeeInterval);
       clearInterval(commitInterval);
     };
-  }, []);
+  }, [isTier2, isVisible]);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
+    <motion.div ref={panelRef} initial={{ opacity: 0, y: 34, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.45 }}
+      transition={{ duration: isTier2 ? 0.35 : 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="w-full p-8">
 
       <div className="mb-5 grid grid-cols-3 gap-4 uppercase">
@@ -361,11 +379,11 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
 
                       return (
                         <motion.div key={day.date}
-                          initial={{ opacity: 0, scale: 0.85 }}
+                          initial={isTier2 ? false : { opacity: 0, scale: 0.85 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
-                          transition={{ delay: weekIndex * 0.01 + dayIndex * 0.002, duration: 0.16 }}
-                          whileHover={{ scale: 1, y: -1 }}
+                          transition={{ delay: isTier2 ? 0 : weekIndex * 0.01 + dayIndex * 0.002, duration: isTier2 ? 0 : 0.16 }}
+                          whileHover={isTier2 ? undefined : { scale: 1, y: -1 }}
                           title={`${day.contributionCount} contributions on ${day.date}`}
                           className="aspect-square w-full rounded-[3px] transition-all duration-150 hover:ring-1  hover:ring-black/10"
                           style={{ backgroundColor }} />

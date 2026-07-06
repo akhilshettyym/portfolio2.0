@@ -3,7 +3,10 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
+import { createThreeTimer } from "@/lib/performance/threeTimer";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { hasLocationPreference } from "@/utils/weather-scene";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import LocationPreferenceModal from "@/components/basic/LocationPreferenceModal";
 
@@ -12,6 +15,8 @@ const Loader = ({ onFinish, duration = 3000 }) => {
 
   const [progress, setProgress] = useState(0);
   const [done, setDone] = useState(false);
+  const { tier, calibrating } = usePerformanceTier();
+  const quality = getQualityPreset(tier);
 
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -98,22 +103,23 @@ const Loader = ({ onFinish, duration = 3000 }) => {
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: !isMobile,
+      antialias: !isMobile && quality.antialias,
+      powerPreference: tier === "tier_1" ? "high-performance" : "default",
     });
 
-    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(isMobile ? 1 : getRendererPixelRatio(tier));
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     container.appendChild(renderer.domElement);
 
     let controls;
-    if (!isMobile) {
+    if (!isMobile && tier === "tier_1") {
       controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
     }
 
     const geometry = new THREE.BufferGeometry();
-    const count = isMobile ? 900 : 2000;
+    const count = Math.round((isMobile ? 850 : 2000) * quality.particleMultiplier);
 
     const positions = new Float32Array(count * 3);
 
@@ -137,12 +143,15 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     scene.add(points);
 
     let frameId;
+    const timer = createThreeTimer();
 
     function animate() {
       frameId = requestAnimationFrame(animate);
+      const delta = Math.min(timer.update(), 0.033);
+      const speed = delta * 60;
 
-      points.rotation.y += isMobile ? 0.0007 : 0.001;
-      points.rotation.x += isMobile ? 0.0003 : 0.0005;
+      points.rotation.y += (isMobile ? 0.0007 : 0.001) * speed;
+      points.rotation.x += (isMobile ? 0.0003 : 0.0005) * speed;
 
       controls?.update();
       renderer.render(scene, camera);
@@ -161,10 +170,12 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
+      geometry.dispose();
+      material.dispose();
       renderer.dispose();
       container?.removeChild(renderer.domElement);
     };
-  }, [isMobile]);
+  }, [isMobile, quality.antialias, quality.particleMultiplier, tier]);
 
   useEffect(() => {
     if (!done) return;
@@ -248,7 +259,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
             <>
               <div className="text-black/40">[ system calibration ]</div>
               <div className="text-black/20 mt-1">
-                synchronizing environment state...
+                {calibrating ? "measuring rendering capacity..." : "synchronizing environment state..."}
               </div>
             </>
           )}

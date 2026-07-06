@@ -4,14 +4,19 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { motion, useReducedMotion } from "framer-motion";
+import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 const BubbleSceneComponent = () => {
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
     const shouldReduceMotion = useReducedMotion();
+    const { tier, isTier2 } = usePerformanceTier();
+    const quality = getQualityPreset(tier);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -41,12 +46,12 @@ const BubbleSceneComponent = () => {
         const renderer = new THREE.WebGLRenderer({
             canvas,
             alpha: true,
-            antialias: true,
-            powerPreference: "high-performance",
+            antialias: quality.antialias,
+            powerPreference: tier === "tier_1" ? "high-performance" : "default",
         });
 
         renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
+        renderer.setPixelRatio(getRendererPixelRatio(tier, isTier2 ? 1 : 1.6));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.08;
@@ -107,9 +112,9 @@ const BubbleSceneComponent = () => {
         const damping = 0.955;
         const mouseForce = 0.017;
         const returnStrength = 0.015;
-        const floatSpeed = shouldReduceMotion ? 0.00025 : 0.00072;
-        const floatAmplitude = shouldReduceMotion ? 0.06 : 0.19;
-        const hoverScale = 2.95;
+        const floatSpeed = shouldReduceMotion || isTier2 ? 0.00025 : 0.00072;
+        const floatAmplitude = shouldReduceMotion || isTier2 ? 0.06 : 0.19;
+        const hoverScale = isTier2 ? 2.2 : 2.95;
 
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
@@ -119,8 +124,8 @@ const BubbleSceneComponent = () => {
             if (animationStarted) return;
 
             animationStarted = true;
-            const duration = shouldReduceMotion ? 0.35 : 1.55;
-            const scaleDuration = shouldReduceMotion ? 0.35 : 1.25;
+            const duration = shouldReduceMotion || isTier2 ? 0.35 : 1.55;
+            const scaleDuration = shouldReduceMotion || isTier2 ? 0.35 : 1.25;
 
             gsap.to(group.rotation, {
                 x: 0,
@@ -138,7 +143,7 @@ const BubbleSceneComponent = () => {
             });
 
             bubbles.forEach((bubble, index) => {
-                const delay = shouldReduceMotion ? 0 : Math.min(index * 0.012, 0.8);
+                const delay = shouldReduceMotion || isTier2 ? 0 : Math.min(index * 0.012, 0.8);
                 const target = bubble.userData.originalPosition;
 
                 gsap.to(bubble.material, {
@@ -162,7 +167,7 @@ const BubbleSceneComponent = () => {
                     y: bubble.userData.baseScale,
                     duration: scaleDuration,
                     delay,
-                    ease: shouldReduceMotion ? "power2.out" : "elastic.out(1, 0.7)",
+                    ease: shouldReduceMotion || isTier2 ? "power2.out" : "elastic.out(1, 0.7)",
                 });
             });
 
@@ -170,12 +175,12 @@ const BubbleSceneComponent = () => {
                 () => {
                     loadingComplete = true;
                 },
-                shouldReduceMotion ? 420 : 1650,
+                shouldReduceMotion || isTier2 ? 420 : 1650,
             );
         }
 
         function handleCollisions() {
-            const collisionCheckLimit = Math.min(bubbles.length, 42);
+            const collisionCheckLimit = Math.min(bubbles.length, quality.bubbleCollisionLimit);
 
             for (let i = 0; i < collisionCheckLimit; i += 1) {
                 const bubbleA = bubbles[i];
@@ -203,6 +208,8 @@ const BubbleSceneComponent = () => {
             }
         }
 
+        const timer = createThreeTimer();
+
         const animate = () => {
             if (!sceneIsVisible) {
                 animationFrameId = null;
@@ -210,6 +217,7 @@ const BubbleSceneComponent = () => {
             }
 
             animationFrameId = requestAnimationFrame(animate);
+            timer.update();
             frame += 1;
 
             const time = performance.now() * floatSpeed;
@@ -265,7 +273,7 @@ const BubbleSceneComponent = () => {
                     bubble.lookAt(camera.position);
                 });
 
-                if (frame % 2 === 0) {
+                if (!isTier2 && frame % 2 === 0) {
                     handleCollisions();
                 }
             }
@@ -333,7 +341,7 @@ const BubbleSceneComponent = () => {
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
+            renderer.setPixelRatio(getRendererPixelRatio(tier, isTier2 ? 1 : 1.6));
             renderer.render(scene, camera);
         };
 
@@ -359,7 +367,7 @@ const BubbleSceneComponent = () => {
             textures.forEach((texture) => texture.dispose());
             renderer.dispose();
         };
-    }, [shouldReduceMotion]);
+    }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier]);
 
     return (
         <motion.section className="bubble-wrapper"
@@ -370,7 +378,6 @@ const BubbleSceneComponent = () => {
 
             <div ref={wrapperRef} className="bubble-scene-panel">
                 <div className="bubble-grid" aria-hidden="true" />
-                {/* <div className="bubble-radial-bg" aria-hidden="true" /> */}
                 <div className="bubble-orbit bubble-orbit-one" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-two" aria-hidden="true" />
 

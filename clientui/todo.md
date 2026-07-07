@@ -715,8 +715,12 @@ Check current performance:
 I want you to check this whole project and cut down these things - 
 If tier_2 then 
 - In HeroSection where everything is still moving, Instead of this I want it to be something like the scene should be paused, completely paused and the play button should be disabled. So when the tier_1 clouds render what scene is present I want the same scene for tier_2 but then in a completely paused state, This shouldn't be moving at all and the play button should be disabled. Make sure to cut down the animation completely, so that the performance is improved.
+
+
 - In BubbleScene, now whatever is happening let it be also, if tier_2 then pause the scene and make sure not to render anything which could make this heavy, let it just look like a normal image with the bubble formation, Let there be no animation or anything at all. when i come to this let me directly see the bubbles in its place fixed.
 - Same goes for CardStackReveal, For tier_2 I dont want any scroll animations, as I scroll revealing all the cards, I dont want that. Right below the bubble scene place this cardstackreveal all cards at its place. Let there be hover animation and blur effect, And everything else should be cut down.
+
+
 - Also MySocials, if it is tier_2 then lets not render MySocials component at all. 
 - Footer currently has widening property applied, which increses the width of it and fits to the screen, Lets not do that for tier_2. Let it be normal and by default fit to the screen. No padding adjustments required. 
 - For MyExperienve component I want you to cut down the animation of shredding, and the heavyly animated stuffs should be cut down, And make sure it renders safe and smooth. 
@@ -749,3 +753,18 @@ In localStorage we are storing two key values such as tier and performance_tier,
 - Make sure to update these in a particular order, And fix everything one by one, make this production ready. 
 
 Make sure to recheck everything from the start and wtr everything is or will work properly.
+
+
+
+---
+
+
+So what I told you was when the bubbleScene and the cardStackReveal and socials enter the viewport, before they enter the background is being transparent and I can see the HeroSection, I want it white.
+
+---
+
+So now what is happening is you removed the Loade
+
+
+Now what is happening is when I try to scroll due to viewport detection and rendering the component, The bubbleScene is being rendered only when it enters the viewport so until the middle of the screen comes up and the component is almost half way the component is being attched to the screen, I want it to render as soon as the component enters the viewport, top of the component. Because the background is being transparent which is making the HeroSection visible until the scene gets atached.
+Fix this issue. This persists with the bubble scene and card stack reveal.

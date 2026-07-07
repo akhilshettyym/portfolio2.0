@@ -8,6 +8,7 @@ import { FaRegCopyright } from "react-icons/fa6";
 import CustomButton from "@/components/basic/CustomButton";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 function splitLetters(text) {
     return Array.from(text);
@@ -60,6 +61,7 @@ const Footer = () => {
     const sectionRef = useRef(null);
     const [shouldSnap, setShouldSnap] = useState(false);
     const prefersReducedMotion = useReducedMotion();
+    const { isTier2 } = usePerformanceTier();
 
     const { scrollYProgress } = useScroll({
         target: sectionRef,
@@ -171,8 +173,8 @@ const Footer = () => {
 
     return (
         <motion.section ref={sectionRef}
-            style={prefersReducedMotion ? undefined : { padding: sectionPadding }}
-            className="relative w-full bg-white text-black p-12.5">
+            style={prefersReducedMotion || isTier2 ? undefined : { padding: sectionPadding }}
+            className={`relative w-full bg-white text-black ${isTier2 ? "p-0" : "p-12.5"}`}>
 
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                 <motion.div style={{ opacity: glowOpacity }}

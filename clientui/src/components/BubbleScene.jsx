@@ -232,19 +232,24 @@ const BubbleSceneComponent = () => {
                 bubbles.forEach((bubble) => {
                     const { originalPosition, velocity, floatOffset } = bubble.userData;
 
-                    const targetY = originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
-                    const targetX = originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
-                    const targetZ = originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
+                    // For tier_2, keep bubbles completely static after loading
+                    if (!isTier2) {
+                        const targetY = originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
+                        const targetX = originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
+                        const targetZ = originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
 
-                    velocity.x += (targetX - bubble.position.x) * returnStrength;
-                    velocity.y += (targetY - bubble.position.y) * returnStrength;
-                    velocity.z += (targetZ - bubble.position.z) * returnStrength;
+                        velocity.x += (targetX - bubble.position.x) * returnStrength;
+                        velocity.y += (targetY - bubble.position.y) * returnStrength;
+                        velocity.z += (targetZ - bubble.position.z) * returnStrength;
+                    }
 
                     const isHovered = intersects.some((hit) => hit.object === bubble);
 
                     if (isHovered) {
                         tempVector.subVectors(bubble.position, camera.position).normalize();
-                        velocity.addScaledVector(tempVector, mouseForce);
+                        if (!isTier2) {
+                            velocity.addScaledVector(tempVector, mouseForce);
+                        }
                     }
 
                     if (isHovered && !bubble.userData.hovered) {
@@ -267,8 +272,10 @@ const BubbleSceneComponent = () => {
                         });
                     }
 
-                    velocity.multiplyScalar(damping);
-                    bubble.position.add(velocity);
+                    if (!isTier2) {
+                        velocity.multiplyScalar(damping);
+                        bubble.position.add(velocity);
+                    }
                     bubble.lookAt(camera.position);
                 });
 
@@ -300,14 +307,14 @@ const BubbleSceneComponent = () => {
                 if (entry.isIntersecting) {
                     startLoop();
 
-                    if (entry.intersectionRatio > 0.32) {
+                    if (entry.intersectionRatio > 0.01) {
                         startAnimation();
                     }
                 } else {
                     stopLoop();
                 }
             },
-            { threshold: [0, 0.12, 0.32] },
+            { threshold: [0, 0.01, 0.5] },
         );
 
         observer.observe(wrapper);
@@ -373,7 +380,7 @@ const BubbleSceneComponent = () => {
             initial={{ opacity: 0, y: 72 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true, amount: 0.18 }}>
+            viewport={{ once: true, amount: 0.01 }}>
 
             <div ref={wrapperRef} className="bubble-scene-panel">
                 <div className="bubble-grid" aria-hidden="true" />

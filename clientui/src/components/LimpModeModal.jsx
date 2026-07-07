@@ -8,20 +8,22 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 const LimpModeModal = () => {
     const { isTier2 } = usePerformanceTier();
     const [isOpen, setIsOpen] = useState(false);
-    const [dismissed, setDismissed] = useState(false);
 
     useEffect(() => {
-        if (isTier2 && !dismissed) {
-            const timer = setTimeout(() => {
-                setIsOpen(true);
-            }, 800);
-            return () => clearTimeout(timer);
+        if (isTier2) {
+            const hasShown = sessionStorage.getItem("limp_mode_shown");
+            if (!hasShown) {
+                const timer = setTimeout(() => {
+                    setIsOpen(true);
+                    sessionStorage.setItem("limp_mode_shown", "true");
+                }, 800);
+                return () => clearTimeout(timer);
+            }
         }
-    }, [isTier2, dismissed]);
+    }, [isTier2]);
 
     const handleDismiss = () => {
         setIsOpen(false);
-        setDismissed(true);
     };
 
     if (!isTier2 || !isOpen) return null;

@@ -18,8 +18,11 @@ const MySocials = () => {
   const lastPosition = useRef({ x: 0, y: 0 });
   const imageIndex = useRef(0);
   const shouldReduceMotion = useReducedMotion();
-  const { tier } = usePerformanceTier();
+  const { tier, isTier2 } = usePerformanceTier();
   const quality = getQualityPreset(tier);
+
+  // Don't render MySocials for tier_2
+  if (isTier2) return null;
 
   const handleMouseMove = (event) => {
     if (shouldReduceMotion) return;

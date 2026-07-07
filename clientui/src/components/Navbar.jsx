@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef, memo } from "react";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -105,6 +106,7 @@ const NavbarComponent = () => {
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
   const pathname = usePathname();
+  const { isTier2 } = usePerformanceTier();
 
   useEffect(() => {
     const updateTime = () => {
@@ -222,7 +224,7 @@ const NavbarComponent = () => {
         </div>
       </div>
 
-      <div className="fixed top-0 left-0 z-50 px-10 pt-1 w-full bg-white/80 backdrop-blur-xl text-black border-black/10 hidden sm:block">
+      <div className="fixed top-0 left-0 z-50 px-10 pt-1 w-full bg-white/50 backdrop-blur-lg text-black border-black/10 hidden sm:block">
         <div className="mt-6 flex items-center">
           <div className="flex items-center gap-3 shrink-0">
             <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
@@ -250,20 +252,26 @@ const NavbarComponent = () => {
             </div>
 
             <div className="relative w-full overflow-hidden">
-              <div className="flex w-max animate-marquee">
-                {[...Array(2)].map((_, i) => (
-                  <div key={i} className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2 font-mono">
-                    <span className="mx-6"> {" "} Full Stack Developer — 4+ Years Building Production Systems{" "} </span>
-                    <span className="mx-6"> {" "} MERN Stack Architecture & Implementation{" "} </span>
-                    <span className="mx-6"> {" "} Scalable Backend Systems & API Design{" "} </span>
-                    <span className="mx-6"> {" "} Dockerized Workflows & Containerization{" "} </span>
-                    <span className="mx-6">  {" "} Performance Optimization & Reliability{" "} </span>
-                    <span className="mx-6"> End-to-End Feature Ownership </span>
-                    <span className="mx-6"> {" "} Clean UI Systems & Interaction Design{" "} </span>
-                    <span className="mx-6"> Shipping Fast, Stable Code </span>
-                  </div>
-                ))}
-              </div>
+              {isTier2 ? (
+                <div className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2 font-mono">
+                  <span className="mx-6">Full Stack Developer — 4+ Years Building Production Systems</span>
+                </div>
+              ) : (
+                <div className="flex w-max animate-marquee">
+                  {[...Array(2)].map((_, i) => (
+                    <div key={i} className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2 font-mono">
+                      <span className="mx-6"> {" "} Full Stack Developer — 4+ Years Building Production Systems{" "} </span>
+                      <span className="mx-6"> {" "} MERN Stack Architecture & Implementation{" "} </span>
+                      <span className="mx-6"> {" "} Scalable Backend Systems & API Design{" "} </span>
+                      <span className="mx-6"> {" "} Dockerized Workflows & Containerization{" "} </span>
+                      <span className="mx-6">  {" "} Performance Optimization & Reliability{" "} </span>
+                      <span className="mx-6"> End-to-End Feature Ownership </span>
+                      <span className="mx-6"> {" "} Clean UI Systems & Interaction Design{" "} </span>
+                      <span className="mx-6"> Shipping Fast, Stable Code </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

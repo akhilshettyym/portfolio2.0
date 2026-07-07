@@ -214,8 +214,6 @@ export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
 
     score += getConnectionScore();
 
-    console.log("PROPS", score)
-
     return score >= 50 ? PERFORMANCE_TIERS.HIGH : PERFORMANCE_TIERS.LOW;
 }
 

@@ -34,9 +34,9 @@ export default function RootLayout({ children }) {
           <LenisProvider>
             <LoaderWrapper>
 
-              {/* <NavbarWrapper>
+              <NavbarWrapper>
                 <Navbar />
-              </NavbarWrapper> */}
+              </NavbarWrapper>
 
               <main className="relative pt-25">
                 {children}

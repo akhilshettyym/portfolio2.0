@@ -389,12 +389,22 @@ const HeroSectionComponent = () => {
     }, [quality.antialias, quality.cloudPlanes, sceneAssets, tier]);
 
     const handleCloudControl = () => {
+        // For tier_2, keep scene paused and don't allow toggling
+        if (isTier2) return;
+
         setPaused((prev) => {
             const nextState = !prev;
             localStorage.setItem(CLOUD_CONTROL, nextState);
             return nextState;
         });
     };
+
+    // For tier_2, ensure scene starts in paused state
+    useEffect(() => {
+        if (isTier2 && !paused) {
+            setPaused(true);
+        }
+    }, [isTier2, paused]);
 
     const handleRestartIntroScene = () => {
         triggerIntroRestart();
@@ -408,7 +418,7 @@ const HeroSectionComponent = () => {
 
                 <div className="absolute top-60 right-0 z-9999">
                     <LiquidGlass width="50px" height="190px" className="p-0">
-                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} className="group absolute top-5 left-1/2 -translate-x-1/2 h-11 w-11 z-20">
+                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} disabled={isTier2} className={`group absolute top-5 left-1/2 -translate-x-1/2 h-11 w-11 z-20 ${isTier2 ? "opacity-40 cursor-not-allowed" : ""}`}>
                             <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
                                 <defs>
                                     <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />

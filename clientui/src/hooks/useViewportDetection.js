@@ -2,10 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Hook for detecting when an element enters the viewport using IntersectionObserver
- * Returns { ref, isVisible }
- */
 export function useViewportDetection(options = {}) {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef(null);
@@ -28,10 +24,6 @@ export function useViewportDetection(options = {}) {
     return { ref, isVisible };
 }
 
-/**
- * Hook for tracking multiple elements in viewport
- * Returns { refs: Map, visibleElements: Set }
- */
 export function useViewportTracker(elementCount = 5) {
     const [visibleElements, setVisibleElements] = useState(new Set());
     const refs = useRef(new Map());
@@ -76,10 +68,6 @@ export function useViewportTracker(elementCount = 5) {
     return { getRef, visibleElements };
 }
 
-/**
- * Hook for lazy-loading components with viewport detection
- * Helps defer render/animation until element is visible
- */
 export function useLazyLoad() {
     const { ref, isVisible } = useViewportDetection();
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true, placeholder = null }) => {
     const containerRef = useRef(null);

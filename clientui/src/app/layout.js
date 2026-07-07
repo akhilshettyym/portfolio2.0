@@ -3,9 +3,9 @@ import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
+import RouteReveal from "@/components/basic/RouteReveal";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
-import RouteReveal from "@/components/basic/RouteReveal";
 import PerformanceBootstrap from "@/components/PerformanceBootstrap";
 
 const montserrat = Montserrat({
@@ -34,9 +34,9 @@ export default function RootLayout({ children }) {
           <LenisProvider>
             <LoaderWrapper>
 
-              <NavbarWrapper>
+              {/* <NavbarWrapper>
                 <Navbar />
-              </NavbarWrapper>
+              </NavbarWrapper> */}
 
               <main className="relative pt-25">
                 {children}

@@ -3,22 +3,21 @@
 import "@/styles/clouds.css";
 import * as THREE from "three";
 import { motion } from "framer-motion";
+import { SiRevealdotjs } from "react-icons/si";
 import { CLOUD_SHADER } from "@/utils/shader-utils";
-import { createThreeTimer } from "@/lib/performance/threeTimer";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
 import LiquidGlass from "@/components/basic/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
+import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { LoadingContext } from "@/components/basic/LoaderWrapper";
 import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
-import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { SiRevealdotjs } from "react-icons/si";
-
-import { LoadingContext } from "@/components/basic/LoaderWrapper";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
@@ -518,37 +517,6 @@ const HeroSectionComponent = () => {
                 <div className="corner" style={{ bottom: "40px", left: "40px" }} />
                 <div className="corner" style={{ bottom: "40px", right: "40px" }} />
             </div>
-
-            {showTierNotice && (
-                <motion.div
-                    initial={{ opacity: 0, y: 28, filter: "blur(12px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: 12 }}
-                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="fixed inset-0 z-9999 flex items-end justify-center px-4 pb-6 pointer-events-none sm:items-center sm:pb-0">
-                    <div className="relative max-w-md overflow-hidden rounded-lg border border-white/25 bg-black/85 p-5 text-white shadow-2xl backdrop-blur-xl pointer-events-auto">
-                        <div className="absolute inset-x-0 top-0 h-px bg-white/60" />
-                        <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(0deg,transparent_0px,transparent_7px,white_8px)]" />
-                        <div className="relative">
-                            <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.28em] text-white/55">
-                                optimized render mode
-                            </div>
-                            <h2 className="text-lg font-semibold tracking-tight">
-                                Your device is running the lightweight experience.
-                            </h2>
-                            <p className="mt-3 text-sm leading-6 text-white/70">
-                                We detected limited graphics headroom, so the site has reduced shader density, background loops, and cursor effects for smoother viewing.
-                            </p>
-                            <button
-                                type="button"
-                                onClick={() => setShowTierNotice(false)}
-                                className="mt-5 rounded-md border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition hover:border-white/50 hover:text-white">
-                                Continue
-                            </button>
-                        </div>
-                    </div>
-                </motion.div>
-            )}
         </section>
     );
 };

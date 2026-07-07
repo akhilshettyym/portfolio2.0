@@ -4,11 +4,11 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
-import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { motion, useReducedMotion } from "framer-motion";
-import { createThreeTimer } from "@/lib/performance/threeTimer";
-import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
+import { createThreeTimer } from "@/lib/performance/threeTimer";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 const BubbleSceneComponent = () => {
@@ -38,8 +38,7 @@ const BubbleSceneComponent = () => {
         const camera = new THREE.PerspectiveCamera(
             30,
             wrapper.clientWidth / wrapper.clientHeight,
-            0.1,
-            1000,
+            0.1, 1000,
         );
         camera.position.set(0, 0.3, 24);
 

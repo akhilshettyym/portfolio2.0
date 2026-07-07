@@ -8,14 +8,14 @@ export const QUALITY_PRESETS = {
         shadowType: THREE.PCFSoftShadowMap,
         shadowMapSize: 2048,
         postprocessing: true,
-        postprocessingQuality: "high", // high, medium, low
+        postprocessingQuality: "high",
         particleMultiplier: 1,
-        particleQuality: "ultra", // ultra, high, medium, low
+        particleQuality: "ultra",
         cloudPlanes: 8000,
         bubbleCollisionLimit: 42,
         socialTrailDistance: 86,
         socialTrailLifeMs: 950,
-        animationFrameInterval: 1, // every frame
+        animationFrameInterval: 1,
         lodDistance: 500,
         lodBias: 0,
     },
@@ -33,7 +33,7 @@ export const QUALITY_PRESETS = {
         bubbleCollisionLimit: 22,
         socialTrailDistance: 150,
         socialTrailLifeMs: 520,
-        animationFrameInterval: 2, // every other frame
+        animationFrameInterval: 2,
         lodDistance: 250,
         lodBias: 1,
     },
@@ -64,45 +64,29 @@ export function configureRendererForTier(renderer, tier, capOverride) {
         renderer.shadowMap.mapSize.height = preset.shadowMapSize;
     }
 
-    renderer.sortObjects = tier === "tier_1"; // Optimize state changes on tier_2
+    renderer.sortObjects = tier === "tier_1";
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 }
 
-/**
- * Get animation frame interval for tier-aware throttling
- * Returns the number of frames to skip
- */
 export function getAnimationFrameInterval(tier) {
     const preset = getQualityPreset(tier);
     return preset.animationFrameInterval || 1;
 }
 
-/**
- * Get LOD (Level of Detail) distance for model simplification
- */
 export function getLODDistance(tier) {
     const preset = getQualityPreset(tier);
     return preset.lodDistance || 500;
 }
 
-/**
- * Check if advanced features should be enabled
- */
 export function shouldEnableAdvancedFeatures(tier) {
     return tier === "tier_1";
 }
 
-/**
- * Get particle system quality preset
- */
 export function getParticleQuality(tier) {
     const preset = getQualityPreset(tier);
     return preset.particleQuality || "medium";
 }
 
-/**
- * Get post-processing quality level
- */
 export function getPostprocessingQuality(tier) {
     const preset = getQualityPreset(tier);
     return preset.postprocessingQuality || "medium";

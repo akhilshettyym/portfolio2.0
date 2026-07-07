@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/global_cursor.css";
 import { useEffect, useRef } from "react";
 
 const GlobalCursor = () => {
@@ -37,10 +38,7 @@ const GlobalCursor = () => {
 
         return () => {
             window.removeEventListener("pointermove", onPointerMove);
-            document.documentElement.removeEventListener(
-                "mouseleave",
-                onPointerLeave,
-            );
+            document.documentElement.removeEventListener("mouseleave", onPointerLeave);
 
             if (frameRef.current) {
                 cancelAnimationFrame(frameRef.current);

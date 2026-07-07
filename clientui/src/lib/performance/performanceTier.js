@@ -1,10 +1,7 @@
 export const PERFORMANCE_TIER_STORAGE_KEY = "performance_tier";
 export const LEGACY_PERFORMANCE_TIER_STORAGE_KEY = "tier";
 export const PERFORMANCE_TIER_EVENT = "performance-tier-change";
-export const PERFORMANCE_TIERS = {
-    HIGH: "tier_1",
-    LOW: "tier_2",
-};
+export const PERFORMANCE_TIERS = { HIGH: "tier_1", LOW: "tier_2" };
 
 function safeWindow() {
     return typeof window !== "undefined" ? window : undefined;
@@ -180,21 +177,20 @@ export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
     let score = 0;
     const gpuText = `${gpu.vendor} ${gpu.renderer}`;
 
-    // Enhanced GPU classification with newer models and mobile GPUs
     if (
         /RTX\s?(40|50)|RX\s?(7[56]|8\d{2})|Radeon\s?Pro|Arc\s?(A|B)[12]\d|M[3-4]\s?(Pro|Max|Ultra)|Apple\s?M[3-4]|Apple\s?M\d\s?(Pro|Max|Ultra)|A17|A18/i.test(
             gpuText,
         )
     ) {
-        score += 36; // Top-tier GPUs
+        score += 36;
     } else if (
         /RTX\s?30|RX\s?(6[67]\d{2}|5700)|GTX\s?1080|Vega|Iris\s?Xe|Apple\s?M1|Apple\s?M2|Adreno\s?8[78]|Mali.*G7[78]/i.test(gpuText)
     ) {
-        score += 24; // High-tier GPUs
+        score += 24;
     } else if (/GTX|Radeon\s?RX\s?5\d{3}|Iris|Apple\s?M1|Adreno\s?[67]\d/i.test(gpuText)) {
-        score += 14; // Mid-tier GPUs
+        score += 14;
     } else if (/Intel|UHD|HD Graphics|Mali|Adreno/i.test(gpuText)) {
-        score += 6; // Low-tier GPUs
+        score += 6;
     }
 
     if (gpu.isWebGL2Available) score += 10;
@@ -218,7 +214,9 @@ export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
 
     score += getConnectionScore();
 
-    return score >= 62 ? PERFORMANCE_TIERS.HIGH : PERFORMANCE_TIERS.LOW;
+    console.log("PROPS", score)
+
+    return score >= 50 ? PERFORMANCE_TIERS.HIGH : PERFORMANCE_TIERS.LOW;
 }
 
 export async function calibratePerformance() {

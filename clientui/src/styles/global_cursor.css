@@ -1,0 +1,33 @@
+@media (pointer: fine) {
+    html,
+    body,
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    [role="button"] {
+        cursor: none !important;
+    }
+}
+
+.global-cursor-dot {
+    position: fixed;
+    top: -2px;
+    left: -2px;
+    z-index: 2147483647;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    transform: translate3d(-20px, -20px, 0);
+    transition: opacity 160ms ease;
+    will-change: transform;
+}
+
+.global-cursor-dot[data-active="true"] {
+    opacity: 1;
+}

@@ -8,6 +8,7 @@ import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, S
 import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic-utils";
 
 const CinematicIntro = ({ onComplete }) => {
+
   const [scene, setScene] = useState(0);
   const [aiStage, setAiStage] = useState(0);
   const [butStage, setButStage] = useState(0);
@@ -41,6 +42,7 @@ const CinematicIntro = ({ onComplete }) => {
 
   const reversedRewind = useMemo(() => [...REWINDLINES].reverse(), []);
   const { isTier2 } = usePerformanceTier();
+
   const floatingBusinessTexts = useMemo(() => {
     const source = [
       ...BUSINESSQUESTIONS,

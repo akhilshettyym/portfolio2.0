@@ -3,12 +3,12 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
+import { hasLocationPreference } from "@/utils/weather-scene";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { hasLocationPreference } from "@/utils/weather-scene";
-import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import LocationPreferenceModal from "@/components/basic/LocationPreferenceModal";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 const Loader = ({ onFinish, duration = 3000 }) => {
   const containerRef = useRef(null);
@@ -52,14 +52,9 @@ const Loader = ({ onFinish, duration = 3000 }) => {
         const next = Math.min(progressRef.current, 100);
         setProgress(next);
 
-        const hasPreference =
-          typeof window !== "undefined" && hasLocationPreference();
+        const hasPreference = typeof window !== "undefined" && hasLocationPreference();
 
-        if (
-          !hasPreference &&
-          !modalTriggeredRef.current &&
-          next >= pausePointRef.current
-        ) {
+        if (!hasPreference && !modalTriggeredRef.current && next >= pausePointRef.current) {
           modalTriggeredRef.current = true;
           setIsPaused(true);
           setShowLocationModal(true);
@@ -95,8 +90,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     const camera = new THREE.PerspectiveCamera(
       60,
       window.innerWidth / window.innerHeight,
-      0.1,
-      1000,
+      0.1, 1000,
     );
 
     camera.position.z = isMobile ? 6 : 5;

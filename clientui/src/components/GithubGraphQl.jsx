@@ -5,8 +5,8 @@ import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic-utils";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { getCachedData, setCachedData } from "@/utils/cache-utils";
 import { motion, animate, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 

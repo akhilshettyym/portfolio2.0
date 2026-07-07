@@ -1,25 +1,11 @@
 import * as THREE from "three";
 
-/**
- * Polyfill for THREE.Clock replacement with THREE.Timer
- * THREE.Clock is deprecated in Three.js r170+
- * This utility provides a drop-in replacement or adapter
- */
-
-/**
- * Check if THREE.Timer is available (Three.js r170+)
- */
 export function hasThreeTimer() {
     return typeof THREE.Timer !== "undefined";
 }
 
-/**
- * Create a timer instance compatible with both old and new Three.js versions
- * Returns an object with start(), getElapsedTime(), and delta properties
- */
 export function createTimer() {
     if (hasThreeTimer()) {
-        // Use native THREE.Timer for newer versions
         const timer = new THREE.Timer();
         return {
             start: () => timer.start(),
@@ -31,7 +17,6 @@ export function createTimer() {
             get elapsed() {
                 return timer.getElapsed();
             },
-            // Compatibility methods
             update: () => {
                 // THREE.Timer auto-updates, no need to manually call
             },
@@ -41,7 +26,6 @@ export function createTimer() {
         };
     }
 
-    // Fallback for older versions - create Clock-like interface
     const startTime = performance.now();
     let lastTime = startTime;
     let deltaTime = 0;
@@ -74,10 +58,6 @@ export function createTimer() {
     };
 }
 
-/**
- * Adapter for existing Clock instances
- * Converts THREE.Clock to the new interface
- */
 export function adaptClock(clock) {
     if (hasThreeTimer() && clock instanceof THREE.Timer) {
         return clock;
@@ -106,10 +86,6 @@ export function adaptClock(clock) {
     return clock;
 }
 
-/**
- * Suppress THREE deprecation warnings
- * Call this once during app initialization
- */
 export function suppressThreeWarnings() {
     if (typeof window === "undefined") return;
 
@@ -122,16 +98,12 @@ export function suppressThreeWarnings() {
                 message.includes("This module has been deprecated") ||
                 message.includes("THREE.Quaternion.multiplyQuaternions"))
         ) {
-            return; // Suppress known deprecation warnings
+            return;
         }
         originalWarn(...args);
     };
 }
 
-/**
- * Hook-compatible timer wrapper for React components
- * Usage: const { elapsed, delta } = useTimer()
- */
 export function useTimerCompat() {
     const timerRef = React.useRef(null);
 

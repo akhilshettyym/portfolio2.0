@@ -3,10 +3,6 @@
 import { motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-/**
- * Page transition reveal effect
- * Shows a smooth transition when page content enters view
- */
 export default function PageTransitionReveal({ children, delayChildren = 0 }) {
     const { tier, isTier2 } = usePerformanceTier();
 

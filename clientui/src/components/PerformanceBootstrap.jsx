@@ -1,15 +1,9 @@
 "use client";
 
 import GlobalCursor from "@/components/GlobalCursor";
-import Tier2WarningModal from "@/components/Tier2WarningModal";
+import Tier2WarningModal from "@/components/LimpModeModal";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import {
-    calibratePerformance,
-    getSavedTier,
-    PERFORMANCE_TIER_EVENT,
-    PERFORMANCE_TIERS,
-    savePerformanceTier,
-} from "@/lib/performance/performanceTier";
+import { calibratePerformance, getSavedTier, PERFORMANCE_TIER_EVENT, PERFORMANCE_TIERS, savePerformanceTier } from "@/lib/performance/performanceTier";
 
 export const PerformanceTierContext = createContext(null);
 
@@ -64,10 +58,7 @@ export default function PerformanceBootstrap({ children }) {
 
         console.warn = (...args) => {
             const first = args[0];
-            if (
-                typeof first === "string" &&
-                first.includes("THREE.Clock: This module has been deprecated")
-            ) {
+            if (typeof first === "string" && first.includes("THREE.Clock: This module has been deprecated")) {
                 return;
             }
 

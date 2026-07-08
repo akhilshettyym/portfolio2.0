@@ -16,12 +16,10 @@ export function getSavedTier() {
         const w = safeWindow();
         if (!w) return null;
 
-        const stored =
-            w.localStorage.getItem(PERFORMANCE_TIER_STORAGE_KEY) ||
-            w.localStorage.getItem(LEGACY_PERFORMANCE_TIER_STORAGE_KEY);
-
+        const stored = w.localStorage.getItem(PERFORMANCE_TIER_STORAGE_KEY);
         return isValidTier(stored) ? stored : null;
-    } catch {
+    } catch (error) {
+        console.warn("PerformanceEngine: Storage read blocked by browser security restrictions:", error.message);
         return null;
     }
 }
@@ -34,18 +32,21 @@ export function savePerformanceTier(tier) {
         if (!w) return;
 
         w.localStorage.setItem(PERFORMANCE_TIER_STORAGE_KEY, tier);
-        w.localStorage.setItem(LEGACY_PERFORMANCE_TIER_STORAGE_KEY, tier);
+
+        try {
+            w.localStorage.removeItem(LEGACY_PERFORMANCE_TIER_STORAGE_KEY);
+        } catch (cleanupError) {
+            console.debug("PerformanceEngine: Failed to remove legacy migration keys:", cleanupError.message);
+        }
+
         w.dispatchEvent(new CustomEvent(PERFORMANCE_TIER_EVENT, { detail: tier }));
-    } catch {
-        // Storage can fail in private windows. The app can still run with memory state.
+    } catch (writeError) {
+        console.error("PerformanceEngine: State synchronization failed to save locally:", writeError.message);
     }
 }
 
 function getConnectionScore() {
-    const connection =
-        typeof navigator !== "undefined"
-            ? navigator.connection || navigator.mozConnection || navigator.webkitConnection
-            : null;
+    const connection = typeof navigator !== "undefined" ? navigator.connection || navigator.mozConnection || navigator.webkitConnection : null;
 
     if (!connection) return 8;
     if (connection.saveData) return -15;
@@ -59,12 +60,8 @@ export function probeGPUInfo() {
         vendor: "unknown",
         renderer: "unknown",
         maxTextureSize: 0,
-        hardwareConcurrency:
-            typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2,
-        deviceMemory:
-            typeof navigator !== "undefined" && navigator.deviceMemory
-                ? navigator.deviceMemory
-                : 4,
+        hardwareConcurrency: typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2,
+        deviceMemory: typeof navigator !== "undefined" && navigator.deviceMemory ? navigator.deviceMemory : 4,
         isWebGL2Available: false,
         caveatBlocked: true,
     };
@@ -77,15 +74,10 @@ export function probeGPUInfo() {
 
     try {
         gl =
-            canvas.getContext("webgl2", {
-                failIfMajorPerformanceCaveat: true,
-                powerPreference: "high-performance",
-            }) ||
-            canvas.getContext("webgl", {
-                failIfMajorPerformanceCaveat: true,
-                powerPreference: "high-performance",
-            });
-    } catch {
+            canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" }) ||
+            canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" });
+    } catch (contextError) {
+        console.warn("PerformanceEngine: Context initialization rejected by high-performance hardware restriction rules:", contextError.message);
         return fallback;
     }
 
@@ -100,8 +92,8 @@ export function probeGPUInfo() {
             vendor = gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) || vendor;
             renderer = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || renderer;
         }
-    } catch {
-        // Browser privacy settings can block unmasked GPU details.
+    } catch (privacyError) {
+        console.warn("PerformanceEngine: Debug strings masked out by browser canvas fingerprinting protection settings:", privacyError.message);
     }
 
     const info = {
@@ -163,10 +155,8 @@ export function benchmarkAnimationFrame(durationMs = 850) {
                 });
                 return;
             }
-
             requestAnimationFrame(tick);
         };
-
         requestAnimationFrame(tick);
     });
 }
@@ -177,15 +167,9 @@ export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
     let score = 0;
     const gpuText = `${gpu.vendor} ${gpu.renderer}`;
 
-    if (
-        /RTX\s?(40|50)|RX\s?(7[56]|8\d{2})|Radeon\s?Pro|Arc\s?(A|B)[12]\d|M[3-4]\s?(Pro|Max|Ultra)|Apple\s?M[3-4]|Apple\s?M\d\s?(Pro|Max|Ultra)|A17|A18/i.test(
-            gpuText,
-        )
-    ) {
+    if (/RTX\s?(40|50)|RX\s?(7[56]|8\d{2})|Radeon\s?Pro|Arc\s?(A|B)[12]\d|M[3-4]\s?(Pro|Max|Ultra)|Apple\s?M[3-4]|Apple\s?M\d\s?(Pro|Max|Ultra)|A17|A18/i.test(gpuText)) {
         score += 36;
-    } else if (
-        /RTX\s?30|RX\s?(6[67]\d{2}|5700)|GTX\s?1080|Vega|Iris\s?Xe|Apple\s?M1|Apple\s?M2|Adreno\s?8[78]|Mali.*G7[78]/i.test(gpuText)
-    ) {
+    } else if (/RTX\s?30|RX\s?(6[67]\d{2}|5700)|GTX\s?1080|Vega|Iris\s?Xe|Apple\s?M1|Apple\s?M2|Adreno\s?8[78]|Mali.*G7[78]/i.test(gpuText)) {
         score += 24;
     } else if (/GTX|Radeon\s?RX\s?5\d{3}|Iris|Apple\s?M1|Adreno\s?[67]\d/i.test(gpuText)) {
         score += 14;

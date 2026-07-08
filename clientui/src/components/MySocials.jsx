@@ -18,11 +18,8 @@ const MySocials = () => {
   const lastPosition = useRef({ x: 0, y: 0 });
   const imageIndex = useRef(0);
   const shouldReduceMotion = useReducedMotion();
-  const { tier, isTier2 } = usePerformanceTier();
+  const { tier } = usePerformanceTier();
   const quality = getQualityPreset(tier);
-
-  // Don't render MySocials for tier_2
-  if (isTier2) return null;
 
   const handleMouseMove = (event) => {
     if (shouldReduceMotion) return;
@@ -64,7 +61,7 @@ const MySocials = () => {
 
       <div className="relative z-10 mx-auto flex min-h-[56vh] w-full max-w-6xl flex-col justify-center gap-10 md:min-h-[78vh]">
         <div>
-          <div className="font-mono text-xs uppercase tracking-[0.32em] text-black/40">
+          <div className="text-xs uppercase tracking-[0.32em] text-black/40">
             network nodes
           </div>
           <h2 className="mt-3 max-w-4xl text-[clamp(2.6rem,7vw,4rem)] font-black uppercase leading-[0.88] tracking-normal">
@@ -76,7 +73,8 @@ const MySocials = () => {
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 20, top: "10.5%", height: "75%" }}>
         <AnimatePresence>
           {trail.map((item) => (
-            <motion.img key={item.id} src={item.src} alt="trail"
+            <motion.img key={item.id}
+              src={item.src} alt="trail"
               initial={{ opacity: 0, scale: 0.2, x: item.x - 96, y: item.y - 96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.2 }}

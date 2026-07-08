@@ -3,7 +3,6 @@ import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
-import RouteReveal from "@/components/basic/RouteReveal";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import PerformanceBootstrap from "@/components/PerformanceBootstrap";
@@ -42,7 +41,6 @@ export default function RootLayout({ children }) {
                 {children}
                 <ToastContainer />
               </main>
-              <RouteReveal />
 
             </LoaderWrapper>
           </LenisProvider>

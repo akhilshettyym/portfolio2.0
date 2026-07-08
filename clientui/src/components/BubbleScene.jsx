@@ -21,7 +21,6 @@ const BubbleSceneComponent = () => {
     useEffect(() => {
         const canvas = canvasRef.current;
         const wrapper = wrapperRef.current;
-
         if (!canvas || !wrapper) return undefined;
 
         let animationFrameId = null;
@@ -63,7 +62,6 @@ const BubbleSceneComponent = () => {
         });
 
         scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-
         const directionalLight = new THREE.DirectionalLight("#dbeafe", 0.8);
         directionalLight.position.set(8, 12, 10);
         scene.add(directionalLight);
@@ -103,7 +101,6 @@ const BubbleSceneComponent = () => {
                 hovered: false,
                 floatOffset: Math.random() * Math.PI * 2,
             };
-
             group.add(bubble);
             return bubble;
         });
@@ -114,14 +111,12 @@ const BubbleSceneComponent = () => {
         const floatSpeed = shouldReduceMotion || isTier2 ? 0.00025 : 0.00072;
         const floatAmplitude = shouldReduceMotion || isTier2 ? 0.06 : 0.19;
         const hoverScale = isTier2 ? 2.2 : 2.95;
-
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
 
         function startAnimation() {
             if (animationStarted) return;
-
             animationStarted = true;
             const duration = shouldReduceMotion || isTier2 ? 0.35 : 1.55;
             const scaleDuration = shouldReduceMotion || isTier2 ? 0.35 : 1.25;
@@ -132,7 +127,6 @@ const BubbleSceneComponent = () => {
                 duration,
                 ease: "power3.out",
             });
-
             gsap.to(group.scale, {
                 x: 1,
                 y: 1,
@@ -151,7 +145,6 @@ const BubbleSceneComponent = () => {
                     delay,
                     ease: "power2.out",
                 });
-
                 gsap.to(bubble.position, {
                     x: target.x,
                     y: target.y,
@@ -160,7 +153,6 @@ const BubbleSceneComponent = () => {
                     delay,
                     ease: "expo.out",
                 });
-
                 gsap.to(bubble.scale, {
                     x: bubble.userData.baseScale,
                     y: bubble.userData.baseScale,
@@ -171,36 +163,29 @@ const BubbleSceneComponent = () => {
             });
 
             window.setTimeout(
-                () => {
-                    loadingComplete = true;
-                },
+                () => { loadingComplete = true; },
                 shouldReduceMotion || isTier2 ? 420 : 1650,
             );
         }
 
         function handleCollisions() {
             const collisionCheckLimit = Math.min(bubbles.length, quality.bubbleCollisionLimit);
-
             for (let i = 0; i < collisionCheckLimit; i += 1) {
                 const bubbleA = bubbles[i];
                 const radiusA = bubbleA.userData.radius;
                 const localLimit = Math.min(i + 12, bubbles.length);
-
                 for (let j = i + 1; j < localLimit; j += 1) {
                     const bubbleB = bubbles[j];
                     const radiusB = bubbleB.userData.radius;
                     const minDistance = (radiusA + radiusB) * 1.3;
-                    const distanceSquared = bubbleA.position.distanceToSquared(
-                        bubbleB.position,
-                    );
+                    const distanceSquared = bubbleA.position.distanceToSquared(bubbleB.position);
 
-                    if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance)
-                        continue;
+                    if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance) continue;
 
                     const distance = Math.sqrt(distanceSquared);
                     tempVector.subVectors(bubbleB.position, bubbleA.position).normalize();
-
                     const correction = (minDistance - distance) * 0.014;
+
                     bubbleA.position.addScaledVector(tempVector, -correction);
                     bubbleB.position.addScaledVector(tempVector, correction);
                 }
@@ -208,22 +193,18 @@ const BubbleSceneComponent = () => {
         }
 
         const timer = createThreeTimer();
-
         const animate = () => {
             if (!sceneIsVisible) {
                 animationFrameId = null;
                 return;
             }
-
             animationFrameId = requestAnimationFrame(animate);
             timer.update();
             frame += 1;
-
             const time = performance.now() * floatSpeed;
 
             if (loadingComplete) {
                 let intersects = [];
-
                 if (mouse.x !== -10 && mouse.y !== -10) {
                     raycaster.setFromCamera(mouse, camera);
                     intersects = raycaster.intersectObjects(bubbles, false);
@@ -232,12 +213,10 @@ const BubbleSceneComponent = () => {
                 bubbles.forEach((bubble) => {
                     const { originalPosition, velocity, floatOffset } = bubble.userData;
 
-                    // For tier_2, keep bubbles completely static after loading
                     if (!isTier2) {
                         const targetY = originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
                         const targetX = originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
                         const targetZ = originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
-
                         velocity.x += (targetX - bubble.position.x) * returnStrength;
                         velocity.y += (targetY - bubble.position.y) * returnStrength;
                         velocity.z += (targetZ - bubble.position.z) * returnStrength;
@@ -283,7 +262,6 @@ const BubbleSceneComponent = () => {
                     handleCollisions();
                 }
             }
-
             renderer.render(scene, camera);
         };
 
@@ -295,7 +273,6 @@ const BubbleSceneComponent = () => {
 
         const stopLoop = () => {
             sceneIsVisible = false;
-
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
                 animationFrameId = null;
@@ -306,25 +283,21 @@ const BubbleSceneComponent = () => {
             ([entry]) => {
                 if (entry.isIntersecting) {
                     startLoop();
-
-                    if (entry.intersectionRatio > 0.01) {
+                    if (entry.intersectionRatio > 0) {
                         startAnimation();
                     }
                 } else {
                     stopLoop();
                 }
             },
-            { threshold: [0, 0.01, 0.5] },
+            { threshold: 0 },
         );
-
         observer.observe(wrapper);
 
         const onPointerMove = (event) => {
             const rect = wrapper.getBoundingClientRect();
-
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
             window.clearTimeout(mouseMoveTimeout);
             mouseMoveTimeout = window.setTimeout(() => {
                 mouse.x = -10;
@@ -343,7 +316,6 @@ const BubbleSceneComponent = () => {
         const onResize = () => {
             const width = wrapper.clientWidth;
             const height = wrapper.clientHeight;
-
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height);
@@ -376,39 +348,36 @@ const BubbleSceneComponent = () => {
     }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier]);
 
     return (
-        <motion.section className="bubble-wrapper"
-            initial={{ opacity: 0, y: 72 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true, amount: 0.01 }}>
-
-            <div ref={wrapperRef} className="bubble-scene-panel">
+        <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
+            <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-[400px]">
                 <div className="bubble-grid" aria-hidden="true" />
-                <div className="bubble-orbit bubble-orbit-one" aria-hidden="true" />
-                <div className="bubble-orbit bubble-orbit-two" aria-hidden="true" />
+                <div className="bubble-orbit bubble-orbit-one mt-10" aria-hidden="true" />
+                <div className="bubble-orbit bubble-orbit-two mt-5" aria-hidden="true" />
 
-                <canvas ref={canvasRef} />
-
-                <motion.div initial={{ opacity: 0, y: 34, filter: "blur(10px)" }}
-                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    className="bubble-content">
-
-                    <div className="bubble-content-inner">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
-                            {BUBBLE_TEXT_GROUPS.map((group) => (
-                                <div key={group.summary} className="flex flex-col space-y-2 p-3 border border-neutral-200 bg-white shadow-[2px_2px_0px_#000000]">
-                                    <p className="text-sm font-sans text-neutral-600 leading-relaxed">
-                                        {group.summary}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
+                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
             </div>
-        </motion.section>
+
+            <motion.div initial={{ opacity: 0, y: 34, filter: "blur(10px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true, amount: 0.4 }}
+                className="bubble-content relative z-10 w-full max-w-6xl mx-auto px-6 -mt-8">
+
+                <div className="bubble-content-inner">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
+
+                        {BUBBLE_TEXT_GROUPS.map((group) => (
+                            <div key={group.summary} className="flex flex-col space-y-2 p-4 border border-neutral-200 bg-white shadow-[4px_4px_0px_#000000]">
+                                <p className="text-sm font-sans text-neutral-800 leading-relaxed font-medium">
+                                    {group.summary}
+                                </p>
+                            </div>
+                        ))}
+
+                    </div>
+                </div>
+            </motion.div>
+        </section>
     );
 };
 

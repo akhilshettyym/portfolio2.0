@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const LimpModeModal = () => {
+const LimpModal = () => {
     const { isTier2 } = usePerformanceTier();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -61,4 +61,4 @@ const LimpModeModal = () => {
     );
 }
 
-export default LimpModeModal;
+export default LimpModal;

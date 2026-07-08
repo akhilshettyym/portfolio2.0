@@ -4,7 +4,7 @@ import "@/styles/clouds.css";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { SiRevealdotjs } from "react-icons/si";
-import { CLOUD_SHADER } from "@/utils/shader-utils";
+import { CLOUD_SHADER } from "@/utils/basic-utils";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
@@ -33,11 +33,12 @@ const HeroSectionComponent = () => {
 
     const [paused, setPaused] = useState(false);
     const [sceneAssets, setSceneAssets] = useState(null);
-    const [showTierNotice, setShowTierNotice] = useState(false);
 
     const { triggerIntroRestart } = useContext(LoadingContext);
     const { tier, ready, isTier2 } = usePerformanceTier();
+
     const quality = getQualityPreset(tier);
+    const maxCloudPlanes = getQualityPreset("tier_1")?.cloudPlanes || 64;
 
     const pausedRef = useRef(false);
     const sceneAssetsRef = useRef(null);
@@ -88,7 +89,6 @@ const HeroSectionComponent = () => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (!entry.isIntersecting) return;
-                setShowTierNotice(true);
                 sessionStorage.setItem("tier_2_notice_seen", "true");
                 observer.disconnect();
             },
@@ -174,7 +174,7 @@ const HeroSectionComponent = () => {
         const scene = new THREE.Scene();
 
         const onMouseMove = (e) => {
-            if (pausedRef.current || !isAnimating) return;
+            if (pausedRef.current || !isAnimating || isTier2) return;
 
             mouseX = (e.clientX - windowHalfX) * 0.25;
             mouseY = (e.clientY - windowHalfY) * 0.15;
@@ -191,6 +191,10 @@ const HeroSectionComponent = () => {
 
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(getRendererPixelRatio(tier));
+
+            if (isTier2 && renderer && camera) {
+                renderer.render(scene, camera);
+            }
         };
 
         const timer = createThreeTimer();
@@ -198,24 +202,31 @@ const HeroSectionComponent = () => {
         const animate = () => {
             if (!isAnimating || isDisposed) return;
 
-            animationId = requestAnimationFrame(animate);
-            const delta = Math.min(timer.update(), 0.033);
-            const frameSpeed = delta * 60;
+            if (!isTier2) {
+                const delta = Math.min(timer.update(), 0.033);
+                const frameSpeed = delta * 60;
 
-            const targetSpeed = pausedRef.current ? 0 : 0.8;
-            speedRef.current += (targetSpeed - speedRef.current) * 0.025;
-            tunnelPositionRef.current += speedRef.current * frameSpeed;
+                const targetSpeed = pausedRef.current ? 0 : 0.8;
+                speedRef.current += (targetSpeed - speedRef.current) * 0.025;
+                tunnelPositionRef.current += speedRef.current * frameSpeed;
 
-            if (camera) {
-                const mouseFactor = pausedRef.current ? 0 : 1;
-                camera.position.x += (mouseX * mouseFactor - camera.position.x) * 0.01;
-                camera.position.y += (-mouseY * mouseFactor - camera.position.y) * 0.01;
-                camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
+                if (camera) {
+                    const mouseFactor = pausedRef.current ? 0 : 1;
+                    camera.position.x += (mouseX * mouseFactor - camera.position.x) * 0.01;
+                    camera.position.y += (-mouseY * mouseFactor - camera.position.y) * 0.01;
+                    camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
+                }
+            } else if (camera) {
+                camera.position.z = 8000;
             }
 
             if (renderer && camera) {
                 renderer.render(scene, camera);
             }
+
+            if (isTier2) return;
+
+            animationId = requestAnimationFrame(animate);
         };
 
         const handleBtnMouseMove = (e) => {
@@ -301,10 +312,10 @@ const HeroSectionComponent = () => {
 
                 const geometries = [];
 
-                for (let i = 0; i < quality.cloudPlanes; i++) {
+                for (let i = 0; i < maxCloudPlanes; i++) {
                     planeObj.position.x = Math.random() * 1000 - 500;
                     planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
-                    planeObj.position.z = i * (8000 / quality.cloudPlanes);
+                    planeObj.position.z = i * (8000 / maxCloudPlanes);
                     planeObj.rotation.z = Math.random() * Math.PI;
                     planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
                     planeObj.updateMatrix();
@@ -386,10 +397,9 @@ const HeroSectionComponent = () => {
                 }
             }
         };
-    }, [quality.antialias, quality.cloudPlanes, sceneAssets, tier]);
+    }, [quality.antialias, maxCloudPlanes, sceneAssets, tier, isTier2]);
 
     const handleCloudControl = () => {
-        // For tier_2, keep scene paused and don't allow toggling
         if (isTier2) return;
 
         setPaused((prev) => {
@@ -399,12 +409,12 @@ const HeroSectionComponent = () => {
         });
     };
 
-    // For tier_2, ensure scene starts in paused state
     useEffect(() => {
-        if (isTier2 && !paused) {
+        if (isTier2) {
             setPaused(true);
+            pausedRef.current = true;
         }
-    }, [isTier2, paused]);
+    }, [isTier2]);
 
     const handleRestartIntroScene = () => {
         triggerIntroRestart();
@@ -417,21 +427,11 @@ const HeroSectionComponent = () => {
                 <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <div className="absolute top-60 right-0 z-9999">
-                    <LiquidGlass width="50px" height="190px" className="p-0">
-                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} disabled={isTier2} className={`group absolute top-5 left-1/2 -translate-x-1/2 h-11 w-11 z-20 ${isTier2 ? "opacity-40 cursor-not-allowed" : ""}`}>
-                            <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full" style={{ animation: "spin 18s linear infinite" }}>
-                                <defs>
-                                    <path id="hero-control-ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
-                                </defs>
-                                <text fill="rgba(0,0,0,0.3)" fontSize="10" letterSpacing="2.5" className="uppercase">
-                                    <textPath href="#hero-control-ring" startOffset="0%">
-                                        CONTROL THE CLOUDS • CONTROL THE CLOUDS •
-                                    </textPath>
-                                </text>
-                            </svg>
+                    <LiquidGlass width="50px" height="180px" className="p-0">
+                        <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} disabled={isTier2} className={`group absolute top-3 left-1/2 -translate-x-1/2 h-11 w-11 z-20`}>
 
                             <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
+                                <div className="relative z-10 flex h-10 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
                                     {paused ? (
                                         <HiMiniPlay size={14} className="translate-x-[0.5px] text-black/50" />
                                     ) : (
@@ -446,7 +446,7 @@ const HeroSectionComponent = () => {
                         </button>
 
 
-                        <button type="button" onClick={handleRestartIntroScene} className="group absolute top-16 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
+                        <button type="button" onClick={handleRestartIntroScene} className="group absolute top-14 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="mr-1/2 relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
                                     <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
@@ -470,7 +470,7 @@ const HeroSectionComponent = () => {
                         BUILD SYSTEMS <br />
                     </span>
                     <span className="line dim uppercase">
-                        OPTIMIZE SCALE × LATENCY <br />
+                        OPTIMIZE SCALE x LATENCY <br />
                     </span>
                     <span className="line strong">
                         <span className="text-md uppercase tracking-tight"> OPS </span>{" "}

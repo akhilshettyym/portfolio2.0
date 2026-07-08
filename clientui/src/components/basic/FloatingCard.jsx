@@ -52,7 +52,7 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
         transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ pointerEvents: hasHoveredCard && !isHovered ? "none" : "auto" }}>
 
-        <motion.article className="relative overflow-hidden rounded-4xl border backdrop-blur-3xl"
+        <motion.article className="relative overflow-hidden rounded-lg border backdrop-blur-3xl"
           style={{ background, borderColor: border, boxShadow: shadow }}
           animate={{ y: isHovered ? -8 : 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}

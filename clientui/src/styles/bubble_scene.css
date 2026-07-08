@@ -71,12 +71,12 @@
 
 .bubble-orbit-one {
   width: min(76vw, 980px);
-  height: min(42vw, 470px);
+  height: min(40vw, 300px);
 }
 
 .bubble-orbit-two {
   width: min(58vw, 740px);
-  height: min(30vw, 340px);
+  height: min(30vw, 280px);
   transform: translate(-50%, -50%) rotate(16deg);
 }
 
@@ -233,7 +233,7 @@
 
   .bubble-orbit-one {
     width: 900px;
-    height: 430px;
+    height: 380px;
   }
 
   .bubble-orbit-two {

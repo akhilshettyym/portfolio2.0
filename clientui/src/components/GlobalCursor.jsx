@@ -2,16 +2,17 @@
 
 import "@/styles/global_cursor.css";
 import { useEffect, useRef } from "react";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const GlobalCursor = () => {
     const cursorRef = useRef(null);
     const frameRef = useRef(null);
     const pointRef = useRef({ x: 0, y: 0 });
+    const { isTier2 } = usePerformanceTier();
 
     useEffect(() => {
         const cursor = cursorRef.current;
         const supportsFinePointer = window.matchMedia("(pointer: fine)").matches;
-
         if (!cursor || !supportsFinePointer) return undefined;
 
         const moveCursor = () => {
@@ -23,7 +24,6 @@ const GlobalCursor = () => {
             pointRef.current.x = event.clientX;
             pointRef.current.y = event.clientY;
             cursor.dataset.active = "true";
-
             if (!frameRef.current) {
                 frameRef.current = requestAnimationFrame(moveCursor);
             }
@@ -38,8 +38,10 @@ const GlobalCursor = () => {
 
         return () => {
             window.removeEventListener("pointermove", onPointerMove);
-            document.documentElement.removeEventListener("mouseleave", onPointerLeave);
-
+            document.documentElement.removeEventListener(
+                "mouseleave",
+                onPointerLeave,
+            );
             if (frameRef.current) {
                 cancelAnimationFrame(frameRef.current);
             }
@@ -47,7 +49,7 @@ const GlobalCursor = () => {
     }, []);
 
     return (
-        <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" />
+        <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" data-tier={isTier2 ? "low" : "high"} />
     );
 };
 

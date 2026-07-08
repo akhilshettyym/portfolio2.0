@@ -1,7 +1,6 @@
 "use client";
-
 import GlobalCursor from "@/components/GlobalCursor";
-import Tier2WarningModal from "@/components/LimpModeModal";
+import LimpModal from "@/components/basic/LimpModal";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { calibratePerformance, getSavedTier, PERFORMANCE_TIER_EVENT, PERFORMANCE_TIERS, savePerformanceTier } from "@/lib/performance/performanceTier";
 
@@ -14,7 +13,6 @@ export default function PerformanceBootstrap({ children }) {
 
     const runCalibration = useCallback(async () => {
         setCalibrating(true);
-
         try {
             const result = await calibratePerformance();
             savePerformanceTier(result);
@@ -28,7 +26,6 @@ export default function PerformanceBootstrap({ children }) {
 
     useEffect(() => {
         const savedTier = getSavedTier();
-
         if (savedTier) {
             setTier(savedTier);
             setReady(true);
@@ -38,7 +35,6 @@ export default function PerformanceBootstrap({ children }) {
         const id = window.setTimeout(() => {
             runCalibration();
         }, 120);
-
         return () => window.clearTimeout(id);
     }, [runCalibration]);
 
@@ -55,16 +51,13 @@ export default function PerformanceBootstrap({ children }) {
 
     useEffect(() => {
         const originalWarn = console.warn;
-
         console.warn = (...args) => {
             const first = args[0];
             if (typeof first === "string" && first.includes("THREE.Clock: This module has been deprecated")) {
                 return;
             }
-
             originalWarn(...args);
         };
-
         return () => {
             console.warn = originalWarn;
         };
@@ -72,8 +65,7 @@ export default function PerformanceBootstrap({ children }) {
 
     const value = useMemo(
         () => ({
-            tier,
-            ready,
+            tier, ready,
             calibrating,
             runCalibration,
             isTier1: tier === PERFORMANCE_TIERS.HIGH,
@@ -84,8 +76,8 @@ export default function PerformanceBootstrap({ children }) {
 
     return (
         <PerformanceTierContext.Provider value={value}>
-            {tier === PERFORMANCE_TIERS.HIGH && <GlobalCursor />}
-            {ready && <Tier2WarningModal />}
+            <GlobalCursor />
+            {ready && <LimpModal />}
             {children}
         </PerformanceTierContext.Provider>
     );

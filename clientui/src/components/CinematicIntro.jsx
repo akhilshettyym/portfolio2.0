@@ -778,7 +778,7 @@ const CinematicIntro = ({ onComplete }) => {
                   repeat: isTier2 ? 0 : Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute max-w-[18rem] text-left font-mono text-[10px] uppercase leading-4 tracking-[0.22em] text-white/70"
+                className="absolute max-w-[18rem] text-left text-[10px] uppercase leading-4 tracking-[0.22em] text-white/70"
                 style={{
                   left: `${item.left}%`,
                   top: `${item.top}%`,

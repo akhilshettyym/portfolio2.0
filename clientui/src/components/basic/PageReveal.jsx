@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 
 const PageReveal = ({ active, children }) => {
+  
   return (
     <>
       {children}

@@ -1,16 +1,11 @@
 "use client";
 
 import { useCallback, useContext, useEffect, useState } from "react";
-import {
-  calibratePerformance,
-  getSavedTier,
-  PERFORMANCE_TIER_EVENT,
-  PERFORMANCE_TIERS,
-  savePerformanceTier,
-} from "@/lib/performance/performanceTier";
 import { PerformanceTierContext } from "@/components/PerformanceBootstrap";
+import { calibratePerformance, getSavedTier, PERFORMANCE_TIER_EVENT, PERFORMANCE_TIERS, savePerformanceTier } from "@/lib/performance/performanceTier";
 
 export function usePerformanceTier(calibrationDurationMs) {
+
   const context = useContext(PerformanceTierContext);
   const [tier, setTier] = useState(() => getSavedTier() || PERFORMANCE_TIERS.LOW);
   const [ready, setReady] = useState(() => Boolean(getSavedTier()));
@@ -52,8 +47,7 @@ export function usePerformanceTier(calibrationDurationMs) {
   }, [context]);
 
   const fallback = {
-    tier,
-    ready,
+    tier, ready,
     calibrating,
     runCalibration,
     isTier1: tier === PERFORMANCE_TIERS.HIGH,

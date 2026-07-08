@@ -5,8 +5,12 @@ import dynamic from "next/dynamic";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const BubbleScene = dynamic(() => import("../BubbleScene"), {
-    loading: () => <div style={{ width: "100%", height: "400px", background: "#0a0a0a" }} />,
+const LoadingFallback = () => (
+    <div style={{ width: "100%", minHeight: "400px", background: "#ffffff" }} />
+);
+
+const BubbleScene = dynamic(() => import("@/components/BubbleScene"), {
+    loading: LoadingFallback,
     ssr: false,
 });
 
@@ -14,17 +18,13 @@ const BubbleSceneTiered = (props) => {
     const { isTier2, ready } = usePerformanceTier();
     const { ref, shouldRender } = useLazyLoad();
 
-    if (!ready) {
-        return <div ref={ref} style={{ width: "100%", height: "400px", background: "#0a0a0a" }} />;
-    }
-
-    if (isTier2 && !shouldRender) {
-        return <div ref={ref} style={{ width: "100%", height: "400px", background: "#0a0a0a" }} />;
+    if (!ready || (isTier2 && !shouldRender)) {
+        return <div ref={ref}><LoadingFallback /></div>;
     }
 
     return (
-        <div ref={ref}>
-            <Suspense fallback={<div style={{ width: "100%", height: "400px", background: "#0a0a0a" }} />}>
+        <div ref={ref} style={{ background: "#ffffff", minHeight: "400px" }}>
+            <Suspense fallback={<LoadingFallback />}>
                 <BubbleScene {...props} isTieredWrapper={isTier2} />
             </Suspense>
         </div>

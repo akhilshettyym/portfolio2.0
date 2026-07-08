@@ -7,10 +7,11 @@ import { hasLocationPreference } from "@/utils/weather-scene";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import LocationPreferenceModal from "@/components/basic/LocationPreferenceModal";
+import LocationModal from "@/components/basic/LocationModal";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 const Loader = ({ onFinish, duration = 3000 }) => {
+
   const containerRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
@@ -191,7 +192,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
   };
 
   const radius = isMobile ? 70 : 85;
-  const stroke = 2;
+  const stroke = 4;
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
@@ -221,15 +222,15 @@ const Loader = ({ onFinish, duration = 3000 }) => {
             <circle stroke="black" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear", filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))" }} />
           </svg>
 
-          <div className={`text-black font-light tabular-nums ${isMobile ? "text-xl" : "text-2xl"}`}>
+          <div className={`text-black font-normal tabular-nums ${isMobile ? "text-xl" : "text-2xl"}`}>
             {Math.floor(progress)}%
           </div>
         </div>
       </div>
 
       <div className="absolute bottom-8 w-full flex justify-center text-center px-6">
-        <div className="text-[10px] sm:text-[11px] leading-5 text-black/60 max-w-md tracking-wide font-mono">
-          <div className="text-black/80 text-sm sm:text-md">
+        <div className="text-[10px] sm:text-[11px] leading-5 text-black/60 max-w-md tracking-wide">
+          <div className="text-black/80 font-normal text-sm sm:text-md">
             AKHIL SHETTY {"//"} identity: portfolio_instance
           </div>
 
@@ -276,7 +277,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
         </div>
       </div>
 
-      <LocationPreferenceModal open={showLocationModal} onComplete={handleLocationSelected} />
+      <LocationModal open={showLocationModal} onComplete={handleLocationSelected} />
     </div>
   );
 };

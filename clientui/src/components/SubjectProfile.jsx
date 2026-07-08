@@ -4,7 +4,8 @@ import Image from "next/image";
 import { FADEUP } from "@/utils/basic-utils";
 import { IoIdCardOutline } from "react-icons/io5";
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useVelocity, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const fadeInContainer = {
     hidden: { opacity: 0, y: 20 },
@@ -29,12 +30,10 @@ const itemReveal = {
 };
 
 const ScrollMarquee = ({ texts = ["DEFAULT TEXT"], baseSpeed = 1, variant = "large", showIcon = false, className = "", direct = false }) => {
-    const { scrollY } = useScroll();
-    const scrollVelocity = useVelocity(scrollY);
-    const [direction, setDirection] = useState(-1);
 
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
     const containerRef = useRef(null);
+    const { isTier2 } = usePerformanceTier();
 
     useEffect(() => {
         if (texts.length <= 1) return;
@@ -44,13 +43,6 @@ const ScrollMarquee = ({ texts = ["DEFAULT TEXT"], baseSpeed = 1, variant = "lar
         return () => clearInterval(interval);
     }, [texts]);
 
-    useEffect(() => {
-        return scrollVelocity.on("change", (latest) => {
-            if (latest > 15) setDirection(1);
-            else if (latest < -15) setDirection(-1);
-        });
-    }, [scrollVelocity]);
-
     const currentText = texts[currentTextIndex];
 
     const speed = Math.max(0.5, baseSpeed);
@@ -58,15 +50,23 @@ const ScrollMarquee = ({ texts = ["DEFAULT TEXT"], baseSpeed = 1, variant = "lar
 
     return (
         <div className={`w-full overflow-hidden whitespace-nowrap flex items-center select-none ${className}`}>
-            <motion.div ref={containerRef}
-                className="flex items-center gap-10 will-change-transform"
-                animate={{ x: direct ? ["0%", "-50%"] : ["-50%", "0%"] }}
-                transition={{ duration: duration, ease: "linear", repeat: Infinity, repeatType: "loop" }}
-                style={{ transformOrigin: "left center" }}>
 
-                <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
-                <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
-            </motion.div>
+            {isTier2 ? (
+                <h2 className={`font-black uppercase tracking-tight text-slate-900 bg-clip-text ${variant === "large" ? "text-[clamp(3.5rem,6vw,5.5rem)]" : "text-[clamp(1.1rem,4vw,1.4rem)]"}`}>
+                    {currentText}
+                </h2>
+            ) : (
+                <motion.div ref={containerRef}
+                    className="flex items-center gap-10 will-change-transform"
+                    animate={{ x: direct ? ["0%", "-50%"] : ["-50%", "0%"] }}
+                    transition={{ duration: duration, ease: "linear", repeat: Infinity, repeatType: "loop" }}
+                    style={{ transformOrigin: "left center" }}>
+
+                    <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
+                    <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
+                </motion.div>
+            )}
+
         </div>
     );
 };
@@ -187,7 +187,7 @@ const SubjectProfile = () => {
 
                 <div className="w-full flex flex-col lg:flex-row gap-8">
                     <motion.div variants={itemReveal}
-                        className="flex-1 border border-slate-200/80 bg-white p-8 md:p-10 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group">
+                        className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group">
 
                         <ScrollMarquee texts={["ABOUT ME"]} baseSpeed={1.5} variant="large" showIcon={true} direct={true} className="border-b border-slate-200/80" />
                         <ScrollMarquee texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />
@@ -205,7 +205,7 @@ const SubjectProfile = () => {
                         </div>
                     </motion.div>
 
-                    <motion.div variants={itemReveal} className="flex-1 border border-slate-200/80 bg-white p-6 md:p-8 flex flex-col justify-between shadow-sm rounded-2xl">
+                    <motion.div variants={itemReveal} className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-between shadow-sm rounded-2xl">
                         <div className="relative w-full h-48 md:h-40 mb-6 border border-slate-100 bg-slate-950 overflow-hidden rounded-2xl group shadow-inner">
                             {/* <Image src="/akhil.svg" alt="System visualization workflow" fill unoptimized className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out mix-blend-luminosity group-hover:mix-blend-normal"
                             /> */}

@@ -4,11 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SOCIALS } from "@/utils/basic-utils";
+import { goToTop } from "@/utils/funct-utils";
 import { FaRegCopyright } from "react-icons/fa6";
 import CustomButton from "@/components/basic/CustomButton";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 function splitLetters(text) {
     return Array.from(text);
@@ -63,12 +64,12 @@ const MarqueeLineLow = ({ text, large }) => {
             <motion.div className="flex w-max items-center gap-6 whitespace-nowrap"
                 transition={{ duration: 46, ease: "linear", repeat: Infinity }}>
 
-                    <div className="flex items-center gap-6">
-                        <span className={`font-bold text-black/90 ${large ? "text-[5rem]" : "text-[2rem]"}`}>
-                            {" "}{text}{" "}
-                        </span>
-                        <span className="h-3 w-3 rounded-full bg-black/90 sm:h-4 sm:w-4" />
-                    </div>
+                <div className="flex items-center gap-6">
+                    <span className={`font-bold text-black/90 ${large ? "text-[5rem]" : "text-[2rem]"}`}>
+                        {" "}{text}{" "}
+                    </span>
+                    <span className="h-3 w-3 rounded-full bg-black/90 sm:h-4 sm:w-4" />
+                </div>
             </motion.div>
         </div>
     );
@@ -153,29 +154,7 @@ const FooterComponent = () => {
 
     const handleNavigation = () => {
         router.push("/start");
-
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-        });
-    };
-
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
-    };
-
-    const handleHitMeUp = () => {
-        router.push("/start");
-
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-        });
+        goToTop();
     };
 
     const topOverlayOpacity = useTransform(
@@ -339,14 +318,14 @@ const FooterComponent = () => {
 
                         <div className="relative h-35 w-full overflow-hidden bg-white">
                             <div className="absolute top-5 right-5 z-10">
-                                <button onClick={scrollToTop} className="flex items-center gap-1.5 text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
+                                <button onClick={goToTop} className="flex items-center gap-1.5 text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
                                     <span className="uppercase"> Back To Top </span>
                                     <Image src="/footer/barcode_name.svg" alt="barcode name" width={30} height={14} priority unoptimized className="h-[0.95em] w-auto object-contain mix-blend-multiply opacity-80" />
                                 </button>
                             </div>
 
                             <div className="absolute top-8 left-15 z-10">
-                                <button onClick={handleHitMeUp}>
+                                <button onClick={handleNavigation}>
                                     <span className="uppercase text-xs font-bold text-black/50 hover:text-black cursor-pointer">
                                         {" "} Am probably not sleeping, Hit me up{" "}
                                     </span>
@@ -390,8 +369,8 @@ const FooterComponent = () => {
                         style={{ opacity: topBorderOpacity }} />
 
                     <div className="relative z-40">
-                        <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 py-5">
-                            <div className="mb-5 flex h-[75vh] w-full flex-col gap-4 md:flex-row">
+                        <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4">
+                            <div className="mb-5 flex h-[78vh] w-full flex-col gap-4 md:flex-row">
                                 <div className="w-full text-white md:w-[60%]">
                                     <div className="flex h-full w-full flex-col gap-4">
                                         <div className="flex flex-1 items-center justify-center p-4 text-indigo-900">
@@ -510,14 +489,14 @@ const FooterComponent = () => {
 
                         <div className="relative h-35 w-full overflow-hidden bg-white">
                             <div className="absolute top-5 right-5 z-10">
-                                <button onClick={scrollToTop} className="flex items-center gap-1.5 text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
+                                <button onClick={goToTop} className="flex items-center gap-1.5 text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
                                     <span className="uppercase"> Back To Top </span>
                                     <Image src="/footer/barcode_name.svg" alt="barcode name" width={30} height={14} priority unoptimized className="h-[0.95em] w-auto object-contain mix-blend-multiply opacity-80" />
                                 </button>
                             </div>
 
                             <div className="absolute top-8 left-15 z-10">
-                                <button onClick={handleHitMeUp}>
+                                <button onClick={handleNavigation}>
                                     <span className="uppercase text-xs font-bold text-black/50 hover:text-black cursor-pointer">
                                         {" "} Am probably not sleeping, Hit me up{" "}
                                     </span>

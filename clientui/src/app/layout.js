@@ -31,18 +31,18 @@ export default function RootLayout({ children }) {
         <PerformanceBootstrap>
 
           <LenisProvider>
-            <LoaderWrapper>
+            {/* <LoaderWrapper> */}
 
-              <NavbarWrapper>
+              {/* <NavbarWrapper>
                 <Navbar />
-              </NavbarWrapper>
+              </NavbarWrapper> */}
 
               <main className="relative pt-25">
                 {children}
                 <ToastContainer />
               </main>
 
-            </LoaderWrapper>
+            {/* </LoaderWrapper> */}
           </LenisProvider>
         </PerformanceBootstrap>
       </body>

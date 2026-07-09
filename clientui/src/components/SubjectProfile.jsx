@@ -3,8 +3,9 @@
 import Image from "next/image";
 import { FADEUP } from "@/utils/basic-utils";
 import { IoIdCardOutline } from "react-icons/io5";
-import React, { useState, useEffect, useRef } from "react";
+import { useDeviceType } from "@/utils/useDeviceType";
 import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const fadeInContainer = {
@@ -88,12 +89,15 @@ const MarqueeContent = ({ text, variant, showIcon }) => (
 
 const SubjectProfile = () => {
     const [carouselIndex, setCarouselIndex] = useState(0);
+
+    const { isMobile } = useDeviceType();
+
     const carouselData = [
-        "I build fast, smooth websites where performance is baked in from the start — delivering excellent results on any device and network.",
+        "I build fast, smooth websites where performance is baked in from the start — delivering excellent results.",
         "I write clean, well-structured, and maintainable code focused on clarity, scalability, and long-term reliability.",
         "I design intuitive, consistent, and responsive interfaces that feel natural across all devices and screen sizes.",
         "Strong technical SEO, accessibility, and modern best practices are built in from day one — not added later.",
-        "From concept to launch, I ensure clear communication, thoughtful planning, and reliable delivery with rigorous testing.",
+        "From concept to launch, I ensure clear communication, thoughtful planning, and reliable, rigorously tested delivery.",
     ];
 
     const welcomeTexts = [
@@ -117,13 +121,13 @@ const SubjectProfile = () => {
                 <div className="grid grid-cols-1 items-end gap-y-14 md:grid-cols-12 md:gap-x-8">
                     <motion.div {...FADEUP} className="md:col-span-8">
                         <div className="overflow-hidden">
-                            <h1 className="text-[clamp(3rem,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
+                            <h1 className="text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                                 FULL STACK
                             </h1>
                         </div>
 
                         <div className="-mt-3 overflow-hidden">
-                            <h1 className="text-[clamp(4.5rem,5vw,3rem)] font-black leading-[0.82] tracking-[-0.12em] text-black/90 will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
+                            <h1 className="text-[clamp(3rem,5vw,3rem)] font-black leading-[0.82] tracking-[-0.12em] text-black/90 will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                                 DEVELOPER
                             </h1>
                         </div>
@@ -180,14 +184,12 @@ const SubjectProfile = () => {
             <div className="absolute inset-0 z-0 opacity-15 pointer-events-none" style={{ backgroundImage: "linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
 
             <motion.div variants={fadeInContainer}
-                initial="hidden"
-                whileInView="visible"
+                initial="hidden" whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 className="max-w-360 mx-auto relative z-10 flex flex-col gap-10">
 
                 <div className="w-full flex flex-col lg:flex-row gap-8">
-                    <motion.div variants={itemReveal}
-                        className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group">
+                    <motion.div variants={itemReveal} className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group">
 
                         <ScrollMarquee texts={["ABOUT ME"]} baseSpeed={1.5} variant="large" showIcon={true} direct={true} className="border-b border-slate-200/80" />
                         <ScrollMarquee texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />
@@ -227,7 +229,7 @@ const SubjectProfile = () => {
                     </motion.div>
                 </div>
 
-                <motion.div variants={itemReveal} className="w-full border border-slate-900 bg-white p-8 md:p-12 relative shadow-xl rounded-2xl">
+                <motion.div variants={itemReveal} className="w-full border border-slate-900 bg-white p-8 md:p-12 relative shadow-xl rounded-xl">
                     <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-slate-900 -translate-x-3 translate-y-3" />
                     <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-slate-900 translate-x-3 -translate-y-3" />
 
@@ -248,11 +250,11 @@ const SubjectProfile = () => {
                                 </h3>
                             </div>
 
-                            <div className="min-h-26 border-l-4 border-slate-900 pl-6 relative flex flex-col justify-center bg-slate-50/80 py-2 pr-4 shadow-sm">
+                            <div className="min-h-30 border-l-4 border-slate-900 pl-6 relative flex flex-col justify-center bg-slate-50/80 py-2 pr-4 shadow-sm">
                                 <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 flex items-center gap-2">
                                     Operational Workflow Ethos
                                 </div>
-                                <div className="relative min-h-12 w-full flex items-center">
+                                <div className="relative min-h-18 w-full flex items-center">
                                     <AnimatePresence mode="popLayout">
                                         <motion.div key={carouselIndex}
                                             initial={{ y: 25, opacity: 0 }}
@@ -261,7 +263,7 @@ const SubjectProfile = () => {
                                             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                                             className="absolute w-full">
 
-                                            <p className="text-sm md:text-base font-medium text-slate-700 leading-relaxed">
+                                            <p className="text-sm md:text-base font-medium text-slate-700 leading-normal">
                                                 <span className="text-black/60 font-bold mr-1.5">
                                                     &gt;
                                                 </span>
@@ -309,7 +311,7 @@ const SubjectProfile = () => {
                                 {/* <Image src="/akhil.svg" alt="Professional Profile Visual Representation" fill unoptimized priority className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-700 ease-out" /> */}
                             </div>
 
-                            <div className="w-70 absolute bottom-4 left-4 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/50 p-3 shadow-xl font-mono select-none rounded-lg">
+                            <div className={`absolute bottom-4 left-4 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/50 p-3 shadow-xl font-mono select-none rounded-lg ${isMobile ? "w-60" : "w-70"}`}>
                                 <div className="flex items-center justify-between gap-2 mb-1.5">
                                     <div className="flex items-center gap-1.5">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

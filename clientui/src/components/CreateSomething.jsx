@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import React, { useState } from "react";
+import { useDeviceType } from "@/utils/useDeviceType";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
 import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic-utils";
@@ -24,6 +25,8 @@ const CreateSomething = () => {
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ type: "", message: "" });
     const [selectedServices, setSelectedServices] = useState([]);
+
+    const { isMobile } = useDeviceType();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -158,11 +161,11 @@ const CreateSomething = () => {
     };
 
     return (
-        <section className="w-full bg-white py-12 text-black p-10">
+        <section className={`w-full bg-white py-12 text-black ${isMobile ? "" : "p-10"}`}>
             <div className="mx-auto max-w-7xl px-6">
                 <div className="gap-12">
                     <div className="w-full">
-                        <div className="mb-12">
+                        <div className={isMobile ? "mb-5" : "mb-10"}>
                             <label className="text-xs uppercase tracking-widest text-neutral-400 block mb-3">
                                 Select Form Purpose Track
                             </label>
@@ -172,7 +175,7 @@ const CreateSomething = () => {
                                         setPurpose("say_hi");
                                         setStatus({ type: "", message: "" })
                                     }}
-                                    className={`py-4 px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                                    className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
                                     Just Say Hi
                                 </button>
 
@@ -181,8 +184,8 @@ const CreateSomething = () => {
                                         setPurpose("work");
                                         setStatus({ type: "", message: "" })
                                     }}
-                                    className={`py-4 px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
-                                    Build A Project
+                                    className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                                    {isMobile ? "Build Project" : "Build A Project"}
                                 </button>
                             </div>
                         </div>
@@ -294,9 +297,10 @@ const CreateSomething = () => {
 
                     <div className="hidden lg:block" />
                 </div>
+
+                <p className="border-b border-black mt-10" />
             </div>
 
-            <p className="border-b border-black mt-10" />
         </section>
     );
 };

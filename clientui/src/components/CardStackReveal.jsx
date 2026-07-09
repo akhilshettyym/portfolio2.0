@@ -1,6 +1,7 @@
 "use client";
 
 import { DEFAULT_CARDS } from "@/utils/basic-utils";
+import { useDeviceType } from "@/utils/useDeviceType";
 import React, { useState, useRef, memo } from "react";
 import FloatingCard from "@/components/basic/FloatingCard";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
@@ -9,6 +10,7 @@ import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "f
 const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
   const sectionRef = useRef(null);
   const [hoveredCard, setHoveredCard] = useState(-1);
+  const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
   const renderedCards = isTier2 ? cards.slice(0, Math.min(cards.length, 4)) : cards;
@@ -49,7 +51,7 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
           <div className={`w-full max-w-7xl mx-auto ${isTier2 ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center" : "relative h-full"}`}>
             {renderedCards.map((card, index) => (
               isTier2 ? (
-                <div key={`${card.title}-${index}`} className="w-full max-w-[20rem] flex flex-col justify-between p-6 rounded-lg border border-neutral-200 bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div key={`${card.title}-${index}`} className="w-full max-w-[25rem] flex flex-col justify-between p-6 rounded-lg border border-neutral-200 bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
 
                   <div className="mb-4 flex items-start justify-between">
                     <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-neutral-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55">
@@ -58,26 +60,37 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
                   </div>
 
                   <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-2xl font-black tracking-tight text-black uppercase mb-2">
-                        {card.title}
-                      </h3>
 
-                      <p className="text-xs font-semibold uppercase text-black/45 tracking-wider mb-3">
-                        {card.caption}
-                      </p>
+                    <div className="flex flex-col space-y-5">
+                      <div>
+                        <h3 className="text-2xl font-black tracking-tight text-black uppercase mb-2">
+                          {card.title}
+                        </h3>
 
-                      <p className="text-sm leading-relaxed text-black/70">
-                        {card.description}
-                      </p>
+                        <p className={`text-xs font-semibold uppercase text-black/45 tracking-wider mb-3 ${isMobile ? "" : "min-h-8"}`}>
+                          {card.caption}
+                        </p>
+
+                        <p className={`text-sm leading-relaxed text-black/70 text-justify ${isMobile ? "" : "min-h-30"}`}>
+                          {card.description}
+                        </p>
+                      </div>
+
+                      <motion.a href={card.href}
+                        target="_blank" rel="noopener noreferrer"
+                        whileTap={{ scale: 0.98 }} whileHover={{ y: -1 }}
+                        className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-black px-5 py-3 text-xs font-semibold text-white tracking-tight shadow-[0_12px_30px_rgba(0,0,0,0.18)] transition-all hover:bg-black/90">
+                        <span> {card.cta} </span>
+                        <span aria-hidden="true"> ↗ </span>
+                      </motion.a>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between text-xs font-bold uppercase text-black/45">
                       <span>Timeline</span>
                       <span className="text-black font-black">{card.year}</span>
                     </div>
-                  </div>
 
+                  </div>
                 </div>
               ) : (
                 <FloatingCard key={`${card.title}-${index}`} card={card} index={index} progress={displayProgress} hoveredCard={hoveredCard} setHoveredCard={setHoveredCard} />

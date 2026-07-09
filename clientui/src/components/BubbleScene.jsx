@@ -4,6 +4,7 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
+import { useDeviceType } from "@/utils/useDeviceType";
 import { motion, useReducedMotion } from "framer-motion";
 import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
@@ -16,6 +17,7 @@ const BubbleSceneComponent = () => {
     const wrapperRef = useRef(null);
     const shouldReduceMotion = useReducedMotion();
     const { tier, isTier2 } = usePerformanceTier();
+    const { isMobile } = useDeviceType();
     const quality = getQualityPreset(tier);
 
     useEffect(() => {
@@ -67,8 +69,12 @@ const BubbleSceneComponent = () => {
         scene.add(directionalLight);
 
         const group = new THREE.Group();
-        group.rotation.set(-0.16, 0, 0.1);
-        group.scale.setScalar(0.78);
+
+        const baseScaleFactor = isMobile ? 0.75 : 1.0;
+        const targetZRotation = isMobile ? -(Math.PI / 2) : 0;
+
+        group.rotation.set(-0.16, 0, targetZRotation + 0.1);
+        group.scale.setScalar(baseScaleFactor * 0.8);
         scene.add(group);
 
         const bubbles = POSITIONS.map((pos, index) => {
@@ -123,14 +129,14 @@ const BubbleSceneComponent = () => {
 
             gsap.to(group.rotation, {
                 x: 0,
-                z: 0,
+                z: targetZRotation,
                 duration,
                 ease: "power3.out",
             });
             gsap.to(group.scale, {
-                x: 1,
-                y: 1,
-                z: 1,
+                x: baseScaleFactor,
+                y: baseScaleFactor,
+                z: baseScaleFactor,
                 duration,
                 ease: "power3.out",
             });
@@ -345,7 +351,8 @@ const BubbleSceneComponent = () => {
             textures.forEach((texture) => texture.dispose());
             renderer.dispose();
         };
-    }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier]);
+        // Include isMobile in the dependency array so rotating the phone correctly triggers a re-draw
+    }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier, isMobile]);
 
     return (
         <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">

@@ -10,18 +10,18 @@ const WorkLayout = memo(
   function WorkLayout() {
     return (
       <div>
-        <SelectedWorks />
+        {/* <SelectedWorks /> */}
 
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <MyExperienceTiered />
+          {/* <MyExperienceTiered /> */}
         </LazyLoad>
 
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <GithubGraphQlTiered />
+          {/* <GithubGraphQlTiered /> */}
         </LazyLoad>
 
-        <EmergencyCTA />
-        <Footer />
+        {/* <EmergencyCTA /> */}
+        {/* <Footer /> */}
       </div>
     );
   },

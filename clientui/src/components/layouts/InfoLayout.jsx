@@ -12,26 +12,26 @@ import CardStackRevealTiered from "@/components/TieredComponents/CardStackReveal
 const InfoLayout = memo(function InfoLayout() {
     return (
         <div className="relative z-10 bg-white">
-            <HeroSection />
-            <SubjectProfile />
-            <DevTicker />
+            {/* <HeroSection /> */}
+            {/* <SubjectProfile /> */}
+            {/* <DevTicker /> */}
 
             <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                <BubbleSceneTiered />
+                {/* <BubbleSceneTiered /> */}
             </LazyLoad>
 
             <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                <CardStackRevealTiered />
+                {/* <CardStackRevealTiered /> */}
             </LazyLoad>
 
             <div className="relative z-0 bg-white">
                 <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
-                    <MySocialsTiered />
+                    {/* <MySocialsTiered /> */}
                 </LazyLoad>
             </div>
 
-            <EmergencyCTA />
-            <Footer />
+            {/* <EmergencyCTA /> */}
+            {/* <Footer /> */}
         </div>
     );
 });

@@ -1,7 +1,7 @@
 "use client";
 
-import "@/styles/clouds.css";
 import * as THREE from "three";
+import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
 import { SiRevealdotjs } from "react-icons/si";
 import { CLOUD_SHADER } from "@/utils/basic-utils";

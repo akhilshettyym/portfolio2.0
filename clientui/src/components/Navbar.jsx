@@ -176,7 +176,7 @@ const NavbarComponent = () => {
 
   return (
     <>
-      <div className="sm:hidden fixed inset-x-0 top-0 z-50 bg-white border-b border-black/20 px-4 py-3">
+      <div className="sm:hidden fixed inset-x-0 top-0 z-50 bg-white border-b border-black/20 px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 relative">
@@ -210,8 +210,8 @@ const NavbarComponent = () => {
         </div>
       </div>
 
-      <div className="fixed top-0 left-0 z-50 px-10 pt-1 w-full bg-white/90 backdrop-blur-lg text-black border-black/10 hidden sm:block">
-        <div className="mt-6 flex items-center">
+      <div className="fixed top-0 left-0 z-50 px-10 w-full bg-white/75 backdrop-blur-xl text-black border-black/10 hidden sm:block">
+        <div className="mt-5 flex items-center">
           <div className="flex items-center gap-3 shrink-0">
             <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
               <div className="w-12 h-12 flex items-center justify-center relative group cursor-default">

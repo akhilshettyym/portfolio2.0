@@ -7,7 +7,7 @@ import { GrPowerReset } from "react-icons/gr";
 import { FaPause, FaPlay } from "react-icons/fa6";
 import LiquidGlass from "@/components/basic/LiquidGlass";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
 
 const COMPONENT_HEIGHT = "480px";
 const UNIQUE_CARD_COUNT = 3;
@@ -53,7 +53,7 @@ const experience_cards = [
   "/my_experience/education/edu_be.svg",
 ];
 
-const MyExperience = () => {
+const MyExperienceComponent = () => {
   const { isTier2 } = usePerformanceTier();
   const baseSpeed = isTier2 ? 76 : 120;
   const [isAnimating, setIsAnimating] = useState(true);
@@ -579,5 +579,7 @@ const MyExperience = () => {
     </div>
   );
 };
+
+const MyExperience = memo(MyExperienceComponent);
 
 export default MyExperience;

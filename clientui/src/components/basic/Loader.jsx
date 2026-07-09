@@ -3,11 +3,11 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
+import LocationModal from "@/components/basic/LocationModal";
 import { hasLocationPreference } from "@/utils/weather-scene";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import LocationModal from "@/components/basic/LocationModal";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 const Loader = ({ onFinish, duration = 3000 }) => {

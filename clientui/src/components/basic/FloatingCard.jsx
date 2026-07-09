@@ -4,6 +4,7 @@ import { motion, useMotionTemplate, useTransform } from "framer-motion";
 const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) => {
   const stateX = useTransform(progress, (v) => getCardState(v, index).x);
   const stateY = useTransform(progress, (v) => getCardState(v, index).y);
+  
   const stateScale = useTransform(
     progress,
     (v) => getCardState(v, index).scale,

@@ -297,3 +297,11 @@ export function SceneShell2({ dark, curtain = false, children }) {
 export function randomChar() {
   return CHARS[Math.floor(Math.random() * CHARS.length)];
 }
+
+export const goToTop = () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
+}

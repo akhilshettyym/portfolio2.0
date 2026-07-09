@@ -6,7 +6,7 @@ import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const DynamicGithubGraphQl = dynamic(() => import("@/components/GithubGraphQl"), {
-    loading: () => <div style={{ width: "100%", height: "300px", background: "#0a0a0a" }} className="w-full animate-pulse" />,
+    loading: () => <div style={{ width: "100%", height: "300px", background: "#ffffff" }} className="w-full animate-pulse" />,
     ssr: false,
 });
 
@@ -20,16 +20,16 @@ const GithubGraphQlTiered = (props) => {
     }, []);
 
     if (!mounted || !ready) {
-        return <div ref={ref} style={{ width: "100%", minHeight: "300px", background: "#0a0a0a" }} />;
+        return <div ref={ref} style={{ width: "100%", minHeight: "300px", background: "#ffffff" }} />;
     }
 
     if (isTier2 && !shouldRender) {
-        return <div ref={ref} style={{ width: "100%", minHeight: "300px", background: "#0a0a0a" }} />;
+        return <div ref={ref} style={{ width: "100%", minHeight: "300px", background: "#ffffff" }} />;
     }
 
     return (
         <div ref={ref} style={{ width: "100%", background: "#0a0a0a", position: "relative" }}>
-            <Suspense fallback={<div style={{ width: "100%", height: "300px", background: "#0a0a0a" }} />}>
+            <Suspense fallback={<div style={{ width: "100%", height: "300px", background: "#ffffff" }} />}>
                 <DynamicGithubGraphQl {...props} isTieredWrapper={isTier2} />
             </Suspense>
         </div>

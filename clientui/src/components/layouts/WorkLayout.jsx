@@ -3,8 +3,8 @@ import Footer from "@/components/Footer";
 import LazyLoad from "@/components/basic/LazyLoad";
 import SelectedWorks from "@/components/SelectedWorks";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
-import MyExperienceLazy from "@/components/LazyComponents/MyExperienceLazy";
-import GithubGraphQlLazy from "@/components/LazyComponents/GithubGraphQlLazy";
+import MyExperienceTiered from "@/components/TieredComponents/MyExperienceTiered";
+import GithubGraphQlTiered from "@/components/TieredComponents/GithubGraphQlTiered";
 
 const WorkLayout = memo(
   function WorkLayout() {
@@ -13,11 +13,11 @@ const WorkLayout = memo(
         <SelectedWorks />
 
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <MyExperienceLazy />
+          <MyExperienceTiered />
         </LazyLoad>
 
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <GithubGraphQlLazy />
+          <GithubGraphQlTiered />
         </LazyLoad>
 
         <EmergencyCTA />

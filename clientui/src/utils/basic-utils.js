@@ -1,25 +1,8 @@
 import { FaFileAlt } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
-import {
-  FaInstagram,
-  FaGithub,
-  FaLinkedin,
-  FaSalesforce,
-} from "react-icons/fa6";
-import {
-  WiMoonAltNew,
-  WiMoonAltWaxingCrescent3,
-  WiMoonAltFirstQuarter,
-  WiMoonAltFull,
-} from "react-icons/wi";
-import {
-  TiWeatherCloudy,
-  TiWeatherNight,
-  TiWeatherPartlySunny,
-  TiWeatherShower,
-  TiWeatherStormy,
-  TiWeatherSunny,
-} from "react-icons/ti";
+import { FaInstagram, FaGithub, FaLinkedin, FaSalesforce } from "react-icons/fa6";
+import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
+import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
 
 export const MONTHS = [
   "Jan",
@@ -46,6 +29,29 @@ export const WORDS = [
   "FRAMEWORKS",
   "ARCHITECTURES",
   "DEPLOYMENT",
+];
+
+export const DEV_TICKERS_TIER = [
+  "BUILD STATUS — STABLE + ",
+  "API RESPONSE 124ms + ",
+  "DEPLOYMENT SYNCHRONIZED + ",
+  "CACHE HIT RATE 92% + ",
+  "EDGE FUNCTIONS ACTIVE + ",
+  "AUTH SERVICE HEALTHY + ",
+  "CI/CD PIPELINE PASSING + ",
+  "REQUEST LOAD NORMAL + ",
+  "SCALABLE SYSTEM DESIGN + ",
+  "THREE.JS RENDER LOOP ACTIVE + ",
+  "NEXT.JS APP ROUTER READY + ",
+  "PRODUCTION BUILD OPTIMIZED + ",
+  "INTERACTIVE UI SYSTEMS + ",
+  "REAL-TIME MOTION ENGINE + ",
+  "DATABASE CONNECTION SECURE + ",
+  "PERFORMANCE SCORE — HIGH + ",
+  "TYPE-SAFE APPLICATION LAYER + ",
+  "FULL STACK ARCHITECTURE + ",
+  "SYSTEM LATENCY WITHIN RANGE + ",
+  "SHIPPING RELIABLE EXPERIENCES + ",
 ];
 
 export const DEV_TICKERS = [
@@ -617,3 +623,28 @@ export const BUDGET_OPTIONS = [
   { id: "10k_plus", label: "$10,000+" },
   { id: "not_sure", label: "Not Sure / Deciding" },
 ];
+
+export const CLOUD_SHADER = {
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }`,
+
+  fragmentShader: `
+    uniform sampler2D map;
+    uniform vec3 fogColor;
+    uniform float fogNear;
+    uniform float fogFar;
+    varying vec2 vUv;
+
+    void main() {
+      float depth = gl_FragCoord.z / gl_FragCoord.w;
+      float fogFactor = smoothstep(fogNear, fogFar, depth);
+
+      gl_FragColor = texture2D(map, vUv);
+      gl_FragColor.w *= pow(gl_FragCoord.z, 20.0);
+      gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
+    }`,
+};

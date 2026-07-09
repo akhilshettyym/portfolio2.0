@@ -276,7 +276,7 @@ const CreateSomething = () => {
                                     {purpose === "work" ? "Project Details" : "Your Message"}{" "}
                                     <span className="text-red-600">*</span>
                                 </h3>
-                                <textarea rows={6} name="message" value={formData.message} onChange={handleInputChange} placeholder={purpose === "work" ? "Provide an overview of objectives, tech requirements, scope..." : "Write your message here..."}  className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm font-sans" />
+                                <textarea rows={6} name="message" value={formData.message} onChange={handleInputChange} placeholder={purpose === "work" ? "Provide an overview of objectives, tech requirements, scope..." : "Write your message here..."} className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm font-sans" />
                             </div>
 
                             <div className="mt-10 flex flex-col sm:flex-row justify-end items-center gap-6">

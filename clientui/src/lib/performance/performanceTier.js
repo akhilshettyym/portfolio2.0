@@ -1,129 +1,223 @@
-// const STORAGE_KEY = "tier";
+export const PERFORMANCE_TIER_STORAGE_KEY = "performance_tier";
+export const LEGACY_PERFORMANCE_TIER_STORAGE_KEY = "tier";
+export const PERFORMANCE_TIER_EVENT = "performance-tier-change";
+export const PERFORMANCE_TIERS = { HIGH: "tier_1", LOW: "tier_2" };
 
-// function safeWindow() {
-//     return typeof window !== "undefined" ? window : undefined;
-// }
+function safeWindow() {
+    return typeof window !== "undefined" ? window : undefined;
+}
 
-// export function getSavedTier() {
-//     try {
-//         const w = safeWindow();
-//         if (!w) return null;
-//         const tier = w.localStorage.getItem(STORAGE_KEY);
-//         if (tier === "tier_1" || tier === "tier_2") return tier;
-//         return null;
-//     } catch {
-//         return null;
-//     }
-// }
+export function isValidTier(tier) {
+    return tier === PERFORMANCE_TIERS.HIGH || tier === PERFORMANCE_TIERS.LOW;
+}
 
-// export function saveCalibration(tier) {
-//     try {
-//         const w = safeWindow();
-//         if (w) w.localStorage.setItem(STORAGE_KEY, tier);
-//     } catch {
-//         // Ignore storage failures (e.g., incognito mode limits)
-//     }
-// }
+export function getSavedTier() {
+    try {
+        const w = safeWindow();
+        if (!w) return null;
 
-// function createProbeCanvas() {
-//     const w = safeWindow();
-//     if (!w || !w.document) return null;
-//     const canvas = w.document.createElement("canvas");
-//     canvas.width = 1;
-//     canvas.height = 1;
-//     Object.assign(canvas.style, {
-//         position: "fixed",
-//         left: "-9999px",
-//         opacity: "0",
-//         pointerEvents: "none"
-//     });
-//     return canvas;
-// }
+        const stored = w.localStorage.getItem(PERFORMANCE_TIER_STORAGE_KEY);
+        return isValidTier(stored) ? stored : null;
+    } catch (error) {
+        console.warn("PerformanceEngine: Storage read blocked by browser security restrictions:", error.message);
+        return null;
+    }
+}
 
-// export function probeGPUInfo() {
-//     const canvas = createProbeCanvas();
-//     const fallback = {
-//         vendor: "unknown",
-//         renderer: "unknown",
-//         maxTextureSize: 0,
-//         hardwareConcurrency: typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2,
-//         isWebGL2Available: false,
-//         caveatBlocked: true,
-//     };
-//     if (!canvas) return fallback;
+export function savePerformanceTier(tier) {
+    if (!isValidTier(tier)) return;
 
-//     let gl = null;
-//     let caveatBlocked = false;
-//     try {
-//         gl = canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) ||
-//             canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true });
-//         if (!gl) return fallback;
-//     } catch {
-//         return fallback;
-//     }
+    try {
+        const w = safeWindow();
+        if (!w) return;
 
-//     let vendor = "unknown";
-//     let renderer = "unknown";
-//     try {
-//         const ext = gl.getExtension("WEBGL_debug_renderer_info");
-//         if (ext) {
-//             vendor = gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) || "unknown";
-//             renderer = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || "unknown";
-//         }
-//     } catch {
-//         // Privacy settings blocked access
-//     }
+        w.localStorage.setItem(PERFORMANCE_TIER_STORAGE_KEY, tier);
 
-//     return {
-//         vendor,
-//         renderer,
-//         maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE) || 0,
-//         hardwareConcurrency: fallback.hardwareConcurrency,
-//         isWebGL2Available: typeof WebGL2RenderingContext !== "undefined" && gl instanceof WebGL2RenderingContext,
-//         caveatBlocked,
-//     };
-// }
+        try {
+            w.localStorage.removeItem(LEGACY_PERFORMANCE_TIER_STORAGE_KEY);
+        } catch (cleanupError) {
+            console.debug("PerformanceEngine: Failed to remove legacy migration keys:", cleanupError.message);
+        }
 
-// function classifyTier(gpu, fps) {
-//     if (gpu.caveatBlocked) return "tier_2";
-//     let score = 0;
-//     const gpuText = `${gpu.vendor} ${gpu.renderer}`;
+        w.dispatchEvent(new CustomEvent(PERFORMANCE_TIER_EVENT, { detail: tier }));
+    } catch (writeError) {
+        console.error("PerformanceEngine: State synchronization failed to save locally:", writeError.message);
+    }
+}
 
-//     // High-End Match
-//     if (/RTX|RX\s?(6|7)\d{3}|Radeon\s?Pro|M1\s?(Pro|Max|Ultra)|M2\s?(Pro|Max|Ultra)|M3|Apple\s?M\d\s?(Pro|Max|Ultra)/i.test(gpuText)) score += 35;
-//     // Mid-Range Match
-//     else if (/GTX|Radeon\s?Vega|Intel\s?Iris|Apple\s?M1|Apple\s?M2/i.test(gpuText)) score += 20;
+function getConnectionScore() {
+    const connection = typeof navigator !== "undefined" ? navigator.connection || navigator.mozConnection || navigator.webkitConnection : null;
 
-//     if (gpu.maxTextureSize >= 8192) score += 10;
-//     if (gpu.hardwareConcurrency >= 8) score += 5;
-//     if (fps >= 55) score += 30;
-//     else if (fps >= 45) score += 20;
+    if (!connection) return 8;
+    if (connection.saveData) return -15;
+    if (/(^|-)2g$/.test(connection.effectiveType || "")) return -10;
+    if (connection.downlink && connection.downlink < 2) return -5;
+    return 8;
+}
 
-//     return score >= 60 ? "tier_1" : "tier_2";
-// }
+export function probeGPUInfo() {
+    const fallback = {
+        vendor: "unknown",
+        renderer: "unknown",
+        maxTextureSize: 0,
+        hardwareConcurrency: typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2,
+        deviceMemory: typeof navigator !== "undefined" && navigator.deviceMemory ? navigator.deviceMemory : 4,
+        isWebGL2Available: false,
+        caveatBlocked: true,
+    };
 
-// export async function benchmarkFps(drawFrame, durationMs = 5000) {
-//     return new Promise((resolve) => {
-//         let frames = 0;
-//         let startedAt = 0;
-//         const tick = (t) => {
-//             if (!startedAt) startedAt = t;
-//             drawFrame();
-//             frames++;
-//             const elapsed = t - startedAt;
-//             if (elapsed >= durationMs) {
-//                 resolve((frames * 1000) / Math.max(elapsed, 1));
-//                 return;
-//             }
-//             requestAnimationFrame(tick);
-//         };
-//         requestAnimationFrame(tick);
-//     });
-// }
+    const w = safeWindow();
+    if (!w?.document) return fallback;
 
-// export async function calibratePerformance(drawFrame, durationMs = 5000) {
-//     const gpu = probeGPUInfo();
-//     if (gpu.caveatBlocked) return "tier_2";
-//     const fps = await benchmarkFps(drawFrame, durationMs);
-//     return classifyTier(gpu, fps);
-// }
+    const canvas = w.document.createElement("canvas");
+    let gl = null;
+
+    try {
+        gl =
+            canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" }) ||
+            canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" });
+    } catch (contextError) {
+        console.warn("PerformanceEngine: Context initialization rejected by high-performance hardware restriction rules:", contextError.message);
+        return fallback;
+    }
+
+    if (!gl) return fallback;
+
+    let vendor = "unknown";
+    let renderer = "unknown";
+
+    try {
+        const ext = gl.getExtension("WEBGL_debug_renderer_info");
+        if (ext) {
+            vendor = gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) || vendor;
+            renderer = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || renderer;
+        }
+    } catch (privacyError) {
+        console.warn("PerformanceEngine: Debug strings masked out by browser canvas fingerprinting protection settings:", privacyError.message);
+    }
+
+    const info = {
+        ...fallback,
+        vendor,
+        renderer,
+        maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE) || 0,
+        isWebGL2Available:
+            typeof WebGL2RenderingContext !== "undefined" &&
+            gl instanceof WebGL2RenderingContext,
+        caveatBlocked: false,
+    };
+
+    const loseContext = gl.getExtension("WEBGL_lose_context");
+    loseContext?.loseContext();
+    canvas.remove();
+
+    return info;
+}
+
+function runCpuSample(durationMs = 90) {
+    const startedAt = performance.now();
+    let iterations = 0;
+    let value = 0;
+
+    while (performance.now() - startedAt < durationMs) {
+        value += Math.sqrt(iterations % 997);
+        iterations += 1;
+    }
+
+    return iterations / Math.max(performance.now() - startedAt, 1);
+}
+
+export function benchmarkAnimationFrame(durationMs = 850) {
+    return new Promise((resolve) => {
+        const samples = [];
+        let frames = 0;
+        let last = 0;
+        let startedAt = 0;
+
+        const tick = (time) => {
+            if (!startedAt) {
+                startedAt = time;
+                last = time;
+            }
+
+            frames += 1;
+            samples.push(time - last);
+            last = time;
+
+            if (time - startedAt >= durationMs) {
+                const elapsed = Math.max(time - startedAt, 1);
+                const sorted = [...samples].sort((a, b) => a - b);
+                const p95 = sorted[Math.floor(sorted.length * 0.95)] || 16.7;
+
+                resolve({
+                    fps: (frames * 1000) / elapsed,
+                    p95FrameMs: p95,
+                });
+                return;
+            }
+            requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+    });
+}
+
+export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
+    if (gpu.caveatBlocked) return PERFORMANCE_TIERS.LOW;
+
+    let score = 0;
+    const gpuText = `${gpu.vendor} ${gpu.renderer}`;
+
+    if (/RTX\s?(40|50)|RX\s?(7[56]|8\d{2})|Radeon\s?Pro|Arc\s?(A|B)[12]\d|M[3-4]\s?(Pro|Max|Ultra)|Apple\s?M[3-4]|Apple\s?M\d\s?(Pro|Max|Ultra)|A17|A18/i.test(gpuText)) {
+        score += 36;
+    } else if (/RTX\s?30|RX\s?(6[67]\d{2}|5700)|GTX\s?1080|Vega|Iris\s?Xe|Apple\s?M1|Apple\s?M2|Adreno\s?8[78]|Mali.*G7[78]/i.test(gpuText)) {
+        score += 24;
+    } else if (/GTX|Radeon\s?RX\s?5\d{3}|Iris|Apple\s?M1|Adreno\s?[67]\d/i.test(gpuText)) {
+        score += 14;
+    } else if (/Intel|UHD|HD Graphics|Mali|Adreno/i.test(gpuText)) {
+        score += 6;
+    }
+
+    if (gpu.isWebGL2Available) score += 10;
+    if (gpu.maxTextureSize >= 8192) score += 12;
+    else if (gpu.maxTextureSize >= 4096) score += 6;
+
+    if (gpu.hardwareConcurrency >= 8) score += 12;
+    else if (gpu.hardwareConcurrency >= 4) score += 6;
+
+    if (gpu.deviceMemory >= 8) score += 10;
+    else if (gpu.deviceMemory >= 4) score += 5;
+    else score -= 8;
+
+    if (fps >= 56 && p95FrameMs <= 24) score += 22;
+    else if (fps >= 48 && p95FrameMs <= 32) score += 12;
+    else score -= 12;
+
+    if (cpuOps >= 36000) score += 10;
+    else if (cpuOps >= 22000) score += 5;
+    else score -= 8;
+
+    score += getConnectionScore();
+
+    return score >= 50 ? PERFORMANCE_TIERS.HIGH : PERFORMANCE_TIERS.LOW;
+}
+
+export async function calibratePerformance() {
+    if (typeof window === "undefined" || typeof performance === "undefined") {
+        return PERFORMANCE_TIERS.LOW;
+    }
+
+    const gpu = probeGPUInfo();
+    const [frameStats, cpuOps] = await Promise.all([
+        benchmarkAnimationFrame(),
+        new Promise((resolve) => {
+            window.setTimeout(() => resolve(runCpuSample()), 80);
+        }),
+    ]);
+
+    return classifyPerformanceTier({
+        gpu,
+        cpuOps,
+        fps: frameStats.fps,
+        p95FrameMs: frameStats.p95FrameMs,
+    });
+}

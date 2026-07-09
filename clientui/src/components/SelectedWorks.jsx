@@ -270,10 +270,12 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
         transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-none fixed left-0 top-0 z-50 hidden lg:block"
         style={{ x: springCardX, y: springCardY, perspective: 1400, transformStyle: "preserve-3d" }}>
+
         <motion.div style={{ x: driftX, y: driftY, rotateX, rotateY, transformStyle: "preserve-3d" }}
-          whileHover={{ scale: 1.01 }}
-          className="relative">
+          whileHover={{ scale: 1.01 }} className="relative">
+
           <div className="absolute -inset-6 rounded-[36px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),transparent_70%)] blur-2xl" />
+
           <motion.div initial={{ y: 6 }}
             animate={{ y: [0, -6, 0] }}
             transition={{ y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" } }}

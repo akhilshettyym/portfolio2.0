@@ -266,7 +266,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   }
 
   return (
-    <motion.div ref={panelRef}
+    <motion.div id="github" ref={panelRef}
       initial={isTier2 ? false : { opacity: 0, y: 34, filter: "blur(10px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.2 }}

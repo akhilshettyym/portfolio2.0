@@ -13,7 +13,7 @@ const InfoLayout = memo(function InfoLayout() {
     return (
         <div className="relative z-10 bg-white">
             {/* <HeroSection /> */}
-            {/* <SubjectProfile /> */}
+            <SubjectProfile />
             {/* <DevTicker /> */}
 
             <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>

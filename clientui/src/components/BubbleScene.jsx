@@ -351,11 +351,10 @@ const BubbleSceneComponent = () => {
             textures.forEach((texture) => texture.dispose());
             renderer.dispose();
         };
-        // Include isMobile in the dependency array so rotating the phone correctly triggers a re-draw
     }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier, isMobile]);
 
     return (
-        <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
+        <section id="skills" className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
             <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-[400px]">
                 <div className="bubble-grid" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-one mt-10" aria-hidden="true" />

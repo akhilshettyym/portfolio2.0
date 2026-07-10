@@ -116,7 +116,7 @@ const SubjectProfile = () => {
     }, [carouselData.length]);
 
     return (
-        <section className="relative w-full min-h-screen bg-white text-slate-900 font-sans selection:bg-slate-900 selection:text-white py-12 px-4 md:px-12 overflow-hidden">
+        <section id="about" className="relative w-full min-h-screen bg-white text-slate-900 font-sans selection:bg-slate-900 selection:text-white py-12 px-4 md:px-12 overflow-hidden">
             <div className="relative z-10">
                 <div className="grid grid-cols-1 items-end gap-y-14 md:grid-cols-12 md:gap-x-8">
                     <motion.div {...FADEUP} className="md:col-span-8">

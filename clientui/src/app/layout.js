@@ -6,6 +6,7 @@ import { LenisProvider } from "@/context/LenisContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import PerformanceBootstrap from "@/components/PerformanceBootstrap";
+import HashScrollListener from "@/components/HashScrollListener";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -19,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AKHIL SHETTY",
+  title: "Akhil Shetty",
   description: "Ofc it's me",
 };
 
@@ -31,18 +32,19 @@ export default function RootLayout({ children }) {
         <PerformanceBootstrap>
 
           <LenisProvider>
-            {/* <LoaderWrapper> */}
+            <LoaderWrapper>
 
-              {/* <NavbarWrapper>
+              <NavbarWrapper>
                 <Navbar />
-              </NavbarWrapper> */}
+              </NavbarWrapper>
 
               <main className="relative pt-25">
+                <HashScrollListener />
                 {children}
                 <ToastContainer />
               </main>
 
-            {/* </LoaderWrapper> */}
+            </LoaderWrapper>
           </LenisProvider>
         </PerformanceBootstrap>
       </body>

@@ -485,7 +485,7 @@ const MyExperienceComponent = () => {
   };
 
   return (
-    <div className="experience-wrapper" style={{ height: `${COMPONENT_HEIGHT}` }}>
+    <div id="experience" className="experience-wrapper" style={{ height: `${COMPONENT_HEIGHT}` }}>
       <div className="controls">
         <LiquidGlass width="65px" height="40px" padding="p-0">
           <button className="flex items-center justify-center w-full h-full text-sm font-medium tracking-wide text-zinc-500 transition-colors duration-200 hover:text-zinc-700 pb-6" onClick={toggleAnimation}>

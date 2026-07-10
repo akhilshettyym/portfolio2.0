@@ -13,7 +13,9 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  const renderedCards = isTier2 ? cards.slice(0, Math.min(cards.length, 4)) : cards;
+  const renderStackedCards = isMobile || isTier2;
+
+  const renderedCards = renderStackedCards ? cards.slice(0, Math.min(cards.length, 4)) : cards;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -26,18 +28,18 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
     mass: 1.1,
   });
 
-  const backgroundBlur = useTransform(progress, [0, 0.4, 0.8], isTier2 ? [0, 0, 0] : [0, 5, 12]);
+  const backgroundBlur = useTransform(progress, [0, 0.4, 0.8], renderStackedCards ? [0, 0, 0] : [0, 5, 12]);
   const backgroundFilter = useMotionTemplate`blur(${backgroundBlur}px)`;
 
   const displayProgress = progress;
 
   return (
-    <section ref={sectionRef} className={`relative bg-white w-full ${isTier2 ? "h-auto py-15" : "h-[425vh]"}`}>
-      <div className={`${isTier2 ? "relative h-auto" : "sticky top-0 h-screen"} w-full overflow-visible bg-white`}>
+    <section id="achievements" ref={sectionRef} className={`relative bg-white w-full ${renderStackedCards ? "h-auto py-15" : "h-[425vh]"}`}>
+      <div className={`${renderStackedCards ? "relative h-auto" : "sticky top-0 h-screen"} w-full overflow-visible bg-white`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)] pointer-events-none" />
 
-        <div className={`${isTier2 ? "relative py-5" : "absolute inset-0 pointer-events-none flex items-center justify-center z-0"}`}>
-          <motion.div className="flex flex-col items-center gap-3 text-center w-full" style={{ filter: isTier2 ? "none" : backgroundFilter }}>
+        <div className={`${renderStackedCards ? "relative py-5" : "absolute inset-0 pointer-events-none flex items-center justify-center z-0"}`}>
+          <motion.div className="flex flex-col items-center gap-3 text-center w-full" style={{ filter: renderStackedCards ? "none" : backgroundFilter }}>
             <div className="text-3xl font-black uppercase text-black/50 tracking-wider">
               Achievements
             </div>
@@ -47,10 +49,10 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
           </motion.div>
         </div>
 
-        <div className={`relative w-full flex items-center justify-center ${isTier2 ? "h-auto px-4 mt-8" : "h-full overflow-hidden z-10"}`}>
-          <div className={`w-full max-w-7xl mx-auto ${isTier2 ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center" : "relative h-full"}`}>
+        <div className={`relative w-full flex items-center justify-center ${renderStackedCards ? "h-auto px-4 mt-8" : "h-full overflow-hidden z-10"}`}>
+          <div className={`w-full max-w-7xl mx-auto ${renderStackedCards ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center" : "relative h-full"}`}>
             {renderedCards.map((card, index) => (
-              isTier2 ? (
+              renderStackedCards ? (
                 <div key={`${card.title}-${index}`} className="w-full max-w-[25rem] flex flex-col justify-between p-6 rounded-lg border border-neutral-200 bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
 
                   <div className="mb-4 flex items-start justify-between">

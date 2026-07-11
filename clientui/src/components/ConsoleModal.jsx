@@ -79,7 +79,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
     const executeCommand = (cmd) => {
         let command = cmd.trim().toLowerCase();
 
-        const nonSlashCommands = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git"];
+        const nonSlashCommands = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work"];
         if (!command.startsWith("/") && !nonSlashCommands.some(c => command.startsWith(c)) && command !== "") {
             command = "/" + command;
         }
@@ -87,18 +87,34 @@ const ConsoleModal = ({ isOpen, onClose }) => {
         let output = "";
 
         const handleNavigation = (path, hash) => {
+            const scrollToElement = () => {
+                const elementId = hash.replace("#", "");
+                const element = document.getElementById(elementId);
+                if (element) {
+                    // Use requestAnimationFrame to ensure DOM is ready
+                    requestAnimationFrame(() => {
+                        element.scrollIntoView({ behavior: "smooth", block: "start" });
+                    });
+                } else {
+                    setTimeout(() => {
+                        const el = document.getElementById(elementId);
+                        if (el) {
+                            el.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                    }, 500);
+                }
+            };
+
             if (pathname === path) {
                 if (window.location.hash === hash) {
-                    const elementId = hash.replace("#", "");
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        element.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }
+                    scrollToElement();
                 } else {
                     window.location.hash = hash;
+                    setTimeout(scrollToElement, 100);
                 }
             } else {
                 router.push(`${path}${hash}`);
+                setTimeout(scrollToElement, 800);
             }
         };
 
@@ -221,41 +237,6 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                 );
                 break;
 
-            case "/projects":
-                handleNavigation("/work", "#projects");
-                output = (
-                    <div className="space-y-4 mt-2">
-                        <div>
-                            <span className="font-bold text-white">Featured Work</span>
-                            <br />
-                            2 projects • 2021–2026
-                        </div>
-
-                        <div>
-                            <span className="text-yellow-400">2026</span>
-                            <br />
-                            <span className="font-bold text-white">Apex Logistics</span> — Supply Chain Command Center
-                            <br />
-                            Architected real-time fleet tracking interfaces with geo-fencing controls and interactive route planning nodes.
-                            <br />
-                            <span className="text-gray-400">UI/UX Design • Dashboard • Logistics</span>
-                            <br />✦ 42% routing efficiency ✦ Zero-latency state management ✦ 12ms data updates
-                        </div>
-
-                        <div>
-                            <span className="text-yellow-400">2025</span>
-                            <br />
-                            <span className="font-bold text-white">NovaPay</span> — FinTech Dashboard Engine
-                            <br />
-                            Refactored micro-frontend transactions dashboard featuring modular widget compositions and dynamic charts.
-                            <br />
-                            <span className="text-gray-400">Frontend Dev • Data Viz • FinTech</span>
-                            <br />✦ 65% faster TTFB ✦ 99.9% uptime tracking ✦ Next.js 15 SSR
-                        </div>
-                    </div>
-                );
-                break;
-
             case "/skills":
                 handleNavigation("/", "#skills");
                 output = (
@@ -273,7 +254,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Next.js / React</span>
                                     <span className="text-cyan-400">85%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-cyan-500" style={{ width: '85%' }}></div>
                                 </div>
                             </div>
@@ -283,7 +264,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>MERN Stack</span>
                                     <span className="text-emerald-400">80%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-emerald-500" style={{ width: '80%' }}></div>
                                 </div>
                             </div>
@@ -293,7 +274,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Docker & DevOps</span>
                                     <span className="text-blue-400">40%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-blue-500" style={{ width: '40%' }}></div>
                                 </div>
                             </div>
@@ -303,7 +284,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Salesforce CRM</span>
                                     <span className="text-amber-400">75%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-amber-500" style={{ width: '75%' }}></div>
                                 </div>
                             </div>
@@ -313,7 +294,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>UI & Visual Design</span>
                                     <span className="text-sky-400">75%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-sky-500" style={{ width: '75%' }}></div>
                                 </div>
                             </div>
@@ -323,7 +304,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Core Java</span>
                                     <span className="text-red-400">60%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-red-500" style={{ width: '60%' }}></div>
                                 </div>
                             </div>
@@ -333,7 +314,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Motion Graphics</span>
                                     <span className="text-purple-400">65%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-purple-500" style={{ width: '65%' }}></div>
                                 </div>
                             </div>
@@ -343,7 +324,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Component Architecture</span>
                                     <span className="text-green-400">85%</span>
                                 </div>
-                                <div className="mt-1 h-[2px] w-full bg-neutral-900">
+                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
                                     <div className="h-full bg-green-500" style={{ width: '85%' }}></div>
                                 </div>
                             </div>
@@ -439,24 +420,67 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                     </div>
                 );
                 break;
-            case "/skills":
-                handleNavigation("/", "#skills");
-                output = "Navigating to skills section...";
+
+            case "/achievements":
+                handleNavigation("/", "#achievements");
+                output = (
+                    <div className="text-[11px]">
+                        <span className="text-emerald-400">Navigating to achievements section...</span>
+                    </div>
+                );
                 break;
+
             case "/socials":
             case "/social":
                 handleNavigation("/", "#socials");
-                output = "Navigating to socials...";
+                output = (
+                    <div className="text-[11px]">
+                        <span className="text-emerald-400">Navigating to socials section...</span>
+                    </div>
+                );
                 break;
+
+            case "/projects":
+                handleNavigation("/work", "#projects");
+                output = (
+                    <div className="text-[11px]">
+                        <span className="text-emerald-400">Navigating to projects section on /work...</span>
+                    </div>
+                );
+                break;
+
+            case "work":
+            case "/experience":
+                handleNavigation("/work", "#experience");
+                output = (
+                    <div className="text-[11px]">
+                        <span className="text-emerald-400">Navigating to experience section on /work...</span>
+                    </div>
+                );
+                break;
+
+            case "github":
+            case "/github":
+                handleNavigation("/work", "#github");
+                output = (
+                    <div className="text-[11px]">
+                        <span className="text-emerald-400">Navigating to GitHub section on /work...</span>
+                    </div>
+                );
+                break;
+
             case "clear":
                 setHistory([]);
                 return;
+
             case "close":
             case "exit":
                 handleClose();
                 return;
+
             case "":
                 break;
+
             default:
                 output = `zsh: command not found: ${command}. Type /help for available commands.`;
         }
@@ -498,7 +522,6 @@ const ConsoleModal = ({ isOpen, onClose }) => {
     const getProgressBar = () => {
         const fill = Math.min(100, bootProgress);
         const blocks = Math.floor(fill / 4);
-        // return `[${" █".repeat(blocks)}${" ".repeat(25 - blocks)}] ${fill}%`;
         return (
             <>
                 {`[`}
@@ -512,8 +535,8 @@ const ConsoleModal = ({ isOpen, onClose }) => {
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
-            <div className={`pointer-events-auto relative flex flex-col bg-[#1e1e1e] border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${getAnimationClasses()} ${isExpanded ? "w-[800px] h-[500px]" : "w-[600px] h-[400px]"}`}>
+        <div className="fixed inset-0 z-9999 flex items-center justify-center pointer-events-none">
+            <div className={`pointer-events-auto relative flex flex-col bg-[#1e1e1e] border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${getAnimationClasses()} ${isExpanded ? "w-200 h-125" : "w-150 h-100"}`}>
 
                 <div className="h-8 bg-[#2d2d2d] flex items-center px-4 w-full select-none shrink-0">
                     <div className="flex space-x-2">
@@ -533,7 +556,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div
-                    className="flex-1 p-4 bg-[#1e1e1e] text-[#00ff00] font-mono text-xs overflow-auto cursor-text scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="flex-1 p-4 bg-[#1e1e1e] text-[#00ff00] font-mono text-xs overflow-auto cursor-text scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]"
                     onClick={handleTerminalClick}
                 >
                     {bootPhase !== "complete" && (
@@ -606,16 +629,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
 
                             <form onSubmit={handleCommandSubmit} className="flex items-center mt-1">
                                 <span className="text-blue-400 mr-2">user@macbook:~$</span>
-                                <input
-                                    ref={inputRef}
-                                    type="text"
-                                    value={inputValue}
-                                    onChange={(e) => setInputValue(e.target.value)}
-                                    className="bg-transparent border-none outline-none text-[#00ff00] flex-1 caret-[#00ff00]"
-                                    autoFocus
-                                    spellCheck="false"
-                                    autoComplete="off"
-                                />
+                                <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} className="bg-transparent border-none outline-none text-[#00ff00] flex-1 caret-[#00ff00]" autoFocus spellCheck="false" autoComplete="off" />
                             </form>
                             <div ref={terminalEndRef} />
                         </div>

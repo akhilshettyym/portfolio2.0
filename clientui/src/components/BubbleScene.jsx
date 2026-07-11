@@ -4,7 +4,7 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, useReducedMotion } from "framer-motion";
 import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
@@ -354,8 +354,8 @@ const BubbleSceneComponent = () => {
     }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier, isMobile]);
 
     return (
-        <section id="skills" className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
-            <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-[400px]">
+        <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
+            <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-100">
                 <div className="bubble-grid" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-one mt-10" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-two mt-5" aria-hidden="true" />

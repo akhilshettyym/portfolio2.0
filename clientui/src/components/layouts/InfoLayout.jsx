@@ -12,26 +12,34 @@ import CardStackRevealTiered from "@/components/TieredComponents/CardStackReveal
 const InfoLayout = memo(function InfoLayout() {
     return (
         <div className="relative z-10 bg-white">
-            {/* <HeroSection /> */}
-            <SubjectProfile />
-            {/* <DevTicker /> */}
+            <section id="about">
+                <HeroSection />
+                <SubjectProfile />
+            </section>
+            <DevTicker />
 
-            <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                {/* <BubbleSceneTiered /> */}
-            </LazyLoad>
+            <section id="achievements">
+                <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
+                    <BubbleSceneTiered />
+                </LazyLoad>
+            </section>
 
-            <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                {/* <CardStackRevealTiered /> */}
-            </LazyLoad>
+            <section id="skills">
+                <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
+                    <CardStackRevealTiered />
+                </LazyLoad>
+            </section>
 
             <div className="relative z-0 bg-white">
-                <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
-                    {/* <MySocialsTiered /> */}
-                </LazyLoad>
+                <section id="socials">
+                    <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
+                        <MySocialsTiered />
+                    </LazyLoad>
+                </section>
             </div>
 
-            {/* <EmergencyCTA /> */}
-            {/* <Footer /> */}
+            <EmergencyCTA />
+            <Footer />
         </div>
     );
 });

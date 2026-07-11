@@ -5,7 +5,7 @@ import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic-utils";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion";
@@ -266,7 +266,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   }
 
   return (
-    <motion.div id="github" ref={panelRef}
+    <motion.div ref={panelRef}
       initial={isTier2 ? false : { opacity: 0, y: 34, filter: "blur(10px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.2 }}
@@ -362,7 +362,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
         </p>
       </div>
 
-      <div className="min-h-[240px] w-full rounded-xl border border-gray-200 bg-white p-4 md:p-6 shadow-sm">
+      <div className="min-h-60 w-full rounded-xl border border-gray-200 bg-white p-4 md:p-6 shadow-sm">
         {loading ? (
           <div className="flex h-65 items-center justify-center">
             <div className="flex items-center gap-3">
@@ -375,7 +375,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
         ) : (
           <>
             {weeks.length > 0 && (
-              <div className={`mb-3 ml-8 grid text-[10px] font-bold uppercase tracking-wider text-gray-500 ${isMobile ? "max-w-[340px] mx-auto" : ""}`} style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}>
+              <div className={`mb-3 ml-8 grid text-[10px] font-bold uppercase tracking-wider text-gray-500 ${isMobile ? "max-w-85 mx-auto" : ""}`} style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}>
                 {monthLabels.map((month) => (
                   <div key={month.index} style={{ gridColumnStart: month.index + 1 }}>
                     {month.label}
@@ -391,7 +391,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
               </div>
 
               {weeks.length > 0 ? (
-                <div className={`grid flex-1 gap-1 overflow-hidden ${isMobile ? "max-w-[340px]" : ""}`} style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}>
+                <div className={`grid flex-1 gap-1 overflow-hidden ${isMobile ? "max-w-85" : ""}`} style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}>
                   {weeks.map((week, weekIndex) => (
                     <div key={weekIndex} className="grid grid-rows-7 gap-1">
 
@@ -411,7 +411,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                             transition={{ delay: isTier2 ? 0 : weekIndex * 0.006 + dayIndex * 0.001, duration: isTier2 ? 0 : 0.12 }}
                             whileHover={isTier2 ? undefined : { scale: 1.15, zIndex: 10 }}
                             title={`${day.contributionCount} contributions on ${day.date}`}
-                            className="aspect-square w-full rounded-[2px] transition-all duration-100 cursor-crosshair border border-black/5"
+                            className="aspect-square w-full rounded-xs transition-all duration-100 cursor-crosshair border border-black/5"
                             style={{ backgroundColor }} />
                         );
                       })}
@@ -431,7 +431,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                 <span> Less </span>
                 <div className="flex gap-1">
                   {themeColors.map((color) => (
-                    <div key={color} className="h-3 w-3 rounded-[2px] border border-black/5" style={{ backgroundColor: color }} />
+                    <div key={color} className="h-3 w-3 rounded-xs border border-black/5" style={{ backgroundColor: color }} />
                   ))}
                 </div>
                 <span> More </span>

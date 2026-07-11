@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { Suspense, useEffect, useState } from "react";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 

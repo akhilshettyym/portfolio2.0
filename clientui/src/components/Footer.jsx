@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { SOCIALS } from "@/utils/basic-utils";
 import { goToTop } from "@/utils/funct-utils";
 import { FaRegCopyright } from "react-icons/fa6";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
@@ -80,13 +80,18 @@ const FooterComponent = () => {
     const router = useRouter();
     const sectionRef = useRef(null);
     const [shouldSnap, setShouldSnap] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
     const prefersReducedMotion = useReducedMotion();
 
     const { isMobile } = useDeviceType();
     const { isTier2 } = usePerformanceTier();
 
+    useEffect(() => {
+        setIsHydrated(true);
+    }, []);
+
     const { scrollYProgress } = useScroll({
-        target: sectionRef,
+        target: isHydrated ? sectionRef : null,
         offset: ["start end", "end start"],
     });
 
@@ -221,7 +226,7 @@ const FooterComponent = () => {
 
                                                         <div className="flex-1 bg-gray-200 rounded-md p-4">
                                                             <div className="absolute top-4 right-5 z-10 bg-gray-200 mt-1">
-                                                                <Image src="/footer/animated_zigzag.gif" alt="Animated zigzag pattern" width={200} height={80} unoptimized className="h-20 w-auto object-contain mix-blend-multiply" />
+                                                                <Image src="/footer/animated_zigzag.gif" alt="Animated zigzag pattern" width={200} height={80} unoptimized className="h-20 w-auto object-contain mix-blend-multiply" style={{ width: 'auto', height: 'auto' }} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -369,7 +374,7 @@ const FooterComponent = () => {
                             <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:h-[70vh] min-h-fit">
 
                                 <div className="w-full text-white lg:w-[60%] flex flex-col gap-4">
-                                    <div className="flex flex-col items-center justify-center p-4 text-indigo-900 bg-slate-50 rounded-md min-h-[150px] lg:flex-1">
+                                    <div className="flex flex-col items-center justify-center p-4 text-indigo-900 bg-slate-50 rounded-md min-h-37.5 lg:flex-1">
                                         <div className="overflow-hidden w-full text-center">
                                             {isTier2 ? (
                                                 <>
@@ -392,7 +397,7 @@ const FooterComponent = () => {
                                                     This section is built to feel alive
                                                 </div>
 
-                                                <div className={`flex-1 bg-gray-200 rounded-md relative ${isMobile ? "min-h-[60px]" : "p-4 min-h-[80px]"}`}>
+                                                <div className={`flex-1 bg-gray-200 rounded-md relative ${isMobile ? "min-h-15" : "p-4 min-h-20"}`}>
                                                     <div className="absolute top-2 sm:top-4 sm:right-5 z-10 bg-gray-200">
                                                         <Image src="/footer/animated_zigzag.gif" alt="Animated zigzag pattern" width={200} height={80} unoptimized className="h-14 sm:h-20 w-auto object-contain mix-blend-multiply" />
                                                     </div>
@@ -410,7 +415,7 @@ const FooterComponent = () => {
 
                                 <div className="flex w-full flex-col gap-4 bg-white p-4 sm:p-6 shadow-sm border border-slate-100 rounded-md lg:w-[40%] lg:h-full">
 
-                                    <div className="flex flex-row gap-4 w-full min-h-[100px] lg:h-[35%] bg-slate-50 rounded-md p-4">
+                                    <div className="flex flex-row gap-4 w-full min-h-25 lg:h-[35%] bg-slate-50 rounded-md p-4">
                                         <div className="w-1/2 p-2 flex items-center justify-center">
                                             <Image src="/footer/animated_blob_gloop.gif" alt="animated blob gloop" width={380} height={35} loading="lazy" unoptimized className="w-full h-auto max-h-16 object-contain mix-blend-multiply" />
                                         </div>
@@ -522,9 +527,17 @@ const FooterComponent = () => {
     }
 
     const render = () => {
-        const renderFooter = isTier2 || isMobile;
+        const renderFooter = isMobile || isTier2;
 
-        return renderFooter ? renderTierTwoFooter() : renderTierOneFooter();
+        if (!isHydrated) {
+            return null;
+        }
+
+        return (
+            <div key={renderFooter ? "tier2" : "tier1"}>
+                {renderFooter ? renderTierTwoFooter() : renderTierOneFooter()}
+            </div>
+        );
     };
 
     return render();

@@ -16,7 +16,11 @@ const GithubGraphQlTiered = (props) => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        const handle = setTimeout(() => {
+            setMounted(true);
+        }, 0);
+
+        return () => clearTimeout(handle);
     }, []);
 
     if (!mounted || !ready) {

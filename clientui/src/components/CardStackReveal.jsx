@@ -1,8 +1,8 @@
 "use client";
 
 import { DEFAULT_CARDS } from "@/utils/basic-utils";
-import { useDeviceType } from "@/utils/useDeviceType";
-import React, { useState, useRef, memo } from "react";
+import { useDeviceType } from "@/hooks/useDeviceType";
+import React, { useState, useRef, memo, useEffect } from "react";
 import FloatingCard from "@/components/basic/FloatingCard";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
@@ -10,6 +10,8 @@ import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "f
 const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
   const sectionRef = useRef(null);
   const [hoveredCard, setHoveredCard] = useState(-1);
+  // const [isHydrated, setIsHydrated] = useState(false);
+
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
@@ -17,8 +19,17 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
 
   const renderedCards = renderStackedCards ? cards.slice(0, Math.min(cards.length, 4)) : cards;
 
+  // useEffect(() => {
+  //   setIsHydrated(true);
+  // }, []);
+
+  // const { scrollYProgress } = useScroll({
+  //   target: isHydrated && !renderStackedCards ? sectionRef : null,
+  //   offset: ["start start", "end end"],
+  // });
+
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: !renderStackedCards ? sectionRef : undefined,
     offset: ["start start", "end end"],
   });
 
@@ -34,7 +45,7 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
   const displayProgress = progress;
 
   return (
-    <section id="achievements" ref={sectionRef} className={`relative bg-white w-full ${renderStackedCards ? "h-auto py-15" : "h-[425vh]"}`}>
+    <section ref={sectionRef} className={`relative bg-white w-full ${renderStackedCards ? "h-auto py-15" : "h-[425vh]"}`}>
       <div className={`${renderStackedCards ? "relative h-auto" : "sticky top-0 h-screen"} w-full overflow-visible bg-white`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)] pointer-events-none" />
 
@@ -53,7 +64,7 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
           <div className={`w-full max-w-7xl mx-auto ${renderStackedCards ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center" : "relative h-full"}`}>
             {renderedCards.map((card, index) => (
               renderStackedCards ? (
-                <div key={`${card.title}-${index}`} className="w-full max-w-[25rem] flex flex-col justify-between p-6 rounded-lg border border-neutral-200 bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div key={`${card.title}-${index}`} className="w-full max-w-100 flex flex-col justify-between p-6 rounded-lg border border-neutral-200 bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
 
                   <div className="mb-4 flex items-start justify-between">
                     <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-neutral-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55">

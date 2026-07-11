@@ -4,7 +4,7 @@ import Image from "next/image";
 import "@/styles/emergency_cta.css";
 import { useRouter } from "next/navigation";
 import { goToTop } from "@/utils/funct-utils";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const EmergencyCTA = () => {

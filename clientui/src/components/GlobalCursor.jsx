@@ -1,7 +1,7 @@
 "use client";
 
 import "@/styles/global_cursor.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const GlobalCursor = () => {
@@ -9,8 +9,12 @@ const GlobalCursor = () => {
     const frameRef = useRef(null);
     const pointRef = useRef({ x: 0, y: 0 });
     const { isTier2 } = usePerformanceTier();
+    
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
+        
         const cursor = cursorRef.current;
         const supportsFinePointer = window.matchMedia("(pointer: fine)").matches;
         if (!cursor || !supportsFinePointer) return undefined;
@@ -48,8 +52,16 @@ const GlobalCursor = () => {
         };
     }, []);
 
+    const currentTier = isMounted ? (isTier2 ? "low" : "high") : "high";
+
     return (
-        <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" data-tier={isTier2 ? "low" : "high"} />
+        <div 
+            ref={cursorRef} 
+            className="global-cursor-dot" 
+            aria-hidden="true" 
+            data-active="false" 
+            data-tier={currentTier} 
+        />
     );
 };
 

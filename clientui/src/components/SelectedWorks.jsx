@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { memo, useEffect, useRef, useState } from "react";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";

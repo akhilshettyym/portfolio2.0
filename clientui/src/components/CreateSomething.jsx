@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import React, { useState } from "react";
-import { useDeviceType } from "@/utils/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
 import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic-utils";
@@ -200,7 +200,7 @@ const CreateSomething = () => {
                             <div>
                                 <h3 className="mb-6 text-sm font-bold uppercase tracking-widest border-b border-black pb-2 flex justify-between items-baseline w-full">
                                     <span> About You </span>
-                                    <span className="text-[10px] font-normal tracking-normal text-red-500 text-neutral-500 capitalize">
+                                    <span className="text-[10px] font-normal tracking-normal text-red-500 capitalize">
                                         {" "} * Required Details{" "}
                                     </span>
                                 </h3>

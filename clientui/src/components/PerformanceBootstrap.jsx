@@ -7,8 +7,8 @@ import { calibratePerformance, getSavedTier, PERFORMANCE_TIER_EVENT, PERFORMANCE
 export const PerformanceTierContext = createContext(null);
 
 export default function PerformanceBootstrap({ children }) {
-    const [tier, setTier] = useState(PERFORMANCE_TIERS.LOW);
-    const [ready, setReady] = useState(false);
+    const [tier, setTier] = useState(() => getSavedTier() || PERFORMANCE_TIERS.LOW);
+    const [ready, setReady] = useState(() => Boolean(getSavedTier()));
     const [calibrating, setCalibrating] = useState(false);
 
     const runCalibration = useCallback(async () => {
@@ -25,18 +25,13 @@ export default function PerformanceBootstrap({ children }) {
     }, []);
 
     useEffect(() => {
-        const savedTier = getSavedTier();
-        if (savedTier) {
-            setTier(savedTier);
-            setReady(true);
-            return undefined;
-        }
+        if (ready) return undefined;
 
         const id = window.setTimeout(() => {
             runCalibration();
         }, 120);
         return () => window.clearTimeout(id);
-    }, [runCalibration]);
+    }, [ready, runCalibration]);
 
     useEffect(() => {
         const onTierChange = (event) => {

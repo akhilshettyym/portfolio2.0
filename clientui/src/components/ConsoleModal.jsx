@@ -143,7 +143,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                 break;
 
             case "/work":
-                handleNavigation("/", "#work");
+                handleNavigation("/work", "#work");
                 output = (
                     <>
                         <div className="w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
@@ -357,6 +357,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                     </div>
                 );
                 break;
+
             case "whoami":
                 output = (
                     <div className="mt-2">
@@ -366,6 +367,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                     </div>
                 );
                 break;
+
             case "/secrets":
                 output = (
                     <div className="mt-2 space-y-2">
@@ -388,6 +390,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                     </div>
                 );
                 break;
+
             case "/help":
                 output = (
                     <div className="mt-2 space-y-4">
@@ -449,7 +452,6 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                 );
                 break;
 
-            case "work":
             case "/experience":
                 handleNavigation("/work", "#experience");
                 output = (
@@ -465,6 +467,18 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                 output = (
                     <div className="text-[11px]">
                         <span className="text-emerald-400">Navigating to GitHub section on /work...</span>
+                    </div>
+                );
+                break;
+
+            case "/connect":
+            case "connect":
+            case "create":
+            case "/create":
+                handleNavigation("/start", "");
+                output = (
+                    <div className="text-[11px]">
+                        <span className="text-emerald-400">Navigating to Create Something section on /start...</span>
                     </div>
                 );
                 break;

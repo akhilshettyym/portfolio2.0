@@ -13,9 +13,10 @@ const InfoLayout = memo(function InfoLayout() {
     return (
         <div className="relative z-10 bg-white">
             <section id="about">
-                <HeroSection />
+                {/* <HeroSection /> */}
                 <SubjectProfile />
             </section>
+
             <DevTicker />
 
             <section id="achievements">
@@ -38,8 +39,8 @@ const InfoLayout = memo(function InfoLayout() {
                 </section>
             </div>
 
-            <EmergencyCTA />
-            <Footer />
+            {/* <EmergencyCTA /> */}
+            {/* <Footer /> */}
         </div>
     );
 });

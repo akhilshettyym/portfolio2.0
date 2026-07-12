@@ -264,7 +264,7 @@ const BubbleSceneComponent = () => {
                     bubble.lookAt(camera.position);
                 });
 
-                if (!isTier2 && frame % 2 === 0) {
+                if (!isTier2 && frame % 3 === 0) {
                     handleCollisions();
                 }
             }

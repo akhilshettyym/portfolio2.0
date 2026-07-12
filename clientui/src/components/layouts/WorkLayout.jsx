@@ -26,8 +26,8 @@ const WorkLayout = memo(
           </LazyLoad>
         </section>
 
-        <EmergencyCTA />
-        <Footer />
+        {/* <EmergencyCTA /> */}
+        {/* <Footer /> */}
       </div>
     );
   },

@@ -351,12 +351,12 @@ const HeroSectionComponent = () => {
 
         init();
 
-        window.addEventListener("mousemove", onMouseMove);
-        window.addEventListener("resize", onResize);
+        window.addEventListener("mousemove", onMouseMove, { passive: true });
+        window.addEventListener("resize", onResize, { passive: true });
 
         if (btn) {
-            btn.addEventListener("mousemove", handleBtnMouseMove);
-            btn.addEventListener("mouseleave", handleBtnMouseLeave);
+            btn.addEventListener("mousemove", handleBtnMouseMove, { passive: true });
+            btn.addEventListener("mouseleave", handleBtnMouseLeave, { passive: true });
         }
 
         return () => {

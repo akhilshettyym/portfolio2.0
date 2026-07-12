@@ -21,7 +21,6 @@ const Loader = ({ onFinish, duration = 3000 }) => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Hydration & responsive guards
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -29,16 +28,13 @@ const Loader = ({ onFinish, duration = 3000 }) => {
   const progressRef = useRef(0);
   const pausePointRef = useRef(null);
 
-  // Determine a random point to pause for the location modal
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;
   }, []);
 
-  // Handle client-side mounting and media queries
   useEffect(() => {
     const media = window.matchMedia("(max-width: 640px)");
 
-    // Safely defer state transformations away from the layout-mount paint block
     const handle = setTimeout(() => {
       setMounted(true);
       setIsMobile(media.matches);
@@ -53,7 +49,6 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     };
   }, []);
 
-  // Progress animation loop
   useEffect(() => {
     let frameId;
 
@@ -92,10 +87,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     };
   }, [duration, isPaused, onFinish]);
 
-  // Three.js Scene Setup
   useEffect(() => {
-    // Optimization: Prevent initialization until the component has mounted 
-    // and the correct client-side responsive environment state is known.
     if (!mounted || !containerRef.current) return;
     const container = containerRef.current;
 
@@ -184,7 +176,6 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     };
   }, [mounted, isMobile, quality.antialias, quality.particleMultiplier, tier]);
 
-  // Handle outro GSAP transitions once progress is complete
   useEffect(() => {
     if (!done) return;
 
@@ -203,8 +194,7 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     }, 300);
   };
 
-  // UI Circular Progress calculations
-  const radius = isMobile ? 70 : 85;
+  const radius = isMobile ? 70 : 100;
   const stroke = 4;
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
@@ -212,14 +202,12 @@ const Loader = ({ onFinish, duration = 3000 }) => {
 
   return (
     <div className="fixed inset-0 z-999 overflow-hidden bg-white">
-      {/* Visual Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.10),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.06),transparent_55%)]" />
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-blue-50/10 to-transparent" />
       </div>
 
-      {/* Decorative Grid Markers */}
       <div className="absolute inset-0 pointer-events-none text-black text-xl font-light">
         <div className="absolute top-4 left-4"> + </div>
         <div className="absolute top-4 right-4"> + </div>
@@ -227,41 +215,67 @@ const Loader = ({ onFinish, duration = 3000 }) => {
         <div className="absolute bottom-4 right-4"> + </div>
       </div>
 
-      {/* Three.js Canvas Container */}
       <div ref={containerRef} className="absolute inset-0" />
 
-      {/* Main Loader Core Layout */}
       <div className="absolute inset-0 flex items-center justify-center">
         {mounted && (
-          /* Client Hydrated State: Adapts safely to mobile or desktop sizes */
-          <div className={`relative flex items-center justify-center ${isMobile ? "w-36 h-36" : "w-50 h-50"}`}>
-            <svg height={isMobile ? 160 : 200} width={isMobile ? 160 : 200} className="absolute -rotate-90">
-              <circle stroke="rgba(0,0,0,0.08)" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx="50%" cy="50%" />
-              <circle stroke="black" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear", filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))" }} />
+          <div className={`relative flex flex-col items-center justify-center ${isMobile ? "w-44 h-44" : "w-56 h-56"}`}>
+
+            <svg className="absolute inset-0 w-full h-full animate-[spin_12s_linear_infinite]" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" strokeDasharray="2 6" />
+              <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth="0.5" strokeDasharray="10 10" />
             </svg>
 
-            <div className={`text-black font-normal tabular-nums ${isMobile ? "text-xl" : "text-2xl"}`}>
-              {Math.floor(progress)}%
+            <svg className="absolute inset-0 w-full h-full animate-[spin_20s_linear_infinite_reverse]" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="1" strokeDasharray="30 10" />
+            </svg>
+
+            <svg height={isMobile ? 160 : 200} width={isMobile ? 160 : 200} className="absolute -rotate-90">
+              <circle stroke="rgba(0,0,0,0.03)" fill="transparent" strokeWidth={stroke + 2} r={normalizedRadius} cx="50%" cy="50%" />
+
+              <circle stroke="rgba(0,0,0,0.15)" fill="transparent" strokeWidth={stroke + 4} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear", filter: "blur(4px)" }} />
+
+              <circle stroke="#000000" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear" }} />
+            </svg>
+
+            <div className="flex flex-col items-center justify-center z-10 mt-1">
+              <div className={`text-black font-medium tracking-tighter tabular-nums ${isMobile ? "text-4xl" : "text-5xl"}`}>
+                {Math.floor(progress)}
+                <span className={`text-black/30 font-light ml-0.5 ${isMobile ? "text-xl" : "text-2xl"}`}>%</span>
+              </div>
+              <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-black/40 mt-1 font-medium">
+                {progress >= 100 ? "Ready" : "Loading"}
+              </div>
             </div>
           </div>
         )}
 
         {!mounted && (
-          /* Server Rendering State: Matches layout defaults exactly to prevent hydration layout shifting */
-          <div className="relative flex items-center justify-center w-50 h-50">
-            <svg height={200} width={200} className="absolute -rotate-90">
-              <circle stroke="rgba(0,0,0,0.08)" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx="50%" cy="50%" />
-              <circle stroke="black" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear", filter: "drop-shadow(0 0 6px rgba(0,0,0,0.2))" }} />
+          <div className="relative flex flex-col items-center justify-center w-56 h-56">
+
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" strokeDasharray="2 6" />
+              <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth="0.5" strokeDasharray="10 10" />
             </svg>
 
-            <div className="text-black font-normal tabular-nums text-2xl">
-              {Math.floor(progress)}%
+            <svg height={200} width={200} className="absolute -rotate-90">
+              <circle stroke="rgba(0,0,0,0.03)" fill="transparent" strokeWidth={stroke + 2} r={normalizedRadius} cx="50%" cy="50%" />
+              <circle stroke="#000000" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" />
+            </svg>
+
+            <div className="flex flex-col items-center justify-center z-10 mt-1">
+              <div className="text-black font-medium tracking-tighter tabular-nums text-5xl">
+                {Math.floor(progress)}
+                <span className="text-black/30 font-light ml-0.5 text-2xl">%</span>
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-black/40 mt-1 font-medium">
+                Loading
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Status Logs and Metadata */}
       <div className="absolute bottom-8 w-full flex justify-center text-center px-6">
         <div className="text-[10px] sm:text-[11px] leading-5 text-black/60 max-w-md tracking-wide">
           <div className="text-black/80 font-normal text-sm sm:text-md">

@@ -1,9 +1,11 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
+import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import PerformanceBootstrap from "@/components/PerformanceBootstrap";
 

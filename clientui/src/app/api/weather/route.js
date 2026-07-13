@@ -17,10 +17,16 @@ export async function GET(request) {
     url.searchParams.set("daily", "sunrise,sunset");
     url.searchParams.set("timezone", "auto");
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: { revalidate: 3600 }, // Cache for 1 hour
+    });
     const data = await response.json();
 
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200',
+      },
+    });
 
   } catch (error) {
     console.error(error);

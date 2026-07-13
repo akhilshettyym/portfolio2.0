@@ -18,6 +18,8 @@ import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
+import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
+import { createFrameLimitedLoop } from "@/lib/performance/FrameManager";
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
@@ -36,6 +38,7 @@ const HeroSectionComponent = () => {
 
     const { triggerIntroRestart } = useContext(LoadingContext);
     const { tier, ready, isTier2 } = usePerformanceTier();
+    const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
 
     const quality = getQualityPreset(tier);
     const maxCloudPlanes = getQualityPreset("tier_1")?.cloudPlanes || 64;
@@ -198,9 +201,27 @@ const HeroSectionComponent = () => {
         };
 
         const timer = createThreeTimer();
+        let frameCount = 0;
 
         const animate = () => {
             if (!isAnimating || isDisposed) return;
+
+            // Apply frame skipping based on visibility (but still request frame to keep loop alive)
+            if (frameSkipInterval === Infinity) {
+                // Completely out of view - minimal frame request to keep loop alive
+                animationId = requestAnimationFrame(animate);
+                return;
+            }
+
+            // Apply frame skipping based on visibility
+            if (frameSkipInterval !== 1) {
+                if (frameCount % frameSkipInterval !== 0) {
+                    frameCount++;
+                    animationId = requestAnimationFrame(animate);
+                    return;
+                }
+            }
+            frameCount++;
 
             if (!isTier2) {
                 const delta = Math.min(timer.update(), 0.033);

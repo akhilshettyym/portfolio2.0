@@ -52,7 +52,11 @@ export async function GET(req) {
       },
     );
 
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=43200, stale-while-revalidate=86400',
+      },
+    });
 
   } catch (error) {
     console.error("GitHub GraphQL Error:", error.response?.data || error.message);

@@ -283,7 +283,7 @@ const NavbarComponent = () => {
               </div>
             </div>
 
-            <div onClick={() => setConsoleOpen((prev) => !prev)} className="w-10 aspect-square border border-black flex items-center justify-center relative overflow-hidden bg-white transition-all duration-300 cursor-pointer z-40 hover:bg-black">
+            <div onClick={() => setConsoleOpen((prev) => !prev)} className="w-10 aspect-square flex items-center justify-center relative overflow-hidden bg-white transition-all duration-300 cursor-pointer z-40 hover:bg-black">
               <svg viewBox="0 0 100 100" className={`w-full h-full transition-all duration-300 ${hovering || consoleOpen ? "scale-70 rotate-90" : ""}`} preserveAspectRatio="none">
                 <SiGnometerminal size={100} />
               </svg>

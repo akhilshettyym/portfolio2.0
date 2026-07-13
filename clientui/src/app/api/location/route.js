@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const response = await fetch(`${process.env.LOCATION_FROM_IP}`, {
-      cache: "no-store",
+      next: { revalidate: 86400 }, // Cache for 24 hours
     });
 
     const data = await response.json();
@@ -11,6 +11,10 @@ export async function GET() {
     return NextResponse.json({
       latitude: data.latitude,
       longitude: data.longitude,
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=172800',
+      },
     });
 
   } catch (error) {

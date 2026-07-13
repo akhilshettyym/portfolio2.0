@@ -12,6 +12,13 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
+import {
+    useCanvasVisibility,
+    createFrameLimitedLoop,
+    createPhysicsThrottler,
+    createRaycasterThrottler
+} from "@/lib/performance/FrameManager";
+
 const BubbleSceneComponent = () => {
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
@@ -20,15 +27,23 @@ const BubbleSceneComponent = () => {
     const { isMobile } = useDeviceType();
     const quality = getQualityPreset(tier);
 
+    // Track visibility and frame skip instructions from the custom hook
+    const { isVisible, frameSkipInterval } = useCanvasVisibility(wrapperRef, tier);
+
+    // Store visibility in a ref so the Three.js render loop can access it 
+    // without triggering a re-render/re-initialization of the scene.
+    const visibilityRef = useRef({ isVisible, frameSkipInterval });
+    useEffect(() => {
+        visibilityRef.current = { isVisible, frameSkipInterval };
+    }, [isVisible, frameSkipInterval]);
+
     useEffect(() => {
         const canvas = canvasRef.current;
         const wrapper = wrapperRef.current;
         if (!canvas || !wrapper) return undefined;
 
-        let animationFrameId = null;
         let loadingComplete = false;
         let animationStarted = false;
-        let sceneIsVisible = false;
         let mouseMoveTimeout;
         let resizeObserver;
         let frame = 0;
@@ -117,6 +132,7 @@ const BubbleSceneComponent = () => {
         const floatSpeed = shouldReduceMotion || isTier2 ? 0.00025 : 0.00072;
         const floatAmplitude = shouldReduceMotion || isTier2 ? 0.06 : 0.19;
         const hoverScale = isTier2 ? 2.2 : 2.95;
+
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
@@ -198,22 +214,41 @@ const BubbleSceneComponent = () => {
             }
         }
 
+        // Setup performance throttlers
         const timer = createThreeTimer();
-        const animate = () => {
-            if (!sceneIsVisible) {
-                animationFrameId = null;
-                return;
+        const physicsThrottler = createPhysicsThrottler(4); // Only check collisions every 4 frames
+        const raycasterThrottler = createRaycasterThrottler(30); // Max 30 times a second
+        let cachedIntersects = [];
+
+        // Managed Render Loop CallBack
+        const animateCallback = (manager) => {
+            const { isVisible, frameSkipInterval } = visibilityRef.current;
+
+            // Early exit to save battery/resources if completely off-screen
+            if (!isVisible) return;
+
+            // Trigger GSAP entrance sequence once upon first visibility
+            if (!animationStarted) {
+                startAnimation();
             }
-            animationFrameId = requestAnimationFrame(animate);
+
+            // Execute frame skipping based on visibility percentages
+            if (manager.shouldSkipFrame(frameSkipInterval)) return;
+
             timer.update();
             frame += 1;
             const time = performance.now() * floatSpeed;
 
             if (loadingComplete) {
-                let intersects = [];
+
+                // Throttle Raycaster updates, but reuse previous intersects during skipped frames
                 if (mouse.x !== -10 && mouse.y !== -10) {
-                    raycaster.setFromCamera(mouse, camera);
-                    intersects = raycaster.intersectObjects(bubbles, false);
+                    if (raycasterThrottler.shouldUpdate()) {
+                        raycaster.setFromCamera(mouse, camera);
+                        cachedIntersects = raycaster.intersectObjects(bubbles, false);
+                    }
+                } else {
+                    cachedIntersects = [];
                 }
 
                 bubbles.forEach((bubble) => {
@@ -228,7 +263,7 @@ const BubbleSceneComponent = () => {
                         velocity.z += (targetZ - bubble.position.z) * returnStrength;
                     }
 
-                    const isHovered = intersects.some((hit) => hit.object === bubble);
+                    const isHovered = cachedIntersects.some((hit) => hit.object === bubble);
 
                     if (isHovered) {
                         tempVector.subVectors(bubble.position, camera.position).normalize();
@@ -264,41 +299,17 @@ const BubbleSceneComponent = () => {
                     bubble.lookAt(camera.position);
                 });
 
-                if (!isTier2 && frame % 3 === 0) {
+                // Execute throttled collisions
+                if (!isTier2 && physicsThrottler.shouldUpdate()) {
                     handleCollisions();
                 }
             }
             renderer.render(scene, camera);
         };
 
-        const startLoop = () => {
-            if (animationFrameId) return;
-            sceneIsVisible = true;
-            animate();
-        };
-
-        const stopLoop = () => {
-            sceneIsVisible = false;
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-        };
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    startLoop();
-                    if (entry.intersectionRatio > 0) {
-                        startAnimation();
-                    }
-                } else {
-                    stopLoop();
-                }
-            },
-            { threshold: 0 },
-        );
-        observer.observe(wrapper);
+        // Initialize and start the limited loop
+        const loop = createFrameLimitedLoop(animateCallback, 60, tier);
+        loop.start();
 
         const onPointerMove = (event) => {
             const rect = wrapper.getBoundingClientRect();
@@ -334,9 +345,8 @@ const BubbleSceneComponent = () => {
         renderer.render(scene, camera);
 
         return () => {
-            stopLoop();
+            loop.stop(); // Stop the managed loop cleanly
             window.clearTimeout(mouseMoveTimeout);
-            observer.disconnect();
             resizeObserver?.disconnect();
             wrapper.removeEventListener("pointermove", onPointerMove);
             wrapper.removeEventListener("pointerleave", onPointerLeave);

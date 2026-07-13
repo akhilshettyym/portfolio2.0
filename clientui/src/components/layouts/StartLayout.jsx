@@ -7,8 +7,8 @@ const StartLayout = memo(function StartLayout() {
   return (
     <div>
       <CreateSomething />
-      {/* <EmergencyCTA /> */}
-      {/* <Footer /> */}
+      <EmergencyCTA />
+      <Footer />
     </div>
   );
 });

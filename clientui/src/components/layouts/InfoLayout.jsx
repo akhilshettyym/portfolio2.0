@@ -13,7 +13,7 @@ const InfoLayout = memo(function InfoLayout() {
     return (
         <div className="relative z-10 bg-white">
             <section id="about">
-                {/* <HeroSection /> */}
+                <HeroSection />
                 <SubjectProfile />
             </section>
 
@@ -21,26 +21,26 @@ const InfoLayout = memo(function InfoLayout() {
 
             <section id="achievements">
                 <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                    {/* <BubbleSceneTiered /> */}
+                    <BubbleSceneTiered />
                 </LazyLoad>
             </section>
 
             <section id="skills">
                 <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                    {/* <CardStackRevealTiered /> */}
+                    <CardStackRevealTiered />
                 </LazyLoad>
             </section>
 
             <div className="relative z-0 bg-white">
                 <section>
                     <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
-                        {/* <MySocialsTiered /> */}
+                        <MySocialsTiered />
                     </LazyLoad>
                 </section>
             </div>
 
-            {/* <EmergencyCTA /> */}
-            {/* <Footer /> */}
+            <EmergencyCTA />
+            <Footer />
         </div>
     );
 });

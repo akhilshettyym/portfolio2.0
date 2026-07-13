@@ -20,6 +20,8 @@ const ConsoleModal = ({ isOpen, onClose }) => {
     const [bootProgress, setBootProgress] = useState(0);
     const [inputValue, setInputValue] = useState("");
     const [history, setHistory] = useState([]);
+    const [commandHistory, setCommandHistory] = useState([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
 
     useEffect(() => {
         setMounted(true);
@@ -87,9 +89,9 @@ const ConsoleModal = ({ isOpen, onClose }) => {
 
         let output = "";
 
-        const handleNavigation = (path, hash) => {
+        const handleNavigation = (path, elementId) => {
             const scrollToElement = () => {
-                const elementId = hash.replace("#", "");
+                if (!elementId) return; // If no element ID, just stay on page
                 const element = document.getElementById(elementId);
                 if (element) {
                     requestAnimationFrame(() => {
@@ -106,52 +108,50 @@ const ConsoleModal = ({ isOpen, onClose }) => {
             };
 
             if (pathname === path) {
-                if (window.location.hash === hash) {
-                    scrollToElement();
-                } else {
-                    window.location.hash = hash;
-                    setTimeout(scrollToElement, 100);
-                }
+                // Already on the target page, just scroll
+                scrollToElement();
             } else {
-                router.push(`${path}${hash}`);
+                // Navigate to the target page without hash
+                router.push(path);
+                // Scroll after navigation
                 setTimeout(scrollToElement, 800);
             }
         };
 
         switch (command) {
             case "/about":
-                handleNavigation("/", "#about");
+                handleNavigation("/", "about");
                 output = logAbout();
                 break;
 
             case "/skills":
-                handleNavigation("/", "#skills");
+                handleNavigation("/", "skills");
                 output = logSkills();
                 break;
 
             case "/achievements":
-                handleNavigation("/", "#achievements");
+                handleNavigation("/", "achievements");
                 output = logAchievements();
                 break;
 
             case "/projects":
-                handleNavigation("/work", "#projects");
+                handleNavigation("/work", "projects");
                 output = logProjects();
                 break;
 
             case "/experience":
-                handleNavigation("/work", "#experience");
+                handleNavigation("/work", "experience");
                 output = logExperience();
                 break;
 
             case "/github":
-                handleNavigation("/work", "#github");
+                handleNavigation("/work", "github");
                 output = logGithub();
                 break;
 
             case "/connect":
             case "/create":
-                handleNavigation("/start", "");
+                handleNavigation("/start");
                 output = logCreate();
                 break;
 
@@ -237,6 +237,9 @@ const ConsoleModal = ({ isOpen, onClose }) => {
         }
 
         setHistory((prev) => [...prev, { command: cmd, output }]);
+        // Add to command history for arrow key navigation
+        setCommandHistory((prev) => [...prev, cmd]);
+        setHistoryIndex(-1); // Reset history index
     };
 
     const handleCommandSubmit = (e) => {
@@ -245,6 +248,28 @@ const ConsoleModal = ({ isOpen, onClose }) => {
             executeCommand(inputValue);
         }
         setInputValue("");
+    };
+
+    const handleKeyDown = (e) => {
+        if (bootPhase !== "complete") return;
+
+        if (e.key === "ArrowUp") {
+            e.preventDefault();
+            const newIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+            setHistoryIndex(newIndex);
+            if (newIndex >= 0 && newIndex < commandHistory.length) {
+                setInputValue(commandHistory[commandHistory.length - 1 - newIndex]);
+            }
+        } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            const newIndex = historyIndex - 1;
+            setHistoryIndex(newIndex);
+            if (newIndex < 0) {
+                setInputValue("");
+            } else if (newIndex < commandHistory.length) {
+                setInputValue(commandHistory[commandHistory.length - 1 - newIndex]);
+            }
+        }
     };
 
     const handleClose = () => {
@@ -350,6 +375,12 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                                     <span>Ship</span><span>: SaaS, Enterprise, Consumer</span>
                                 </div>
                                 <br />
+                                <p className="text-white font-bold mb-1">Quick Tips</p>
+                                <div className="text-yellow-400 space-y-1 mb-3">
+                                    <p>💡 Try: <span className="text-cyan-400">/secrets</span> if you like finding hidden things</p>
+                                    <p>💡 Use arrow keys to navigate command history</p>
+                                    <p>�� Commands work with or without the <span className="text-cyan-400">/</span> prefix</p>
+                                </div>
                                 <p className="text-white font-bold mb-1">Navigation</p>
                                 <div className="text-gray-400 space-y-1">
                                     <p>/about</p>
@@ -380,7 +411,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
 
                             <form onSubmit={handleCommandSubmit} className="flex items-center mt-1">
                                 <span className="text-blue-400 mr-2">user@macbook:~$</span>
-                                <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} className="bg-transparent border-none outline-none text-[#00ff00] flex-1 caret-[#00ff00]" autoFocus spellCheck="false" autoComplete="off" />
+                                <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} className="bg-transparent border-none outline-none text-[#00ff00] flex-1 caret-[#00ff00]" autoFocus spellCheck="false" autoComplete="off" />
                             </form>
                             <div ref={terminalEndRef} />
                         </div>

@@ -6,7 +6,6 @@ import { LenisProvider } from "@/context/LenisContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import PerformanceBootstrap from "@/components/PerformanceBootstrap";
-import HashScrollListener from "@/components/HashScrollListener";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -39,9 +38,8 @@ export default function RootLayout({ children }) {
               </NavbarWrapper>
 
               <main className="relative pt-25">
-                <HashScrollListener />
-                {children}
                 <ToastContainer />
+                {children}
               </main>
 
             </LoaderWrapper>

@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 import { FaCodeMerge } from "react-icons/fa6";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
+import { logAbout, logAchievements, logCatReadme, logCoffee, logCreate, logExperience, logGithub, logHelp, logInstagram, logLinkedin, logLocation, logls, logMail, logPhilosophy, logPingAkhil, logProjects, logrmrf, logSalesforce, logSecrets, logSkills, logSocials, logSudoHire, logWhoAmI } from "@/utils/funct-utils";
 
 const ConsoleModal = ({ isOpen, onClose }) => {
     const router = useRouter();
@@ -91,7 +92,6 @@ const ConsoleModal = ({ isOpen, onClose }) => {
                 const elementId = hash.replace("#", "");
                 const element = document.getElementById(elementId);
                 if (element) {
-                    // Use requestAnimationFrame to ensure DOM is ready
                     requestAnimationFrame(() => {
                         element.scrollIntoView({ behavior: "smooth", block: "start" });
                     });
@@ -121,366 +121,103 @@ const ConsoleModal = ({ isOpen, onClose }) => {
         switch (command) {
             case "/about":
                 handleNavigation("/", "#about");
-                output = (
-                    <div className="text-[11px] text-justify">
-                        <span className="block text-white font-medium mt-4">About Akhil Shetty</span>
-                        <p className="mt-1"> A <span className="text-white font-medium">computer science graduate </span>
-                            from Mangalore, Karnataka, who somehow turned curiosity into a full-time habit. I graduated from St. Joseph Engineering College and currently live in Mumbai, working as an
-                            <span className="text-white font-medium"> IT Trainee Developer</span>.
-                        </p>
-
-                        <span className="block text-white font-medium mt-4">What I do</span>
-                        <p className="mt-1"> During the day, I build, fix, and break things (occasionally on purpose). I spend way too much time optimizing performance and crafting
-                            <span className="text-white font-medium"> seamless user experiences.</span>
-                        </p>
-
-                        <div className="pt-2">
-                            <span className="text-slate-500 select-none">$</span>
-                            <span>try: cat readme.md</span>
-                        </div>
-                    </div>
-                );
-                break;
-
-            case "/work":
-                handleNavigation("/work", "#work");
-                output = (
-                    <>
-                        <div className="w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
-                            <div className="mb-2 flex items-start justify-between border-b border-neutral-800 pb-2">
-                                <div>
-                                    <p className="text-[11px] text-emerald-400">$ company</p>
-                                    <h3 className="text-[11px] text-neutral-100">
-                                        Adore Earth (Non-Profit Organization)
-                                    </h3>
-                                </div>
-                                <span className="text-[11px] text-neutral-500">
-                                    Oct 2024 — Nov 2024
-                                </span>
-                            </div>
-
-                            <p className="leading-relaxed text-neutral-400">
-                                Managed end-to-end recruitment workflows, including candidate screening, onboarding, and
-                                team coordination. Coordinated and hosted organizational conferences while driving internal
-                                communication and team culture initiatives.
-                            </p>
-                        </div>
-
-                        <div className="mt-4 w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
-                            <div className="mb-2 flex items-start justify-between border-b border-neutral-800 pb-2">
-                                <div>
-                                    <p className="text-[11px] text-sky-400">$ company</p>
-                                    <h3 className="text-[11px] text-neutral-100">
-                                        Karanji Infotech Pvt. Ltd.
-                                    </h3>
-                                </div>
-                                <span className="text-[11px] text-neutral-500">
-                                    Nov 2024 — Dec 2024
-                                </span>
-                            </div>
-
-                            <p className="leading-relaxed text-neutral-400">
-                                Designed visual assets and 2D motion graphics utilizing Adobe Creative Suite, focusing on
-                                Adobe Animate. Executed character rigging, applied motion principles, and prepared assets
-                                for interactive digital storytelling.
-                            </p>
-                        </div>
-
-                        <div className="mt-4 w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
-                            <div className="mb-2 flex items-start justify-between border-b border-neutral-800 pb-2">
-                                <div>
-                                    <p className="text-[11px] text-amber-400">$ company</p>
-                                    <h3 className="text-[11px] text-neutral-100">
-                                        Global Industrial Pvt. Ltd.
-                                    </h3>
-                                </div>
-                                <span className="text-[11px] text-neutral-500">
-                                    Feb 2025 — Present
-                                </span>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <div className="mb-1 flex items-center justify-between">
-                                        <span className="text-[11px] text-green-400">
-                                            ─ IT Intern · Developer
-                                        </span>
-                                        <span className="text-[11px] text-neutral-500">
-                                            Feb 03 2025 — Jun 15 2025
-                                        </span>
-                                    </div>
-
-                                    <p className="pl-4 leading-relaxed text-neutral-400">
-                                        Contributed to active codebases by developing responsive UIs, enhancing user experiences,
-                                        and implementing core features within cross-functional engineering teams.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <div className="mb-1 flex items-center justify-between">
-                                        <span className="text-[11px] text-cyan-400">
-                                            └─ IT Trainee · Developer
-                                        </span>
-                                        <span className="text-[11px] text-neutral-500">
-                                            Jun 16 2025 — Present
-                                        </span>
-                                    </div>
-
-                                    <p className="pl-4 leading-relaxed text-neutral-400">
-                                        Build and scale enterprise frontend applications using Next.js, React, and Material UI.
-                                        Responsible for UI/UX implementation, understanding CMS, data handling, and performance optimization.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                );
+                output = logAbout();
                 break;
 
             case "/skills":
                 handleNavigation("/", "#skills");
-                output = (
-                    <div className="w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 font-mono text-[11px] text-neutral-300">
-                        <div className="mb-4 flex items-start justify-between border-b border-neutral-800 pb-2">
-                            <div>
-                                <p className="text-[11px] text-purple-400">$ cat skills.json</p>
-                                <h3 className="text-[11px] text-neutral-100">Expertise & Capabilities</h3>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>Next.js / React</span>
-                                    <span className="text-cyan-400">85%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-cyan-500" style={{ width: '85%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>MERN Stack</span>
-                                    <span className="text-emerald-400">80%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-emerald-500" style={{ width: '80%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>Docker & DevOps</span>
-                                    <span className="text-blue-400">40%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-blue-500" style={{ width: '40%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>Salesforce CRM</span>
-                                    <span className="text-amber-400">75%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-amber-500" style={{ width: '75%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>UI & Visual Design</span>
-                                    <span className="text-sky-400">75%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-sky-500" style={{ width: '75%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>Core Java</span>
-                                    <span className="text-red-400">60%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-red-500" style={{ width: '60%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>Motion Graphics</span>
-                                    <span className="text-purple-400">65%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-purple-500" style={{ width: '65%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-neutral-400">
-                                    <span>Component Architecture</span>
-                                    <span className="text-green-400">85%</span>
-                                </div>
-                                <div className="mt-1 h-0.5 w-full bg-neutral-900">
-                                    <div className="h-full bg-green-500" style={{ width: '85%' }}></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="mt-6 border-t border-neutral-800 pt-3">
-                            <p className="text-[11px] text-neutral-500 mb-1">// environment stack</p>
-                            <p className="leading-relaxed text-neutral-400">
-                                <span className="text-neutral-200 font-semibold">Languages & Frameworks:</span> Core Java • JavaScript • NextJs • MySql • TypeScript • Node.js • Express • Material UI • React •  HTML/CSS • Figma <br />
-                                <span className="text-neutral-200 font-semibold">Tools & Infrastructure:</span> Git • GitHub • CMS Integrations • REST APIs
-                            </p>
-                        </div>
-                    </div>
-                );
-                break;
-
-            case "ls":
-                output = (
-                    <div className="mt-2 whitespace-pre">
-                        drwxr-xr-x akhil design-systems.exe{"\n"}
-                        drwxr-xr-x akhil ux-research.doc{"\n"}
-                        -rwxr-xr-x akhil figma-mastery.cfg{"\n"}
-                        -rw-r--r-- akhil pixel-perfection.so{"\n"}
-                        -rwxr-xr-x akhil strategic-thinking.bin{"\n"}
-                        drwxr-xr-x akhil workshop-facilitation/{"\n"}
-                        -rw-r--r-- akhil accessibility.a11y{"\n"}
-                        -rwxr-xr-x akhil brand-identity.svg{"\n"}
-                        -rw-r--r-- akhil coffee-dependency.lock{"\n"}
-                        -rw------- akhil secret-design-sauce.enc
-                    </div>
-                );
-                break;
-
-            case "whoami":
-                output = (
-                    <div className="mt-2">
-                        You're the person about to hire a great designer.<br />
-                        (Trust the terminal. It knows things.)<br /><br />
-                        Type /secrets if you like finding hidden things.
-                    </div>
-                );
-                break;
-
-            case "/secrets":
-                output = (
-                    <div className="mt-2 space-y-2">
-                        <div><span className="font-bold text-white">Secret Commands</span><br />Shhh... you found the cheat sheet.</div>
-                        <div className="grid grid-cols-[120px_1fr] gap-x-2">
-                            <span className="text-blue-400">sudo hire akhil</span><span>Fake contract with progress bar</span>
-                            <span className="text-blue-400">rm -rf doubts</span><span>Remove all your doubts</span>
-                            <span className="text-blue-400">/matrix</span><span>Matrix green rain</span>
-                            <span className="text-blue-400">/figma</span><span>Where I actually live</span>
-                            <span className="text-blue-400">/coffee</span><span>Design fuel status</span>
-                            <span className="text-blue-400">ls</span><span>Skills as Linux files</span>
-                            <span className="text-blue-400">cat readme.md</span><span>A hidden personal message</span>
-                            <span className="text-blue-400">ping akhil</span><span>Am I available? Find out</span>
-                            <span className="text-blue-400">git log</span><span>Totally real commit history</span>
-                            <span className="text-blue-400">whoami</span><span>The terminal knows you</span>
-                            <span className="text-blue-400">exit</span><span>Try to leave. I dare you.</span>
-                            <span className="text-blue-400">/konami</span><span>Party mode with confetti</span>
-                            <span className="text-blue-400">↑↑↓↓←→←→BA</span><span>Konami code on keyboard</span>
-                        </div>
-                    </div>
-                );
-                break;
-
-            case "/help":
-                output = (
-                    <div className="mt-2 space-y-4">
-                        <div><span className="font-bold text-white">Available Commands</span></div>
-                        <div>
-                            <span className="font-bold text-white">Navigation</span>
-                            <div className="grid grid-cols-[120px_1fr] gap-x-2 mt-1 text-gray-300">
-                                <span className="text-blue-400">/help</span><span>List all available commands</span>
-                                <span className="text-blue-400">/about</span><span>Who is Akhil Shetty M?</span>
-                                <span className="text-blue-400">/work</span><span>Featured projects & case studies</span>
-                                <span className="text-blue-400">/clients</span><span>Companies I've worked with</span>
-                                <span className="text-blue-400">/skills</span><span>Expertise & capabilities</span>
-                                <span className="text-blue-400">/philosophy</span><span>My design philosophy</span>
-                                <span className="text-blue-400">/social</span><span>Social profiles & links</span>
-                                <span className="text-blue-400">/contact</span><span>Get in touch</span>
-                                <span className="text-blue-400">/clear</span><span>Clear the terminal</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span className="font-bold text-white">Projects</span>
-                            <div className="grid grid-cols-[120px_1fr] gap-x-2 mt-1 text-gray-300">
-                                <span className="text-blue-400">/signals</span><span>Research Integrity Platform</span>
-                                <span className="text-blue-400">/anylyze</span><span>Analytics Data Platform</span>
-                                <span className="text-blue-400">/liveu</span><span>Signa Design System</span>
-                                <span className="text-blue-400">/tuiasi</span><span>University Redesign</span>
-                                <span className="text-blue-400">/resnet</span><span>Hospitality Design System</span>
-                            </div>
-                        </div>
-                        <div>Aliases: /portfolio, /projects, /me, /hire, /call, /mail<br />Tip: Use ↑↓ arrows for command history, Tab for autocomplete</div>
-                    </div>
-                );
+                output = logSkills();
                 break;
 
             case "/achievements":
                 handleNavigation("/", "#achievements");
-                output = (
-                    <div className="text-[11px]">
-                        <span className="text-emerald-400">Navigating to achievements section...</span>
-                    </div>
-                );
-                break;
-
-            case "/socials":
-            case "/social":
-                handleNavigation("/", "#socials");
-                output = (
-                    <div className="text-[11px]">
-                        <span className="text-emerald-400">Navigating to socials section...</span>
-                    </div>
-                );
+                output = logAchievements();
                 break;
 
             case "/projects":
                 handleNavigation("/work", "#projects");
-                output = (
-                    <div className="text-[11px]">
-                        <span className="text-emerald-400">Navigating to projects section on /work...</span>
-                    </div>
-                );
+                output = logProjects();
                 break;
 
             case "/experience":
                 handleNavigation("/work", "#experience");
-                output = (
-                    <div className="text-[11px]">
-                        <span className="text-emerald-400">Navigating to experience section on /work...</span>
-                    </div>
-                );
+                output = logExperience();
                 break;
 
-            case "github":
             case "/github":
                 handleNavigation("/work", "#github");
-                output = (
-                    <div className="text-[11px]">
-                        <span className="text-emerald-400">Navigating to GitHub section on /work...</span>
-                    </div>
-                );
+                output = logGithub();
                 break;
 
             case "/connect":
-            case "connect":
-            case "create":
             case "/create":
                 handleNavigation("/start", "");
-                output = (
-                    <div className="text-[11px]">
-                        <span className="text-emerald-400">Navigating to Create Something section on /start...</span>
-                    </div>
-                );
+                output = logCreate();
+                break;
+
+            case "/philosophy":
+                output = logPhilosophy();
+                break;
+
+            case "/mail":
+                output = logMail();
+                break;
+
+            case "/linkedin":
+                output = logLinkedin();
+                break;
+
+            case "/instagram":
+                output = logInstagram();
+                break;
+
+            case "/salesforce":
+                output = logSalesforce();
+                break;
+
+            case "/socials":
+                output = logSocials();
+                break;
+
+            case "sudo hire akhil":
+                output = logSudoHire();
+                break;
+
+            case "rm -rf doubts":
+                output = logrmrf();
+                break;
+
+            case "/coffee":
+                output = logCoffee();
+                break;
+
+            case "cat readme.md":
+                output = logCatReadme();
+                break;
+
+            case "ping akhil":
+                output = logPingAkhil();
+                break;
+
+            case "/secrets":
+                output = logSecrets();
+                break;
+
+            case "me":
+            case "whoami":
+                output = logWhoAmI();
+                break;
+
+            case "/location":
+                output = logLocation();
+                break;
+
+            case "ls":
+                output = logls();
+                break;
+
+            case "/help":
+                output = logHelp();
                 break;
 
             case "clear":

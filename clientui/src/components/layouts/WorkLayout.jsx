@@ -16,13 +16,13 @@ const WorkLayout = memo(
 
         <section id="experience">
           <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-            <MyExperienceTiered />
+            {/* <MyExperienceTiered /> */}
           </LazyLoad>
         </section>
 
         <section id="github">
           <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-            <GithubGraphQlTiered />
+            {/* <GithubGraphQlTiered /> */}
           </LazyLoad>
         </section>
 

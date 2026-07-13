@@ -6,7 +6,7 @@ import CreateSomething from "@/components/CreateSomething";
 const StartLayout = memo(function StartLayout() {
   return (
     <div>
-      {/* <CreateSomething /> */}
+      <CreateSomething />
       {/* <EmergencyCTA /> */}
       {/* <Footer /> */}
     </div>

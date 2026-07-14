@@ -1,16 +1,11 @@
-import React, { memo } from "react";
-import Footer from "@/components/Footer";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import CreateSomething from "@/components/CreateSomething";
 
-const StartLayout = memo(function StartLayout() {
+export default function StartLayout() {
   return (
-    <div>
+    <article>
       <CreateSomething />
       <EmergencyCTA />
-      <Footer />
-    </div>
+    </article>
   );
-});
-
-export default StartLayout;
+}

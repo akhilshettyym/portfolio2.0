@@ -1,8 +1,8 @@
 import { CACHE_PREFIX } from "@/utils/localstorage";
 
-const CACHE_TTL = 24 * 60 * 60 * 1000;
+const DEFAULT_CACHE_TTL = 24 * 60 * 60 * 1000;
 
-export const getCachedData = (key) => {
+export const getCachedData = (key, ttl = DEFAULT_CACHE_TTL) => {
   try {
     if (typeof window === "undefined") return null;
 
@@ -14,7 +14,7 @@ export const getCachedData = (key) => {
     const { data, timestamp } = JSON.parse(cachedItem);
     const now = Date.now();
 
-    if (now - timestamp > CACHE_TTL) {
+    if (now - timestamp > ttl) {
       window.localStorage.removeItem(cacheKey);
       return null;
     }
@@ -67,3 +67,27 @@ export const clearAllGitHubCache = () => {
     console.error("Clear all cache error:", error);
   }
 };
+
+const inflightRequests = new Map();
+
+export async function getCachedOrFetch(key, fetcher, ttl = DEFAULT_CACHE_TTL) {
+  const cached = getCachedData(key, ttl);
+  if (cached) return cached;
+
+  if (inflightRequests.has(key)) {
+    return inflightRequests.get(key);
+  }
+
+  const request = Promise.resolve()
+    .then(fetcher)
+    .then((data) => {
+      setCachedData(key, data);
+      return data;
+    })
+    .finally(() => {
+      inflightRequests.delete(key);
+    });
+
+  inflightRequests.set(key, request);
+  return request;
+}

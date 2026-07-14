@@ -1,7 +1,7 @@
 "use client";
 
-import "@/styles/clouds.css";
 import * as THREE from "three";
+import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
 import { SiRevealdotjs } from "react-icons/si";
 import { CLOUD_SHADER } from "@/utils/basic-utils";
@@ -18,6 +18,8 @@ import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
+import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
+import { createFrameLimitedLoop } from "@/lib/performance/FrameManager";
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
@@ -36,12 +38,19 @@ const HeroSectionComponent = () => {
 
     const { triggerIntroRestart } = useContext(LoadingContext);
     const { tier, ready, isTier2 } = usePerformanceTier();
+    const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
 
     const quality = getQualityPreset(tier);
-    const maxCloudPlanes = getQualityPreset("tier_1")?.cloudPlanes || 64;
+    // const maxCloudPlanes = quality.cloudPlanes || 900;
+    const maxCloudPlanes = quality.cloudPlanes ? Math.floor(quality.cloudPlanes * 1.5) : 1500;
 
     const pausedRef = useRef(false);
     const sceneAssetsRef = useRef(null);
+    const visibilityRef = useRef({ canvasVisible, frameSkipInterval });
+
+    useEffect(() => {
+        visibilityRef.current = { canvasVisible, frameSkipInterval };
+    }, [canvasVisible, frameSkipInterval]);
 
     useEffect(() => {
         pausedRef.current = paused;
@@ -161,6 +170,7 @@ const HeroSectionComponent = () => {
         let material = null;
         let renderer = null;
         let animationId = null;
+        let resumeTimeoutId = null;
 
         let isAnimating = true;
         let isDisposed = false;
@@ -198,9 +208,36 @@ const HeroSectionComponent = () => {
         };
 
         const timer = createThreeTimer();
+        let frameCount = 0;
 
         const animate = () => {
             if (!isAnimating || isDisposed) return;
+
+            const visibility = visibilityRef.current;
+
+            if (!visibility.canvasVisible) {
+                resumeTimeoutId = window.setTimeout(() => {
+                    animationId = requestAnimationFrame(animate);
+                }, 180);
+                return;
+            }
+
+            if (visibility.frameSkipInterval === Infinity) {
+                if (renderer && camera) renderer.render(scene, camera);
+                resumeTimeoutId = window.setTimeout(() => {
+                    animationId = requestAnimationFrame(animate);
+                }, 300);
+                return;
+            }
+
+            if (visibility.frameSkipInterval !== 1) {
+                if (frameCount % visibility.frameSkipInterval !== 0) {
+                    frameCount++;
+                    animationId = requestAnimationFrame(animate);
+                    return;
+                }
+            }
+            frameCount++;
 
             if (!isTier2) {
                 const delta = Math.min(timer.update(), 0.033);
@@ -313,11 +350,11 @@ const HeroSectionComponent = () => {
                 const geometries = [];
 
                 for (let i = 0; i < maxCloudPlanes; i++) {
-                    planeObj.position.x = Math.random() * 1000 - 500;
+                    planeObj.position.x = Math.random() * 1400 - 700;
                     planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
                     planeObj.position.z = i * (8000 / maxCloudPlanes);
                     planeObj.rotation.z = Math.random() * Math.PI;
-                    planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+                    planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 2.5 + 1.2;
                     planeObj.updateMatrix();
 
                     const cloned = planeGeo.clone();
@@ -342,6 +379,7 @@ const HeroSectionComponent = () => {
                 planeGeo.dispose();
 
                 animate();
+
             } catch (error) {
                 if (!isDisposed) {
                     console.error("Cloud scene init failed:", error);
@@ -351,12 +389,12 @@ const HeroSectionComponent = () => {
 
         init();
 
-        window.addEventListener("mousemove", onMouseMove);
-        window.addEventListener("resize", onResize);
+        window.addEventListener("mousemove", onMouseMove, { passive: true });
+        window.addEventListener("resize", onResize, { passive: true });
 
         if (btn) {
-            btn.addEventListener("mousemove", handleBtnMouseMove);
-            btn.addEventListener("mouseleave", handleBtnMouseLeave);
+            btn.addEventListener("mousemove", handleBtnMouseMove, { passive: true });
+            btn.addEventListener("mouseleave", handleBtnMouseLeave, { passive: true });
         }
 
         return () => {
@@ -374,6 +412,10 @@ const HeroSectionComponent = () => {
 
             if (animationId) {
                 cancelAnimationFrame(animationId);
+            }
+
+            if (resumeTimeoutId) {
+                window.clearTimeout(resumeTimeoutId);
             }
 
             if (mesh) {
@@ -411,8 +453,8 @@ const HeroSectionComponent = () => {
 
     useEffect(() => {
         if (isTier2) {
-            setPaused(true);
             pausedRef.current = true;
+            window.requestAnimationFrame(() => setPaused(true));
         }
     }, [isTier2]);
 
@@ -424,7 +466,7 @@ const HeroSectionComponent = () => {
         <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
+                <div ref={containerRef} className="canvas-bg absolute inset-0 z-0" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <div className="absolute top-60 right-0 z-9999">
                     <LiquidGlass width="50px" height="180px" className="p-0">
@@ -441,10 +483,9 @@ const HeroSectionComponent = () => {
                             </div>
 
                             <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
-                                {paused ? "Run Clouds" : "Stall Clouds"}
+                                {isTier2 ? "DISABLED" : (paused ? "Run Clouds" : "Stall Clouds")}
                             </div>
                         </button>
-
 
                         <button type="button" onClick={handleRestartIntroScene} className="group absolute top-14 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
                             <div className="absolute inset-0 flex items-center justify-center">

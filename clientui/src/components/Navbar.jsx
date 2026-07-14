@@ -6,6 +6,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import ConsoleModal from "./ConsoleModal";
+import { SiGnometerminal } from "react-icons/si";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -176,14 +178,18 @@ const NavbarComponent = () => {
 
   return (
     <>
-      <div className="sm:hidden fixed inset-x-0 top-0 z-50 bg-white border-b border-black/20 px-4 py-3">
+      <div className="sm:hidden w-full bg-white border-b border-black/20 px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 relative">
+            {/* Mobile Logo Reload Trigger */}
+            <div 
+              className="w-10 h-10 relative cursor-pointer" 
+              onClick={() => window.location.reload()}
+            >
               <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" unoptimized priority />
             </div>
 
-            <nav className="flex gap-2">
+            <nav aria-label="Mobile Navigation" className="flex gap-2">
               {navItems.map((item) => (
                 <Link key={item.label} href={item.href} className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wide transition ${pathname === item.href ? "bg-black text-white" : "bg-black/10 text-black"}`}>
                   {item.label}
@@ -192,11 +198,11 @@ const NavbarComponent = () => {
             </nav>
           </div>
 
-          <div className="relative flex flex-col items-center justify-center group cursor-pointer" onClick={() => setConsoleOpen((prev) => !prev)}>
+          <div className="relative flex flex-col items-center justify-center group cursor-pointer z-10" onClick={() => setConsoleOpen((prev) => !prev)}>
             <div className={`absolute right-full top-1/2 -translate-y-1/2 flex items-center overflow-hidden transition-all duration-300 ease-out ${consoleOpen ? "w-22 opacity-100 mr-2" : "w-0 opacity-0 mr-0"} bg-black text-white`}>
               <div className="px-3 py-1 text-[10px] whitespace-nowrap flex items-center">
                 <span className="mr-1">{">_"}</span>
-                <GlitchMini text="console" active={consoleOpen} />
+                <span>console</span>
                 <span className="ml-1 animate-blink">|</span>
               </div>
             </div>
@@ -210,18 +216,22 @@ const NavbarComponent = () => {
         </div>
       </div>
 
-      <div className="fixed top-0 left-0 z-50 px-10 pt-1 w-full bg-white/90 backdrop-blur-lg text-black border-black/10 hidden sm:block">
-        <div className="mt-6 flex items-center">
+      <div className="px-10 w-full bg-white/25 backdrop-blur-xl text-black border-black/10 hidden sm:block mt-6">
+        <div className="flex items-center">
           <div className="flex items-center gap-3 shrink-0">
             <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
-              <div className="w-12 h-12 flex items-center justify-center relative group cursor-default">
+              {/* Desktop Logo Reload Trigger */}
+              <div 
+                className="w-12 h-12 flex items-center justify-center relative group cursor-pointer"
+                onClick={() => window.location.reload()}
+              >
                 <div className="relative w-full h-full overflow-hidden rounded-md">
                   <Image src="/akhil.svg" alt="Akhil" unoptimized fill priority className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5" />
                 </div>
               </div>
             </div>
 
-            <nav className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]">
+            <nav aria-label="Desktop Navigation" className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]">
               {navItems.map((item, i) => (
                 <GlitchNavItem key={item.label} href={item.href} label={item.label} active={pathname === item.href} delay={200 + i * 120} />
               ))}
@@ -258,6 +268,7 @@ const NavbarComponent = () => {
           </div>
 
           <div className="ml-auto relative flex items-center gap-3 shrink-0 min-w-40 justify-end opacity-0 animate-[navbar-enter_0.6s_ease-out_0.4s_forwards]">
+
             <button onClick={() => setConsoleOpen((prev) => !prev)} className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen || hovering ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} bg-black text-white px-4 text-[11px] overflow-hidden`}>
               <span className="mr-2">{">_"}</span>
               <span className="uppercase tracking-wide whitespace-nowrap">console </span>
@@ -275,10 +286,9 @@ const NavbarComponent = () => {
               </div>
             </div>
 
-            <div onClick={() => setConsoleOpen((prev) => !prev)} className="w-10 aspect-square border border-black flex items-center justify-center relative overflow-hidden bg-white transition-all duration-300 cursor-pointer z-40 hover:bg-black">
+            <div onClick={() => setConsoleOpen((prev) => !prev)} className="w-10 aspect-square flex items-center justify-center relative overflow-hidden bg-white transition-all duration-300 cursor-pointer z-40 hover:bg-black">
               <svg viewBox="0 0 100 100" className={`w-full h-full transition-all duration-300 ${hovering || consoleOpen ? "scale-70 rotate-90" : ""}`} preserveAspectRatio="none">
-                <line x2="100" y2="100" stroke="currentColor" className={`${hovering || consoleOpen ? "stroke-white" : ""}`} />
-                <line x1="100" y2="100" stroke="currentColor" className={`${hovering || consoleOpen ? "stroke-white" : ""}`} />
+                <SiGnometerminal size={100} />
               </svg>
             </div>
           </div>
@@ -286,6 +296,8 @@ const NavbarComponent = () => {
 
         <div className="mt-6 border-b border-black/20" />
       </div>
+
+      <ConsoleModal isOpen={consoleOpen} onClose={() => setConsoleOpen(false)} />
     </>
   );
 };

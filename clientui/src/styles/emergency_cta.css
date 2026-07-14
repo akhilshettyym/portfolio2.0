@@ -9,10 +9,18 @@
 
 .animate-marquee {
   width: max-content;
-  animation: marquee 20s linear infinite;
+  animation: marquee 30s linear infinite;
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }

@@ -163,7 +163,9 @@
   overflow: hidden;
   white-space: pre;
   letter-spacing: 0.5px;
-  animation: terminal-flicker 0.15s infinite linear alternate-reverse;
+  animation: terminal-flicker 0.4s infinite linear alternate-reverse;
+  will-change: opacity;
+  backface-visibility: hidden;
 
   -webkit-mask-image: linear-gradient(
     to right,

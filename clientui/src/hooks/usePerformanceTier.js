@@ -23,17 +23,14 @@ export function usePerformanceTier(calibrationDurationMs) {
 
   useEffect(() => {
     if (context) return undefined;
+    if (ready) return undefined;
 
-    const saved = getSavedTier();
-    if (saved) {
-      setTier(saved);
-      setReady(true);
-      return undefined;
-    }
+    const handle = setTimeout(() => {
+      runCalibration();
+    }, 0);
 
-    runCalibration();
-    return undefined;
-  }, [context, runCalibration]);
+    return () => clearTimeout(handle);
+  }, [context, ready, runCalibration]);
 
   useEffect(() => {
     if (context) return undefined;

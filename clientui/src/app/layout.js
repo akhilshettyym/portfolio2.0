@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
@@ -19,8 +20,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AKHIL SHETTY",
-  description: "Ofc it's me",
+  metadataBase: new URL("https://akhilshetty.com"),
+  title: {
+    default: "Akhil Shetty | Full Stack Developer",
+    template: "%s | Akhil Shetty",
+  },
+  description: "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
+  keywords: ["Akhil Shetty", "Full Stack Developer", "Next.js Developer", "React Developer", "Portfolio"],
+  authors: [{ name: "Akhil Shetty" }],
+  creator: "Akhil Shetty",
+  openGraph: {
+    title: "Akhil Shetty | Full Stack Developer",
+    description: "Performance-minded portfolio, selected work, experience, and ways to start a project with Akhil Shetty.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Akhil Shetty",
+    images: [{ url: "/my-image.png", width: 1200, height: 630, alt: "Akhil Shetty" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Akhil Shetty | Full Stack Developer",
+    description: "Full stack developer focused on fast, stable, production-grade web experiences.",
+    images: ["/my-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -37,10 +63,15 @@ export default function RootLayout({ children }) {
                 <Navbar />
               </NavbarWrapper>
 
-              <main className="relative pt-25">
-                {children}
+              <main id="main-content" className="relative pt-25 flex flex-col min-h-screen bg-white">
                 <ToastContainer />
+
+                <div className="flex-grow">
+                  {children}
+                </div>
               </main>
+
+              <Footer />
 
             </LoaderWrapper>
           </LenisProvider>

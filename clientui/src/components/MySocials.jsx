@@ -37,6 +37,7 @@ const MySocials = () => {
       id: `${Date.now()}-${imageIndex.current}`,
       x, y,
       src: trailImages[imageIndex.current],
+      zIndex: 20 + (imageIndex.current % 10),
     };
 
     imageIndex.current = (imageIndex.current + 1) % trailImages.length;
@@ -80,7 +81,7 @@ const MySocials = () => {
               exit={{ opacity: 0, scale: 0.2 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="absolute w-35 h-35 object-cover rounded-lg"
-              style={{ zIndex: Math.floor(Math.random() * 10) + 20 }} />
+              style={{ zIndex: item.zIndex }} />
           ))}
         </AnimatePresence>
       </div>

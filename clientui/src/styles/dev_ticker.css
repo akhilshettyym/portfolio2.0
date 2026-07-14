@@ -1,6 +1,9 @@
 .dev-marquee {
   width: max-content;
-  animation: devTickerMove 28s linear infinite;
+  animation: devTickerMove 42s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @keyframes devTickerMove {
@@ -10,5 +13,12 @@
 
   to {
     transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dev-marquee {
+    animation: none;
+    transform: translateX(0);
   }
 }

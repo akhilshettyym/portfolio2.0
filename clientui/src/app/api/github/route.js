@@ -1,15 +1,19 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+const memoryCache = new Map();
+
+function getCacheKey(username, from, to) {
+  return `${username}:${from}:${to}`;
+}
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const username = searchParams.get("username");
-
-    const from =
-      searchParams.get("from") || `${new Date().getFullYear()}-01-01T00:00:00Z`;
-    const to =
-      searchParams.get("to") || `${new Date().getFullYear()}-12-31T23:59:59Z`;
+    const from = searchParams.get("from") || `${new Date().getFullYear()}-01-01T00:00:00Z`;
+    const to = searchParams.get("to") || `${new Date().getFullYear()}-12-31T23:59:59Z`;
 
     if (!username) {
       return NextResponse.json(
@@ -18,24 +22,43 @@ export async function GET(req) {
       );
     }
 
+    if (!process.env.GITHUB_GRAPHQL_API || !process.env.GITHUB_TOKEN) {
+      return NextResponse.json(
+        { error: "GitHub API configuration is missing" },
+        { status: 500 },
+      );
+    }
+
+    const cacheKey = getCacheKey(username, from, to);
+    const cached = memoryCache.get(cacheKey);
+
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return NextResponse.json(cached.data, {
+        headers: {
+          "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=86400",
+          "X-Cache": "HIT",
+        },
+      });
+    }
+
     const query = `
-           query($username: String!, $from: DateTime!, $to: DateTime!) {
-               user(login: $username) {
-                   contributionsCollection(from: $from, to: $to) {
-                       contributionCalendar {
-                           totalContributions
-                           weeks {
-                               contributionDays {
-                                   contributionCount
-                                   date
-                                   color
-                               }
-                           }
-                       }
-                   }
-               }
-           }
-       `;
+          query($username: String!, $from: DateTime!, $to: DateTime!) {
+              user(login: $username) {
+                  contributionsCollection(from: $from, to: $to) {
+                      contributionCalendar {
+                          totalContributions
+                          weeks {
+                              contributionDays {
+                                  contributionCount
+                                  date
+                                  color
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      `;
 
     const response = await axios.post(
       process.env.GITHUB_GRAPHQL_API,
@@ -55,12 +78,20 @@ export async function GET(req) {
       },
     );
 
-    return NextResponse.json(response.data);
+    memoryCache.set(cacheKey, {
+      data: response.data,
+      timestamp: Date.now(),
+    });
+
+    return NextResponse.json(response.data, {
+      headers: {
+        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=86400",
+        "X-Cache": "MISS",
+      },
+    });
+
   } catch (error) {
-    console.error(
-      "GitHub GraphQL Error:",
-      error.response?.data || error.message,
-    );
+    console.error("GitHub GraphQL Error:", error.response?.data || error.message);
 
     return NextResponse.json(
       {

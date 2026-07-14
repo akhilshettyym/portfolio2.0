@@ -1,5 +1,3 @@
-import React, { memo } from "react";
-import Footer from "@/components/Footer";
 import DevTicker from "@/components/DevTicker";
 import LazyLoad from "@/components/basic/LazyLoad";
 import HeroSection from "@/components/HeroSection";
@@ -9,31 +7,37 @@ import MySocialsTiered from "@/components/TieredComponents/MySocialsTiered";
 import BubbleSceneTiered from "@/components/TieredComponents/BubbleSceneTiered";
 import CardStackRevealTiered from "@/components/TieredComponents/CardStackRevealTiered";
 
-const InfoLayout = memo(function InfoLayout() {
+export default function InfoLayout() {
     return (
-        <div className="relative z-10 bg-white">
-            <HeroSection />
-            <SubjectProfile />
+        <article className="relative z-10 bg-white">
+            <section id="about">
+                <HeroSection />
+                <SubjectProfile />
+            </section>
+
             <DevTicker />
 
-            <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                <BubbleSceneTiered />
-            </LazyLoad>
+            <section id="achievements">
+                <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
+                    <BubbleSceneTiered />
+                </LazyLoad>
+            </section>
 
-            <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                <CardStackRevealTiered />
-            </LazyLoad>
+            <section id="skills">
+                <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
+                    <CardStackRevealTiered />
+                </LazyLoad>
+            </section>
 
             <div className="relative z-0 bg-white">
-                <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
-                    <MySocialsTiered />
-                </LazyLoad>
+                <section>
+                    <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
+                        <MySocialsTiered />
+                    </LazyLoad>
+                </section>
             </div>
 
             <EmergencyCTA />
-            <Footer />
-        </div>
+        </article>
     );
-});
-
-export default InfoLayout;
+}

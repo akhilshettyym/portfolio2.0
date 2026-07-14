@@ -4,29 +4,38 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, useReducedMotion } from "framer-motion";
 import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
+import { useCanvasVisibility, createFrameLimitedLoop, createPhysicsThrottler, createRaycasterThrottler } from "@/lib/performance/FrameManager";
 
 const BubbleSceneComponent = () => {
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
     const shouldReduceMotion = useReducedMotion();
     const { tier, isTier2 } = usePerformanceTier();
+    const { isMobile } = useDeviceType();
     const quality = getQualityPreset(tier);
+
+    const { isVisible, frameSkipInterval } = useCanvasVisibility(wrapperRef, tier);
+
+    const visibilityRef = useRef({ isVisible, frameSkipInterval });
+
+    useEffect(() => {
+        visibilityRef.current = { isVisible, frameSkipInterval };
+    }, [isVisible, frameSkipInterval]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const wrapper = wrapperRef.current;
         if (!canvas || !wrapper) return undefined;
 
-        let animationFrameId = null;
         let loadingComplete = false;
         let animationStarted = false;
-        let sceneIsVisible = false;
         let mouseMoveTimeout;
         let resizeObserver;
         let frame = 0;
@@ -67,8 +76,12 @@ const BubbleSceneComponent = () => {
         scene.add(directionalLight);
 
         const group = new THREE.Group();
-        group.rotation.set(-0.16, 0, 0.1);
-        group.scale.setScalar(0.78);
+
+        const baseScaleFactor = isMobile ? 0.75 : 1.0;
+        const targetZRotation = isMobile ? -(Math.PI / 2) : 0;
+
+        group.rotation.set(-0.16, 0, targetZRotation + 0.1);
+        group.scale.setScalar(baseScaleFactor * 0.8);
         scene.add(group);
 
         const bubbles = POSITIONS.map((pos, index) => {
@@ -111,6 +124,7 @@ const BubbleSceneComponent = () => {
         const floatSpeed = shouldReduceMotion || isTier2 ? 0.00025 : 0.00072;
         const floatAmplitude = shouldReduceMotion || isTier2 ? 0.06 : 0.19;
         const hoverScale = isTier2 ? 2.2 : 2.95;
+
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
@@ -123,14 +137,14 @@ const BubbleSceneComponent = () => {
 
             gsap.to(group.rotation, {
                 x: 0,
-                z: 0,
+                z: targetZRotation,
                 duration,
                 ease: "power3.out",
             });
             gsap.to(group.scale, {
-                x: 1,
-                y: 1,
-                z: 1,
+                x: baseScaleFactor,
+                y: baseScaleFactor,
+                z: baseScaleFactor,
                 duration,
                 ease: "power3.out",
             });
@@ -193,21 +207,34 @@ const BubbleSceneComponent = () => {
         }
 
         const timer = createThreeTimer();
-        const animate = () => {
-            if (!sceneIsVisible) {
-                animationFrameId = null;
-                return;
+        const physicsThrottler = createPhysicsThrottler(4);
+        const raycasterThrottler = createRaycasterThrottler(30);
+        let cachedIntersects = [];
+
+        const animateCallback = (manager) => {
+            const { isVisible, frameSkipInterval } = visibilityRef.current;
+
+            if (!isVisible) return false;
+
+            if (!animationStarted) {
+                startAnimation();
             }
-            animationFrameId = requestAnimationFrame(animate);
+
+            if (manager.shouldSkipFrame(frameSkipInterval)) return;
+
             timer.update();
             frame += 1;
             const time = performance.now() * floatSpeed;
 
             if (loadingComplete) {
-                let intersects = [];
+
                 if (mouse.x !== -10 && mouse.y !== -10) {
-                    raycaster.setFromCamera(mouse, camera);
-                    intersects = raycaster.intersectObjects(bubbles, false);
+                    if (raycasterThrottler.shouldUpdate()) {
+                        raycaster.setFromCamera(mouse, camera);
+                        cachedIntersects = raycaster.intersectObjects(bubbles, false);
+                    }
+                } else {
+                    cachedIntersects = [];
                 }
 
                 bubbles.forEach((bubble) => {
@@ -222,7 +249,7 @@ const BubbleSceneComponent = () => {
                         velocity.z += (targetZ - bubble.position.z) * returnStrength;
                     }
 
-                    const isHovered = intersects.some((hit) => hit.object === bubble);
+                    const isHovered = cachedIntersects.some((hit) => hit.object === bubble);
 
                     if (isHovered) {
                         tempVector.subVectors(bubble.position, camera.position).normalize();
@@ -258,41 +285,31 @@ const BubbleSceneComponent = () => {
                     bubble.lookAt(camera.position);
                 });
 
-                if (!isTier2 && frame % 2 === 0) {
+                if (!isTier2 && physicsThrottler.shouldUpdate()) {
                     handleCollisions();
                 }
             }
             renderer.render(scene, camera);
+            return true;
         };
 
-        const startLoop = () => {
-            if (animationFrameId) return;
-            sceneIsVisible = true;
-            animate();
-        };
+        const loop = createFrameLimitedLoop(animateCallback, 60, tier);
+        if (isTier2 || shouldReduceMotion) {
+            startAnimation();
+            window.setTimeout(() => renderer.render(scene, camera), isTier2 ? 420 : 900);
+        }
 
-        const stopLoop = () => {
-            sceneIsVisible = false;
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-        };
-
-        const observer = new IntersectionObserver(
+        const visibilityObserver = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
-                    startLoop();
-                    if (entry.intersectionRatio > 0) {
-                        startAnimation();
-                    }
-                } else {
-                    stopLoop();
+                if (entry.isIntersecting && !loop.isRunning() && !isTier2 && !shouldReduceMotion) {
+                    loop.start();
+                } else if (!entry.isIntersecting) {
+                    loop.stop();
                 }
             },
-            { threshold: 0 },
+            { threshold: 0.05, rootMargin: "80px" },
         );
-        observer.observe(wrapper);
+        visibilityObserver.observe(wrapper);
 
         const onPointerMove = (event) => {
             const rect = wrapper.getBoundingClientRect();
@@ -328,9 +345,9 @@ const BubbleSceneComponent = () => {
         renderer.render(scene, camera);
 
         return () => {
-            stopLoop();
+            loop.stop();
+            visibilityObserver.disconnect();
             window.clearTimeout(mouseMoveTimeout);
-            observer.disconnect();
             resizeObserver?.disconnect();
             wrapper.removeEventListener("pointermove", onPointerMove);
             wrapper.removeEventListener("pointerleave", onPointerLeave);
@@ -345,11 +362,11 @@ const BubbleSceneComponent = () => {
             textures.forEach((texture) => texture.dispose());
             renderer.dispose();
         };
-    }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier]);
+    }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier, isMobile]);
 
     return (
         <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
-            <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-[400px]">
+            <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-100">
                 <div className="bubble-grid" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-one mt-10" aria-hidden="true" />
                 <div className="bubble-orbit bubble-orbit-two mt-5" aria-hidden="true" />

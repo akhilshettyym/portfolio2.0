@@ -206,14 +206,11 @@ const HeroSectionComponent = () => {
         const animate = () => {
             if (!isAnimating || isDisposed) return;
 
-            // Apply frame skipping based on visibility (but still request frame to keep loop alive)
             if (frameSkipInterval === Infinity) {
-                // Completely out of view - minimal frame request to keep loop alive
                 animationId = requestAnimationFrame(animate);
                 return;
             }
 
-            // Apply frame skipping based on visibility
             if (frameSkipInterval !== 1) {
                 if (frameCount % frameSkipInterval !== 0) {
                     frameCount++;
@@ -363,6 +360,7 @@ const HeroSectionComponent = () => {
                 planeGeo.dispose();
 
                 animate();
+
             } catch (error) {
                 if (!isDisposed) {
                     console.error("Cloud scene init failed:", error);
@@ -445,7 +443,7 @@ const HeroSectionComponent = () => {
         <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
             <div className="wrapper">
 
-                <div ref={containerRef} className="canvas-bg" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
+                <div ref={containerRef} className="canvas-bg absolute inset-0 z-0" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <div className="absolute top-60 right-0 z-9999">
                     <LiquidGlass width="50px" height="180px" className="p-0">
@@ -462,10 +460,9 @@ const HeroSectionComponent = () => {
                             </div>
 
                             <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
-                                {paused ? "Run Clouds" : "Stall Clouds"}
+                                {isTier2 ? "DISABLED" : (paused ? "Run Clouds" : "Stall Clouds")}
                             </div>
                         </button>
-
 
                         <button type="button" onClick={handleRestartIntroScene} className="group absolute top-14 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
                             <div className="absolute inset-0 flex items-center justify-center">

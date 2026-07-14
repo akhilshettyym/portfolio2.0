@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-/**
- * Hook to detect canvas visibility in viewport and provide optimal frame rate
- * Returns visibility state and frame skip interval based on visibility percentage
- */
 export function useCanvasVisibility(ref, tier = 'tier_1') {
     const [isVisible, setIsVisible] = useState(false);
     const [visibilityPercent, setVisibilityPercent] = useState(0);
@@ -34,21 +30,19 @@ export function useCanvasVisibility(ref, tier = 'tier_1') {
         };
     }, [ref]);
 
-    // Determine frame skip interval based on visibility and tier
     const getFrameSkipInterval = () => {
-        if (!isVisible) return Infinity; // Don't render at all
+        if (!isVisible) return Infinity;
 
         if (visibilityPercent > 75) {
-            // Fully visible - use full frame rate
             return tier === 'tier_1' ? 1 : (tier === 'tier_2' ? Infinity : 1);
+
         } else if (visibilityPercent > 50) {
-            // Mostly visible - every other frame
             return tier === 'tier_1' ? 2 : Infinity;
+
         } else if (visibilityPercent > 25) {
-            // Partially visible - render every 4 frames
             return tier === 'tier_1' ? 4 : Infinity;
+
         } else {
-            // Barely visible - render every 8 frames
             return tier === 'tier_1' ? 8 : Infinity;
         }
     };

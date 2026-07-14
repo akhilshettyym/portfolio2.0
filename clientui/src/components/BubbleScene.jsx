@@ -11,13 +11,7 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-
-import {
-    useCanvasVisibility,
-    createFrameLimitedLoop,
-    createPhysicsThrottler,
-    createRaycasterThrottler
-} from "@/lib/performance/FrameManager";
+import { useCanvasVisibility, createFrameLimitedLoop, createPhysicsThrottler, createRaycasterThrottler } from "@/lib/performance/FrameManager";
 
 const BubbleSceneComponent = () => {
     const canvasRef = useRef(null);
@@ -27,12 +21,10 @@ const BubbleSceneComponent = () => {
     const { isMobile } = useDeviceType();
     const quality = getQualityPreset(tier);
 
-    // Track visibility and frame skip instructions from the custom hook
     const { isVisible, frameSkipInterval } = useCanvasVisibility(wrapperRef, tier);
 
-    // Store visibility in a ref so the Three.js render loop can access it 
-    // without triggering a re-render/re-initialization of the scene.
     const visibilityRef = useRef({ isVisible, frameSkipInterval });
+
     useEffect(() => {
         visibilityRef.current = { isVisible, frameSkipInterval };
     }, [isVisible, frameSkipInterval]);
@@ -214,25 +206,20 @@ const BubbleSceneComponent = () => {
             }
         }
 
-        // Setup performance throttlers
         const timer = createThreeTimer();
-        const physicsThrottler = createPhysicsThrottler(4); // Only check collisions every 4 frames
-        const raycasterThrottler = createRaycasterThrottler(30); // Max 30 times a second
+        const physicsThrottler = createPhysicsThrottler(4);
+        const raycasterThrottler = createRaycasterThrottler(30);
         let cachedIntersects = [];
 
-        // Managed Render Loop CallBack
         const animateCallback = (manager) => {
             const { isVisible, frameSkipInterval } = visibilityRef.current;
 
-            // Early exit to save battery/resources if completely off-screen
             if (!isVisible) return;
 
-            // Trigger GSAP entrance sequence once upon first visibility
             if (!animationStarted) {
                 startAnimation();
             }
 
-            // Execute frame skipping based on visibility percentages
             if (manager.shouldSkipFrame(frameSkipInterval)) return;
 
             timer.update();
@@ -241,7 +228,6 @@ const BubbleSceneComponent = () => {
 
             if (loadingComplete) {
 
-                // Throttle Raycaster updates, but reuse previous intersects during skipped frames
                 if (mouse.x !== -10 && mouse.y !== -10) {
                     if (raycasterThrottler.shouldUpdate()) {
                         raycaster.setFromCamera(mouse, camera);
@@ -299,7 +285,6 @@ const BubbleSceneComponent = () => {
                     bubble.lookAt(camera.position);
                 });
 
-                // Execute throttled collisions
                 if (!isTier2 && physicsThrottler.shouldUpdate()) {
                     handleCollisions();
                 }
@@ -307,7 +292,6 @@ const BubbleSceneComponent = () => {
             renderer.render(scene, camera);
         };
 
-        // Initialize and start the limited loop
         const loop = createFrameLimitedLoop(animateCallback, 60, tier);
         loop.start();
 
@@ -345,7 +329,7 @@ const BubbleSceneComponent = () => {
         renderer.render(scene, camera);
 
         return () => {
-            loop.stop(); // Stop the managed loop cleanly
+            loop.stop();
             window.clearTimeout(mouseMoveTimeout);
             resizeObserver?.disconnect();
             wrapper.removeEventListener("pointermove", onPointerMove);

@@ -1,10 +1,10 @@
 import { createPortal } from "react-dom";
 import { FaCodeMerge } from "react-icons/fa6";
 import { useRouter, usePathname } from "next/navigation";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { logAbout, logAchievements, logCatReadme, logCoffee, logCreate, logExperience, logGithub, logHelp, logInstagram, logLinkedin, logLocation, logls, logMail, logPhilosophy, logPingAkhil, logProjects, logrmrf, logSalesforce, logSecrets, logSkills, logSocials, logSudoHire, logWhoAmI } from "@/utils/funct-utils";
 
-const ConsoleModal = ({ isOpen, onClose }) => {
+const ConsoleModalComponent = ({ isOpen, onClose }) => {
     const router = useRouter();
     const pathname = usePathname();
     const inputRef = useRef(null);
@@ -91,7 +91,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
 
         const handleNavigation = (path, elementId) => {
             const scrollToElement = () => {
-                if (!elementId) return; // If no element ID, just stay on page
+                if (!elementId) return;
                 const element = document.getElementById(elementId);
                 if (element) {
                     requestAnimationFrame(() => {
@@ -108,12 +108,9 @@ const ConsoleModal = ({ isOpen, onClose }) => {
             };
 
             if (pathname === path) {
-                // Already on the target page, just scroll
                 scrollToElement();
             } else {
-                // Navigate to the target page without hash
                 router.push(path);
-                // Scroll after navigation
                 setTimeout(scrollToElement, 800);
             }
         };
@@ -237,9 +234,8 @@ const ConsoleModal = ({ isOpen, onClose }) => {
         }
 
         setHistory((prev) => [...prev, { command: cmd, output }]);
-        // Add to command history for arrow key navigation
         setCommandHistory((prev) => [...prev, cmd]);
-        setHistoryIndex(-1); // Reset history index
+        setHistoryIndex(-1);
     };
 
     const handleCommandSubmit = (e) => {
@@ -422,5 +418,7 @@ const ConsoleModal = ({ isOpen, onClose }) => {
         document.body
     );
 };
+
+const ConsoleModal = memo(ConsoleModalComponent);
 
 export default ConsoleModal;

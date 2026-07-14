@@ -11,12 +11,12 @@ const WorkLayout = memo(
     return (
       <div>
         <section id="projects">
-          <SelectedWorks />
+          {/* <SelectedWorks /> */}
         </section>
 
         <section id="experience">
           <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-            <MyExperienceTiered />
+            {/* <MyExperienceTiered /> */}
           </LazyLoad>
         </section>
 
@@ -27,7 +27,7 @@ const WorkLayout = memo(
         </section>
 
         <EmergencyCTA />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   },

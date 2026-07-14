@@ -178,9 +178,7 @@ const FooterComponent = () => {
 
     const renderTierOneFooter = () => {
         return (
-            <motion.section ref={sectionRef}
-                style={prefersReducedMotion ? undefined : { padding: sectionPadding }}
-                className="relative w-full bg-white text-black p-12.5">
+            <motion.section ref={sectionRef} style={prefersReducedMotion ? undefined : { padding: sectionPadding }} className="relative z-50 w-full bg-white text-black p-12.5">
 
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
                     <motion.div style={{ opacity: glowOpacity }}
@@ -194,7 +192,7 @@ const FooterComponent = () => {
                 </div>
 
                 <motion.div style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }}
-                    className="relative mx-auto min-h-svh w-full overflow-hidden bg-white">
+                    className="relative mx-auto min-h-svh w-full overflow-hidden bg-white z-10">
 
                     <motion.div aria-hidden="true"
                         className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_20%,transparent_45%)]"
@@ -351,7 +349,7 @@ const FooterComponent = () => {
 
     const renderTierTwoFooter = () => {
         return (
-            <motion.section ref={sectionRef} className="relative w-full bg-white text-black overflow-hidden">
+            <motion.section ref={sectionRef} className="relative z-50 w-full bg-white text-black overflow-hidden">
 
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
                     <motion.div style={{ opacity: glowOpacity }} className="absolute left-1/2 top-10 h-96 w-96 -translate-x-1/2 rounded-full bg-white blur-3xl sm:h-184 sm:w-184 lg:h-128 lg:w-lg" />
@@ -361,7 +359,7 @@ const FooterComponent = () => {
                     <motion.div style={{ opacity: curtainOpacity }} className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_52%)]" />
                 </div>
 
-                <motion.div style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }} className="relative mx-auto min-h-svh w-full overflow-hidden rounded-none bg-white flex flex-col justify-between">
+                <motion.div style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }} className="relative mx-auto min-h-svh w-full overflow-hidden rounded-none bg-white z-10 flex flex-col justify-between">
 
                     <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_20%,transparent_45%)]"
                         style={{ opacity: topOverlayOpacity }} />
@@ -534,9 +532,9 @@ const FooterComponent = () => {
         }
 
         return (
-            <div key={renderFooter ? "tier2" : "tier1"}>
+            <footer key={renderFooter ? "tier2" : "tier1"}>
                 {renderFooter ? renderTierTwoFooter() : renderTierOneFooter()}
-            </div>
+            </footer>
         );
     };
 

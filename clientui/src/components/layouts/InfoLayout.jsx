@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import Footer from "@/components/Footer";
 import DevTicker from "@/components/DevTicker";
 import LazyLoad from "@/components/basic/LazyLoad";
 import HeroSection from "@/components/HeroSection";
@@ -21,7 +20,7 @@ const InfoLayout = memo(function InfoLayout() {
 
             <section id="achievements">
                 <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                    <BubbleSceneTiered />
+                    {/* <BubbleSceneTiered /> */}
                 </LazyLoad>
             </section>
 
@@ -40,7 +39,6 @@ const InfoLayout = memo(function InfoLayout() {
             </div>
 
             <EmergencyCTA />
-            <Footer />
         </div>
     );
 });

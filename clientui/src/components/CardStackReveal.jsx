@@ -2,9 +2,9 @@
 
 import { DEFAULT_CARDS } from "@/utils/basic-utils";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import React, { useState, useRef, memo, useEffect } from "react";
 import FloatingCard from "@/components/basic/FloatingCard";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import React, { useState, useRef, memo, useEffect } from "react";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 
 const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {

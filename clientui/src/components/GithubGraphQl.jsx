@@ -70,12 +70,15 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
         const response = await axios.get("/api/github", {
           params: { username, from: range.from, to: range.to },
         });
+
         if (!active) return;
         const calendar = response.data?.data?.user?.contributionsCollection?.contributionCalendar;
         setWeeks(calendar?.weeks || []);
         setTotal(calendar?.totalContributions || 0);
+
       } catch (err) {
         console.error("GitHub contributions fetch failed:", err.message);
+        
       } finally {
         if (active) setLoading(false);
       }

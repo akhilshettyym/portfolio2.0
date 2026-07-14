@@ -178,15 +178,14 @@ const NavbarComponent = () => {
 
   return (
     <>
-      {/* 📱 MOBILE NAVIGATION */}
-      <div className="sm:hidden fixed inset-x-0 top-0 z-50 bg-white border-b border-black/20 px-4 py-6">
+      <div className="sm:hidden w-full bg-white border-b border-black/20 px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 relative">
               <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" unoptimized priority />
             </div>
 
-            <nav className="flex gap-2">
+            <nav aria-label="Mobile Navigation" className="flex gap-2">
               {navItems.map((item) => (
                 <Link key={item.label} href={item.href} className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wide transition ${pathname === item.href ? "bg-black text-white" : "bg-black/10 text-black"}`}>
                   {item.label}
@@ -195,10 +194,7 @@ const NavbarComponent = () => {
             </nav>
           </div>
 
-          <div
-            className="relative flex flex-col items-center justify-center group cursor-pointer z-10"
-            onClick={() => setConsoleOpen((prev) => !prev)}
-          >
+          <div className="relative flex flex-col items-center justify-center group cursor-pointer z-10" onClick={() => setConsoleOpen((prev) => !prev)}>
             <div className={`absolute right-full top-1/2 -translate-y-1/2 flex items-center overflow-hidden transition-all duration-300 ease-out ${consoleOpen ? "w-22 opacity-100 mr-2" : "w-0 opacity-0 mr-0"} bg-black text-white`}>
               <div className="px-3 py-1 text-[10px] whitespace-nowrap flex items-center">
                 <span className="mr-1">{">_"}</span>
@@ -216,8 +212,7 @@ const NavbarComponent = () => {
         </div>
       </div>
 
-      {/* 💻 DESKTOP NAVIGATION */}
-      <div className="fixed top-0 left-0 z-50 px-10 w-full bg-white/75 backdrop-blur-xl text-black border-black/10 hidden sm:block">
+      <div className="px-10 w-full bg-white/75 backdrop-blur-xl text-black border-black/10 hidden sm:block">
         <div className="mt-5 flex items-center">
           <div className="flex items-center gap-3 shrink-0">
             <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
@@ -228,7 +223,7 @@ const NavbarComponent = () => {
               </div>
             </div>
 
-            <nav className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]">
+            <nav aria-label="Desktop Navigation" className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]">
               {navItems.map((item, i) => (
                 <GlitchNavItem key={item.label} href={item.href} label={item.label} active={pathname === item.href} delay={200 + i * 120} />
               ))}

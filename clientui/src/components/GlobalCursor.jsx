@@ -25,7 +25,6 @@ const GlobalCursor = () => {
             const dx = pointRef.current.x - lastUpdateRef.current.x;
             const dy = pointRef.current.y - lastUpdateRef.current.y;
 
-            // Only update if movement is significant (>2px)
             if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
                 lastUpdateRef.current.x = pointRef.current.x;
                 lastUpdateRef.current.y = pointRef.current.y;
@@ -64,13 +63,7 @@ const GlobalCursor = () => {
     const currentTier = isMounted ? (isTier2 ? "low" : "high") : "high";
 
     return (
-        <div
-            ref={cursorRef}
-            className="global-cursor-dot"
-            aria-hidden="true"
-            data-active="false"
-            data-tier={currentTier}
-        />
+        <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" data-tier={currentTier} />
     );
 };
 

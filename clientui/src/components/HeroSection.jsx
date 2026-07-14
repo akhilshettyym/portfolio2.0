@@ -41,10 +41,16 @@ const HeroSectionComponent = () => {
     const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
 
     const quality = getQualityPreset(tier);
-    const maxCloudPlanes = getQualityPreset("tier_1")?.cloudPlanes || 64;
+    // const maxCloudPlanes = quality.cloudPlanes || 900;
+    const maxCloudPlanes = quality.cloudPlanes ? Math.floor(quality.cloudPlanes * 1.5) : 1500;
 
     const pausedRef = useRef(false);
     const sceneAssetsRef = useRef(null);
+    const visibilityRef = useRef({ canvasVisible, frameSkipInterval });
+
+    useEffect(() => {
+        visibilityRef.current = { canvasVisible, frameSkipInterval };
+    }, [canvasVisible, frameSkipInterval]);
 
     useEffect(() => {
         pausedRef.current = paused;
@@ -164,6 +170,7 @@ const HeroSectionComponent = () => {
         let material = null;
         let renderer = null;
         let animationId = null;
+        let resumeTimeoutId = null;
 
         let isAnimating = true;
         let isDisposed = false;
@@ -206,13 +213,25 @@ const HeroSectionComponent = () => {
         const animate = () => {
             if (!isAnimating || isDisposed) return;
 
-            if (frameSkipInterval === Infinity) {
-                animationId = requestAnimationFrame(animate);
+            const visibility = visibilityRef.current;
+
+            if (!visibility.canvasVisible) {
+                resumeTimeoutId = window.setTimeout(() => {
+                    animationId = requestAnimationFrame(animate);
+                }, 180);
                 return;
             }
 
-            if (frameSkipInterval !== 1) {
-                if (frameCount % frameSkipInterval !== 0) {
+            if (visibility.frameSkipInterval === Infinity) {
+                if (renderer && camera) renderer.render(scene, camera);
+                resumeTimeoutId = window.setTimeout(() => {
+                    animationId = requestAnimationFrame(animate);
+                }, 300);
+                return;
+            }
+
+            if (visibility.frameSkipInterval !== 1) {
+                if (frameCount % visibility.frameSkipInterval !== 0) {
                     frameCount++;
                     animationId = requestAnimationFrame(animate);
                     return;
@@ -331,11 +350,11 @@ const HeroSectionComponent = () => {
                 const geometries = [];
 
                 for (let i = 0; i < maxCloudPlanes; i++) {
-                    planeObj.position.x = Math.random() * 1000 - 500;
+                    planeObj.position.x = Math.random() * 1400 - 700;
                     planeObj.position.y = -Math.random() * Math.random() * 200 - 15;
                     planeObj.position.z = i * (8000 / maxCloudPlanes);
                     planeObj.rotation.z = Math.random() * Math.PI;
-                    planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+                    planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 2.5 + 1.2;
                     planeObj.updateMatrix();
 
                     const cloned = planeGeo.clone();
@@ -395,6 +414,10 @@ const HeroSectionComponent = () => {
                 cancelAnimationFrame(animationId);
             }
 
+            if (resumeTimeoutId) {
+                window.clearTimeout(resumeTimeoutId);
+            }
+
             if (mesh) {
                 scene.remove(mesh);
                 mesh.geometry?.dispose();
@@ -430,8 +453,8 @@ const HeroSectionComponent = () => {
 
     useEffect(() => {
         if (isTier2) {
-            setPaused(true);
             pausedRef.current = true;
+            window.requestAnimationFrame(() => setPaused(true));
         }
     }, [isTier2]);
 

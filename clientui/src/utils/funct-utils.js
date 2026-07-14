@@ -423,7 +423,7 @@ export const logSkills = () => {
       </div>
 
       <div className="mt-6 border-t border-neutral-800 pt-3">
-        <p className="text-[11px] text-neutral-500 mb-1">// environment stack</p>
+        <p className="text-[11px] text-neutral-500 mb-1">{"// environment stack"}</p>
         <p className="leading-relaxed text-neutral-400">
           <span className="text-neutral-200 font-semibold">Languages & Frameworks:</span> Core Java • JavaScript • NextJs • MySql • TypeScript • Node.js • Express • Material UI • React •  HTML/CSS • Figma <br />
           <span className="text-neutral-200 font-semibold">Tools & Infrastructure:</span> Git • GitHub • CMS Integrations • REST APIs
@@ -575,7 +575,7 @@ export const logPhilosophy = () => {
     <div className="w-full text-[11px] bg-black border border-slate-800 rounded-lg p-4 text-slate-400 font-normal leading-relaxed max-w-3xl">
       <div className="mb-4 pb-3 border-b border-slate-900">
         <span className="text-slate-500 font-medium block uppercase tracking-wider mb-1">My Design Philosophy</span>
-        <p className="text-slate-200 text-[12px] font-medium italic">"If it doesn't remove friction, it doesn't belong."</p>
+        <p className="text-slate-200 text-[12px] font-medium italic">&quot;If it doesn&apos;t remove friction, it doesn&apos;t belong.&quot;</p>
       </div>
 
       <ul className="space-y-3.5">
@@ -596,7 +596,7 @@ export const logPhilosophy = () => {
 
         <li className="flex flex-col gap-0.5">
           <strong className="text-slate-200 font-medium">Ruthless Clarity:</strong>
-          <span>Eliminating visual clutter. If a pixel doesn't serve a clear purpose, it gets cut.</span>
+          <span>Eliminating visual clutter. If a pixel doesn&apos;t serve a clear purpose, it gets cut.</span>
         </li>
 
         <li className="flex flex-col gap-0.5">
@@ -823,8 +823,8 @@ export const logCatReadme = () => {
 
       <div className="space-y-3.5 text-slate-400">
         <p className="text-slate-200 font-medium"> Hey, you found this. Nice. </p>
-        <p> If you're reading this, you're probably the kind of person who inspects elements, reads source code, and appreciates the details. We'd get along. </p>
-        <p> I believe the best design is invisible. It doesn't make you think about the interface — it makes you think about your goals. Every pixel I push is in service of that belief. </p>
+        <p> If you&apos;re reading this, you&apos;re probably the kind of person who inspects elements, reads source code, and appreciates the details. We&apos;d get along. </p>
+        <p> I believe the best design is invisible. It doesn&apos;t make you think about the interface — it makes you think about your goals. Every pixel I push is in service of that belief. </p>
         <p> The world has enough pretty mockups that never ship. I build things that do. </p>
 
         <div className="pt-2 text-slate-300 font-medium text-right italic">
@@ -891,7 +891,7 @@ export const logSecrets = () => {
 export const logWhoAmI = () => {
   return (
     <div className="mt-2">
-      You're the person about to hire a great designer.<br />
+      You&apos;re the person about to hire a great designer.<br />
       (Trust the terminal. It knows things.)<br /><br />
       Type /secrets if you like finding hidden things.
     </div>
@@ -955,7 +955,7 @@ export const logHelp = () => {
           <span className="text-blue-400">/help</span><span>List all available commands</span>
           <span className="text-blue-400">/about</span><span>Who is Akhil Shetty M?</span>
           <span className="text-blue-400">/skills</span><span>Featured projects & case studies</span>
-          <span className="text-blue-400">/achievements</span><span>Companies I've worked with</span>
+          <span className="text-blue-400">/achievements</span><span>Companies I&apos;ve worked with</span>
           <span className="text-blue-400">/projects</span><span>Expertise & capabilities</span>
           <span className="text-blue-400">/experience</span><span>My design philosophy</span>
           <span className="text-blue-400">/socials</span><span>Social profiles & links</span>

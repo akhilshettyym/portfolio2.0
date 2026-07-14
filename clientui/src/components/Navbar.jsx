@@ -181,7 +181,11 @@ const NavbarComponent = () => {
       <div className="sm:hidden w-full bg-white border-b border-black/20 px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 relative">
+            {/* Mobile Logo Reload Trigger */}
+            <div 
+              className="w-10 h-10 relative cursor-pointer" 
+              onClick={() => window.location.reload()}
+            >
               <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" unoptimized priority />
             </div>
 
@@ -212,11 +216,15 @@ const NavbarComponent = () => {
         </div>
       </div>
 
-      <div className="px-10 w-full bg-white/75 backdrop-blur-xl text-black border-black/10 hidden sm:block">
-        <div className="mt-5 flex items-center">
+      <div className="px-10 w-full bg-white/25 backdrop-blur-xl text-black border-black/10 hidden sm:block mt-6">
+        <div className="flex items-center">
           <div className="flex items-center gap-3 shrink-0">
             <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
-              <div className="w-12 h-12 flex items-center justify-center relative group cursor-default">
+              {/* Desktop Logo Reload Trigger */}
+              <div 
+                className="w-12 h-12 flex items-center justify-center relative group cursor-pointer"
+                onClick={() => window.location.reload()}
+              >
                 <div className="relative w-full h-full overflow-hidden rounded-md">
                   <Image src="/akhil.svg" alt="Akhil" unoptimized fill priority className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5" />
                 </div>

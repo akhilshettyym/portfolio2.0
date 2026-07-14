@@ -101,24 +101,37 @@ class FrameManager {
 export function createFrameLimitedLoop(callback, targetFps = 60, tier = 'tier_1') {
     const manager = new FrameManager(targetFps, tier);
     let animationFrameId = null;
+    let running = false;
 
     const loop = () => {
+        if (!running) return;
+
         if (manager.shouldRender()) {
-            callback(manager);
+            const shouldContinue = callback(manager);
+            if (shouldContinue === false) {
+                running = false;
+                animationFrameId = null;
+                return;
+            }
         }
+
         animationFrameId = requestAnimationFrame(loop);
     };
 
     return {
         start: () => {
+            if (running || manager.targetFps <= 0) return;
+            running = true;
             animationFrameId = requestAnimationFrame(loop);
         },
         stop: () => {
+            running = false;
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
                 animationFrameId = null;
             }
         },
+        isRunning: () => running,
         manager,
     };
 }

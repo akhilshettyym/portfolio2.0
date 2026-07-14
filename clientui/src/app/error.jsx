@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 
 export default function Error({
@@ -19,14 +20,16 @@ export default function Error({
                     <FaRegFolderOpen size={64} className="text-gray-400" />
                 </div>
 
-                <h1 className="text-4xl font-bold mb-2">Oops!</h1>
+                <h1 className="text-4xl font-bold mb-2">Something interrupted this page</h1>
                 <p className="text-xl text-gray-600 mb-2">Something went wrong</p>
 
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
-                    <p className="text-sm font-mono text-gray-700 break-words">
-                        {error?.message || 'An unexpected error occurred'}
-                    </p>
-                </div>
+                {process.env.NODE_ENV !== 'production' && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
+                        <p className="text-sm font-mono text-gray-700 break-words">
+                            {error?.message || 'An unexpected error occurred'}
+                        </p>
+                    </div>
+                )}
 
                 <p className="text-gray-500 text-sm mb-6">
                     We&apos;ve logged this error and will look into it. Try refreshing the page or come back later.
@@ -39,12 +42,12 @@ export default function Error({
                     Try Again
                 </button>
 
-                <a
+                <Link
                     href="/"
                     className="block w-full bg-gray-100 text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                 >
                     Go Home
-                </a>
+                </Link>
             </div>
         </div>
     );

@@ -1,11 +1,11 @@
 "use client";
 
-import axios from "axios";
 import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic-utils";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { getCachedOrFetch, getCachedData } from "@/utils/cache-utils";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion";
@@ -13,21 +13,34 @@ import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion"
 const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
+
+  // Guard against hydration mismatches
+  const [mounted, setMounted] = useState(false);
+
   const [total, setTotal] = useState(0);
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
-  const panelRef = useRef(null);
   const motionTotal = useMotionValue(0);
+
+  const panelRef = useRef(null);
   const [aiDisplay, setAiDisplay] = useState("100M+");
   const [coffeeDisplay, setCoffeeDisplay] = useState("2.9k+");
   const [commitDisplay, setCommitDisplay] = useState("0");
   const [aiNotif, setAiNotif] = useState(null);
   const [coffeeNotif, setCoffeeNotif] = useState(null);
   const [commitNotif, setCommitNotif] = useState(null);
-  const currentDate = useMemo(() => new Date(), []);
+
+  // Set mounted flag on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const range = useMemo(() => {
+    // Return a stable placeholder during SSR to prevent hydration errors
+    if (!mounted) return { from: "", to: "" };
+
+    const currentDate = new Date();
     const end = new Date(currentDate);
     const start = new Date(currentDate);
 
@@ -44,13 +57,28 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
       from: start.toISOString(),
       to: end.toISOString(),
     };
-  }, [currentDate, isMobile]);
+  }, [mounted, isMobile]);
+
+  // Initialize state from cache immediately once mounted
+  useEffect(() => {
+    if (!mounted || !range.from) return;
+
+    const cacheKey = `github:${username}:${range.from}:${range.to}`;
+    const cachedData = getCachedData(cacheKey);
+
+    if (cachedData) {
+      const calendar = cachedData?.data?.user?.contributionsCollection?.contributionCalendar;
+      if (calendar) {
+        setWeeks(calendar.weeks || []);
+        setTotal(calendar.totalContributions || 0);
+        setLoading(false);
+      }
+    }
+  }, [username, range, mounted]);
 
   useEffect(() => {
-    if (isTier2) {
-      setCommitDisplay(total.toString());
-      return undefined;
-    }
+    if (isTier2) return undefined;
+
     const controls = animate(motionTotal, total, {
       duration: 1.2,
       ease: "easeOut",
@@ -61,24 +89,47 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     return () => controls.stop();
   }, [total, motionTotal, isTier2]);
 
+  const displayedCommitCount = isTier2 ? total.toString() : commitDisplay;
+
+  // Primary fetch effect
   useEffect(() => {
+    if (!mounted || !range.from) return;
+
     let active = true;
+    const abortController = new AbortController();
 
     const fetchContributions = async () => {
       try {
-        setLoading(true);
-        const response = await axios.get("/api/github", {
-          params: { username, from: range.from, to: range.to },
+        const params = new URLSearchParams({ username, from: range.from, to: range.to });
+        const cacheKey = `github:${username}:${range.from}:${range.to}`;
+
+        const hasCachedData = getCachedData(cacheKey);
+        if (!hasCachedData) {
+          setLoading(true);
+        }
+
+        const responseData = await getCachedOrFetch(cacheKey, async () => {
+          const response = await fetch(`/api/github?${params.toString()}`, {
+            signal: abortController.signal,
+            next: { revalidate: 43200 },
+          });
+
+          if (!response.ok) {
+            throw new Error(`GitHub API returned ${response.status}`);
+          }
+          return response.json();
         });
 
-        if (!active) return;
-        const calendar = response.data?.data?.user?.contributionsCollection?.contributionCalendar;
+        if (!active || !responseData) return;
+
+        const calendar = responseData?.data?.user?.contributionsCollection?.contributionCalendar;
         setWeeks(calendar?.weeks || []);
         setTotal(calendar?.totalContributions || 0);
 
       } catch (err) {
-        console.error("GitHub contributions fetch failed:", err.message);
-        
+        if (err.name !== "AbortError") {
+          console.error("GitHub contributions fetch failed:", err.message);
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -87,10 +138,12 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     fetchContributions();
     return () => {
       active = false;
+      abortController.abort();
     };
-  }, [username, range]);
+  }, [username, range, mounted]);
 
   const monthLabels = useMemo(() => {
+    if (!mounted) return [];
     const labels = [];
     const renderedMonths = new Set();
 
@@ -117,7 +170,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     });
 
     return labels;
-  }, [weeks, range]);
+  }, [weeks, range, mounted]);
 
   const randomChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
@@ -128,7 +181,6 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     }
 
     let iteration = 0;
-
     const interval = setInterval(() => {
       const glitched = finalText
         .split("")
@@ -158,7 +210,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     observer.observe(panelRef.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [mounted]);
 
   useEffect(() => {
     if (!isVisible || isTier2) return undefined;
@@ -190,6 +242,15 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
       clearInterval(commitInterval);
     };
   }, [isTier2, isVisible]);
+
+  // Don't render anything structurally sensitive until mounted on the client
+  if (!mounted) {
+    return (
+      <div className="w-full min-h-60 flex items-center justify-center bg-white">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-black" />
+      </div>
+    );
+  }
 
   const themeColors = ["#ebedf0", "#cccccc", "#999999", "#555555", "#111111"];
 
@@ -257,7 +318,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
           </AnimatePresence>
 
           <motion.p onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)} className="cursor-default text-[15px] font-black tracking-tight text-black">
-            {commitDisplay}
+            {displayedCommitCount}
           </motion.p>
 
           <p className="flex items-center mt-1 text-[10px] font-bold tracking-wider text-black/50">
@@ -270,9 +331,8 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
 
   return (
     <motion.div ref={panelRef}
-      initial={isTier2 ? false : { opacity: 0, y: 34, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.2 }}
+      initial={false}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: isTier2 ? 0.2 : 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="w-full p-6 md:p-8 bg-white text-black">
 
@@ -343,7 +403,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
             </AnimatePresence>
 
             <motion.p onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)} className="cursor-default text-[26px] font-black tracking-tight text-black">
-              {commitDisplay}
+              {displayedCommitCount}
             </motion.p>
 
             <p className="flex items-center mt-2 text-xs font-bold tracking-wider text-black/50">
@@ -408,9 +468,8 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                         if (count > 10) backgroundColor = themeColors[4];
 
                         return (
-                          <motion.div key={day.date} initial={isTier2 ? false : { opacity: 0, scale: 0.85 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
+                          <motion.div key={day.date} initial={false}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: isTier2 ? 0 : weekIndex * 0.006 + dayIndex * 0.001, duration: isTier2 ? 0 : 0.12 }}
                             whileHover={isTier2 ? undefined : { scale: 1.15, zIndex: 10 }}
                             title={`${day.contributionCount} contributions on ${day.date}`}

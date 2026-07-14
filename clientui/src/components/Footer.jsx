@@ -87,7 +87,8 @@ const FooterComponent = () => {
     const { isTier2 } = usePerformanceTier();
 
     useEffect(() => {
-        setIsHydrated(true);
+        const handle = window.setTimeout(() => setIsHydrated(true), 0);
+        return () => window.clearTimeout(handle);
     }, []);
 
     const { scrollYProgress } = useScroll({

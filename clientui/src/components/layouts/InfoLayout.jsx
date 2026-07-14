@@ -1,4 +1,3 @@
-import React, { memo } from "react";
 import DevTicker from "@/components/DevTicker";
 import LazyLoad from "@/components/basic/LazyLoad";
 import HeroSection from "@/components/HeroSection";
@@ -8,9 +7,9 @@ import MySocialsTiered from "@/components/TieredComponents/MySocialsTiered";
 import BubbleSceneTiered from "@/components/TieredComponents/BubbleSceneTiered";
 import CardStackRevealTiered from "@/components/TieredComponents/CardStackRevealTiered";
 
-const InfoLayout = memo(function InfoLayout() {
+export default function InfoLayout() {
     return (
-        <div className="relative z-10 bg-white">
+        <article className="relative z-10 bg-white">
             <section id="about">
                 <HeroSection />
                 <SubjectProfile />
@@ -20,7 +19,7 @@ const InfoLayout = memo(function InfoLayout() {
 
             <section id="achievements">
                 <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
-                    {/* <BubbleSceneTiered /> */}
+                    <BubbleSceneTiered />
                 </LazyLoad>
             </section>
 
@@ -39,8 +38,6 @@ const InfoLayout = memo(function InfoLayout() {
             </div>
 
             <EmergencyCTA />
-        </div>
+        </article>
     );
-});
-
-export default InfoLayout;
+}

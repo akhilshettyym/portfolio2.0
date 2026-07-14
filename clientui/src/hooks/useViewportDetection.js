@@ -5,21 +5,31 @@ import { useEffect, useRef, useState } from "react";
 export function useViewportDetection(options = {}) {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef(null);
+    const once = options.once ?? false;
+    const root = options.root ?? null;
+    const rootMargin = options.rootMargin;
+    const threshold = options.threshold ?? 0.1;
 
     useEffect(() => {
         const element = ref.current;
         if (!element) return;
 
         const observer = new IntersectionObserver(([entry]) => {
-            setIsVisible(entry.isIntersecting);
+            if (entry.isIntersecting) {
+                setIsVisible(true);
+                if (once) observer.unobserve(entry.target);
+            } else if (!once) {
+                setIsVisible(false);
+            }
         }, {
-            threshold: 0.1,
-            ...options,
+            root,
+            rootMargin,
+            threshold,
         });
 
         observer.observe(element);
         return () => observer.disconnect();
-    }, [options]);
+    }, [once, root, rootMargin, threshold]);
 
     return { ref, isVisible };
 }
@@ -68,8 +78,8 @@ export function useViewportTracker(elementCount = 5) {
     return { getRef, visibleElements };
 }
 
-export function useLazyLoad() {
-    const { ref, isVisible } = useViewportDetection();
+export function useLazyLoad(options = {}) {
+    const { ref, isVisible } = useViewportDetection({ once: true, ...options });
 
     return {
         ref,

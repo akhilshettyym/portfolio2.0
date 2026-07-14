@@ -12,7 +12,7 @@ const DynamicGithubGraphQl = dynamic(() => import("@/components/GithubGraphQl"),
 
 const GithubGraphQlTiered = (props) => {
     const { isTier2, ready } = usePerformanceTier();
-    const { ref, shouldRender } = useLazyLoad();
+    const { ref, shouldRender } = useLazyLoad({ rootMargin: "300px 0px", threshold: 0 });
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -24,11 +24,11 @@ const GithubGraphQlTiered = (props) => {
     }, []);
 
     if (!mounted || !ready) {
-        return <div ref={ref} style={{ width: "100%", minHeight: "300px", background: "#ffffff" }} />;
+        return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "#ffffff" }} />;
     }
 
     if (isTier2 && !shouldRender) {
-        return <div ref={ref} style={{ width: "100%", minHeight: "300px", background: "#ffffff" }} />;
+        return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "#ffffff" }} />;
     }
 
     return (

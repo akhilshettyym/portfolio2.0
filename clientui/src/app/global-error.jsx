@@ -21,11 +21,13 @@ export default function GlobalError({
                             A critical error occurred. Please try refreshing the page.
                         </p>
 
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
-                            <p className="text-sm font-mono text-red-700 wrap-break-word">
-                                {error?.message || 'An unexpected error occurred'}
-                            </p>
-                        </div>
+                        {process.env.NODE_ENV !== 'production' && (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
+                                <p className="text-sm font-mono text-red-700 break-words">
+                                    {error?.message || 'An unexpected error occurred'}
+                                </p>
+                            </div>
+                        )}
 
                         <button
                             onClick={() => reset()}

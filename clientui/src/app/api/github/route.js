@@ -1,6 +1,13 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+const memoryCache = new Map();
+
+function getCacheKey(username, from, to) {
+  return `${username}:${from}:${to}`;
+}
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -13,6 +20,25 @@ export async function GET(req) {
         { error: "username is required" },
         { status: 400 },
       );
+    }
+
+    if (!process.env.GITHUB_GRAPHQL_API || !process.env.GITHUB_TOKEN) {
+      return NextResponse.json(
+        { error: "GitHub API configuration is missing" },
+        { status: 500 },
+      );
+    }
+
+    const cacheKey = getCacheKey(username, from, to);
+    const cached = memoryCache.get(cacheKey);
+
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return NextResponse.json(cached.data, {
+        headers: {
+          "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=86400",
+          "X-Cache": "HIT",
+        },
+      });
     }
 
     const query = `
@@ -52,9 +78,15 @@ export async function GET(req) {
       },
     );
 
+    memoryCache.set(cacheKey, {
+      data: response.data,
+      timestamp: Date.now(),
+    });
+
     return NextResponse.json(response.data, {
       headers: {
-        'Cache-Control': 'public, s-maxage=43200, stale-while-revalidate=86400',
+        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=86400",
+        "X-Cache": "MISS",
       },
     });
 

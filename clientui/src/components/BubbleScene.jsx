@@ -214,7 +214,7 @@ const BubbleSceneComponent = () => {
         const animateCallback = (manager) => {
             const { isVisible, frameSkipInterval } = visibilityRef.current;
 
-            if (!isVisible) return;
+            if (!isVisible) return false;
 
             if (!animationStarted) {
                 startAnimation();
@@ -290,10 +290,26 @@ const BubbleSceneComponent = () => {
                 }
             }
             renderer.render(scene, camera);
+            return true;
         };
 
         const loop = createFrameLimitedLoop(animateCallback, 60, tier);
-        loop.start();
+        if (isTier2 || shouldReduceMotion) {
+            startAnimation();
+            window.setTimeout(() => renderer.render(scene, camera), isTier2 ? 420 : 900);
+        }
+
+        const visibilityObserver = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !loop.isRunning() && !isTier2 && !shouldReduceMotion) {
+                    loop.start();
+                } else if (!entry.isIntersecting) {
+                    loop.stop();
+                }
+            },
+            { threshold: 0.05, rootMargin: "80px" },
+        );
+        visibilityObserver.observe(wrapper);
 
         const onPointerMove = (event) => {
             const rect = wrapper.getBoundingClientRect();
@@ -330,6 +346,7 @@ const BubbleSceneComponent = () => {
 
         return () => {
             loop.stop();
+            visibilityObserver.disconnect();
             window.clearTimeout(mouseMoveTimeout);
             resizeObserver?.disconnect();
             wrapper.removeEventListener("pointermove", onPointerMove);

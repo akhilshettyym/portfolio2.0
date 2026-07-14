@@ -1,8 +1,8 @@
 import { createPortal } from "react-dom";
 import { FaCodeMerge } from "react-icons/fa6";
 import { useRouter, usePathname } from "next/navigation";
-import React, { useState, useEffect, useRef, memo } from "react";
-import { logAbout, logAchievements, logCatReadme, logCoffee, logCreate, logExperience, logGithub, logHelp, logInstagram, logLinkedin, logLocation, logls, logMail, logPhilosophy, logPingAkhil, logProjects, logrmrf, logSalesforce, logSecrets, logSkills, logSocials, logSudoHire, logWhoAmI } from "@/utils/funct-utils";
+import React, { useState, useEffect, useRef, memo, useCallback } from "react";
+import { runConsoleCommand } from "@/utils/console-commands";
 
 const ConsoleModalComponent = ({ isOpen, onClose }) => {
     const router = useRouter();
@@ -22,22 +22,26 @@ const ConsoleModalComponent = ({ isOpen, onClose }) => {
     const [history, setHistory] = useState([]);
     const [commandHistory, setCommandHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
+    const pendingScrollRef = useRef(null);
 
     useEffect(() => {
-        setMounted(true);
+        const handle = window.setTimeout(() => setMounted(true), 0);
+        return () => window.clearTimeout(handle);
     }, []);
 
     useEffect(() => {
         if (isOpen) {
-            setRender(true);
+            const renderHandle = window.setTimeout(() => setRender(true), 0);
             setTimeout(() => setAnimationState("open"), 10);
 
             if (bootPhase === "loading") {
-                setBootProgress(0);
+                window.requestAnimationFrame(() => setBootProgress(0));
             }
+            return () => window.clearTimeout(renderHandle);
         } else {
-            setAnimationState("closed");
-            setTimeout(() => setRender(false), 300);
+            window.requestAnimationFrame(() => setAnimationState("closed"));
+            const closeHandle = window.setTimeout(() => setRender(false), 300);
+            return () => window.clearTimeout(closeHandle);
         }
     }, [isOpen, bootPhase]);
 
@@ -79,159 +83,42 @@ const ConsoleModalComponent = ({ isOpen, onClose }) => {
         }
     }, [history, bootPhase]);
 
-    const executeCommand = (cmd) => {
-        let command = cmd.trim().toLowerCase();
+    const scrollToSection = useCallback(function scrollToElement(elementId, attempts = 0) {
+        if (!elementId || attempts > 12) return;
 
-        const nonSlashCommands = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work"];
-        if (!command.startsWith("/") && !nonSlashCommands.some(c => command.startsWith(c)) && command !== "") {
-            command = "/" + command;
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+            pendingScrollRef.current = null;
+            return;
         }
 
-        let output = "";
+        window.setTimeout(() => scrollToElement(elementId, attempts + 1), 100);
+    }, []);
 
-        const handleNavigation = (path, elementId) => {
-            const scrollToElement = () => {
-                if (!elementId) return;
-                const element = document.getElementById(elementId);
-                if (element) {
-                    requestAnimationFrame(() => {
-                        element.scrollIntoView({ behavior: "smooth", block: "start" });
-                    });
-                } else {
-                    setTimeout(() => {
-                        const el = document.getElementById(elementId);
-                        if (el) {
-                            el.scrollIntoView({ behavior: "smooth", block: "start" });
-                        }
-                    }, 500);
-                }
-            };
+    useEffect(() => {
+        if (!pendingScrollRef.current) return;
+        scrollToSection(pendingScrollRef.current);
+    }, [pathname, scrollToSection]);
+
+    const executeCommand = (cmd) => {
+        const navigate = (path, elementId) => {
+            if (elementId) pendingScrollRef.current = elementId;
 
             if (pathname === path) {
-                scrollToElement();
+                window.requestAnimationFrame(() => scrollToSection(elementId));
             } else {
                 router.push(path);
-                setTimeout(scrollToElement, 800);
             }
         };
 
-        switch (command) {
-            case "/about":
-                handleNavigation("/", "about");
-                output = logAbout();
-                break;
+        const output = runConsoleCommand(cmd, {
+            navigate,
+            close: handleClose,
+            clear: () => setHistory([]),
+        });
 
-            case "/skills":
-                handleNavigation("/", "skills");
-                output = logSkills();
-                break;
-
-            case "/achievements":
-                handleNavigation("/", "achievements");
-                output = logAchievements();
-                break;
-
-            case "/projects":
-                handleNavigation("/work", "projects");
-                output = logProjects();
-                break;
-
-            case "/experience":
-                handleNavigation("/work", "experience");
-                output = logExperience();
-                break;
-
-            case "/github":
-                handleNavigation("/work", "github");
-                output = logGithub();
-                break;
-
-            case "/connect":
-            case "/create":
-                handleNavigation("/start");
-                output = logCreate();
-                break;
-
-            case "/philosophy":
-                output = logPhilosophy();
-                break;
-
-            case "/mail":
-                output = logMail();
-                break;
-
-            case "/linkedin":
-                output = logLinkedin();
-                break;
-
-            case "/instagram":
-                output = logInstagram();
-                break;
-
-            case "/salesforce":
-                output = logSalesforce();
-                break;
-
-            case "/socials":
-                output = logSocials();
-                break;
-
-            case "sudo hire akhil":
-                output = logSudoHire();
-                break;
-
-            case "rm -rf doubts":
-                output = logrmrf();
-                break;
-
-            case "/coffee":
-                output = logCoffee();
-                break;
-
-            case "cat readme.md":
-                output = logCatReadme();
-                break;
-
-            case "ping akhil":
-                output = logPingAkhil();
-                break;
-
-            case "/secrets":
-                output = logSecrets();
-                break;
-
-            case "me":
-            case "whoami":
-                output = logWhoAmI();
-                break;
-
-            case "/location":
-                output = logLocation();
-                break;
-
-            case "ls":
-                output = logls();
-                break;
-
-            case "/help":
-                output = logHelp();
-                break;
-
-            case "clear":
-                setHistory([]);
-                return;
-
-            case "close":
-            case "exit":
-                handleClose();
-                return;
-
-            case "":
-                break;
-
-            default:
-                output = `zsh: command not found: ${command}. Type /help for available commands.`;
-        }
+        if (output === undefined) return;
 
         setHistory((prev) => [...prev, { command: cmd, output }]);
         setCommandHistory((prev) => [...prev, cmd]);

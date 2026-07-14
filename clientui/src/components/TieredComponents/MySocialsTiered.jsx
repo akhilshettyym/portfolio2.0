@@ -18,7 +18,8 @@ const MySocialsTiered = (props) => {
     const { ref, shouldRender } = useLazyLoad({ rootMargin: "200px 0px", threshold: 0 });
 
     useEffect(() => {
-        setMounted(true);
+        const handle = window.setTimeout(() => setMounted(true), 0);
+        return () => window.clearTimeout(handle);
     }, []);
 
     if (!mounted || !ready) {

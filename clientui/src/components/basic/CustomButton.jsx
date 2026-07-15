@@ -12,7 +12,7 @@ const ArrowIcon = () => {
   );
 };
 
-const CustomButton = ({ title, onClick, width = 180, height = 56, className = "", disabled = false }) => {
+export default function CustomButton({ title, onClick, width = 180, height = 56, className = "", disabled = false }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ const CustomButton = ({ title, onClick, width = 180, height = 56, className = ""
       <motion.div onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
-        className="relative cursor-pointer overflow-hidden border border-zinc-300 bg-white" 
+        className="relative cursor-pointer overflow-hidden border border-zinc-300 bg-white"
         style={{ width: `${width}px`, height: `${height}px`, clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)" }}>
 
         <div className="flex h-full">
@@ -42,17 +42,19 @@ const CustomButton = ({ title, onClick, width = 180, height = 56, className = ""
               exit={{ x: "110%" }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 z-10 flex h-full" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)" }}>
-                
+
               <div className="flex w-3/4 items-center justify-start bg-white px-5">
                 <span className="text-xs font-medium uppercase text-black"> {" "}{title}{" "} </span>
               </div>
               <div className="flex w-1/4 items-center justify-center border-l border-black/10 bg-black text-white">
+
                 <motion.div initial={{ x: 0, y: 0 }}
                   animate={{ x: 3, y: 0 }}
                   exit={{ x: 0, y: 0 }}
                   transition={{ duration: 0.25, ease: "easeOut" }}>
                   <ArrowIcon />
                 </motion.div>
+
               </div>
             </motion.div>
           )}
@@ -61,5 +63,3 @@ const CustomButton = ({ title, onClick, width = 180, height = 56, className = ""
     </button>
   );
 };
-
-export default CustomButton;

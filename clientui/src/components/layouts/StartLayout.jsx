@@ -1,11 +1,11 @@
-import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import CreateSomething from "@/components/CreateSomething";
 
 export default function StartLayout() {
+
   return (
-    <article>
+    <article className="relative z-10 bg-white">
       <CreateSomething />
-      <EmergencyCTA />
     </article>
   );
+
 }

@@ -1,14 +1,11 @@
-export const PERFORMANCE_TIER_STORAGE_KEY = "performance_tier";
-export const LEGACY_PERFORMANCE_TIER_STORAGE_KEY = "tier";
-export const PERFORMANCE_TIER_EVENT = "performance-tier-change";
-export const PERFORMANCE_TIERS = { HIGH: "tier_1", LOW: "tier_2" };
+import { PERF_TIER, LEGACY_TIER, TIER_EVENT, PERF_TIERS } from "@/utils/storage";
 
 function safeWindow() {
     return typeof window !== "undefined" ? window : undefined;
 }
 
 export function isValidTier(tier) {
-    return tier === PERFORMANCE_TIERS.HIGH || tier === PERFORMANCE_TIERS.LOW;
+    return tier === PERF_TIERS.HIGH || tier === PERF_TIERS.LOW;
 }
 
 export function getSavedTier() {
@@ -16,7 +13,7 @@ export function getSavedTier() {
         const w = safeWindow();
         if (!w) return null;
 
-        const stored = w.localStorage.getItem(PERFORMANCE_TIER_STORAGE_KEY);
+        const stored = w.localStorage.getItem(PERF_TIER);
         return isValidTier(stored) ? stored : null;
     } catch (error) {
         console.warn("PerformanceEngine: Storage read blocked by browser security restrictions:", error.message);
@@ -31,15 +28,15 @@ export function savePerformanceTier(tier) {
         const w = safeWindow();
         if (!w) return;
 
-        w.localStorage.setItem(PERFORMANCE_TIER_STORAGE_KEY, tier);
+        w.localStorage.setItem(PERF_TIER, tier);
 
         try {
-            w.localStorage.removeItem(LEGACY_PERFORMANCE_TIER_STORAGE_KEY);
+            w.localStorage.removeItem(LEGACY_TIER);
         } catch (cleanupError) {
             console.debug("PerformanceEngine: Failed to remove legacy migration keys:", cleanupError.message);
         }
 
-        w.dispatchEvent(new CustomEvent(PERFORMANCE_TIER_EVENT, { detail: tier }));
+        w.dispatchEvent(new CustomEvent(TIER_EVENT, { detail: tier }));
     } catch (writeError) {
         console.error("PerformanceEngine: State synchronization failed to save locally:", writeError.message);
     }
@@ -73,9 +70,9 @@ export function probeGPUInfo() {
     let gl = null;
 
     try {
-        gl =
-            canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" }) ||
+        gl = canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" }) ||
             canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" });
+
     } catch (contextError) {
         console.warn("PerformanceEngine: Context initialization rejected by high-performance hardware restriction rules:", contextError.message);
         return fallback;
@@ -92,6 +89,7 @@ export function probeGPUInfo() {
             vendor = gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) || vendor;
             renderer = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || renderer;
         }
+
     } catch (privacyError) {
         console.warn("PerformanceEngine: Debug strings masked out by browser canvas fingerprinting protection settings:", privacyError.message);
     }
@@ -101,9 +99,7 @@ export function probeGPUInfo() {
         vendor,
         renderer,
         maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE) || 0,
-        isWebGL2Available:
-            typeof WebGL2RenderingContext !== "undefined" &&
-            gl instanceof WebGL2RenderingContext,
+        isWebGL2Available: typeof WebGL2RenderingContext !== "undefined" && gl instanceof WebGL2RenderingContext,
         caveatBlocked: false,
     };
 
@@ -162,7 +158,7 @@ export function benchmarkAnimationFrame(durationMs = 850) {
 }
 
 export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
-    if (gpu.caveatBlocked) return PERFORMANCE_TIERS.LOW;
+    if (gpu.caveatBlocked) return PERF_TIERS.LOW;
 
     let score = 0;
     const gpuText = `${gpu.vendor} ${gpu.renderer}`;
@@ -198,12 +194,12 @@ export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
 
     score += getConnectionScore();
 
-    return score >= 50 ? PERFORMANCE_TIERS.HIGH : PERFORMANCE_TIERS.LOW;
+    return score >= 50 ? PERF_TIERS.HIGH : PERF_TIERS.LOW;
 }
 
 export async function calibratePerformance() {
     if (typeof window === "undefined" || typeof performance === "undefined") {
-        return PERFORMANCE_TIERS.LOW;
+        return PERF_TIERS.LOW;
     }
 
     const gpu = probeGPUInfo();

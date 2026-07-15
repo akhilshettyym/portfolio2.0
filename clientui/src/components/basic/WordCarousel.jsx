@@ -1,9 +1,9 @@
 "use client";
 
-import { WORDS } from "@/utils/basic-utils";
+import { WORDS } from "@/utils/basic";
 import { useState, useEffect } from "react";
 
-const WordCarousel = () => {
+export default function WordCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isResetting, setIsResetting] = useState(false);
 
@@ -46,5 +46,3 @@ const WordCarousel = () => {
     </span>
   );
 };
-
-export default WordCarousel;

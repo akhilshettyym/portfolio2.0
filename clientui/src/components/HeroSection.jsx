@@ -3,30 +3,30 @@
 import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
+import { CLOUD_SHADER } from "@/utils/basic";
 import { SiRevealdotjs } from "react-icons/si";
-import { CLOUD_SHADER } from "@/utils/basic-utils";
+import LimpModal from "@/components/basic/LimpModal";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
 import LiquidGlass from "@/components/basic/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
+import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
 import { LoadingContext } from "@/components/basic/LoaderWrapper";
-import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
-import { createFrameLimitedLoop } from "@/lib/performance/FrameManager";
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
     return a.background === b.background && a.clouds === b.clouds;
 }
 
-const HeroSectionComponent = () => {
+const HeroSection = () => {
     const btnRef = useRef(null);
     const sectionRef = useRef(null);
     const speedRef = useRef(0.8);
@@ -34,6 +34,7 @@ const HeroSectionComponent = () => {
     const tunnelPositionRef = useRef(0);
 
     const [paused, setPaused] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [sceneAssets, setSceneAssets] = useState(null);
 
     const { triggerIntroRestart } = useContext(LoadingContext);
@@ -41,7 +42,6 @@ const HeroSectionComponent = () => {
     const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
 
     const quality = getQualityPreset(tier);
-    // const maxCloudPlanes = quality.cloudPlanes || 900;
     const maxCloudPlanes = quality.cloudPlanes ? Math.floor(quality.cloudPlanes * 1.5) : 1500;
 
     const pausedRef = useRef(false);
@@ -57,8 +57,20 @@ const HeroSectionComponent = () => {
     }, [paused]);
 
     useEffect(() => {
+        if (ready) {
+            const timer = setTimeout(() => {
+                setShowModal(true);
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        } else {
+            setShowModal(false);
+        }
+    }, [ready]);
+
+    useEffect(() => {
         try {
-            const cachedScene = localStorage.getItem(WEATHER_SCENE_ASSETS);
+            const cachedScene = localStorage.getItem(ASSET_CACHE);
 
             if (cachedScene) {
                 const parsed = JSON.parse(cachedScene);
@@ -90,25 +102,6 @@ const HeroSectionComponent = () => {
     }, [sceneAssets]);
 
     useEffect(() => {
-        if (!ready || !isTier2 || !sectionRef.current) return undefined;
-
-        const dismissed = sessionStorage.getItem("tier_2_notice_seen") === "true";
-        if (dismissed) return undefined;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry.isIntersecting) return;
-                sessionStorage.setItem("tier_2_notice_seen", "true");
-                observer.disconnect();
-            },
-            { threshold: 0.35 },
-        );
-
-        observer.observe(sectionRef.current);
-        return () => observer.disconnect();
-    }, [isTier2, ready]);
-
-    useEffect(() => {
         let mounted = true;
 
         async function init() {
@@ -127,9 +120,10 @@ const HeroSectionComponent = () => {
                         return prev;
                     }
 
-                    localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(nextScene));
+                    localStorage.setItem(ASSET_CACHE, JSON.stringify(nextScene));
                     return nextScene;
                 });
+
             } catch (error) {
                 console.error("Failed to load weather scene:", error);
 
@@ -140,7 +134,7 @@ const HeroSectionComponent = () => {
                         clouds: "morning_clear",
                     };
 
-                    localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(fallback));
+                    localStorage.setItem(ASSET_CACHE, JSON.stringify(fallback));
 
                     sceneAssetsRef.current = fallback;
                     setSceneAssets(fallback);
@@ -464,8 +458,10 @@ const HeroSectionComponent = () => {
 
     return (
         <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
-            <div className="wrapper">
 
+            {showModal && <LimpModal />}
+
+            <div className="wrapper">
                 <div ref={containerRef} className="canvas-bg absolute inset-0 z-0" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <div className="absolute top-60 right-0 z-9999">
@@ -568,10 +564,9 @@ const HeroSectionComponent = () => {
                 <div className="corner" style={{ bottom: "40px", left: "40px" }} />
                 <div className="corner" style={{ bottom: "40px", right: "40px" }} />
             </div>
+
         </section>
     );
 };
 
-const HeroSection = memo(HeroSectionComponent);
-
-export default HeroSection;
+export default memo(HeroSection);

@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true, placeholder = null, className = "", style = {} }) => {
-    
+export default function LazyLoad({ children, threshold = 0.1, rootMargin = "100px", once = true, placeholder = null, className = "", style = {} }) {
+
     const containerRef = useRef(null);
     const observerRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -53,9 +53,7 @@ const LazyLoad = ({ children, threshold = 0.1, rootMargin = "100px", once = true
                     style={{ width: "100%", height: "100%" }}>
                     {children}
                 </motion.div>
-            ) : ( placeholder )}
+            ) : (placeholder)}
         </div>
     );
 };
-
-export default LazyLoad;

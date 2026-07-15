@@ -4,11 +4,10 @@ import "@/styles/cinematic_intro.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct-utils";
-import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic-utils";
+import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct";
+import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic";
 
-const CinematicIntro = ({ onComplete }) => {
-
+export default function CinematicIntro({ onComplete }) {
   const [scene, setScene] = useState(0);
   const [aiStage, setAiStage] = useState(0);
   const [butStage, setButStage] = useState(0);
@@ -764,26 +763,12 @@ const CinematicIntro = ({ onComplete }) => {
 
           <div className="absolute inset-0 z-3 overflow-hidden">
             {floatingBusinessTexts.map((item) => (
-              <motion.div
-                key={item.id}
+              <motion.div key={item.id}
                 initial={{ opacity: 0, y: 16, rotate: -2 }}
-                animate={{
-                  opacity: item.opacity,
-                  y: isTier2 ? 0 : [0, -18, 10, 0],
-                  rotate: isTier2 ? 0 : [-2, 2, -1],
-                }}
-                transition={{
-                  duration: isTier2 ? 0.4 : item.duration,
-                  delay: item.delay,
-                  repeat: isTier2 ? 0 : Infinity,
-                  ease: "easeInOut",
-                }}
+                animate={{ opacity: item.opacity, y: isTier2 ? 0 : [0, -18, 10, 0], rotate: isTier2 ? 0 : [-2, 2, -1] }}
+                transition={{ duration: isTier2 ? 0.4 : item.duration, delay: item.delay, repeat: isTier2 ? 0 : Infinity, ease: "easeInOut" }}
                 className="absolute max-w-[18rem] text-left text-[10px] uppercase leading-4 tracking-[0.22em] text-white/70"
-                style={{
-                  left: `${item.left}%`,
-                  top: `${item.top}%`,
-                  transform: `scale(${item.scale})`,
-                }}>
+                style={{ left: `${item.left}%`, top: `${item.top}%`, transform: `scale(${item.scale})` }}>
                 {item.text}
               </motion.div>
             ))}
@@ -1033,5 +1018,3 @@ const CinematicIntro = ({ onComplete }) => {
     </div>
   );
 };
-
-export default CinematicIntro;

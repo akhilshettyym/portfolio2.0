@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 import { WiMoonAltFull } from "react-icons/wi";
 import { TiWeatherSunny } from "react-icons/ti";
+import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
 import { getWeatherIconData } from "@/utils/weather-scene";
-import { MOON_MAP, WEATHER_MAP } from "@/utils/basic-utils";
 
-const WeatherIcon = () => {
+export default function WeatherIcon() {
     const data = getWeatherIconData();
     const moonPhase = data?.getMoonPhase;
     const sceneCondition = data?.getSceneCondition;
@@ -41,5 +41,3 @@ const WeatherIcon = () => {
         </div>
     );
 };
-
-export default WeatherIcon;

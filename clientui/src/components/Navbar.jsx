@@ -3,11 +3,11 @@
 import "@/styles/navbar.css";
 import Link from "next/link";
 import Image from "next/image";
+import ConsoleModal from "./ConsoleModal";
 import { usePathname } from "next/navigation";
+import { SiGnometerminal } from "react-icons/si";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import ConsoleModal from "./ConsoleModal";
-import { SiGnometerminal } from "react-icons/si";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -31,36 +31,6 @@ function scrambleTo(setText, finalText) {
       setText(finalText);
     }
   }, 30);
-}
-
-function GlitchMini({ text, active }) {
-  const [display, setDisplay] = useState(text);
-
-  useEffect(() => {
-    if (!active) {
-      return;
-    }
-    let frame = 0;
-    const original = text.split("");
-
-    const interval = setInterval(() => {
-      frame++;
-      setDisplay(() =>
-        original.map((c, i) => (i < frame ? c : randomChar())).join(""),
-      );
-
-      if (frame > original.length) {
-        clearInterval(interval);
-      }
-    }, 30);
-    return () => clearInterval(interval);
-  }, [active, text]);
-
-  return (
-    <span key={`${text}-${active}`} className="uppercase">
-      {active ? display : text}
-    </span>
-  );
 }
 
 function GlitchNavItem({ href, label, active, delay = 0 }) {
@@ -97,7 +67,7 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
   );
 }
 
-const NavbarComponent = () => {
+const Navbar = () => {
   const [time, setTime] = useState("");
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -181,11 +151,7 @@ const NavbarComponent = () => {
       <div className="sm:hidden w-full bg-white border-b border-black/20 px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Mobile Logo Reload Trigger */}
-            <div 
-              className="w-10 h-10 relative cursor-pointer" 
-              onClick={() => window.location.reload()}
-            >
+            <div className="w-10 h-10 relative cursor-pointer" onClick={() => window.location.reload()}>
               <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" unoptimized priority />
             </div>
 
@@ -220,11 +186,7 @@ const NavbarComponent = () => {
         <div className="flex items-center">
           <div className="flex items-center gap-3 shrink-0">
             <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
-              {/* Desktop Logo Reload Trigger */}
-              <div 
-                className="w-12 h-12 flex items-center justify-center relative group cursor-pointer"
-                onClick={() => window.location.reload()}
-              >
+              <div className="w-12 h-12 flex items-center justify-center relative group cursor-pointer" onClick={() => window.location.reload()}>
                 <div className="relative w-full h-full overflow-hidden rounded-md">
                   <Image src="/akhil.svg" alt="Akhil" unoptimized fill priority className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5" />
                 </div>
@@ -302,6 +264,4 @@ const NavbarComponent = () => {
   );
 };
 
-const Navbar = memo(NavbarComponent);
-
-export default Navbar;
+export default memo(Navbar);

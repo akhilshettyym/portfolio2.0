@@ -1,5 +1,5 @@
-import { CACHE_TTL_MS } from "@/utils/basic-utils";
-import { CACHE_KEY, LOCATION_MODE_KEY } from "@/utils/localstorage";
+import { CACHE_TTL_MS } from "@/utils/basic";
+import { SCENE_CACHE, LOCATION_MODE } from "@/utils/storage";
 import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
 
 async function fetchWeather(latitude, longitude) {
@@ -53,7 +53,7 @@ async function getLocationFromIP() {
 }
 
 async function getCoordinates() {
-    const mode = localStorage.getItem(LOCATION_MODE_KEY) || "fast";
+    const mode = localStorage.getItem(LOCATION_MODE) || "fast";
 
     if (mode === "accurate") {
         try {
@@ -63,6 +63,7 @@ async function getCoordinates() {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
             };
+            
         } catch (error) {
             console.warn("GPS failed. Falling back to IP.", error);
             return await getLocationFromIP();
@@ -78,7 +79,7 @@ function readCachedScene() {
     }
 
     try {
-        const raw = localStorage.getItem(CACHE_KEY);
+        const raw = localStorage.getItem(SCENE_CACHE);
 
         if (!raw) {
             return null;
@@ -97,6 +98,7 @@ function readCachedScene() {
         }
 
         return parsed.data;
+
     } catch {
         return null;
     }
@@ -108,35 +110,35 @@ function writeCachedScene(data) {
     }
 
     try {
-        localStorage.setItem(
-            CACHE_KEY,
+        localStorage.setItem(SCENE_CACHE,
             JSON.stringify({
                 timestamp: Date.now(),
                 data,
             }),
         );
+
     } catch (error) {
         console.error("Failed to cache weather scene", error);
     }
 }
 
 export function setLocationMode(mode) {
-    localStorage.setItem(LOCATION_MODE_KEY, mode);
-    localStorage.removeItem(CACHE_KEY);
+    localStorage.setItem(LOCATION_MODE, mode);
+    localStorage.removeItem(SCENE_CACHE);
 }
 
 export function getLocationMode() {
-    return localStorage.getItem(LOCATION_MODE_KEY);
+    return localStorage.getItem(LOCATION_MODE);
 }
 
 export function getWeatherIconData() {
     try {
-        const rawData = localStorage.getItem(CACHE_KEY);
+        const rawData = localStorage.getItem(SCENE_CACHE);
 
         if (!rawData) {
             return {
-                getMoonPhase: "MOON",
-                getSceneCondition: "SCENE",
+                getMoonPhase: "NEW_MOON",
+                getSceneCondition: "clear",
             };
         }
 
@@ -144,13 +146,14 @@ export function getWeatherIconData() {
         const innerData = parsedData?.data;
 
         return {
-            getMoonPhase: innerData?.renderMoonPhase || "MOON",
-            getSceneCondition: innerData?.sceneCondition || "SCENE",
+            getMoonPhase: innerData?.renderMoonPhase || "NEW_MOON",
+            getSceneCondition: innerData?.sceneCondition || "clear",
         };
+
     } catch {
         return {
-            getMoonPhase: "MOON",
-            getSceneCondition: "SCENE",
+            getMoonPhase: "NEW_MOON",
+            getSceneCondition: "clear",
         };
     }
 }
@@ -167,7 +170,7 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
 
         const { latitude, longitude } = await getCoordinates();
         const weather = await fetchWeather(latitude, longitude);
-        const mode = localStorage.getItem(LOCATION_MODE_KEY) || "fast";
+        const mode = localStorage.getItem(LOCATION_MODE) || "fast";
         const scene = resolveScene(weather);
         const sceneCondition = scene.condition;
         const renderMoonPhase = getMoonVariant();
@@ -189,6 +192,7 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
 
         writeCachedScene(result);
         return result;
+
     } catch (error) {
         console.error("Weather Scene Error:", error);
         const cached = readCachedScene();
@@ -211,5 +215,5 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
 }
 
 export function hasLocationPreference() {
-    return !!localStorage.getItem(LOCATION_MODE_KEY);
+    return !!localStorage.getItem(LOCATION_MODE);
 }

@@ -1,10 +1,10 @@
-import { getCardState } from "@/utils/funct-utils";
+import { getCardState } from "@/utils/funct";
 import { motion, useMotionTemplate, useTransform } from "framer-motion";
 
-const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) => {
+export default function FloatingCard({ card, index, progress, hoveredCard, setHoveredCard }) {
   const stateX = useTransform(progress, (v) => getCardState(v, index).x);
   const stateY = useTransform(progress, (v) => getCardState(v, index).y);
-  
+
   const stateScale = useTransform(
     progress,
     (v) => getCardState(v, index).scale,
@@ -49,6 +49,7 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
 
   return (
     <motion.div className="absolute left-1/2 top-1/2 w-[min(90vw,20rem)] -translate-x-1/2 -translate-y-1/2" style={{ x: stateX, y: stateY, scale: stateScale, opacity: stateOpacity, rotate: stateRotate, filter: blurFilter, zIndex: isHovered ? 999 : 20 + index }}>
+
       <motion.div animate={{ filter: hasHoveredCard && !isHovered ? "blur(2px)" : "blur(0px)", opacity: hasHoveredCard && !isHovered ? 0.25 : 1, scale: hasHoveredCard && !isHovered ? 0.95 : 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ pointerEvents: hasHoveredCard && !isHovered ? "none" : "auto" }}>
@@ -84,6 +85,7 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
 
               <div className="mt-5 flex items-center justify-between gap-3">
                 <div className="text-xs text-black/45"> Decrypt </div>
+
                 <motion.a href={card.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -93,6 +95,7 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
                   <span> {card.cta} </span>
                   <span aria-hidden="true"> ↗ </span>
                 </motion.a>
+
               </div>
             </div>
           </div>
@@ -102,5 +105,3 @@ const FloatingCard = ({ card, index, progress, hoveredCard, setHoveredCard }) =>
     </motion.div>
   );
 };
-
-export default FloatingCard;

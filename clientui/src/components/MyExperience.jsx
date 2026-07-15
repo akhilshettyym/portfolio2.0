@@ -9,8 +9,8 @@ import LiquidGlass from "@/components/basic/LiquidGlass";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
 
-const COMPONENT_HEIGHT = "480px";
 const UNIQUE_CARD_COUNT = 3;
+const COMPONENT_HEIGHT = "480px";
 const SCANNER_POSITION_RATIO = 0.75;
 
 const generateMachineCode = (width, height) => {
@@ -42,18 +42,22 @@ const generateMachineCode = (width, height) => {
 };
 
 const education_cards = [
-  "/my_experience/education/edu_sslc.svg",
-  "/my_experience/education/edu_puc.svg",
+  // "/my_experience/education/edu_sslc.svg",
+  // "/my_experience/education/edu_puc.svg",
+  "/my_experience/education/edu_be.svg",
+  "/my_experience/education/edu_be.svg",
   "/my_experience/education/edu_be.svg",
 ];
 
 const experience_cards = [
-  "/my_experience/education/edu_sslc.svg",
-  "/my_experience/education/edu_puc.svg",
+  // "/my_experience/education/edu_sslc.svg",
+  // "/my_experience/education/edu_puc.svg",
+  "/my_experience/education/edu_be.svg",
+  "/my_experience/education/edu_be.svg",
   "/my_experience/education/edu_be.svg",
 ];
 
-const MyExperienceComponent = () => {
+const MyExperience = () => {
   const { isTier2 } = usePerformanceTier();
   const baseSpeed = isTier2 ? 76 : 120;
   const [isAnimating, setIsAnimating] = useState(true);
@@ -580,6 +584,4 @@ const MyExperienceComponent = () => {
   );
 };
 
-const MyExperience = memo(MyExperienceComponent);
-
-export default MyExperience;
+export default memo(MyExperience);

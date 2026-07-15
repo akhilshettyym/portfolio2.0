@@ -1,11 +1,10 @@
 "use client";
 
 import "@/styles/dev_ticker.css";
+import { DEV_TICKERS, DEV_TICKERS_TIER } from "@/utils/basic";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { DEV_TICKERS, DEV_TICKERS_TIER } from "@/utils/basic-utils";
 
-const DevTicker = () => {
-
+export default function DevTicker() {
   const { isTier2 } = usePerformanceTier();
   const stream = [...DEV_TICKERS, ...DEV_TICKERS];
 
@@ -39,5 +38,3 @@ const DevTicker = () => {
     </section>
   );
 };
-
-export default DevTicker;

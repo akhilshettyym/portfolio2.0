@@ -1,6 +1,10 @@
-import { CACHE_PREFIX } from "@/utils/localstorage";
+import { CACHE_PREFIX } from "@/utils/storage";
+
+const inflightRequests = new Map();
 
 const DEFAULT_CACHE_TTL = 24 * 60 * 60 * 1000;
+
+export const CACHE_DURATION_MS = 24 * 60 * 60 * 1000;
 
 export const getCachedData = (key, ttl = DEFAULT_CACHE_TTL) => {
   try {
@@ -20,6 +24,7 @@ export const getCachedData = (key, ttl = DEFAULT_CACHE_TTL) => {
     }
 
     return data;
+
   } catch (error) {
     console.error("Cache retrieval error:", error);
     return null;
@@ -31,12 +36,10 @@ export const setCachedData = (key, data) => {
     if (typeof window === "undefined") return;
 
     const cacheKey = `${CACHE_PREFIX}${key}`;
-    const cacheItem = {
-      data,
-      timestamp: Date.now(),
-    };
+    const cacheItem = { data, timestamp: Date.now() };
 
     window.localStorage.setItem(cacheKey, JSON.stringify(cacheItem));
+
   } catch (error) {
     console.error("Cache set error:", error);
   }
@@ -48,6 +51,7 @@ export const clearCache = (key) => {
 
     const cacheKey = `${CACHE_PREFIX}${key}`;
     window.localStorage.removeItem(cacheKey);
+
   } catch (error) {
     console.error("Cache clear error:", error);
   }
@@ -63,12 +67,11 @@ export const clearAllGitHubCache = () => {
         window.localStorage.removeItem(key);
       }
     });
+
   } catch (error) {
     console.error("Clear all cache error:", error);
   }
 };
-
-const inflightRequests = new Map();
 
 export async function getCachedOrFetch(key, fetcher, ttl = DEFAULT_CACHE_TTL) {
   const cached = getCachedData(key, ttl);

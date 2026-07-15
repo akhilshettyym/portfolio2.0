@@ -18,7 +18,7 @@ export async function GET(request) {
     url.searchParams.set("timezone", "auto");
 
     const response = await fetch(url, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
     });
     const data = await response.json();
 

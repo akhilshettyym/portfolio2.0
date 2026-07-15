@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { memo, useEffect, useRef, useState } from "react";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { PROJECTS, CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic-utils";
+import { PROJECTS, CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(value, max));
@@ -30,6 +30,7 @@ function getButtonPosition(clientX, clientY) {
   let y = clientY - CTA_HEIGHT / 2 + cursorOffsetY;
   x = clamp(x, EDGE_PADDING, vw - CTA_WIDTH - EDGE_PADDING);
   y = clamp(y, EDGE_PADDING, vh - CTA_HEIGHT - EDGE_PADDING);
+
   return { x, y };
 }
 
@@ -41,7 +42,7 @@ function getFallbackPointerPoint() {
   };
 }
 
-const SelectedWorksComponent = () => {
+export default function SelectedWorks() {
   const { isMobile } = useDeviceType();
 
   const [activeProject, setActiveProject] = useState(null);
@@ -372,8 +373,4 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
       )}
     </>
   );
-}
-
-const SelectedWorks = memo(SelectedWorksComponent);
-
-export default SelectedWorks;
+};

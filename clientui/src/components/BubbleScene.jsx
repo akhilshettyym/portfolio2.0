@@ -4,16 +4,15 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
+import { BUBBLE_TEXT_GROUPS } from "@/utils/basic";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, useReducedMotion } from "framer-motion";
-import { BUBBLE_TEXT_GROUPS } from "@/utils/basic-utils";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic-utils";
+import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-import { useCanvasVisibility, createFrameLimitedLoop, createPhysicsThrottler, createRaycasterThrottler } from "@/lib/performance/FrameManager";
 
-const BubbleSceneComponent = () => {
+function BubbleScene() {
     const canvasRef = useRef(null);
     const wrapperRef = useRef(null);
     const shouldReduceMotion = useReducedMotion();
@@ -21,21 +20,15 @@ const BubbleSceneComponent = () => {
     const { isMobile } = useDeviceType();
     const quality = getQualityPreset(tier);
 
-    const { isVisible, frameSkipInterval } = useCanvasVisibility(wrapperRef, tier);
-
-    const visibilityRef = useRef({ isVisible, frameSkipInterval });
-
-    useEffect(() => {
-        visibilityRef.current = { isVisible, frameSkipInterval };
-    }, [isVisible, frameSkipInterval]);
-
     useEffect(() => {
         const canvas = canvasRef.current;
         const wrapper = wrapperRef.current;
         if (!canvas || !wrapper) return undefined;
 
+        let animationFrameId = null;
         let loadingComplete = false;
         let animationStarted = false;
+        let sceneIsVisible = false;
         let mouseMoveTimeout;
         let resizeObserver;
         let frame = 0;
@@ -124,7 +117,6 @@ const BubbleSceneComponent = () => {
         const floatSpeed = shouldReduceMotion || isTier2 ? 0.00025 : 0.00072;
         const floatAmplitude = shouldReduceMotion || isTier2 ? 0.06 : 0.19;
         const hoverScale = isTier2 ? 2.2 : 2.95;
-
         const mouse = new THREE.Vector2(-10, -10);
         const raycaster = new THREE.Raycaster();
         const tempVector = new THREE.Vector3();
@@ -207,34 +199,21 @@ const BubbleSceneComponent = () => {
         }
 
         const timer = createThreeTimer();
-        const physicsThrottler = createPhysicsThrottler(4);
-        const raycasterThrottler = createRaycasterThrottler(30);
-        let cachedIntersects = [];
-
-        const animateCallback = (manager) => {
-            const { isVisible, frameSkipInterval } = visibilityRef.current;
-
-            if (!isVisible) return false;
-
-            if (!animationStarted) {
-                startAnimation();
+        const animate = () => {
+            if (!sceneIsVisible) {
+                animationFrameId = null;
+                return;
             }
-
-            if (manager.shouldSkipFrame(frameSkipInterval)) return;
-
+            animationFrameId = requestAnimationFrame(animate);
             timer.update();
             frame += 1;
             const time = performance.now() * floatSpeed;
 
             if (loadingComplete) {
-
+                let intersects = [];
                 if (mouse.x !== -10 && mouse.y !== -10) {
-                    if (raycasterThrottler.shouldUpdate()) {
-                        raycaster.setFromCamera(mouse, camera);
-                        cachedIntersects = raycaster.intersectObjects(bubbles, false);
-                    }
-                } else {
-                    cachedIntersects = [];
+                    raycaster.setFromCamera(mouse, camera);
+                    intersects = raycaster.intersectObjects(bubbles, false);
                 }
 
                 bubbles.forEach((bubble) => {
@@ -249,7 +228,7 @@ const BubbleSceneComponent = () => {
                         velocity.z += (targetZ - bubble.position.z) * returnStrength;
                     }
 
-                    const isHovered = cachedIntersects.some((hit) => hit.object === bubble);
+                    const isHovered = intersects.some((hit) => hit.object === bubble);
 
                     if (isHovered) {
                         tempVector.subVectors(bubble.position, camera.position).normalize();
@@ -285,31 +264,41 @@ const BubbleSceneComponent = () => {
                     bubble.lookAt(camera.position);
                 });
 
-                if (!isTier2 && physicsThrottler.shouldUpdate()) {
+                if (!isTier2 && frame % 3 === 0) {
                     handleCollisions();
                 }
             }
             renderer.render(scene, camera);
-            return true;
         };
 
-        const loop = createFrameLimitedLoop(animateCallback, 60, tier);
-        if (isTier2 || shouldReduceMotion) {
-            startAnimation();
-            window.setTimeout(() => renderer.render(scene, camera), isTier2 ? 420 : 900);
-        }
+        const startLoop = () => {
+            if (animationFrameId) return;
+            sceneIsVisible = true;
+            animate();
+        };
 
-        const visibilityObserver = new IntersectionObserver(
+        const stopLoop = () => {
+            sceneIsVisible = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        };
+
+        const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting && !loop.isRunning() && !isTier2 && !shouldReduceMotion) {
-                    loop.start();
-                } else if (!entry.isIntersecting) {
-                    loop.stop();
+                if (entry.isIntersecting) {
+                    startLoop();
+                    if (entry.intersectionRatio > 0) {
+                        startAnimation();
+                    }
+                } else {
+                    stopLoop();
                 }
             },
-            { threshold: 0.05, rootMargin: "80px" },
+            { threshold: 0 },
         );
-        visibilityObserver.observe(wrapper);
+        observer.observe(wrapper);
 
         const onPointerMove = (event) => {
             const rect = wrapper.getBoundingClientRect();
@@ -345,9 +334,9 @@ const BubbleSceneComponent = () => {
         renderer.render(scene, camera);
 
         return () => {
-            loop.stop();
-            visibilityObserver.disconnect();
+            stopLoop();
             window.clearTimeout(mouseMoveTimeout);
+            observer.disconnect();
             resizeObserver?.disconnect();
             wrapper.removeEventListener("pointermove", onPointerMove);
             wrapper.removeEventListener("pointerleave", onPointerLeave);
@@ -398,6 +387,4 @@ const BubbleSceneComponent = () => {
     );
 };
 
-const BubbleScene = memo(BubbleSceneComponent);
-
-export default BubbleScene;
+export default memo(BubbleScene);

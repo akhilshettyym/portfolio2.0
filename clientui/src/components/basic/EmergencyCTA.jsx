@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import "@/styles/emergency_cta.css";
+import { goToTop } from "@/utils/funct";
 import { useRouter } from "next/navigation";
-import { goToTop } from "@/utils/funct-utils";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const EmergencyCTA = () => {
+export default function EmergencyCTA() {
   const router = useRouter();
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
@@ -19,7 +19,7 @@ const EmergencyCTA = () => {
 
   const renderMobile = () => {
     return (
-      <div className="bg-white">
+      <div className="relative z-10">
         <div className="relative flex flex-row items-center overflow-hidden w-full bg-white px-10">
 
           <div className="flex-1 rounded-lg text-sm px-4 overflow-hidden min-w-0 flex items-center">
@@ -51,8 +51,8 @@ const EmergencyCTA = () => {
 
   const renderDesktop = () => {
     return (
-      <div className="bg-white">
-        <div className="relative flex flex-row items-center overflow-hidden w-full bg-white px-10">
+      <div className="relative z-10">
+        <div className="flex flex-row items-center overflow-hidden w-full bg-white px-10">
           <div className="flex-1 rounded-lg text-sm px-4 flex items-center justify-start min-w-0">
             <Image src="/footer/animated_qr_border.gif" alt="animated qr border" width={200} height={56} priority unoptimized style={{ width: "auto" }} className="w-auto h-auto z-10 object-contain mix-blend-multiply" />
           </div>
@@ -94,5 +94,3 @@ const EmergencyCTA = () => {
   return render();
 
 };
-
-export default EmergencyCTA;

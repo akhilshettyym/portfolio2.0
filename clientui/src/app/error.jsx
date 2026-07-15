@@ -1,15 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 
-export default function Error({
-    error,
-    reset,
-}) {
+export default function Error({ error, reset }) {
+
     useEffect(() => {
-        // Log the error to an error reporting service
         console.error('Application Error:', error);
     }, [error]);
 
@@ -35,20 +32,14 @@ export default function Error({
                     We&apos;ve logged this error and will look into it. Try refreshing the page or come back later.
                 </p>
 
-                <button
-                    onClick={() => reset()}
-                    className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors mb-3"
-                >
+                <button onClick={() => reset()} className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors mb-3">
                     Try Again
                 </button>
 
-                <Link
-                    href="/"
-                    className="block w-full bg-gray-100 text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-                >
+                <Link href="/" className="block w-full bg-gray-100 text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                     Go Home
                 </Link>
             </div>
         </div>
     );
-}
+};

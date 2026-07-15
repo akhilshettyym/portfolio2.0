@@ -14,7 +14,7 @@ const BubbleScene = dynamic(() => import("@/components/BubbleScene"), {
     ssr: false,
 });
 
-const BubbleSceneTiered = (props) => {
+export default function BubbleSceneTiered(props) {
     const { isTier2, ready } = usePerformanceTier();
     const { ref, shouldRender } = useLazyLoad();
 
@@ -29,6 +29,4 @@ const BubbleSceneTiered = (props) => {
             </Suspense>
         </div>
     );
-}
-
-export default BubbleSceneTiered;
+};

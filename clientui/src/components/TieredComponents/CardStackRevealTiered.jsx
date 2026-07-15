@@ -10,7 +10,7 @@ const DynamicCardStackReveal = dynamic(() => import("@/components/CardStackRevea
     ssr: false,
 });
 
-const CardStackRevealTiered = (props) => {
+export default function CardStackRevealTiered(props) {
     const { isTier2, ready } = usePerformanceTier();
     const { ref, shouldRender } = useLazyLoad({ rootMargin: "200px 0px", threshold: 0 });
     const [mounted, setMounted] = useState(false);
@@ -36,5 +36,3 @@ const CardStackRevealTiered = (props) => {
         </div>
     );
 };
-
-export default CardStackRevealTiered;

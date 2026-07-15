@@ -1,8 +1,8 @@
 import { FaFileAlt } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import { FaInstagram, FaGithub, FaLinkedin, FaSalesforce } from "react-icons/fa6";
-import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull } from "react-icons/wi";
 import { TiWeatherCloudy, TiWeatherNight, TiWeatherPartlySunny, TiWeatherShower, TiWeatherStormy, TiWeatherSunny } from "react-icons/ti";
+import { WiMoonAltNew, WiMoonAltWaxingCrescent3, WiMoonAltFirstQuarter, WiMoonAltFull, WiMoonAltWaxingGibbous3, WiMoonAltWaningGibbous3, WiMoonAltThirdQuarter, WiMoonAltWaningCrescent3 } from "react-icons/wi";
 
 export const MONTHS = [
   "Jan",
@@ -484,22 +484,42 @@ export const WEATHER_MAP = {
 export const MOON_MAP = {
   NEW_MOON: {
     icon: WiMoonAltNew,
-    label: "New Moon",
+    label: "New Moon"
   },
 
-  CRESCENT: {
+  WAXING_CRESCENT: {
     icon: WiMoonAltWaxingCrescent3,
-    label: "Crescent Moon",
+    label: "Waxing Crescent"
   },
 
-  HALF_MOON: {
+  FIRST_QUARTER: {
     icon: WiMoonAltFirstQuarter,
-    label: "Half Moon",
+    label: "First Quarter"
+  },
+
+  WAXING_GIBBOUS: {
+    icon: WiMoonAltWaxingGibbous3,
+    label: "Waxing Gibbous"
   },
 
   FULL_MOON: {
     icon: WiMoonAltFull,
-    label: "Full Moon",
+    label: "Full Moon"
+  },
+
+  WANING_GIBBOUS: {
+    icon: WiMoonAltWaningGibbous3,
+    label: "Waning Gibbous"
+  },
+
+  THIRD_QUARTER: {
+    icon: WiMoonAltThirdQuarter,
+    label: "Third Quarter"
+  },
+
+  WANING_CRESCENT: {
+    icon: WiMoonAltWaningCrescent3,
+    label: "Waning Crescent"
   },
 };
 
@@ -644,3 +664,43 @@ export const CLOUD_SHADER = {
       gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.w), fogFactor);
     }`,
 };
+
+
+/* SubjectProfile */
+export const fadeInContainer = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+export const itemReveal = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+export const carouselData = [
+  "I build fast, smooth websites where performance is baked in from the start — delivering excellent results.",
+  "I write clean, well-structured, and maintainable code focused on clarity, scalability, and long-term reliability.",
+  "I design intuitive, consistent, and responsive interfaces that feel natural across all devices and screen sizes.",
+  "Strong technical SEO, accessibility, and modern best practices are built in from day one — not added later.",
+  "From concept to launch, I ensure clear communication, thoughtful planning, and reliable, rigorously tested delivery.",
+];
+
+export const welcomeTexts = [
+  "HELLO, GLAD YOU'RE HERE.",
+  "WELCOME TO MY CREATIVE SPACE.",
+  "LET'S CREATE SOMETHING REMARKABLE.",
+  "CRAFTING DIGITAL EXPERIENCES FOR YOU.",
+  "READY TO BRING IDEAS TO LIFE?",
+];

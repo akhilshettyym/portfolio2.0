@@ -10,7 +10,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
-const Loader = ({ onFinish, duration = 3000 }) => {
+export default function Loader({ onFinish, duration = 3000 }) {
   const containerRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
@@ -325,5 +325,3 @@ const Loader = ({ onFinish, duration = 3000 }) => {
     </div>
   );
 };
-
-export default Loader;

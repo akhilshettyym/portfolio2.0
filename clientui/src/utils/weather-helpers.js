@@ -1,20 +1,34 @@
 import { Moon } from "lunarphase-js";
-import { WEATHER_CODES } from "@/utils/basic-utils";
+import { WEATHER_CODES } from "@/utils/basic";
 
 export function getMoonVariant() {
   const phase = Moon.lunarPhase();
 
   switch (phase) {
-    case "New Moon":
+    case "New":
       return "NEW_MOON";
 
     case "Waxing Crescent":
-    case "Waning Crescent":
-      return "CRESCENT";
+      return "WAXING_CRESCENT";
 
     case "First Quarter":
+      return "FIRST_QUARTER";
+
+    case "Waxing Gibbous":
+      return "WAXING_GIBBOUS";
+
+    case "Full":
+      return "FULL_MOON";
+
+    case "Waning Gibbous":
+      return "WANING_GIBBOUS";
+
     case "Last Quarter":
-      return "HALF_MOON";
+    case "Third Quarter":
+      return "THIRD_QUARTER";
+
+    case "Waning Crescent":
+      return "WANING_CRESCENT";
 
     default:
       return "FULL_MOON";

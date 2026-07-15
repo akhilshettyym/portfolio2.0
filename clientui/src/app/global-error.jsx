@@ -2,12 +2,9 @@
 
 import { useEffect } from 'react';
 
-export default function GlobalError({
-    error,
-    reset,
-}) {
+export default function GlobalError({ error, reset }) {
+
     useEffect(() => {
-        // Log the error to an error reporting service
         console.error('Global Error:', error);
     }, [error]);
 
@@ -29,10 +26,7 @@ export default function GlobalError({
                             </div>
                         )}
 
-                        <button
-                            onClick={() => reset()}
-                            className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
-                        >
+                        <button onClick={() => reset()} className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
                             Reload Page
                         </button>
                     </div>
@@ -40,4 +34,4 @@ export default function GlobalError({
             </body>
         </html>
     );
-}
+};

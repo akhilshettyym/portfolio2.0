@@ -541,6 +541,14 @@ export const logCreate = () => {
   )
 }
 
+export const logHero = () => {
+  return (
+    <div className="text-[11px]">
+      <span className="text-emerald-400">Navigating to Hero section on /...</span>
+    </div>
+  )
+}
+
 export const logPhilosophy = () => {
   return (
     <div className="w-full text-[11px] bg-black border border-slate-800 rounded-lg p-4 text-slate-400 font-normal leading-relaxed max-w-3xl">
@@ -741,7 +749,7 @@ export const logSudoHire = () => {
 
 export const logrmrf = () => {
   return (
-    <div className="w-full max-w-md bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
+    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
       <div className="flex flex-col gap-1.5 text-slate-400">
         <div>Removing doubts/impostor-syndrome... done</div>
         <div>Removing doubts/will-he-deliver... done</div>
@@ -758,7 +766,7 @@ export const logrmrf = () => {
 
 export const logCoffee = () => {
   return (
-    <div className="w-full max-w-sm bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-normal select-none">
+    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-normal select-none">
       <div className="text-slate-600 font-bold whitespace-pre mb-2.5">
         {"( ( ) )\n........\n| |] \\ /\n`----´"}
       </div>
@@ -786,7 +794,7 @@ export const logCoffee = () => {
 
 export const logCatReadme = () => {
   return (
-    <div className="w-full max-w-xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
+    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
       <div className="flex items-center gap-2 border-b border-slate-900 pb-2 mb-3 text-slate-500 font-medium">
         <span className="text-emerald-500">#</span>
         <span>README.md</span>

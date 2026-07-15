@@ -264,9 +264,11 @@ function ConsoleModal({ isOpen, onClose }) {
                                 <p className="text-white font-bold mb-1">Navigation</p>
                                 <div className="text-gray-400 space-y-1">
                                     <p>/about</p>
-                                    <p>/work</p>
-                                    <p>/clients</p>
                                     <p>/skills</p>
+                                    <p>/projects</p>
+                                    <p>/connect</p>
+                                    <p>/socials</p>
+                                    <p>/achievements</p>
                                     <p className="mt-2 text-gray-500">... /help for all commands</p>
                                 </div>
                             </div>

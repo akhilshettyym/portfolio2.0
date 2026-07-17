@@ -70,7 +70,6 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
 const Navbar = () => {
   const [time, setTime] = useState("");
   const [consoleOpen, setConsoleOpen] = useState(false);
-  const [hovering, setHovering] = useState(false);
   const pathname = usePathname();
   const { isTier2 } = usePerformanceTier();
 
@@ -231,14 +230,14 @@ const Navbar = () => {
 
           <div className="ml-auto relative flex items-center gap-3 shrink-0 min-w-40 justify-end opacity-0 animate-[navbar-enter_0.6s_ease-out_0.4s_forwards]">
 
-            <button onClick={() => setConsoleOpen((prev) => !prev)} className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen || hovering ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} bg-black text-white px-4 text-[11px] overflow-hidden`}>
+            <button onClick={() => setConsoleOpen((prev) => !prev)} className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} bg-black text-white px-4 text-[11px] overflow-hidden`}>
               <span className="mr-2">{">_"}</span>
               <span className="uppercase tracking-wide whitespace-nowrap">console </span>
               <span className="ml-1 animate-blink">|</span>
               <span className="ml-2 uppercase tracking-wide whitespace-nowrap opacity-60"> run command </span>
             </button>
 
-            <div className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen || hovering ? "opacity-0" : "opacity-100"}`}>
+            <div className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen ? "opacity-0" : "opacity-100"}`}>
               <div className="font-bold"> {" "} AKHIL SHETTY M <span className="font-light">, IN</span>
               </div>
               <div>{time || "—:—:— --"}</div>
@@ -249,7 +248,7 @@ const Navbar = () => {
             </div>
 
             <div onClick={() => setConsoleOpen((prev) => !prev)} className="w-10 aspect-square flex items-center justify-center relative overflow-hidden bg-white transition-all duration-300 cursor-pointer z-40 hover:bg-black">
-              <svg viewBox="0 0 100 100" className={`w-full h-full transition-all duration-300 ${hovering || consoleOpen ? "scale-70 rotate-90" : ""}`} preserveAspectRatio="none">
+              <svg viewBox="0 0 100 100" className={`w-full h-full transition-all duration-300 ${consoleOpen ? "scale-70 rotate-90" : ""}`} preserveAspectRatio="none">
                 <SiGnometerminal size={100} />
               </svg>
             </div>

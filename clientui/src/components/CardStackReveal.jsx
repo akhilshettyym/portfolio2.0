@@ -1,16 +1,15 @@
 "use client";
 
-import { DEFAULT_CARDS } from "@/utils/basic-utils";
+import { DEFAULT_CARDS } from "@/utils/basic";
+import React, { useState, useRef, memo } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import FloatingCard from "@/components/basic/FloatingCard";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import React, { useState, useRef, memo, useEffect } from "react";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 
-const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
+function CardStackReveal({ cards = DEFAULT_CARDS }) {
   const sectionRef = useRef(null);
   const [hoveredCard, setHoveredCard] = useState(-1);
-  // const [isHydrated, setIsHydrated] = useState(false);
 
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
@@ -18,15 +17,6 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
   const renderStackedCards = isMobile || isTier2;
 
   const renderedCards = renderStackedCards ? cards.slice(0, Math.min(cards.length, 4)) : cards;
-
-  // useEffect(() => {
-  //   setIsHydrated(true);
-  // }, []);
-
-  // const { scrollYProgress } = useScroll({
-  //   target: isHydrated && !renderStackedCards ? sectionRef : null,
-  //   offset: ["start start", "end end"],
-  // });
 
   const { scrollYProgress } = useScroll({
     target: !renderStackedCards ? sectionRef : undefined,
@@ -116,6 +106,4 @@ const CardStackRevealComponent = ({ cards = DEFAULT_CARDS }) => {
   );
 };
 
-const CardStackReveal = memo(CardStackRevealComponent);
-
-export default CardStackReveal;
+export default memo(CardStackReveal);

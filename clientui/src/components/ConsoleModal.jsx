@@ -2,9 +2,9 @@ import { createPortal } from "react-dom";
 import { FaCodeMerge } from "react-icons/fa6";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useState, useEffect, useRef, memo, useCallback } from "react";
-import { runConsoleCommand } from "@/utils/console-commands";
+import { runConsoleCommand } from "@/utils/console";
 
-const ConsoleModalComponent = ({ isOpen, onClose }) => {
+function ConsoleModal({ isOpen, onClose }) {
     const router = useRouter();
     const pathname = usePathname();
     const inputRef = useRef(null);
@@ -214,10 +214,7 @@ const ConsoleModalComponent = ({ isOpen, onClose }) => {
                     </div>
                 </div>
 
-                <div
-                    className="flex-1 p-4 bg-[#1e1e1e] text-[#00ff00] font-mono text-xs overflow-auto cursor-text scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]"
-                    onClick={handleTerminalClick}
-                >
+                <div className="flex-1 p-4 bg-[#1e1e1e] text-[#00ff00] font-mono text-xs overflow-auto cursor-text scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]" onClick={handleTerminalClick}>
                     {bootPhase !== "complete" && (
                         <div className="flex flex-col space-y-1">
                             <p>Initializing portfolio...</p>
@@ -260,16 +257,18 @@ const ConsoleModalComponent = ({ isOpen, onClose }) => {
                                 <br />
                                 <p className="text-white font-bold mb-1">Quick Tips</p>
                                 <div className="text-yellow-400 space-y-1 mb-3">
-                                    <p>💡 Try: <span className="text-cyan-400">/secrets</span> if you like finding hidden things</p>
-                                    <p>💡 Use arrow keys to navigate command history</p>
-                                    <p>�� Commands work with or without the <span className="text-cyan-400">/</span> prefix</p>
+                                    <p>Try: <span className="text-cyan-400">/secrets</span> if you like finding hidden things</p>
+                                    <p>Use arrow keys to navigate command history</p>
+                                    <p>Commands work with or without the <span className="text-cyan-400">/</span> prefix</p>
                                 </div>
                                 <p className="text-white font-bold mb-1">Navigation</p>
                                 <div className="text-gray-400 space-y-1">
                                     <p>/about</p>
-                                    <p>/work</p>
-                                    <p>/clients</p>
                                     <p>/skills</p>
+                                    <p>/projects</p>
+                                    <p>/connect</p>
+                                    <p>/socials</p>
+                                    <p>/achievements</p>
                                     <p className="mt-2 text-gray-500">... /help for all commands</p>
                                 </div>
                             </div>
@@ -284,9 +283,7 @@ const ConsoleModalComponent = ({ isOpen, onClose }) => {
                                         <div className="text-gray-300 mt-1">
                                             {typeof item.output === "string" ? (
                                                 <span className="whitespace-pre-wrap">{item.output}</span>
-                                            ) : (
-                                                item.output
-                                            )}
+                                            ) : (item.output)}
                                         </div>
                                     )}
                                 </div>
@@ -306,6 +303,4 @@ const ConsoleModalComponent = ({ isOpen, onClose }) => {
     );
 };
 
-const ConsoleModal = memo(ConsoleModalComponent);
-
-export default ConsoleModal;
+export default memo(ConsoleModal);

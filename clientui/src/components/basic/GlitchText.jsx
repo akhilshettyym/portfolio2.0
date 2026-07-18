@@ -1,10 +1,10 @@
 "use client";
 
-import { randomChar } from "@/utils/funct-utils";
+import { randomChar } from "@/utils/funct";
 import { useLenis } from "@/context/LenisContext";
 import { useEffect, useState, useRef } from "react";
 
-const GlitchText = ({ text }) => {
+export default function GlitchText({ text }) {
     const lenisRef = useLenis();
 
     const [display, setDisplay] = useState(text);
@@ -85,5 +85,3 @@ const GlitchText = ({ text }) => {
         </span>
     );
 };
-
-export default GlitchText;

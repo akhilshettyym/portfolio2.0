@@ -21,18 +21,14 @@ export function useViewportDetection(options = {}) {
             } else if (!once) {
                 setIsVisible(false);
             }
-        }, {
-            root,
-            rootMargin,
-            threshold,
-        });
+        }, { root, rootMargin, threshold });
 
         observer.observe(element);
         return () => observer.disconnect();
     }, [once, root, rootMargin, threshold]);
 
     return { ref, isVisible };
-}
+};
 
 export function useViewportTracker(elementCount = 5) {
     const [visibleElements, setVisibleElements] = useState(new Set());
@@ -76,7 +72,7 @@ export function useViewportTracker(elementCount = 5) {
     };
 
     return { getRef, visibleElements };
-}
+};
 
 export function useLazyLoad(options = {}) {
     const { ref, isVisible } = useViewportDetection({ once: true, ...options });
@@ -86,4 +82,4 @@ export function useLazyLoad(options = {}) {
         shouldRender: isVisible,
         isVisible,
     };
-}
+};

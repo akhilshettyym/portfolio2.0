@@ -1,11 +1,13 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const memoryCache = new Map();
 
 function getCacheKey(username, from, to) {
-  return `${username}:${from}:${to}`;
+  const normalizedFrom = from.split("T")[0];
+  const normalizedTo = to.split("T")[0];
+  return `${username}:${normalizedFrom}:${normalizedTo}`;
 }
 
 export async function GET(req) {
@@ -35,30 +37,30 @@ export async function GET(req) {
     if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
       return NextResponse.json(cached.data, {
         headers: {
-          "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=86400",
+          "Cache-Control": "public, max-age=86400, stale-while-revalidate=172800",
           "X-Cache": "HIT",
         },
       });
     }
 
     const query = `
-          query($username: String!, $from: DateTime!, $to: DateTime!) {
-              user(login: $username) {
-                  contributionsCollection(from: $from, to: $to) {
-                      contributionCalendar {
-                          totalContributions
-                          weeks {
-                              contributionDays {
-                                  contributionCount
-                                  date
-                                  color
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      `;
+     query($username: String!, $from: DateTime!, $to: DateTime!) {
+       user(login: $username) {
+         contributionsCollection(from: $from, to: $to) {
+           contributionCalendar {
+             totalContributions
+             weeks {
+               contributionDays {
+                 contributionCount
+                 date
+                 color
+               }
+             }
+           }
+         }
+       }
+     }
+   `;
 
     const response = await axios.post(
       process.env.GITHUB_GRAPHQL_API,
@@ -85,7 +87,7 @@ export async function GET(req) {
 
     return NextResponse.json(response.data, {
       headers: {
-        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=86400",
+        "Cache-Control": "public, max-age=86400, stale-while-revalidate=172800",
         "X-Cache": "MISS",
       },
     });

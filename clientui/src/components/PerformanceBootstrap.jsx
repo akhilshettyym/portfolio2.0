@@ -1,13 +1,13 @@
 "use client";
 import GlobalCursor from "@/components/GlobalCursor";
-import LimpModal from "@/components/basic/LimpModal";
+import { TIER_EVENT, PERF_TIERS } from "@/utils/storage";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import { calibratePerformance, getSavedTier, PERFORMANCE_TIER_EVENT, PERFORMANCE_TIERS, savePerformanceTier } from "@/lib/performance/performanceTier";
+import { calibratePerformance, getSavedTier, savePerformanceTier } from "@/lib/performance/performanceTier";
 
 export const PerformanceTierContext = createContext(null);
 
 export default function PerformanceBootstrap({ children }) {
-    const [tier, setTier] = useState(() => getSavedTier() || PERFORMANCE_TIERS.LOW);
+    const [tier, setTier] = useState(() => getSavedTier() || PERF_TIERS.LOW);
     const [ready, setReady] = useState(() => Boolean(getSavedTier()));
     const [calibrating, setCalibrating] = useState(false);
 
@@ -19,6 +19,7 @@ export default function PerformanceBootstrap({ children }) {
             setTier(result);
             setReady(true);
             return result;
+
         } finally {
             setCalibrating(false);
         }
@@ -40,8 +41,8 @@ export default function PerformanceBootstrap({ children }) {
             setReady(true);
         };
 
-        window.addEventListener(PERFORMANCE_TIER_EVENT, onTierChange);
-        return () => window.removeEventListener(PERFORMANCE_TIER_EVENT, onTierChange);
+        window.addEventListener(TIER_EVENT, onTierChange);
+        return () => window.removeEventListener(TIER_EVENT, onTierChange);
     }, []);
 
     useEffect(() => {
@@ -63,8 +64,8 @@ export default function PerformanceBootstrap({ children }) {
             tier, ready,
             calibrating,
             runCalibration,
-            isTier1: tier === PERFORMANCE_TIERS.HIGH,
-            isTier2: tier === PERFORMANCE_TIERS.LOW,
+            isTier1: tier === PERF_TIERS.HIGH,
+            isTier2: tier === PERF_TIERS.LOW,
         }),
         [calibrating, ready, runCalibration, tier],
     );
@@ -72,8 +73,7 @@ export default function PerformanceBootstrap({ children }) {
     return (
         <PerformanceTierContext.Provider value={value}>
             <GlobalCursor />
-            {ready && <LimpModal />}
             {children}
         </PerformanceTierContext.Provider>
     );
-}
+};

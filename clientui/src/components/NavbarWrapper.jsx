@@ -3,7 +3,7 @@
 import { useContext, memo } from "react";
 import { LoadingContext } from "@/components/basic/LoaderWrapper";
 
-const NavbarWrapperComponent = ({ children }) => {
+const NavbarWrapper = ({ children }) => {
   const context = useContext(LoadingContext);
   const navReady = context?.navReady ?? false;
 
@@ -15,6 +15,4 @@ const NavbarWrapperComponent = ({ children }) => {
   );
 };
 
-const NavbarWrapper = memo(NavbarWrapperComponent);
-
-export default NavbarWrapper;
+export default memo(NavbarWrapper);

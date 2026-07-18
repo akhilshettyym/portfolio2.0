@@ -11,7 +11,7 @@ const DynamicMySocials = dynamic(() => import("@/components/MySocials"), {
     loading: () => <div style={{ minHeight: "500px", background: "#ffffff" }} className="w-full animate-pulse" />,
 });
 
-const MySocialsTiered = (props) => {
+export default function MySocialsTiered(props) {
     const { isMobile } = useDeviceType();
     const [mounted, setMounted] = useState(false);
     const { isTier2, ready } = usePerformanceTier();
@@ -42,5 +42,3 @@ const MySocialsTiered = (props) => {
         </div>
     );
 };
-
-export default MySocialsTiered;

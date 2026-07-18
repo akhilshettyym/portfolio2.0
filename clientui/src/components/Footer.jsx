@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { SOCIALS } from "@/utils/basic";
+import { goToTop } from "@/utils/funct";
 import { useRouter } from "next/navigation";
-import { SOCIALS } from "@/utils/basic-utils";
-import { goToTop } from "@/utils/funct-utils";
 import { FaRegCopyright } from "react-icons/fa6";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import CustomButton from "@/components/basic/CustomButton";
@@ -76,7 +76,7 @@ const MarqueeLineLow = ({ text, large, isMobile }) => {
     );
 };
 
-const FooterComponent = () => {
+const Footer = () => {
     const router = useRouter();
     const sectionRef = useRef(null);
     const [shouldSnap, setShouldSnap] = useState(false);
@@ -543,6 +543,4 @@ const FooterComponent = () => {
 
 };
 
-const Footer = memo(FooterComponent);
-
-export default Footer;
+export default memo(Footer);

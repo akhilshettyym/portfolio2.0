@@ -1,28 +1,4 @@
-import {
-  logAbout,
-  logAchievements,
-  logCatReadme,
-  logCoffee,
-  logCreate,
-  logExperience,
-  logGithub,
-  logHelp,
-  logInstagram,
-  logLinkedin,
-  logLocation,
-  logls,
-  logMail,
-  logPhilosophy,
-  logPingAkhil,
-  logProjects,
-  logrmrf,
-  logSalesforce,
-  logSecrets,
-  logSkills,
-  logSocials,
-  logSudoHire,
-  logWhoAmI,
-} from "@/utils/funct-utils";
+import { logAbout, logAchievements, logCatReadme, logCoffee, logCreate, logExperience, logGithub, logHelp, logHero, logInstagram, logLinkedin, logLocation, logls, logMail, logPhilosophy, logPingAkhil, logProjects, logrmrf, logSalesforce, logSecrets, logSkills, logSocials, logSudoHire, logWhoAmI } from "@/utils/funct";
 
 const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work", "me"];
 
@@ -41,6 +17,7 @@ export function runConsoleCommand(rawCommand, { navigate, close, clear }) {
   const command = normalizeConsoleCommand(rawCommand);
 
   const commands = {
+    "/hero": () => ({ output: logHero(), navigation: ["/", "hero"] }),
     "/about": () => ({ output: logAbout(), navigation: ["/", "about"] }),
     "/skills": () => ({ output: logSkills(), navigation: ["/", "skills"] }),
     "/achievements": () => ({ output: logAchievements(), navigation: ["/", "achievements"] }),

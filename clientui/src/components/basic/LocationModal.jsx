@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { setLocationMode } from "@/utils/weather-scene";
 import CustomButton from "@/components/basic/CustomButton";
 
-const LocationModal = ({ open, onComplete }) => {
+export default function LocationModal({ open, onComplete }) {
 
   const handleAccurate = () => {
     setLocationMode("accurate");
@@ -65,6 +65,4 @@ const LocationModal = ({ open, onComplete }) => {
       )}
     </AnimatePresence>
   );
-}
-
-export default LocationModal;
+};

@@ -1,26 +1,26 @@
 "use client";
 
 import { FaGitAlt } from "react-icons/fa";
-import { MONTHS } from "@/utils/basic-utils";
+import { MONTHS } from "@/utils/basic";
+import { CACHE_BASE } from "@/utils/storage";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
+import { CACHE_DURATION_MS } from "@/utils/cache";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { getCachedOrFetch, getCachedData } from "@/utils/cache-utils";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion";
 
-const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
+const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) => {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  // Guard against hydration mismatches
   const [mounted, setMounted] = useState(false);
-
   const [total, setTotal] = useState(0);
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasEnteredViewport, setHasEnteredViewport] = useState(false);
   const motionTotal = useMotionValue(0);
 
   const panelRef = useRef(null);
@@ -31,13 +31,11 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   const [coffeeNotif, setCoffeeNotif] = useState(null);
   const [commitNotif, setCommitNotif] = useState(null);
 
-  // Set mounted flag on client side
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const range = useMemo(() => {
-    // Return a stable placeholder during SSR to prevent hydration errors
     if (!mounted) return { from: "", to: "" };
 
     const currentDate = new Date();
@@ -59,88 +57,101 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     };
   }, [mounted, isMobile]);
 
-  // Initialize state from cache immediately once mounted
   useEffect(() => {
-    if (!mounted || !range.from) return;
-
-    const cacheKey = `github:${username}:${range.from}:${range.to}`;
-    const cachedData = getCachedData(cacheKey);
-
-    if (cachedData) {
-      const calendar = cachedData?.data?.user?.contributionsCollection?.contributionCalendar;
-      if (calendar) {
-        setWeeks(calendar.weeks || []);
-        setTotal(calendar.totalContributions || 0);
-        setLoading(false);
-      }
-    }
-  }, [username, range, mounted]);
-
-  useEffect(() => {
-    if (isTier2) return undefined;
-
-    const controls = animate(motionTotal, total, {
-      duration: 1.2,
-      ease: "easeOut",
-      onUpdate: (latest) => {
-        setCommitDisplay(Math.round(latest).toString());
-      },
-    });
-    return () => controls.stop();
-  }, [total, motionTotal, isTier2]);
-
-  const displayedCommitCount = isTier2 ? total.toString() : commitDisplay;
-
-  // Primary fetch effect
-  useEffect(() => {
-    if (!mounted || !range.from) return;
+    if (!mounted || !range.from) return undefined;
 
     let active = true;
     const abortController = new AbortController();
 
-    const fetchContributions = async () => {
-      try {
-        const params = new URLSearchParams({ username, from: range.from, to: range.to });
-        const cacheKey = `github:${username}:${range.from}:${range.to}`;
+    const fromDateOnly = range.from.substring(0, 10);
+    const toDateOnly = range.to.substring(0, 10);
+    const cacheKey = `${CACHE_BASE}:${username}:${fromDateOnly}:${toDateOnly}`;
 
-        const hasCachedData = getCachedData(cacheKey);
-        if (!hasCachedData) {
-          setLoading(true);
+    const processPayload = (calendarData) => {
+      if (calendarData) {
+        setWeeks(calendarData.weeks || []);
+        setTotal(calendarData.totalContributions || 0);
+      }
+    };
+
+    const runDataRetrieval = async () => {
+      try {
+        const diskRecord = localStorage.getItem(cacheKey);
+        if (diskRecord) {
+          try {
+            const parsed = JSON.parse(diskRecord);
+            const now = Date.now();
+
+            if (parsed && parsed.timestamp && now - parsed.timestamp < CACHE_DURATION_MS) {
+              processPayload(parsed.data);
+              setLoading(false);
+              return;
+            }
+          } catch (e) {
+            console.warn("Stale disk storage verification fault, clearing cache key...", e);
+            localStorage.removeItem(cacheKey);
+          }
         }
 
-        const responseData = await getCachedOrFetch(cacheKey, async () => {
-          const response = await fetch(`/api/github?${params.toString()}`, {
-            signal: abortController.signal,
-            next: { revalidate: 43200 },
-          });
-
-          if (!response.ok) {
-            throw new Error(`GitHub API returned ${response.status}`);
-          }
-          return response.json();
+        const params = new URLSearchParams({ username, from: range.from, to: range.to });
+        const response = await fetch(`/api/github?${params.toString()}`, {
+          signal: abortController.signal,
+          next: { revalidate: 86400 },
         });
 
+        if (!response.ok) {
+          throw new Error(`GitHub Engine Response Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
         if (!active || !responseData) return;
 
         const calendar = responseData?.data?.user?.contributionsCollection?.contributionCalendar;
-        setWeeks(calendar?.weeks || []);
-        setTotal(calendar?.totalContributions || 0);
+
+        if (calendar) {
+          const recordToCache = {
+            timestamp: Date.now(),
+            data: calendar,
+          };
+          localStorage.setItem(cacheKey, JSON.stringify(recordToCache));
+          processPayload(calendar);
+        }
 
       } catch (err) {
         if (err.name !== "AbortError") {
-          console.error("GitHub contributions fetch failed:", err.message);
+          console.error("GitHub primary data synchronization pipeline error:", err.message);
         }
       } finally {
         if (active) setLoading(false);
       }
     };
 
-    fetchContributions();
+    runDataRetrieval();
+
     return () => {
       active = false;
       abortController.abort();
     };
   }, [username, range, mounted]);
+
+  useEffect(() => {
+    if (isTier2 || loading || !hasEnteredViewport) {
+      setCommitDisplay(total.toString());
+      return undefined;
+    }
+
+    motionTotal.set(0);
+    const controls = animate(motionTotal, total, {
+      duration: 1.4,
+      ease: "easeOut",
+      onUpdate: (latest) => {
+        setCommitDisplay(Math.round(latest).toString());
+      },
+    });
+    return () => controls.stop();
+  }, [total, motionTotal, isTier2, loading, hasEnteredViewport]);
+
+  const displayedCommitCount = isTier2 ? total.toString() : commitDisplay;
 
   const monthLabels = useMemo(() => {
     if (!mounted) return [];
@@ -201,16 +212,29 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   };
 
   useEffect(() => {
+    if (forceTriggerAnimation) {
+      setIsVisible(true);
+      setHasEnteredViewport(true);
+      return undefined;
+    }
+
     if (!panelRef.current) return undefined;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.12 },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          setHasEnteredViewport(true);
+        } else {
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.08 },
     );
     observer.observe(panelRef.current);
 
     return () => observer.disconnect();
-  }, [mounted]);
+  }, [mounted, forceTriggerAnimation]);
 
   useEffect(() => {
     if (!isVisible || isTier2) return undefined;
@@ -243,7 +267,6 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
     };
   }, [isTier2, isVisible]);
 
-  // Don't render anything structurally sensitive until mounted on the client
   if (!mounted) {
     return (
       <div className="w-full min-h-60 flex items-center justify-center bg-white">
@@ -326,14 +349,14 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
           </p>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <motion.div ref={panelRef}
-      initial={false}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: isTier2 ? 0.2 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 35, filter: "blur(8px)" }}
+      animate={hasEnteredViewport ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: isTier2 ? 0.2 : 0.75, ease: [0.22, 1, 0.36, 1] }}
       className="w-full p-6 md:p-8 bg-white text-black">
 
       {isMobile ? (renderMobile()) : (
@@ -377,9 +400,11 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                 </motion.div>
               )}
             </AnimatePresence>
+
             <motion.p onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)} className="cursor-default text-[26px] font-black tracking-tight text-black/80">
               {coffeeDisplay}
             </motion.p>
+
             <p className="flex items-center mt-2 text-xs font-bold tracking-wider text-gray-500">
               <span className="mr-1.5 text-gray-600">
                 <DiCoffeescript size={18} />
@@ -446,6 +471,7 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                 ))}
               </div>
             )}
+
             <div className="flex w-full justify-center md:justify-start">
               <div className="mr-3 flex flex-col justify-between py-1 text-[10px] font-bold text-gray-500 uppercase">
                 <span> Mon </span>
@@ -457,7 +483,6 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                 <div className={`grid flex-1 gap-1 overflow-hidden ${isMobile ? "max-w-85" : ""}`} style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}>
                   {weeks.map((week, weekIndex) => (
                     <div key={weekIndex} className="grid grid-rows-7 gap-1">
-
                       {week.contributionDays.map((day, dayIndex) => {
                         const count = day.contributionCount;
                         let backgroundColor = themeColors[0];
@@ -467,20 +492,22 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
                         if (count > 5 && count <= 10) backgroundColor = themeColors[3];
                         if (count > 10) backgroundColor = themeColors[4];
 
+                        const staggerDelay = isTier2 ? 0 : weekIndex * 0.012 + dayIndex * 0.002;
+
                         return (
-                          <motion.div key={day.date} initial={false}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: isTier2 ? 0 : weekIndex * 0.006 + dayIndex * 0.001, duration: isTier2 ? 0 : 0.12 }}
-                            whileHover={isTier2 ? undefined : { scale: 1.15, zIndex: 10 }}
+                          <motion.div key={day.date}
+                            initial={isTier2 ? false : { opacity: 0, scale: 0.1, rotateY: 90 }}
+                            animate={hasEnteredViewport ? { opacity: 1, scale: 1, rotateY: 0 } : {}}
+                            transition={isTier2 ? { duration: 0 } : { type: "spring", stiffness: 100, damping: 14, delay: staggerDelay, duration: 0.4 }}
+                            whileHover={isTier2 ? undefined : { scale: 1.25, zIndex: 10, transition: { duration: 0.1 } }}
                             title={`${day.contributionCount} contributions on ${day.date}`}
-                            className="aspect-square w-full rounded-xs transition-all duration-100 cursor-crosshair border border-black/5"
+                            className="aspect-square w-full rounded-xs transition-all cursor-crosshair border border-black/5"
                             style={{ backgroundColor }} />
                         );
                       })}
                     </div>
                   ))}
                 </div>
-
               ) : (
                 <div className="flex-1 flex items-center justify-center py-12 text-sm text-gray-400 font-medium text-center">
                   No tracking log history discovered within this date range scope boundary.
@@ -506,6 +533,4 @@ const GithubGraphQlComponent = ({ username = "akhilshettyym" }) => {
   );
 };
 
-const GithubGraphQl = memo(GithubGraphQlComponent);
-
-export default GithubGraphQl;
+export default memo(GithubGraphQl);

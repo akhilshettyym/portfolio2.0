@@ -1,13 +1,13 @@
 "use client";
 
+import { TIER_EVENT, PERF_TIERS } from "@/utils/storage";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { PerformanceTierContext } from "@/components/PerformanceBootstrap";
-import { calibratePerformance, getSavedTier, PERFORMANCE_TIER_EVENT, PERFORMANCE_TIERS, savePerformanceTier } from "@/lib/performance/performanceTier";
+import { calibratePerformance, getSavedTier, savePerformanceTier } from "@/lib/performance/performanceTier";
 
 export function usePerformanceTier(calibrationDurationMs) {
-
   const context = useContext(PerformanceTierContext);
-  const [tier, setTier] = useState(() => getSavedTier() || PERFORMANCE_TIERS.LOW);
+  const [tier, setTier] = useState(() => getSavedTier() || PERF_TIERS.LOW);
   const [ready, setReady] = useState(() => Boolean(getSavedTier()));
   const [calibrating, setCalibrating] = useState(false);
 
@@ -39,16 +39,16 @@ export function usePerformanceTier(calibrationDurationMs) {
       if (event.detail) setTier(event.detail);
     };
 
-    window.addEventListener(PERFORMANCE_TIER_EVENT, onTierChange);
-    return () => window.removeEventListener(PERFORMANCE_TIER_EVENT, onTierChange);
+    window.addEventListener(TIER_EVENT, onTierChange);
+    return () => window.removeEventListener(TIER_EVENT, onTierChange);
   }, [context]);
 
   const fallback = {
     tier, ready,
     calibrating,
     runCalibration,
-    isTier1: tier === PERFORMANCE_TIERS.HIGH,
-    isTier2: tier === PERFORMANCE_TIERS.LOW,
+    isTier1: tier === PERF_TIERS.HIGH,
+    isTier2: tier === PERF_TIERS.LOW,
   };
 
   return context || fallback;

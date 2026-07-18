@@ -6,7 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const LiquidGlass = ({ children, width = "460px", height = "300px", className = "", padding = "p-8", ...props }) => {
+export default function LiquidGlass({ children, width = "460px", height = "300px", className = "", padding = "p-8", ...props }) {
     const { isTier2 } = usePerformanceTier();
 
     return (
@@ -39,5 +39,3 @@ const LiquidGlass = ({ children, width = "460px", height = "300px", className = 
         </div>
     );
 };
-
-export default LiquidGlass;

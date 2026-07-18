@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
-import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic-utils";
+import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
@@ -19,7 +19,7 @@ const InputField = ({ label, name, placeholder, value, onChange, type = "text", 
     );
 };
 
-const CreateSomething = () => {
+export default function CreateSomething() {
     const [purpose, setPurpose] = useState("say_hi");
     const [budget, setBudget] = useState("");
     const [loading, setLoading] = useState(false);
@@ -304,5 +304,3 @@ const CreateSomething = () => {
         </section>
     );
 };
-
-export default CreateSomething;

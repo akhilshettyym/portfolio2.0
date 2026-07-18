@@ -3,30 +3,124 @@
 import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
+import { CLOUD_SHADER } from "@/utils/basic";
 import { SiRevealdotjs } from "react-icons/si";
-import { CLOUD_SHADER } from "@/utils/basic-utils";
+import LimpModal from "@/components/basic/LimpModal";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
 import LiquidGlass from "@/components/basic/LiquidGlass";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
+import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
 import { LoadingContext } from "@/components/basic/LoaderWrapper";
-import { CLOUD_CONTROL, WEATHER_SCENE_ASSETS } from "@/utils/localstorage";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
-import { createFrameLimitedLoop } from "@/lib/performance/FrameManager";
+
+// --- FLUID SIMULATION SHADERS ---
+const simulationVertexShader = `
+varying vec2 vUv;
+void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 1.0);
+}
+`;
+
+const simulationFragmentShader = `
+uniform sampler2D textureA;
+uniform sampler2D textTexture;
+uniform vec2 mouse;
+uniform vec2 resolution;
+uniform float time;
+uniform int frame;
+
+varying vec2 vUv;
+const float delta = 1.4;
+
+void main() {
+    vec2 uv = vUv;
+    if(frame == 0){
+        gl_FragColor = vec4(0.0);
+        return;
+    }
+
+    vec4 data = texture2D(textureA, uv);
+    float pressure = data.x;
+    float pVel = data.y;
+
+    vec2 texelSize = 1.0 / resolution;
+
+    float p_right = texture2D(textureA, uv + vec2(texelSize.x, 0.0)).x;
+    float p_left  = texture2D(textureA, uv - vec2(texelSize.x, 0.0)).x;
+    float p_up    = texture2D(textureA, uv + vec2(0.0, texelSize.y)).x;
+    float p_down  = texture2D(textureA, uv - vec2(0.0, texelSize.y)).x;
+
+    if(uv.x <= texelSize.x) p_left = p_right;
+    if(uv.x >= 1.0 - texelSize.x) p_right = p_left;
+    if(uv.y <= texelSize.y) p_down = p_up;
+    if(uv.y >= 1.0 - texelSize.y) p_up = p_down;
+
+    pVel += delta * (-2.0 * pressure + p_right + p_left) / 4.0;
+    pVel += delta * (-2.0 * pressure + p_up + p_down) / 4.0;
+
+    pressure += delta * pVel;
+    pVel -= 0.005 * delta * pressure;
+
+    pVel *= 0.90;
+    pressure *= 0.92;
+
+    vec2 mouseUV = mouse / resolution;
+
+    if(mouse.x > 0.0){
+        float radius = 0.08;
+        float dist = distance(uv, mouseUV);
+        if(dist < radius){
+            // Reading '.r' channel for the text fluid physics mask
+            float isText = texture2D(textTexture, uv).r;
+            float influence = mix(0.1, 4.0, isText);
+            pressure += influence * (1.0 - dist / radius);
+        }
+    }
+
+    gl_FragColor = vec4(pressure, pVel, (p_right - p_left) * 0.5, (p_up - p_down) * 0.5);
+}
+`;
+
+const renderVertexShader = `
+varying vec2 vUv;
+void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 1.0);
+}
+`;
+
+const renderFragmentShader = `
+uniform sampler2D textureA;
+uniform sampler2D textureB;
+varying vec2 vUv;
+
+void main() {
+    vec4 data = texture2D(textureA, vUv);
+    vec2 distortion = data.zw * 0.25; 
+
+    // Read the red channel to isolate the text shape
+    float textMask = texture2D(textureB, clamp(vUv + distortion, 0.0, 1.0)).r;
+
+    // Clean, bold white text over clouds (0.95 opacity)
+    gl_FragColor = vec4(vec3(1.0), textMask * 0.95);
+}
+`;
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
     return a.background === b.background && a.clouds === b.clouds;
 }
 
-const HeroSectionComponent = () => {
+const HeroSection = () => {
     const btnRef = useRef(null);
     const sectionRef = useRef(null);
     const speedRef = useRef(0.8);
@@ -34,6 +128,7 @@ const HeroSectionComponent = () => {
     const tunnelPositionRef = useRef(0);
 
     const [paused, setPaused] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [sceneAssets, setSceneAssets] = useState(null);
 
     const { triggerIntroRestart } = useContext(LoadingContext);
@@ -41,7 +136,6 @@ const HeroSectionComponent = () => {
     const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
 
     const quality = getQualityPreset(tier);
-    // const maxCloudPlanes = quality.cloudPlanes || 900;
     const maxCloudPlanes = quality.cloudPlanes ? Math.floor(quality.cloudPlanes * 1.5) : 1500;
 
     const pausedRef = useRef(false);
@@ -57,28 +151,29 @@ const HeroSectionComponent = () => {
     }, [paused]);
 
     useEffect(() => {
-        try {
-            const cachedScene = localStorage.getItem(WEATHER_SCENE_ASSETS);
+        if (ready) {
+            const timer = setTimeout(() => {
+                setShowModal(true);
+            }, 5000);
+            return () => clearTimeout(timer);
+        } else {
+            setShowModal(false);
+        }
+    }, [ready]);
 
+    useEffect(() => {
+        try {
+            const cachedScene = localStorage.getItem(ASSET_CACHE);
             if (cachedScene) {
                 const parsed = JSON.parse(cachedScene);
                 sceneAssetsRef.current = parsed;
-
-                startTransition(() => {
-                    setSceneAssets(parsed);
-                });
+                startTransition(() => { setSceneAssets(parsed); });
             }
-
             const cloudControl = localStorage.getItem(CLOUD_CONTROL);
-
             if (cloudControl !== null) {
                 const value = cloudControl === "true";
-
                 pausedRef.current = value;
-
-                startTransition(() => {
-                    setPaused(value);
-                });
+                startTransition(() => { setPaused(value); });
             }
         } catch (err) {
             console.error(err);
@@ -90,31 +185,10 @@ const HeroSectionComponent = () => {
     }, [sceneAssets]);
 
     useEffect(() => {
-        if (!ready || !isTier2 || !sectionRef.current) return undefined;
-
-        const dismissed = sessionStorage.getItem("tier_2_notice_seen") === "true";
-        if (dismissed) return undefined;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry.isIntersecting) return;
-                sessionStorage.setItem("tier_2_notice_seen", "true");
-                observer.disconnect();
-            },
-            { threshold: 0.35 },
-        );
-
-        observer.observe(sectionRef.current);
-        return () => observer.disconnect();
-    }, [isTier2, ready]);
-
-    useEffect(() => {
         let mounted = true;
-
         async function init() {
             try {
                 const sceneData = await getWeatherScene();
-
                 if (!mounted) return;
 
                 const nextScene = {
@@ -123,36 +197,23 @@ const HeroSectionComponent = () => {
                 };
 
                 setSceneAssets((prev) => {
-                    if (isSameScene(prev, nextScene)) {
-                        return prev;
-                    }
-
-                    localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(nextScene));
+                    if (isSameScene(prev, nextScene)) return prev;
+                    localStorage.setItem(ASSET_CACHE, JSON.stringify(nextScene));
                     return nextScene;
                 });
             } catch (error) {
                 console.error("Failed to load weather scene:", error);
-
                 if (!mounted) return;
                 if (!sceneAssetsRef.current) {
-                    const fallback = {
-                        background: "morning_clear",
-                        clouds: "morning_clear",
-                    };
-
-                    localStorage.setItem(WEATHER_SCENE_ASSETS, JSON.stringify(fallback));
-
+                    const fallback = { background: "morning_clear", clouds: "morning_clear" };
+                    localStorage.setItem(ASSET_CACHE, JSON.stringify(fallback));
                     sceneAssetsRef.current = fallback;
                     setSceneAssets(fallback);
                 }
             }
         }
-
         init();
-
-        return () => {
-            mounted = false;
-        };
+        return () => { mounted = false; };
     }, []);
 
     useEffect(() => {
@@ -160,34 +221,113 @@ const HeroSectionComponent = () => {
 
         const container = containerRef.current;
         const btn = btnRef.current;
-
         if (!container) return;
 
-        let mesh = null;
-        let mesh2 = null;
-        let camera = null;
-        let texture = null;
-        let material = null;
-        let renderer = null;
-        let animationId = null;
-        let resumeTimeoutId = null;
+        let mesh = null, mesh2 = null, camera = null, texture = null, material = null, renderer = null;
+        let animationId = null, resumeTimeoutId = null;
+        let isAnimating = true, isDisposed = false;
 
-        let isAnimating = true;
-        let isDisposed = false;
-
-        let mouseX = 0;
-        let mouseY = 0;
-
+        let mouseX = 0, mouseY = 0;
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
 
         const scene = new THREE.Scene();
+        const simScene = new THREE.Scene();
+        const textRenderScene = new THREE.Scene();
+        const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const fluidMouse = new THREE.Vector2();
+
+        const dpr = Math.min(window.devicePixelRatio, 2);
+        let width = Math.floor(window.innerWidth * dpr);
+        let height = Math.floor(window.innerHeight * dpr);
+
+        const rtOptions = {
+            format: THREE.RGBAFormat,
+            type: THREE.FloatType,
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter,
+            depthBuffer: false,
+            stencilBuffer: false,
+        };
+
+        let rtA = new THREE.WebGLRenderTarget(width, height, rtOptions);
+        let rtB = new THREE.WebGLRenderTarget(width, height, rtOptions);
+        let simMaterial = null, renderMaterial = null, quadGeometry = null;
+        let simQuad = null, renderQuad = null, textTexture = null;
+
+        const createTextTexture = (w, h) => {
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d");
+
+            // Mask background
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const text = "AKHIL SHETTY";
+
+            // 1. Emulate 'font-black'
+            const baseFontSize = 100;
+            ctx.font = `900 ${baseFontSize}px "Arial Black", "Impact", system-ui, sans-serif`;
+
+            // 2. Emulate 'tracking-[-0.09em]' using native letterSpacing (if browser supports it)
+            if ('letterSpacing' in ctx) {
+                ctx.letterSpacing = "-0.09em";
+            }
+
+            const textWidth = ctx.measureText(text).width;
+
+            // 3. Emulate 'clamp(..., 8vw, 4.5rem)' 
+            // We cap the absolute pixel width so it doesn't get massive on desktop screens.
+            // 750 physical pixels is roughly equivalent to a 6rem max container.
+            const maxPhysicalWidth = 750 * dpr;
+            const targetWidth = Math.min(w * 0.70, maxPhysicalWidth);
+
+            // 4. Uniform scaling factor (1:1 ratio, no vertical stretch)
+            const globalScale = targetWidth / textWidth;
+
+            ctx.save();
+            ctx.translate(w / 2, h / 2);
+            ctx.scale(globalScale, globalScale);
+
+            // Slight stroke to keep it thick/heavy
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = baseFontSize * 0.02;
+            ctx.lineJoin = "round";
+
+            // Draw full string natively kerned
+            ctx.fillText(text, 0, 0);
+            ctx.strokeText(text, 0, 0);
+
+            ctx.restore();
+
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+            tex.needsUpdate = true;
+            return tex;
+        };
 
         const onMouseMove = (e) => {
-            if (pausedRef.current || !isAnimating || isTier2) return;
+            if (!pausedRef.current && isAnimating && !isTier2) {
+                mouseX = (e.clientX - windowHalfX) * 0.25;
+                mouseY = (e.clientY - windowHalfY) * 0.15;
+            }
+            fluidMouse.x = e.clientX * dpr;
+            fluidMouse.y = (window.innerHeight - e.clientY) * dpr;
+        };
 
-            mouseX = (e.clientX - windowHalfX) * 0.25;
-            mouseY = (e.clientY - windowHalfY) * 0.15;
+        const onMouseLeave = () => { fluidMouse.set(0, 0); };
+        const onTouchMove = (e) => {
+            if (e.touches.length > 0) {
+                fluidMouse.x = e.touches[0].clientX * dpr;
+                fluidMouse.y = (window.innerHeight - e.touches[0].clientY) * dpr;
+            }
         };
 
         const onResize = () => {
@@ -200,11 +340,26 @@ const HeroSectionComponent = () => {
             camera.updateProjectionMatrix();
 
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(getRendererPixelRatio(tier));
+            renderer.setPixelRatio(dpr);
 
-            if (isTier2 && renderer && camera) {
-                renderer.render(scene, camera);
+            width = Math.floor(window.innerWidth * dpr);
+            height = Math.floor(window.innerHeight * dpr);
+
+            rtA.dispose();
+            rtB.dispose();
+            rtA = new THREE.WebGLRenderTarget(width, height, rtOptions);
+            rtB = new THREE.WebGLRenderTarget(width, height, rtOptions);
+
+            if (simMaterial) {
+                simMaterial.uniforms.resolution.value.set(width, height);
+                const oldTex = textTexture;
+                textTexture = createTextTexture(width, height);
+                simMaterial.uniforms.textTexture.value = textTexture;
+                renderMaterial.uniforms.textureB.value = textTexture;
+                oldTex.dispose();
             }
+
+            if (isTier2 && renderer && camera) renderer.render(scene, camera);
         };
 
         const timer = createThreeTimer();
@@ -223,7 +378,10 @@ const HeroSectionComponent = () => {
             }
 
             if (visibility.frameSkipInterval === Infinity) {
-                if (renderer && camera) renderer.render(scene, camera);
+                if (renderer && camera) {
+                    renderer.clear();
+                    renderer.render(scene, camera);
+                }
                 resumeTimeoutId = window.setTimeout(() => {
                     animationId = requestAnimationFrame(animate);
                 }, 300);
@@ -242,7 +400,6 @@ const HeroSectionComponent = () => {
             if (!isTier2) {
                 const delta = Math.min(timer.update(), 0.033);
                 const frameSpeed = delta * 60;
-
                 const targetSpeed = pausedRef.current ? 0 : 0.8;
                 speedRef.current += (targetSpeed - speedRef.current) * 0.025;
                 tunnelPositionRef.current += speedRef.current * frameSpeed;
@@ -258,21 +415,36 @@ const HeroSectionComponent = () => {
             }
 
             if (renderer && camera) {
+                simMaterial.uniforms.frame.value = frameCount;
+                simMaterial.uniforms.time.value = performance.now() * 0.001;
+                simMaterial.uniforms.textureA.value = rtA.texture;
+
+                renderer.setRenderTarget(rtB);
+                renderer.render(simScene, orthoCamera);
+
+                renderer.setRenderTarget(null);
+                renderer.clear();
                 renderer.render(scene, camera);
+
+                renderMaterial.uniforms.textureA.value = rtB.texture;
+                renderer.autoClear = false;
+                renderer.render(textRenderScene, orthoCamera);
+                renderer.autoClear = true;
+
+                const temp = rtA;
+                rtA = rtB;
+                rtB = temp;
             }
 
             if (isTier2) return;
-
             animationId = requestAnimationFrame(animate);
         };
 
         const handleBtnMouseMove = (e) => {
             if (!btn) return;
-
             const rect = btn.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
-
             btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
         };
 
@@ -281,15 +453,15 @@ const HeroSectionComponent = () => {
             btn.style.transform = "translate(0px, 0px)";
         };
 
-        async function init() {
+        async function initWebGL() {
             try {
-                camera = new THREE.PerspectiveCamera(
-                    30,
-                    window.innerWidth / window.innerHeight,
-                    1,
-                    3000,
-                );
+                if (typeof document !== 'undefined') {
+                    await document.fonts.ready;
+                }
 
+                if (isDisposed) return;
+
+                camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
                 camera.position.z = 6000;
 
                 renderer = new THREE.WebGLRenderer({
@@ -299,16 +471,46 @@ const HeroSectionComponent = () => {
                 });
 
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(getRendererPixelRatio(tier));
+                renderer.setPixelRatio(dpr);
                 renderer.outputColorSpace = THREE.SRGBColorSpace;
-
                 container.appendChild(renderer.domElement);
 
-                const textureLoader = new THREE.TextureLoader();
+                textTexture = createTextTexture(width, height);
 
-                texture = await textureLoader.loadAsync(
-                    `/clouds/${sceneAssets.clouds}.svg`,
-                );
+                simMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        textureA: { value: null },
+                        textTexture: { value: textTexture },
+                        mouse: { value: fluidMouse },
+                        resolution: { value: new THREE.Vector2(width, height) },
+                        time: { value: 0 },
+                        frame: { value: 0 },
+                    },
+                    vertexShader: simulationVertexShader,
+                    fragmentShader: simulationFragmentShader,
+                });
+
+                renderMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        textureA: { value: null },
+                        textureB: { value: textTexture },
+                    },
+                    vertexShader: renderVertexShader,
+                    fragmentShader: renderFragmentShader,
+                    transparent: true,
+                    depthWrite: false,
+                    depthTest: false,
+                });
+
+                quadGeometry = new THREE.PlaneGeometry(2, 2);
+                simQuad = new THREE.Mesh(quadGeometry, simMaterial);
+                renderQuad = new THREE.Mesh(quadGeometry, renderMaterial);
+
+                simScene.add(simQuad);
+                textRenderScene.add(renderQuad);
+
+                const textureLoader = new THREE.TextureLoader();
+                texture = await textureLoader.loadAsync(`/clouds/${sceneAssets.clouds}.svg`);
 
                 if (isDisposed) return;
 
@@ -319,26 +521,17 @@ const HeroSectionComponent = () => {
                 texture.needsUpdate = true;
 
                 const fog = new THREE.Fog(0xffffff, -100, 3000);
-
                 scene.fog = fog;
 
                 material = new THREE.ShaderMaterial({
                     uniforms: {
                         map: { value: texture },
-                        fogColor: {
-                            value: fog.color,
-                        },
-                        fogNear: {
-                            value: fog.near,
-                        },
-                        fogFar: {
-                            value: fog.far,
-                        },
+                        fogColor: { value: fog.color },
+                        fogNear: { value: fog.near },
+                        fogFar: { value: fog.far },
                     },
-
                     vertexShader: CLOUD_SHADER.vertexShader,
                     fragmentShader: CLOUD_SHADER.fragmentShader,
-
                     depthWrite: false,
                     depthTest: false,
                     transparent: true,
@@ -346,7 +539,6 @@ const HeroSectionComponent = () => {
 
                 const planeGeo = new THREE.PlaneGeometry(64, 64);
                 const planeObj = new THREE.Object3D();
-
                 const geometries = [];
 
                 for (let i = 0; i < maxCloudPlanes; i++) {
@@ -363,7 +555,6 @@ const HeroSectionComponent = () => {
                 }
 
                 const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
-
                 geometries.forEach((g) => g.dispose());
 
                 mesh = new THREE.Mesh(mergedGeo, material);
@@ -375,22 +566,21 @@ const HeroSectionComponent = () => {
 
                 scene.add(mesh);
                 scene.add(mesh2);
-
                 planeGeo.dispose();
 
                 animate();
-
             } catch (error) {
-                if (!isDisposed) {
-                    console.error("Cloud scene init failed:", error);
-                }
+                if (!isDisposed) console.error("Combined WebGL Initialization Failed:", error);
             }
         }
 
-        init();
+        initWebGL();
 
         window.addEventListener("mousemove", onMouseMove, { passive: true });
         window.addEventListener("resize", onResize, { passive: true });
+        container.addEventListener("mouseleave", onMouseLeave, { passive: true });
+        container.addEventListener("touchmove", onTouchMove, { passive: true });
+        container.addEventListener("touchend", onMouseLeave, { passive: true });
 
         if (btn) {
             btn.addEventListener("mousemove", handleBtnMouseMove, { passive: true });
@@ -403,6 +593,9 @@ const HeroSectionComponent = () => {
 
             window.removeEventListener("mousemove", onMouseMove);
             window.removeEventListener("resize", onResize);
+            container.removeEventListener("mouseleave", onMouseLeave);
+            container.removeEventListener("touchmove", onTouchMove);
+            container.removeEventListener("touchend", onMouseLeave);
 
             if (btn) {
                 btn.removeEventListener("mousemove", handleBtnMouseMove);
@@ -410,40 +603,30 @@ const HeroSectionComponent = () => {
                 btn.style.transform = "translate(0px, 0px)";
             }
 
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-            }
+            if (animationId) cancelAnimationFrame(animationId);
+            if (resumeTimeoutId) window.clearTimeout(resumeTimeoutId);
 
-            if (resumeTimeoutId) {
-                window.clearTimeout(resumeTimeoutId);
-            }
-
-            if (mesh) {
-                scene.remove(mesh);
-                mesh.geometry?.dispose();
-            }
-
-            if (mesh2) {
-                scene.remove(mesh2);
-                mesh2.geometry?.dispose();
-            }
-
+            if (mesh) { scene.remove(mesh); mesh.geometry?.dispose(); }
+            if (mesh2) { scene.remove(mesh2); mesh2.geometry?.dispose(); }
             material?.dispose();
             texture?.dispose();
 
+            quadGeometry?.dispose();
+            simMaterial?.dispose();
+            renderMaterial?.dispose();
+            textTexture?.dispose();
+            rtA?.dispose();
+            rtB?.dispose();
+
             if (renderer) {
                 renderer.dispose();
-
-                if (container.contains(renderer.domElement)) {
-                    container.removeChild(renderer.domElement);
-                }
+                if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
             }
         };
     }, [quality.antialias, maxCloudPlanes, sceneAssets, tier, isTier2]);
 
     const handleCloudControl = () => {
         if (isTier2) return;
-
         setPaused((prev) => {
             const nextState = !prev;
             localStorage.setItem(CLOUD_CONTROL, nextState);
@@ -458,20 +641,18 @@ const HeroSectionComponent = () => {
         }
     }, [isTier2]);
 
-    const handleRestartIntroScene = () => {
-        triggerIntroRestart();
-    }
+    const handleRestartIntroScene = () => triggerIntroRestart();
 
     return (
         <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
-            <div className="wrapper">
+            {showModal && <LimpModal />}
 
+            <div className="wrapper">
                 <div ref={containerRef} className="canvas-bg absolute inset-0 z-0" style={{ backgroundImage: sceneAssets ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")` : "none" }} />
 
                 <div className="absolute top-60 right-0 z-9999">
                     <LiquidGlass width="50px" height="180px" className="p-0">
                         <button type="button" onClick={handleCloudControl} aria-label={paused ? "Resume animation" : "Pause animation"} disabled={isTier2} className={`group absolute top-3 left-1/2 -translate-x-1/2 h-11 w-11 z-20`}>
-
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="relative z-10 flex h-10 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
                                     {paused ? (
@@ -481,7 +662,6 @@ const HeroSectionComponent = () => {
                                     )}
                                 </div>
                             </div>
-
                             <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
                                 {isTier2 ? "DISABLED" : (paused ? "Run Clouds" : "Stall Clouds")}
                             </div>
@@ -507,12 +687,8 @@ const HeroSectionComponent = () => {
                 </div>
 
                 <div className="hero-text">
-                    <span className="line dim uppercase">
-                        BUILD SYSTEMS <br />
-                    </span>
-                    <span className="line dim uppercase">
-                        OPTIMIZE SCALE x LATENCY <br />
-                    </span>
+                    <span className="line dim uppercase">BUILD SYSTEMS <br /></span>
+                    <span className="line dim uppercase">OPTIMIZE SCALE x LATENCY <br /></span>
                     <span className="line strong">
                         <span className="text-md uppercase tracking-tight"> OPS </span>{" "}
                         <WordCarousel />
@@ -526,14 +702,11 @@ const HeroSectionComponent = () => {
                     </button>
                 </div>
 
-                <div className="hero-name"> AKHIL SHETTY </div>
-
                 <div className="hero-subtext-wrap">
                     <p className="hero-subtext">
                         Design and code, refined until <br />
                         nothing feels unnecessary.
                     </p>
-
                     <span className="dot tl" />
                     <span className="dot tr" />
                     <span className="dot bl" />
@@ -543,16 +716,13 @@ const HeroSectionComponent = () => {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
-
                     <div className="relative px-10 py-4 text-xs tracking-widest">
                         <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
                             ©001
                         </div>
-
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
                             (DEV)
                         </div>
-
                         <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-auto">
                             <GlitchText text="SCROLL_MORE__" />
                         </div>
@@ -572,6 +742,4 @@ const HeroSectionComponent = () => {
     );
 };
 
-const HeroSection = memo(HeroSectionComponent);
-
-export default HeroSection;
+export default memo(HeroSection);

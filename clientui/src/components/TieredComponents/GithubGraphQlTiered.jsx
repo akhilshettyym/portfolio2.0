@@ -10,9 +10,9 @@ const DynamicGithubGraphQl = dynamic(() => import("@/components/GithubGraphQl"),
     ssr: false,
 });
 
-const GithubGraphQlTiered = (props) => {
+export default function GithubGraphQlTiered(props) {
     const { isTier2, ready } = usePerformanceTier();
-    const { ref, shouldRender } = useLazyLoad({ rootMargin: "300px 0px", threshold: 0 });
+    const { ref, shouldRender } = useLazyLoad({ rootMargin: "300px 0px", threshold: 0.05 });
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -32,12 +32,10 @@ const GithubGraphQlTiered = (props) => {
     }
 
     return (
-        <div ref={ref} style={{ width: "100%", background: "#0a0a0a", position: "relative" }}>
+        <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
             <Suspense fallback={<div style={{ width: "100%", height: "300px", background: "#ffffff" }} />}>
-                <DynamicGithubGraphQl {...props} isTieredWrapper={isTier2} />
+                <DynamicGithubGraphQl {...props} isTieredWrapper={isTier2} forceTriggerAnimation={shouldRender} />
             </Suspense>
         </div>
     );
 };
-
-export default GithubGraphQlTiered;

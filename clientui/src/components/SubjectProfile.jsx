@@ -1,34 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { FADEUP } from "@/utils/basic-utils";
+import { FADEUP } from "@/utils/basic";
 import { IoIdCardOutline } from "react-icons/io5";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect, useRef } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-
-const fadeInContainer = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 0.8,
-            ease: [0.16, 1, 0.3, 1],
-            staggerChildren: 0.15,
-        },
-    },
-};
-
-const itemReveal = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-    },
-};
+import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
 
 const ScrollMarquee = ({ texts = ["DEFAULT TEXT"], baseSpeed = 1, variant = "large", showIcon = false, className = "", direct = false }) => {
 
@@ -87,26 +66,9 @@ const MarqueeContent = ({ text, variant, showIcon }) => (
     </div>
 );
 
-const SubjectProfile = () => {
+export default function SubjectProfile() {
     const [carouselIndex, setCarouselIndex] = useState(0);
-
     const { isMobile } = useDeviceType();
-
-    const carouselData = [
-        "I build fast, smooth websites where performance is baked in from the start — delivering excellent results.",
-        "I write clean, well-structured, and maintainable code focused on clarity, scalability, and long-term reliability.",
-        "I design intuitive, consistent, and responsive interfaces that feel natural across all devices and screen sizes.",
-        "Strong technical SEO, accessibility, and modern best practices are built in from day one — not added later.",
-        "From concept to launch, I ensure clear communication, thoughtful planning, and reliable, rigorously tested delivery.",
-    ];
-
-    const welcomeTexts = [
-        "HELLO, GLAD YOU'RE HERE.",
-        "WELCOME TO MY CREATIVE SPACE.",
-        "LET'S CREATE SOMETHING REMARKABLE.",
-        "CRAFTING DIGITAL EXPERIENCES FOR YOU.",
-        "READY TO BRING IDEAS TO LIFE?",
-    ];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -331,5 +293,3 @@ const SubjectProfile = () => {
         </section>
     );
 };
-
-export default SubjectProfile;

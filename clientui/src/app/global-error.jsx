@@ -2,12 +2,9 @@
 
 import { useEffect } from 'react';
 
-export default function GlobalError({
-    error,
-    reset,
-}) {
+export default function GlobalError({ error, reset }) {
+
     useEffect(() => {
-        // Log the error to an error reporting service
         console.error('Global Error:', error);
     }, [error]);
 
@@ -23,16 +20,13 @@ export default function GlobalError({
 
                         {process.env.NODE_ENV !== 'production' && (
                             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
-                                <p className="text-sm font-mono text-red-700 break-words">
+                                <p className="text-sm font-mono text-red-700 wrap-break-word">
                                     {error?.message || 'An unexpected error occurred'}
                                 </p>
                             </div>
                         )}
 
-                        <button
-                            onClick={() => reset()}
-                            className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
-                        >
+                        <button onClick={() => reset()} className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
                             Reload Page
                         </button>
                     </div>
@@ -40,4 +34,4 @@ export default function GlobalError({
             </body>
         </html>
     );
-}
+};

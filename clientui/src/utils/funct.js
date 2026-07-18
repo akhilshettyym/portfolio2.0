@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { CHARS, CLAMP, EASEOUTEXPO, ERRORBITS, LERP, SAMPLES } from "@/utils/basic-utils";
+import { CHARS, CLAMP, EASEOUTEXPO, ERRORBITS, LERP, SAMPLES } from "@/utils/basic";
+
+export const goToTop = () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
+}
 
 export function getCardState(progress, index) {
   const enterStart = 0.08 + index * 0.08;
@@ -104,11 +112,9 @@ export function useWheelDeck(onDown, onUp, enabled = true) {
 export function CurtainText({ children, delay = 0, className = "" }) {
   return (
     <div className={`overflow-hidden ${className}`}>
-      <motion.div
-        initial={{ y: "108%", opacity: 0 }}
+      <motion.div initial={{ y: "108%", opacity: 0 }}
         animate={{ y: "0%", opacity: 1 }}
-        transition={{ duration: 0.9, delay, ease: [0.77, 0, 0.175, 1] }}
-      >
+        transition={{ duration: 0.9, delay, ease: [0.77, 0, 0.175, 1] }}>
         {children}
       </motion.div>
     </div>
@@ -156,18 +162,12 @@ export function CodeRain({ active }) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_40%)]" />
       {active &&
         lines.map((line, idx) => (
-          <motion.div
-            key={line.id}
+          <motion.div key={line.id}
             initial={{ opacity: 0, y: 22, filter: "blur(8px)" }}
             animate={{ opacity: 0.9, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.22, delay: line.delay }}
             className="absolute font-mono text-[10px] leading-none tracking-[0.28em] text-white/75 md:text-[11px]"
-            style={{
-              left: `${line.x}%`,
-              top: `${line.y}%`,
-              transform: `translate(-50%, -50%) rotate(${(idx % 5) - 2}deg)`,
-            }}
-          >
+            style={{ left: `${line.x}%`, top: `${line.y}%`, transform: `translate(-50%, -50%) rotate(${(idx % 5) - 2}deg)` }}>
             {line.text}
           </motion.div>
         ))}
@@ -206,38 +206,28 @@ export function GlitchField({ active, seed }) {
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      <motion.div
-        animate={{ opacity: tick % 7 === 0 ? [0, 0.18, 0] : 0 }}
+      <motion.div animate={{ opacity: tick % 7 === 0 ? [0, 0.18, 0] : 0 }}
         transition={{ duration: 0.08 }}
-        className="absolute inset-0 bg-white mix-blend-screen"
-      />
+        className="absolute inset-0 bg-white mix-blend-screen" />
 
       <div className="absolute inset-0 opacity-[0.035] bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.15)_3px)]" />
 
-      <motion.div
-        key={`flash-${seed}-${tick}`}
+      <motion.div key={`flash-${seed}-${tick}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 0.12, 0.04, 0], scale: [1, 1.02, 1] }}
         transition={{ duration: 0.25 }}
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_45%)] mix-blend-screen"
-      />
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_45%)] mix-blend-screen" />
 
       {ERRORBITS.map((bit, i) => {
         const config = glitchPositions[i];
 
         return (
-          <motion.div
-            key={`${bit}-${tick}-${i}`}
+          <motion.div key={`${bit}-${tick}-${i}`}
             initial={{ opacity: 0, x: i % 2 ? 120 : -120 }}
-            animate={{
-              opacity: [0, 0.8, 0.3],
-              x: [0, config.xShift, 0],
-              y: [0, config.yShift, 0],
-            }}
+            animate={{ opacity: [0, 0.8, 0.3], x: [0, config.xShift, 0], y: [0, config.yShift, 0] }}
             transition={{ duration: 0.18, delay: i * 0.03, ease: "linear" }}
             className="absolute font-mono text-[10px] uppercase tracking-[0.35em] text-white/70 md:text-[11px]"
-            style={{ left: config.left, top: config.top }}
-          >
+            style={{ left: config.left, top: config.top }}>
             {config.useGlitch ? <GlitchText>{bit}</GlitchText> : bit}
           </motion.div>
         );
@@ -248,25 +238,18 @@ export function GlitchField({ active, seed }) {
 
 function BottomCurtain({ active }) {
   return (
-    <motion.div
-      initial={false}
-      animate={
-        active
-          ? { width: "100vw", height: "100vh", borderRadius: 0, x: 0, y: 0 }
-          : { width: "92vw", height: "88vh", borderRadius: 32, x: "4vw", y: 0 }
-      }
+    <motion.div initial={false}
+      animate={ active ? { width: "100vw", height: "100vh", borderRadius: 0, x: 0, y: 0 } : { width: "92vw", height: "88vh", borderRadius: 32, x: "4vw", y: 0 }}
       transition={{ duration: 1.05, ease: [0.77, 0, 0.175, 1] }}
       className="absolute bottom-0 left-0 bg-black"
-      style={{ transformOrigin: "bottom center" }}
-    />
+      style={{ transformOrigin: "bottom center" }} />
   );
 }
 
 export function SceneShell({ dark, curtain = false, children }) {
   return (
     <div
-      className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}
-    >
+      className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}>
       {curtain ? <BottomCurtain active /> : null}
       <div className={`absolute inset-0 ${dark ? "bg-black" : "bg-white"}`} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.08),transparent_40%)] opacity-40" />
@@ -278,14 +261,10 @@ export function SceneShell({ dark, curtain = false, children }) {
 
 export function SceneShell2({ dark, curtain = false, children }) {
   return (
-    <div
-      className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}
-    >
+    <div className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}>
       {curtain ? <BottomCurtain active /> : null}
 
-      <div
-        className={`absolute inset-0 z-0 ${dark ? "bg-black" : "bg-white"}`}
-      />
+      <div className={`absolute inset-0 z-0 ${dark ? "bg-black" : "bg-white"}`} />
       <div className="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.08),transparent_40%)] opacity-40" />
       <div className="pointer-events-none absolute inset-0 z-2 opacity-[0.08] mix-blend-overlay bg-[linear-gradient(rgba(0,0,0,0.55)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.25)_1px,transparent_1px)] bg-size-[100%_100%,100%_100%]" />
 
@@ -297,14 +276,6 @@ export function SceneShell2({ dark, curtain = false, children }) {
 /* GlitchText */
 export function randomChar() {
   return CHARS[Math.floor(Math.random() * CHARS.length)];
-}
-
-export const goToTop = () => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: "smooth",
-  });
 }
 
 // ConsoleModal
@@ -570,6 +541,14 @@ export const logCreate = () => {
   )
 }
 
+export const logHero = () => {
+  return (
+    <div className="text-[11px]">
+      <span className="text-emerald-400">Navigating to Hero section on /...</span>
+    </div>
+  )
+}
+
 export const logPhilosophy = () => {
   return (
     <div className="w-full text-[11px] bg-black border border-slate-800 rounded-lg p-4 text-slate-400 font-normal leading-relaxed max-w-3xl">
@@ -770,7 +749,7 @@ export const logSudoHire = () => {
 
 export const logrmrf = () => {
   return (
-    <div className="w-full max-w-md bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
+    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
       <div className="flex flex-col gap-1.5 text-slate-400">
         <div>Removing doubts/impostor-syndrome... done</div>
         <div>Removing doubts/will-he-deliver... done</div>
@@ -787,7 +766,7 @@ export const logrmrf = () => {
 
 export const logCoffee = () => {
   return (
-    <div className="w-full max-w-sm bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-normal select-none">
+    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-normal select-none">
       <div className="text-slate-600 font-bold whitespace-pre mb-2.5">
         {"( ( ) )\n........\n| |] \\ /\n`----´"}
       </div>
@@ -815,7 +794,7 @@ export const logCoffee = () => {
 
 export const logCatReadme = () => {
   return (
-    <div className="w-full max-w-xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
+    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
       <div className="flex items-center gap-2 border-b border-slate-900 pb-2 mb-3 text-slate-500 font-medium">
         <span className="text-emerald-500">#</span>
         <span>README.md</span>

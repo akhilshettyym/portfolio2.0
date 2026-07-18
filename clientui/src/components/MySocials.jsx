@@ -13,7 +13,7 @@ const trailImages = [
   "/bubbles/bubbles.vscode.svg",
 ];
 
-const MySocials = () => {
+export default function MySocials() {
   const [trail, setTrail] = useState([]);
   const lastPosition = useRef({ x: 0, y: 0 });
   const imageIndex = useRef(0);
@@ -88,5 +88,3 @@ const MySocials = () => {
     </motion.section>
   );
 };
-
-export default MySocials;

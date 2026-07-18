@@ -4,11 +4,10 @@ import "@/styles/cinematic_intro.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct-utils";
-import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic-utils";
+import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/funct";
+import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic";
 
-const CinematicIntro = ({ onComplete }) => {
-
+export default function CinematicIntro({ onComplete }) {
   const [scene, setScene] = useState(0);
   const [aiStage, setAiStage] = useState(0);
   const [butStage, setButStage] = useState(0);
@@ -42,6 +41,30 @@ const CinematicIntro = ({ onComplete }) => {
 
   const reversedRewind = useMemo(() => [...REWINDLINES].reverse(), []);
   const { isTier2 } = usePerformanceTier();
+
+  const PEEL_EASE = [0.19, 1, 0.22, 1];
+  const PEEL_DURATION = 1.6;
+  const [revealPhase, setRevealPhase] = useState("covering");
+
+  useEffect(() => {
+    const peelTimer = setTimeout(() => {
+      setRevealPhase("peel");
+    }, 50);
+
+    const doneTimer = setTimeout(() => {
+      setRevealPhase("done");
+    }, 50 + PEEL_DURATION * 1000);
+
+    const startCinematicTimer = setTimeout(() => {
+      setScene(0);
+    }, 50 + (PEEL_DURATION * 1000) + 3000);
+
+    return () => {
+      clearTimeout(peelTimer);
+      clearTimeout(doneTimer);
+      clearTimeout(startCinematicTimer);
+    };
+  }, []);
 
   const floatingBusinessTexts = useMemo(() => {
     const source = [
@@ -196,9 +219,9 @@ const CinematicIntro = ({ onComplete }) => {
     const intervals = [];
 
     if (scene === 0) {
-      timers.push(setTimeout(() => setIntroStep(1), 1800));
-      timers.push(setTimeout(() => setIntroStep(2), 3800));
-      timers.push(setTimeout(() => setReady(true), 5800));
+      timers.push(setTimeout(() => setIntroStep(1), 2800));
+      timers.push(setTimeout(() => setIntroStep(2), 5600));
+      timers.push(setTimeout(() => setReady(true), 8400));
     }
 
     if (scene === 1) {
@@ -764,26 +787,12 @@ const CinematicIntro = ({ onComplete }) => {
 
           <div className="absolute inset-0 z-3 overflow-hidden">
             {floatingBusinessTexts.map((item) => (
-              <motion.div
-                key={item.id}
+              <motion.div key={item.id}
                 initial={{ opacity: 0, y: 16, rotate: -2 }}
-                animate={{
-                  opacity: item.opacity,
-                  y: isTier2 ? 0 : [0, -18, 10, 0],
-                  rotate: isTier2 ? 0 : [-2, 2, -1],
-                }}
-                transition={{
-                  duration: isTier2 ? 0.4 : item.duration,
-                  delay: item.delay,
-                  repeat: isTier2 ? 0 : Infinity,
-                  ease: "easeInOut",
-                }}
+                animate={{ opacity: item.opacity, y: isTier2 ? 0 : [0, -18, 10, 0], rotate: isTier2 ? 0 : [-2, 2, -1] }}
+                transition={{ duration: isTier2 ? 0.4 : item.duration, delay: item.delay, repeat: isTier2 ? 0 : Infinity, ease: "easeInOut" }}
                 className="absolute max-w-[18rem] text-left text-[10px] uppercase leading-4 tracking-[0.22em] text-white/70"
-                style={{
-                  left: `${item.left}%`,
-                  top: `${item.top}%`,
-                  transform: `scale(${item.scale})`,
-                }}>
+                style={{ left: `${item.left}%`, top: `${item.top}%`, transform: `scale(${item.scale})` }}>
                 {item.text}
               </motion.div>
             ))}
@@ -1004,11 +1013,44 @@ const CinematicIntro = ({ onComplete }) => {
 
   return (
     <div className={`fixed inset-0 overflow-hidden antialiased ${isDarkScene ? "bg-black text-white" : "bg-white text-black"}`}>
+
+      {revealPhase !== "done" && (
+        <div className="fixed inset-0 z-9999 pointer-events-none">
+          <motion.div className="absolute top-0 left-0 w-full h-1/2 bg-black/10 z-50"
+            initial={{ y: "0%", borderBottomLeftRadius: "0%", borderBottomRightRadius: "0%" }}
+            animate={{
+              y: revealPhase === "peel" ? "-100%" : "0%",
+              borderBottomLeftRadius: revealPhase === "peel" ? "50% 50%" : "0% 0%",
+              borderBottomRightRadius: revealPhase === "peel" ? "50% 50%" : "0% 0%",
+            }}
+            transition={{
+              y: { duration: PEEL_DURATION, ease: PEEL_EASE },
+              borderBottomLeftRadius: { duration: PEEL_DURATION * 0.8, ease: PEEL_EASE },
+              borderBottomRightRadius: { duration: PEEL_DURATION * 0.8, ease: PEEL_EASE },
+            }} />
+
+          <motion.div className="absolute bottom-0 left-0 w-full h-1/2 bg-black/10 z-50"
+            initial={{ y: "0%", borderTopLeftRadius: "0%", borderTopRightRadius: "0%" }}
+            animate={{
+              y: revealPhase === "peel" ? "100%" : "0%",
+              borderTopLeftRadius: revealPhase === "peel" ? "50% 50%" : "0% 0%",
+              borderTopRightRadius: revealPhase === "peel" ? "50% 50%" : "0% 0%",
+            }}
+            transition={{
+              y: { duration: PEEL_DURATION, ease: PEEL_EASE },
+              borderTopLeftRadius: { duration: PEEL_DURATION * 0.8, ease: PEEL_EASE },
+              borderTopRightRadius: { duration: PEEL_DURATION * 0.8, ease: PEEL_EASE },
+            }} />
+        </div>
+      )}
+
       <div className="absolute inset-0 overflow-hidden">
-        <AnimatePresence mode="wait">{renderScene()}</AnimatePresence>
+        <AnimatePresence mode="wait">
+          {scene >= 0 && renderScene()}
+        </AnimatePresence>
       </div>
 
-      {scene !== 13 && (
+      {scene >= 0 && scene !== 13 && (
         <button onClick={handleSkipToLastScene} className="fixed bottom-8 right-8 z-50 flex items-center gap-2 rounded-full border border-current/30 bg-white/90 px-5 py-2.5 text-xs uppercase tracking-normal text-black backdrop-blur-md transition-all hover:bg-white hover:border-white/60 active:scale-95 dark:bg-black/90 dark:text-white dark:hover:bg-black">
           <span> Skip Intro </span>
         </button>
@@ -1024,14 +1066,14 @@ const CinematicIntro = ({ onComplete }) => {
         transition={{ duration: 0.35 }}
         className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-current/15" />
 
-      <motion.div initial={false}
-        animate={{ opacity: ready ? 0.5 : 0.95 }}
-        transition={{ duration: 0.4 }}
-        className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current backdrop-blur-sm">
-        {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
-      </motion.div>
+      {scene >= 0 && (
+        <motion.div initial={false}
+          animate={{ opacity: ready ? 0.5 : 0.95 }}
+          transition={{ duration: 0.4 }}
+          className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current backdrop-blur-sm">
+          {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
+        </motion.div>
+      )}
     </div>
   );
 };
-
-export default CinematicIntro;

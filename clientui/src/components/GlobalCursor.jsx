@@ -4,7 +4,7 @@ import "@/styles/global_cursor.css";
 import { useEffect, useRef, useState } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const GlobalCursor = () => {
+export default function GlobalCursor() {
     const cursorRef = useRef(null);
     const frameRef = useRef(null);
     const pointRef = useRef({ x: 0, y: 0 });
@@ -69,14 +69,6 @@ const GlobalCursor = () => {
     }, []);
 
     return (
-        <div
-            ref={cursorRef}
-            className="global-cursor-dot"
-            aria-hidden="true"
-            data-active="false"
-            data-tier={mounted ? (isTier2 ? "low" : "high") : "unknown"}
-        />
+        <div ref={cursorRef} className="global-cursor-dot" aria-hidden="true" data-active="false" data-tier={mounted ? (isTier2 ? "low" : "high") : "unknown"} />
     );
 };
-
-export default GlobalCursor;

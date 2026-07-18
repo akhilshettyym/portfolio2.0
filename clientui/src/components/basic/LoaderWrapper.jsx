@@ -2,27 +2,26 @@
 
 import "@/styles/intro_entrance.css";
 import Loader from "@/components/basic/Loader";
-import { INTRO_KEY } from "@/utils/localstorage";
+import { INTRO_SEEN } from "@/utils/storage";
 import PageReveal from "@/components/basic/PageReveal";
 import CinematicIntro from "@/components/CinematicIntro";
 import { createContext, useEffect, useRef, useState } from "react";
 
 export const LoadingContext = createContext();
 
-const LoaderWrapper = ({ children }) => {
+export default function LoaderWrapper({ children }) {
     const [loading, setLoading] = useState(true);
     const [hasSeenIntro, setHasSeenIntro] = useState(null);
     const [showIntro, setShowIntro] = useState(false);
     const [revealActive, setRevealActive] = useState(false);
     const [navReady, setNavReady] = useState(false);
-    const [introComplete, setIntroComplete] = useState(false);
     const [shouldMountChildren, setShouldMountChildren] = useState(false);
 
     const revealTimerRef = useRef(null);
 
     useEffect(() => {
         const frame = window.requestAnimationFrame(() => {
-            const seen = window.localStorage.getItem(INTRO_KEY) === "true";
+            const seen = window.localStorage.getItem(INTRO_SEEN) === "true";
             setHasSeenIntro(seen);
         });
 
@@ -57,10 +56,9 @@ const LoaderWrapper = ({ children }) => {
     }, []);
 
     const handleIntroComplete = () => {
-        window.localStorage.setItem(INTRO_KEY, "true");
+        window.localStorage.setItem(INTRO_SEEN, "true");
         setHasSeenIntro(true);
         setShowIntro(false);
-        setIntroComplete(true);
         window.requestAnimationFrame(() => {
             setShouldMountChildren(true);
             startReveal();
@@ -68,10 +66,9 @@ const LoaderWrapper = ({ children }) => {
     };
 
     const triggerIntroRestart = () => {
-        window.localStorage.removeItem(INTRO_KEY);
+        window.localStorage.removeItem(INTRO_SEEN);
         setRevealActive(false);
         setNavReady(false);
-        setIntroComplete(false);
 
         setTimeout(() => {
             setShouldMountChildren(false);
@@ -95,5 +92,3 @@ const LoaderWrapper = ({ children }) => {
         </LoadingContext.Provider>
     );
 };
-
-export default LoaderWrapper;

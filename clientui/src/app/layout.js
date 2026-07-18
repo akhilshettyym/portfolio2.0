@@ -67,7 +67,7 @@ export default function RootLayout({ children }) {
               <main id="main-content" className="relative pt-25 flex flex-col min-h-screen bg-white">
                 <ToastContainer />
 
-                <div className="flex-grow">
+                <div className="grow">
                   {children}
                 </div>
               </main>

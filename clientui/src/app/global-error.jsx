@@ -20,7 +20,7 @@ export default function GlobalError({ error, reset }) {
 
                         {process.env.NODE_ENV !== 'production' && (
                             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
-                                <p className="text-sm font-mono text-red-700 break-words">
+                                <p className="text-sm font-mono text-red-700 wrap-break-word">
                                     {error?.message || 'An unexpected error occurred'}
                                 </p>
                             </div>

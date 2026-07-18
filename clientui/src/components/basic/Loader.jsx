@@ -10,7 +10,26 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
-export default function Loader({ onFinish, duration = 3000 }) {
+const GREETINGS = [
+  "Hello", // English
+  "こんにちは", // Japanese
+  "Bonjour", // French
+  "Hola", // Spanish
+  "Ciao", // Italian
+  "你好", // Mandarin
+  "Olá", // Portuguese
+  "Привет", // Russian
+  "مرحباً", // Arabic
+  "안녕하세요", // Korean
+  "Γεια σας", // Greek
+  "สวัสดี", // Thai
+  "Ahoj", // Czech
+  "Xin chào", // Vietnamese
+  "नमस्ते", // Hindi
+  "ನಮಸ್ಕಾರ", // Kannada
+];
+
+export default function Loader({ onFinish }) {
   const containerRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
@@ -27,6 +46,8 @@ export default function Loader({ onFinish, duration = 3000 }) {
   const modalTriggeredRef = useRef(false);
   const progressRef = useRef(0);
   const pausePointRef = useRef(null);
+
+  const lastTimeRef = useRef(0);
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;
@@ -51,10 +72,16 @@ export default function Loader({ onFinish, duration = 3000 }) {
 
   useEffect(() => {
     let frameId;
+    lastTimeRef.current = performance.now();
 
-    const animate = () => {
+    const DURATION_MS = GREETINGS.length * 400;
+
+    const animate = (time) => {
+      const delta = time - lastTimeRef.current;
+      lastTimeRef.current = time;
+
       if (!isPaused) {
-        progressRef.current += 100 / (duration / 16);
+        progressRef.current += (100 / DURATION_MS) * delta;
 
         const next = Math.min(progressRef.current, 100);
         setProgress(next);
@@ -85,7 +112,7 @@ export default function Loader({ onFinish, duration = 3000 }) {
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [duration, isPaused, onFinish]);
+  }, [isPaused, onFinish]);
 
   useEffect(() => {
     if (!mounted || !containerRef.current) return;
@@ -147,10 +174,10 @@ export default function Loader({ onFinish, duration = 3000 }) {
     function animate() {
       frameId = requestAnimationFrame(animate);
       const delta = Math.min(timer.update(), 0.033);
-      const speed = delta * 60;
 
-      points.rotation.y += (isMobile ? 0.0007 : 0.001) * speed;
-      points.rotation.x += (isMobile ? 0.0003 : 0.0005) * speed;
+      const speed = delta * 60;
+      points.rotation.y += (isMobile ? 0.0025 : 0.0035) * speed;
+      points.rotation.x += (isMobile ? 0.001 : 0.0018) * speed;
 
       controls?.update();
       renderer.render(scene, camera);
@@ -191,14 +218,14 @@ export default function Loader({ onFinish, duration = 3000 }) {
     setShowLocationModal(false);
     setTimeout(() => {
       setIsPaused(false);
+      lastTimeRef.current = performance.now();
     }, 300);
   };
 
-  const radius = isMobile ? 70 : 100;
-  const stroke = 4;
-  const normalizedRadius = radius - stroke * 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  const greetingIndex = Math.min(
+    Math.floor((progress / 100) * GREETINGS.length),
+    GREETINGS.length - 1
+  );
 
   return (
     <div className="fixed inset-0 z-999 overflow-hidden bg-white">
@@ -208,120 +235,45 @@ export default function Loader({ onFinish, duration = 3000 }) {
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-blue-50/10 to-transparent" />
       </div>
 
-      <div className="absolute inset-0 pointer-events-none text-black text-xl font-light">
-        <div className="absolute top-4 left-4"> + </div>
-        <div className="absolute top-4 right-4"> + </div>
-        <div className="absolute bottom-4 left-4"> + </div>
-        <div className="absolute bottom-4 right-4"> + </div>
+      <div className="absolute inset-0 pointer-events-none text-black/40 text-xl font-light">
+        <div className="absolute top-8 left-8"> + </div>
+        <div className="absolute top-8 right-8"> + </div>
+        <div className="absolute bottom-8 left-8"> + </div>
+        <div className="absolute bottom-8 right-8"> + </div>
       </div>
 
       <div ref={containerRef} className="absolute inset-0" />
 
-      <div className="absolute inset-0 flex items-center justify-center">
-        {mounted && (
-          <div className={`relative flex flex-col items-center justify-center ${isMobile ? "w-44 h-44" : "w-56 h-56"}`}>
-
-            <svg className="absolute inset-0 w-full h-full animate-[spin_12s_linear_infinite]" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" strokeDasharray="2 6" />
-              <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth="0.5" strokeDasharray="10 10" />
-            </svg>
-
-            <svg className="absolute inset-0 w-full h-full animate-[spin_20s_linear_infinite_reverse]" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="1" strokeDasharray="30 10" />
-            </svg>
-
-            <svg height={isMobile ? 160 : 200} width={isMobile ? 160 : 200} className="absolute -rotate-90">
-              <circle stroke="rgba(0,0,0,0.03)" fill="transparent" strokeWidth={stroke + 2} r={normalizedRadius} cx="50%" cy="50%" />
-
-              <circle stroke="rgba(0,0,0,0.15)" fill="transparent" strokeWidth={stroke + 4} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear", filter: "blur(4px)" }} />
-
-              <circle stroke="#000000" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" style={{ transition: "stroke-dashoffset 0.1s linear" }} />
-            </svg>
-
-            <div className="flex flex-col items-center justify-center z-10 mt-1">
-              <div className={`text-black font-medium tracking-tighter tabular-nums ${isMobile ? "text-4xl" : "text-5xl"}`}>
-                {Math.floor(progress)}
-                <span className={`text-black/30 font-light ml-0.5 ${isMobile ? "text-xl" : "text-2xl"}`}>%</span>
-              </div>
-              <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-black/40 mt-1 font-medium">
-                {progress >= 100 ? "Ready" : "Loading"}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!mounted && (
-          <div className="relative flex flex-col items-center justify-center w-56 h-56">
-
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" strokeDasharray="2 6" />
-              <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth="0.5" strokeDasharray="10 10" />
-            </svg>
-
-            <svg height={200} width={200} className="absolute -rotate-90">
-              <circle stroke="rgba(0,0,0,0.03)" fill="transparent" strokeWidth={stroke + 2} r={normalizedRadius} cx="50%" cy="50%" />
-              <circle stroke="#000000" fill="transparent" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} r={normalizedRadius} cx="50%" cy="50%" />
-            </svg>
-
-            <div className="flex flex-col items-center justify-center z-10 mt-1">
-              <div className="text-black font-medium tracking-tighter tabular-nums text-5xl">
-                {Math.floor(progress)}
-                <span className="text-black/30 font-light ml-0.5 text-2xl">%</span>
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.3em] text-black/40 mt-1 font-medium">
-                Loading
-              </div>
-            </div>
-          </div>
-        )}
+      <div className="absolute top-0 left-0 w-full h-1.5 bg-black/10 z-50">
+        <div className="h-full bg-black" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className="absolute bottom-8 w-full flex justify-center text-center px-6">
-        <div className="text-[10px] sm:text-[11px] leading-5 text-black/60 max-w-md tracking-wide">
-          <div className="text-black/80 font-normal text-sm sm:text-md">
-            AKHIL SHETTY {"//"} identity: portfolio_instance
-          </div>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+        <div className="relative h-20 w-full flex items-center justify-center overflow-hidden">
+          {GREETINGS.map((greeting, idx) => {
+            let offset = 1;
+            if (idx === greetingIndex) {
+              offset = 0;
+            } else if (idx < greetingIndex) {
+              offset = -1;
+            }
 
-          {progress < 25 && (
-            <>
-              <div className="text-black/40">[ boot sequence initiated ]</div>
-              <div className="text-black/20 mt-1">loading core modules...</div>
-            </>
-          )}
-
-          {progress >= 25 && progress < 55 && (
-            <>
-              <div className="text-black/40">[ authentication check ]</div>
-              <div className="text-black/20 mt-1">verifying identity matrix...</div>
-            </>
-          )}
-
-          {progress >= 55 && progress < 85 && (
-            <>
-              <div className="text-black/40">[ system calibration ]</div>
-              <div className="text-black/20 mt-1">
-                {calibrating ? "measuring rendering capacity..." : "synchronizing environment state..."}
-              </div>
-            </>
-          )}
-
-          {progress >= 85 && progress < 100 && (
-            <>
-              <div className="text-black/40">[ finalizing ]</div>
-              <div className="text-black/20 mt-1">preparing interface shell...</div>
-            </>
-          )}
-
-          {progress >= 100 && (
-            <>
-              <div className="text-black/40">[ portfolio unlocked ]</div>
-              <div className="text-black/20 mt-1">welcome, - akhil shetty</div>
-            </>
-          )}
+            return (
+              <span key={`${greeting}-${idx}`} className="absolute text-[22px] font-bold tracking-tight text-black transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ opacity: offset === 0 ? 1 : 0, transform: `translateY(${offset * 32}px)` }}>
+                {greeting}
+              </span>
+            );
+          })}
         </div>
+      </div>
+
+      <div className="absolute bottom-12 w-full flex justify-center text-center px-6 z-10 pointer-events-none">
+        <h1 className="text-[clamp(0.5em,2vw,1.5rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform" style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
+          AKHIL SHETTY M
+        </h1>
       </div>
 
       <LocationModal open={showLocationModal} onComplete={handleLocationSelected} />
     </div>
   );
-};
+}

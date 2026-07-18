@@ -22,7 +22,7 @@ export default function Error({ error, reset }) {
 
                 {process.env.NODE_ENV !== 'production' && (
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left max-h-48 overflow-auto">
-                        <p className="text-sm font-mono text-gray-700 break-words">
+                        <p className="text-sm font-mono text-gray-700 wrap-break-word">
                             {error?.message || 'An unexpected error occurred'}
                         </p>
                     </div>

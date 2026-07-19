@@ -14,6 +14,9 @@
 - DONE[clientui] - `SelectedWorks.jsx` - project section should be enhanced for higher tiers to work smoothly without delay.
 - DONE[clientui] - `Navbar.jsx` - Color difference at the top and bottom. 
 - DONE[clientui] - `CinematicIntro n loader` - loader reveals the introsection, (Page reveal required, make sure the intro dosent run until the reveal is done).
+- DONE[clientui] - `ConsoleModal.jsx` - enhance the boot sequence.
+- DONE[clientui] - `ConsoleModal.jsx` - add some life while the user enters commands.
+
 
 ---
 
@@ -44,17 +47,20 @@
 
 
 - [clientui] - `ConsoleModal.jsx` - update commands.
-- [clientui] - `ConsoleModal.jsx` - enhance the boot sequence.
-- [clientui] - `ConsoleModal.jsx` - add some life while the user enters commands.
+
+
+
 
 
 - [clientui] - `MySocials.jsx` - Rebuild from scratch.
 - [clientui] - `MySocials.jsx` - Let the Socials section draw from the right and snap to the screen and then continue to scroll down.
 
 
+
+
+
+
 - [clientui] - page roll from bottom to top
-
-
 
 
 
@@ -85,21 +91,3 @@
 
 
 
-
-
-
-
-I have this file where I have liquid background, but what am expecting from you is insteasd of the background I want this on words which call out my name 
-AKHIL SHETTY I want this effect on the words so that when I move my mouse on or over these texts it should act as if its tearing apart and then get attached back again once the mouse moves off it.
-
-Create a component called Hero.jsx and do this, let the text be in the middle of the screen. I want on mouse hover the letters should kind of distort and the text should be in black.
-
-
-
-
-I want to add more thickness to the name as in this - className="text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform"
-something like this, I want the text. How can I change this 
-
-
-Now can you stretch the whole text to the screen width and i want the height but to be streched and also initially too the text should be a bit transparent or frosted that being white. I'll add a photo of how I want the text to look like 
-Generate the final update code, with these changes

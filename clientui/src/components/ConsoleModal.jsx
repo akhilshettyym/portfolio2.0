@@ -1,8 +1,21 @@
 import { createPortal } from "react-dom";
-import { FaCodeMerge } from "react-icons/fa6";
+import { runConsoleCommand } from "@/utils/console";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useState, useEffect, useRef, memo, useCallback } from "react";
-import { runConsoleCommand } from "@/utils/console";
+
+const AnimatedOutput = ({ children }) => {
+    const [isVisible, setIsVisible] = useState(false);
+    useEffect(() => {
+        const t = setTimeout(() => setIsVisible(true), 50);
+        return () => clearTimeout(t);
+    }, []);
+
+    return (
+        <div className={`transition-all duration-500 ease-out origin-top ${isVisible ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-75 -translate-y-2"}`}>
+            {children}
+        </div>
+    );
+};
 
 function ConsoleModal({ isOpen, onClose }) {
     const router = useRouter();
@@ -18,11 +31,29 @@ function ConsoleModal({ isOpen, onClose }) {
 
     const [bootPhase, setBootPhase] = useState("loading");
     const [bootProgress, setBootProgress] = useState(0);
+    const [bootLogs, setBootLogs] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [history, setHistory] = useState([]);
     const [commandHistory, setCommandHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [hint, setHint] = useState("/about");
+
     const pendingScrollRef = useRef(null);
+
+    const HINTS = ["/skills", "/projects", "/experience", "/socials", "whoami", "/secrets", "clear", "/philosophy"];
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         const handle = window.setTimeout(() => setMounted(true), 0);
@@ -35,28 +66,54 @@ function ConsoleModal({ isOpen, onClose }) {
             setTimeout(() => setAnimationState("open"), 10);
 
             if (bootPhase === "loading") {
-                window.requestAnimationFrame(() => setBootProgress(0));
+                setBootProgress(0);
+                setBootLogs(["$ npm install @akhilshetty/portfolio-core", "npm info it worked if it ends with ok"]);
             }
             return () => window.clearTimeout(renderHandle);
         } else {
-            window.requestAnimationFrame(() => setAnimationState("closed"));
+            setAnimationState("closed");
             const closeHandle = window.setTimeout(() => setRender(false), 300);
             return () => window.clearTimeout(closeHandle);
         }
-    }, [isOpen, bootPhase]);
+    }, [isOpen]);
 
     useEffect(() => {
         if (isOpen && bootPhase === "loading") {
+            const mockNpmLogs = [
+                "npm http fetch GET 200 https://registry.npmjs.org/@akhilshetty/portfolio-core 340ms",
+                "npm info lifecycle @akhilshetty/portfolio-core@1.0.0~preinstall: @akhilshetty/portfolio-core@1.0.0",
+                "npm http fetch GET 200 https://registry.npmjs.org/react-design-tokens 120ms",
+                "npm http fetch GET 200 https://registry.npmjs.org/next-router-matrix 210ms",
+                "extract:@akhilshetty/portfolio-core: extract tree created",
+                "extract:react-design-tokens: lift-up modules completed",
+                "npm info sub-dependencies resolving tree structure...",
+                "finishing installation layout structure...",
+            ];
+
+            let step = 0;
             const interval = setInterval(() => {
                 setBootProgress((prev) => {
-                    if (prev >= 100) {
+                    const nextProgress = prev + Math.floor(Math.random() * 15) + 6;
+
+                    if (nextProgress > (step * 12) && step < mockNpmLogs.length) {
+                        setBootLogs(logs => [...logs, mockNpmLogs[step]]);
+                        step++;
+                    }
+
+                    if (nextProgress >= 100) {
                         clearInterval(interval);
-                        setBootPhase("ready");
+                        setBootLogs(logs => [
+                            ...logs,
+                            "✔ Loaded 34 dependencies in 1.12s",
+                            "added 412 packages from 184 contributors and audited 413 packages in 1.45s",
+                            "found 0 vulnerabilities"
+                        ]);
+                        setTimeout(() => setBootPhase("ready"), 300);
                         return 100;
                     }
-                    return prev + Math.floor(Math.random() * 15) + 5;
+                    return nextProgress;
                 });
-            }, 150);
+            }, 90);
             return () => clearInterval(interval);
         }
     }, [isOpen, bootPhase]);
@@ -72,7 +129,9 @@ function ConsoleModal({ isOpen, onClose }) {
     }, [isOpen, bootPhase]);
 
     const handleTerminalClick = () => {
-        if (bootPhase === "complete" && inputRef.current) {
+        if (bootPhase === "ready") {
+            setBootPhase("complete");
+        } else if (bootPhase === "complete" && inputRef.current) {
             inputRef.current.focus();
         }
     };
@@ -81,18 +140,16 @@ function ConsoleModal({ isOpen, onClose }) {
         if (terminalEndRef.current) {
             terminalEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [history, bootPhase]);
+    }, [history, bootPhase, bootLogs, isProcessing]);
 
     const scrollToSection = useCallback(function scrollToElement(elementId, attempts = 0) {
         if (!elementId || attempts > 12) return;
-
         const element = document.getElementById(elementId);
         if (element) {
             element.scrollIntoView({ behavior: "smooth", block: "start" });
             pendingScrollRef.current = null;
             return;
         }
-
         window.setTimeout(() => scrollToElement(elementId, attempts + 1), 100);
     }, []);
 
@@ -104,7 +161,6 @@ function ConsoleModal({ isOpen, onClose }) {
     const executeCommand = (cmd) => {
         const navigate = (path, elementId) => {
             if (elementId) pendingScrollRef.current = elementId;
-
             if (pathname === path) {
                 window.requestAnimationFrame(() => scrollToSection(elementId));
             } else {
@@ -112,29 +168,39 @@ function ConsoleModal({ isOpen, onClose }) {
             }
         };
 
-        const output = runConsoleCommand(cmd, {
-            navigate,
-            close: handleClose,
-            clear: () => setHistory([]),
-        });
-
-        if (output === undefined) return;
-
-        setHistory((prev) => [...prev, { command: cmd, output }]);
+        setHistory((prev) => [...prev, { command: cmd, output: null, processing: true }]);
+        setIsProcessing(true);
         setCommandHistory((prev) => [...prev, cmd]);
         setHistoryIndex(-1);
+
+        setHint(HINTS[Math.floor(Math.random() * HINTS.length)]);
+
+        setTimeout(() => {
+            const output = runConsoleCommand(cmd, {
+                navigate,
+                close: handleClose,
+                clear: () => setHistory([]),
+            });
+
+            setHistory((prev) => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { command: cmd, output, processing: false };
+                return updated;
+            });
+            setIsProcessing(false);
+        }, 400 + Math.random() * 400);
     };
 
     const handleCommandSubmit = (e) => {
         e.preventDefault();
-        if (inputValue.trim()) {
+        if (inputValue.trim() && !isProcessing) {
             executeCommand(inputValue);
+            setInputValue("");
         }
-        setInputValue("");
     };
 
     const handleKeyDown = (e) => {
-        if (bootPhase !== "complete") return;
+        if (bootPhase !== "complete" || isProcessing) return;
 
         if (e.key === "ArrowUp") {
             e.preventDefault();
@@ -167,7 +233,7 @@ function ConsoleModal({ isOpen, onClose }) {
 
     const handleExpand = () => {
         setIsExpanded((prev) => !prev);
-        setDimen(isExpanded ? "15x40" : "27x88");
+        setDimen(isExpanded ? "15x40" : "24x80");
     };
 
     if (!render || !mounted) return null;
@@ -180,24 +246,18 @@ function ConsoleModal({ isOpen, onClose }) {
 
     const getProgressBar = () => {
         const fill = Math.min(100, bootProgress);
-        const blocks = Math.floor(fill / 4);
-        return (
-            <>
-                {`[`}
-                {Array.from({ length: blocks }, (_, i) => (
-                    <FaCodeMerge key={i} size={10} className="inline" />
-                ))}
-                {`${" ".repeat(25 - blocks)}] ${fill}%`}
-            </>
-        );
-
+        const totalBlocks = 25;
+        const filledBlocks = Math.floor((fill / 100) * totalBlocks);
+        const emptyBlocks = totalBlocks - filledBlocks;
+        const bar = "=".repeat(Math.max(0, filledBlocks - 1)) + (filledBlocks > 0 && fill < 100 ? ">" : (fill === 100 ? "=" : "")) + " ".repeat(emptyBlocks);
+        return `[${bar}] ${fill}%`;
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-9999 flex items-center justify-center pointer-events-none">
-            <div className={`pointer-events-auto relative flex flex-col bg-[#1e1e1e] border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${getAnimationClasses()} ${isExpanded ? "w-200 h-125" : "w-150 h-100"}`}>
+        <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/20 backdrop-blur-sm transition-all duration-300">
+            <div className={`relative flex flex-col bg-[#0c0c0c] border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${getAnimationClasses()} ${isExpanded ? "w-[60vw] h-[60vh]" : "w-150 h-100 max-w-[95vw] max-h-[85vh]"}`}>
 
-                <div className="h-8 bg-[#2d2d2d] flex items-center px-4 w-full select-none shrink-0">
+                <div className="h-8 bg-[#1e1e1e] border-b border-white/5 flex items-center px-4 w-full select-none shrink-0">
                     <div className="flex space-x-2">
                         <button onClick={handleClose} className="w-3.5 h-3.5 bg-[#ff5f56] rounded-full hover:bg-[#ff5f56]/80 flex items-center justify-center transition-colors group/btn">
                             <span className="text-[8px] text-black/60 opacity-0 group-hover/btn:opacity-100">✕</span>
@@ -209,34 +269,29 @@ function ConsoleModal({ isOpen, onClose }) {
                             <span className="text-[8px] text-black/60 opacity-0 group-hover/btn:opacity-100 leading-none">⤢</span>
                         </button>
                     </div>
-                    <div className="flex-1 text-center text-gray-400 text-xs font-medium">
+                    <div className="flex-1 text-center text-gray-400 text-xs font-mono font-medium">
                         akhilshettym@macbook-pro --zsh-{dimen}
                     </div>
                 </div>
 
-                <div className="flex-1 p-4 bg-[#1e1e1e] text-[#00ff00] font-mono text-xs overflow-auto cursor-text scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]" onClick={handleTerminalClick}>
-                    {bootPhase !== "complete" && (
-                        <div className="flex flex-col space-y-1">
-                            <p>Initializing portfolio...</p>
-                            {bootProgress > 20 && <p>Loading design tokens...</p>}
-                            {bootProgress > 40 && <p>Mounting component library...</p>}
-                            {bootProgress > 60 && (
-                                <>
-                                    <p className="whitespace-pre">Boot sequence running</p>
-                                    <p className="whitespace-pre">{getProgressBar()} {bootProgress === 100 && "done"}</p>
-                                </>
-                            )}
-                            {bootPhase === "ready" && (
-                                <div className="mt-4 animate-fade-in space-y-1">
-                                    <p>Initializing connection to core product architecture...</p>
-                                    <p>Design token frameworks: operational</p>
-                                    <p>UX research matrix: synchronized</p>
-                                    <p>Security protocol: zero vulnerabilities detected</p>
-                                    <p>Strategic alignment modules: engaged</p>
+                <div className="flex-1 min-h-0 p-5 bg-[#0c0c0c] text-green-400 font-mono text-xs md:text-sm overflow-y-auto overscroll-contain cursor-text select-text pr-3 scrollbar-thin [scrollbar-color:#333_#0c0c0c] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#0c0c0c] [&::-webkit-scrollbar-thumb]:bg-[#333] [&::-webkit-scrollbar-thumb]:rounded" onClick={handleTerminalClick}>
 
-                                    <br />
-                                    <p className="text-white font-bold">akhilshettym v1.0.0 --ready</p>
-                                    <p className="animate-pulse text-yellow-400">Press Enter to continue...</p>
+                    {bootPhase !== "complete" && (
+                        <div className="flex flex-col space-y-1 opacity-90">
+                            {bootLogs.map((log, index) => (
+                                <p key={index} className="text-gray-300 select-none">{log}</p>
+                            ))}
+
+                            {bootPhase === "loading" && (
+                                <div className="mt-2">
+                                    <p className="whitespace-pre text-cyan-400 select-none">{getProgressBar()}</p>
+                                </div>
+                            )}
+
+                            {bootPhase === "ready" && (
+                                <div className="mt-6 animate-fade-in space-y-2">
+                                    <p className="text-white font-bold select-none">Environment verified. Shell initialization script complete.</p>
+                                    <p className="animate-pulse text-yellow-400 cursor-pointer select-none">Press Enter or click anywhere here to load session...</p>
                                 </div>
                             )}
                         </div>
@@ -244,56 +299,52 @@ function ConsoleModal({ isOpen, onClose }) {
 
                     {bootPhase === "complete" && (
                         <div className="flex flex-col space-y-1">
-                            <p>Last login: {new Date().toString().split(" GMT")[0].toLowerCase()} on ttys000.</p>
-                            <br />
-                            <div className="mb-4">
-                                <p className="text-white font-bold mb-1">Capabilities</p>
-                                <div className="grid grid-cols-[60px_1fr] gap-x-2 text-gray-400">
-                                    <span>Design</span><span>: Systems, UX/UI, Enterprise Dashboards</span>
-                                    <span>Lead</span><span>: Teams, Workshops, Mentoring</span>
-                                    <span>Build</span><span>: Web, Mobile, Branding</span>
-                                    <span>Ship</span><span>: SaaS, Enterprise, Consumer</span>
-                                </div>
-                                <br />
-                                <p className="text-white font-bold mb-1">Quick Tips</p>
-                                <div className="text-yellow-400 space-y-1 mb-3">
-                                    <p>Try: <span className="text-cyan-400">/secrets</span> if you like finding hidden things</p>
-                                    <p>Use arrow keys to navigate command history</p>
-                                    <p>Commands work with or without the <span className="text-cyan-400">/</span> prefix</p>
-                                </div>
-                                <p className="text-white font-bold mb-1">Navigation</p>
-                                <div className="text-gray-400 space-y-1">
-                                    <p>/about</p>
-                                    <p>/skills</p>
-                                    <p>/projects</p>
-                                    <p>/connect</p>
-                                    <p>/socials</p>
-                                    <p>/achievements</p>
-                                    <p className="mt-2 text-gray-500">... /help for all commands</p>
-                                </div>
+                            <div className="mb-6">
+                                <p className="text-gray-400">Last login: {new Date().toString().split(" GMT")[0]} on ttys000</p>
+                                <p className="text-gray-400 mt-1">Type <span className="text-cyan-400 font-bold">/help</span> to see available commands.</p>
                             </div>
 
                             {history.map((item, i) => (
-                                <div key={i} className="mb-2">
+                                <div key={i} className="mb-4">
                                     <div className="flex items-center">
-                                        <span className="text-blue-400 mr-2">user@macbook:~$</span>
+                                        <span className="text-emerald-400 mr-2 font-semibold">user@macbook:~$</span>
                                         <span className="text-white">{item.command}</span>
                                     </div>
-                                    {item.output && (
-                                        <div className="text-gray-300 mt-1">
-                                            {typeof item.output === "string" ? (
-                                                <span className="whitespace-pre-wrap">{item.output}</span>
-                                            ) : (item.output)}
+
+                                    {item.processing ? (
+                                        <div className="text-gray-500 mt-1 animate-pulse">
+                                            Processing command...
                                         </div>
-                                    )}
+                                    ) : item.output ? (
+                                        <AnimatedOutput>
+                                            <div className="text-gray-300 mt-2">
+                                                {typeof item.output === "string" ? (
+                                                    <span className="whitespace-pre-wrap">{item.output}</span>
+                                                ) : (item.output)}
+                                            </div>
+                                        </AnimatedOutput>
+                                    ) : null}
                                 </div>
                             ))}
 
-                            <form onSubmit={handleCommandSubmit} className="flex items-center mt-1">
-                                <span className="text-blue-400 mr-2">user@macbook:~$</span>
-                                <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} className="bg-transparent border-none outline-none text-[#00ff00] flex-1 caret-[#00ff00]" autoFocus spellCheck="false" autoComplete="off" />
-                            </form>
-                            <div ref={terminalEndRef} />
+                            {!isProcessing && (
+                                <div className="mt-2 group">
+                                    <div className="text-gray-500 text-[10px] mb-1 opacity-60 select-none">
+                                        💡 Recommended: <span className="text-gray-400">{hint}</span>
+                                    </div>
+                                    <form onSubmit={handleCommandSubmit} className="flex items-center relative">
+                                        <span className="text-emerald-400 mr-2 font-semibold select-none">user@macbook:~$</span>
+                                        <div className="relative flex-1 flex items-center">
+                                            <input ref={inputRef} type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} className="bg-transparent border-none outline-none text-white w-full caret-transparent absolute inset-0 z-10" autoFocus spellCheck="false" autoComplete="off" />
+                                            <span className="text-transparent whitespace-pre pointer-events-none font-mono">
+                                                {inputValue}
+                                            </span>
+                                            <span className="h-[1.2em] w-2 bg-gray-400 animate-pulse pointer-events-none" />
+                                        </div>
+                                    </form>
+                                </div>
+                            )}
+                            <div ref={terminalEndRef} className="h-4 w-full" />
                         </div>
                     )}
                 </div>
@@ -301,6 +352,6 @@ function ConsoleModal({ isOpen, onClose }) {
         </div>,
         document.body
     );
-};
+}
 
 export default memo(ConsoleModal);

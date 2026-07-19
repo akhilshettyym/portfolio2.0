@@ -239,7 +239,7 @@ export function GlitchField({ active, seed }) {
 function BottomCurtain({ active }) {
   return (
     <motion.div initial={false}
-      animate={ active ? { width: "100vw", height: "100vh", borderRadius: 0, x: 0, y: 0 } : { width: "92vw", height: "88vh", borderRadius: 32, x: "4vw", y: 0 }}
+      animate={active ? { width: "100vw", height: "100vh", borderRadius: 0, x: 0, y: 0 } : { width: "92vw", height: "88vh", borderRadius: 32, x: "4vw", y: 0 }}
       transition={{ duration: 1.05, ease: [0.77, 0, 0.175, 1] }}
       className="absolute bottom-0 left-0 bg-black"
       style={{ transformOrigin: "bottom center" }} />
@@ -281,29 +281,27 @@ export function randomChar() {
 // ConsoleModal
 export const logAbout = () => {
   return (
-    <div className="text-[11px] text-justify">
-      <span className="block text-white font-medium mt-4">About Akhil Shetty</span>
-      <p className="mt-1"> A <span className="text-white font-medium">computer science graduate </span>
-        from Mangalore, Karnataka, who somehow turned curiosity into a full-time habit. I graduated from St. Joseph Engineering College and currently live in Mumbai, working as an
-        <span className="text-white font-medium"> IT Trainee Developer</span>.
+    <div className="text-[11px] text-justify leading-relaxed max-w-full">
+      <span className="block text-white font-medium mt-2">About Akhil Shetty</span>
+      <p className="mt-1">
+        A <span className="text-white font-medium">computer science graduate</span> from Mangalore, Karnataka, who turned systemic curiosity into a full-time engineering habit. Having graduated from St. Joseph Engineering College, I am currently based in Mumbai, accelerating products as an <span className="text-white font-medium">IT Developer</span>.
       </p>
 
-      <span className="block text-white font-medium mt-4">What I do</span>
-      <p className="mt-1"> During the day, I build, fix, and break things (occasionally on purpose). I spend way too much time optimizing performance and crafting
-        <span className="text-white font-medium"> seamless user experiences.</span>
+      <span className="block text-white font-medium mt-3">Core Focus</span>
+      <p className="mt-1">
+        Building high-performance code, fine-tuning infrastructure latency, and mapping pixel-perfect layout architectures across scalable user systems.
       </p>
 
-      <div className="pt-2">
-        <span className="text-slate-500 select-none">$</span>
-        <span>try: cat readme.md</span>
+      <div className="pt-3 text-slate-500 select-none">
+        $ <span>try entering: cat readme.md</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logSkills = () => {
   return (
-    <div className="w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 font-mono text-[11px] text-neutral-300">
+    <div className="w-full max-w-full rounded-md border border-neutral-800 bg-black/40 p-4 font-mono text-[11px] text-neutral-300">
       <div className="mb-4 flex items-start justify-between border-b border-neutral-800 pb-2">
         <div>
           <p className="text-[11px] text-purple-400">$ cat skills.json</p>
@@ -312,647 +310,341 @@ export const logSkills = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>Next.js / React</span>
-            <span className="text-cyan-400">85%</span>
+        {[
+          { name: "Next.js / React", val: "85%", color: "bg-cyan-500", text: "text-cyan-400" },
+          { name: "MERN Stack", val: "80%", color: "bg-emerald-500", text: "text-emerald-400" },
+          { name: "Salesforce CRM", val: "75%", color: "bg-amber-500", text: "text-amber-400" },
+          { name: "Component Architecture", val: "85%", color: "bg-green-500", text: "text-green-400" },
+          { name: "UI & Visual Design", val: "75%", color: "bg-sky-500", text: "text-sky-400" },
+          { name: "Motion Graphics", val: "65%", color: "bg-purple-500", text: "text-purple-400" },
+          { name: "Core Java", val: "60%", color: "bg-red-500", text: "text-red-400" },
+          { name: "Docker & DevOps", val: "40%", color: "bg-blue-500", text: "text-blue-400" }
+        ].map((s, idx) => (
+          <div key={idx}>
+            <div className="flex justify-between text-neutral-400">
+              <span>{s.name}</span>
+              <span className={s.text}>{s.val}</span>
+            </div>
+            <div className="mt-1 h-1 w-full bg-neutral-900 rounded-full overflow-hidden">
+              <div className={`h-full ${s.color}`} style={{ width: s.val }}></div>
+            </div>
           </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-cyan-500" style={{ width: '85%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>MERN Stack</span>
-            <span className="text-emerald-400">80%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-emerald-500" style={{ width: '80%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>Docker & DevOps</span>
-            <span className="text-blue-400">40%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-blue-500" style={{ width: '40%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>Salesforce CRM</span>
-            <span className="text-amber-400">75%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-amber-500" style={{ width: '75%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>UI & Visual Design</span>
-            <span className="text-sky-400">75%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-sky-500" style={{ width: '75%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>Core Java</span>
-            <span className="text-red-400">60%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-red-500" style={{ width: '60%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>Motion Graphics</span>
-            <span className="text-purple-400">65%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-purple-500" style={{ width: '65%' }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between text-neutral-400">
-            <span>Component Architecture</span>
-            <span className="text-green-400">85%</span>
-          </div>
-          <div className="mt-1 h-0.5 w-full bg-neutral-900">
-            <div className="h-full bg-green-500" style={{ width: '85%' }}></div>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="mt-6 border-t border-neutral-800 pt-3">
-        <p className="text-[11px] text-neutral-500 mb-1">{"// environment stack"}</p>
+        <p className="text-[11px] text-neutral-500 mb-1">// environment stack matrix</p>
         <p className="leading-relaxed text-neutral-400">
-          <span className="text-neutral-200 font-semibold">Languages & Frameworks:</span> Core Java • JavaScript • NextJs • MySql • TypeScript • Node.js • Express • Material UI • React •  HTML/CSS • Figma <br />
-          <span className="text-neutral-200 font-semibold">Tools & Infrastructure:</span> Git • GitHub • CMS Integrations • REST APIs
+          <span className="text-neutral-200 font-semibold">Tools & Tech:</span> Core Java • JavaScript • Next.js • MySQL • TypeScript • Node.js • Express • Material UI • React • HTML/CSS • Figma • Git • GitHub • REST APIs
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export const logAchievements = () => {
-  return (
-    <div className="text-[11px]">
-      <span className="text-emerald-400">Navigating to achievements section...</span>
-    </div>
-  )
-}
+export const logAchievements = () => (
+  <div className="text-[11px] text-emerald-400 font-mono">
+    Navigating window down to achievements section...
+  </div>
+);
 
-export const logProjects = () => {
-  return (
-    <div className="text-[11px]">
-      <span className="text-emerald-400">Navigating to projects section on /work...</span>
-    </div>
-  )
-}
+export const logProjects = () => (
+  <div className="text-[11px] text-emerald-400 font-mono">
+    Syncing workspace environment context to /work...
+  </div>
+);
 
 export const logExperience = () => {
   return (
-    <>
-      <div className="w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
-        <div className="mb-2 flex items-start justify-between border-b border-neutral-800 pb-2">
-          <div>
-            <p className="text-[11px] text-emerald-400">$ company</p>
-            <h3 className="text-[11px] text-neutral-100">
-              Adore Earth (Non-Profit Organization)
-            </h3>
-          </div>
-          <span className="text-[11px] text-neutral-500">
-            Oct 2024 — Nov 2024
-          </span>
-        </div>
-
-        <p className="leading-relaxed text-neutral-400">
-          Managed end-to-end recruitment workflows, including candidate screening, onboarding, and
-          team coordination. Coordinated and hosted organizational conferences while driving internal
-          communication and team culture initiatives.
-        </p>
-      </div>
-
-      <div className="mt-4 w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
-        <div className="mb-2 flex items-start justify-between border-b border-neutral-800 pb-2">
-          <div>
-            <p className="text-[11px] text-sky-400">$ company</p>
-            <h3 className="text-[11px] text-neutral-100">
-              Karanji Infotech Pvt. Ltd.
-            </h3>
-          </div>
-          <span className="text-[11px] text-neutral-500">
-            Nov 2024 — Dec 2024
-          </span>
-        </div>
-
-        <p className="leading-relaxed text-neutral-400">
-          Designed visual assets and 2D motion graphics utilizing Adobe Creative Suite, focusing on
-          Adobe Animate. Executed character rigging, applied motion principles, and prepared assets
-          for interactive digital storytelling.
-        </p>
-      </div>
-
-      <div className="mt-4 w-full max-w-3xl rounded-md border border-neutral-800 bg-black p-4 text-[11px] font-mono text-neutral-300">
-        <div className="mb-2 flex items-start justify-between border-b border-neutral-800 pb-2">
-          <div>
-            <p className="text-[11px] text-amber-400">$ company</p>
-            <h3 className="text-[11px] text-neutral-100">
-              Global Industrial Pvt. Ltd.
-            </h3>
-          </div>
-          <span className="text-[11px] text-neutral-500">
-            Feb 2025 — Present
-          </span>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <div className="mb-1 flex items-center justify-between">
-              <span className="text-[11px] text-green-400">
-                ─ IT Intern · Developer
-              </span>
-              <span className="text-[11px] text-neutral-500">
-                Feb 03 2025 — Jun 15 2025
-              </span>
+    <div className="space-y-3 max-w-full">
+      {[
+        {
+          title: "Global Industrial Pvt. Ltd.",
+          role: "IT Trainee · Developer",
+          date: "Feb 2025 — Present",
+          desc: "Scale global client dashboards and client frameworks utilizing Next.js, React, and Material UI. Optimize performance, layout paint timelines, and modular systems integration.",
+          color: "text-amber-400"
+        },
+        {
+          title: "Karanji Infotech Pvt. Ltd.",
+          role: "Creative Motion Developer",
+          date: "Nov 2024 — Dec 2024",
+          desc: "Crafted 2D structural visuals and dynamic interactive vector systems using Adobe Creative platforms, keeping layout delivery structures crisp.",
+          color: "text-sky-400"
+        },
+        {
+          title: "Adore Earth",
+          role: "Technical Operations Coordinator",
+          date: "Oct 2024 — Nov 2024",
+          desc: "Synchronized internal developer infrastructure pipelines, team alignment parameters, and digital conference matrices.",
+          color: "text-emerald-400"
+        }
+      ].map((exp, idx) => (
+        <div key={idx} className="rounded-md border border-neutral-800 bg-black/30 p-4 text-[11px] font-mono text-neutral-300">
+          <div className="mb-2 flex items-start justify-between border-b border-neutral-800/60 pb-2">
+            <div>
+              <p className={`text-[11px] ${exp.color}`}>$ status --active</p>
+              <h3 className="text-[11px] text-neutral-100 font-bold">{exp.title} <span className="text-neutral-500 font-normal">({exp.role})</span></h3>
             </div>
-
-            <p className="pl-4 leading-relaxed text-neutral-400">
-              Contributed to active codebases by developing responsive UIs, enhancing user experiences,
-              and implementing core features within cross-functional engineering teams.
-            </p>
+            <span className="text-[11px] text-neutral-500">{exp.date}</span>
           </div>
-
-          <div>
-            <div className="mb-1 flex items-center justify-between">
-              <span className="text-[11px] text-cyan-400">
-                └─ IT Trainee · Developer
-              </span>
-              <span className="text-[11px] text-neutral-500">
-                Jun 16 2025 — Present
-              </span>
-            </div>
-
-            <p className="pl-4 leading-relaxed text-neutral-400">
-              Build and scale enterprise frontend applications using Next.js, React, and Material UI.
-              Responsible for UI/UX implementation, understanding CMS, data handling, and performance optimization.
-            </p>
-          </div>
+          <p className="leading-relaxed text-neutral-400">{exp.desc}</p>
         </div>
-      </div>
-    </>
-  )
-}
-
-export const logGithub = () => {
-  return (
-    <div>
-      <span className="text-xs font-medium text-slate-400 block mb-1.5">Github</span>
-
-      <Link href="https://github.com/akhilshettyym" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhilshettyym
-        </span>
-      </Link>
-
-      <div className="text-[10px] text-slate-600 mt-1.5 pl-1">
-        → /social for all profiles
-      </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export const logCreate = () => {
-  return (
-    <div className="text-[11px]">
-      <span className="text-emerald-400">Navigating to Create Something section on /start...</span>
-    </div>
-  )
-}
+export const logGithub = () => (
+  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
+    <span className="text-gray-400 block mb-1">GitHub Endpoint</span>
+    <a href="https://github.com/akhilshettyym" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+      github.com/akhilshettyym ↗
+    </a>
+  </div>
+);
 
-export const logHero = () => {
-  return (
-    <div className="text-[11px]">
-      <span className="text-emerald-400">Navigating to Hero section on /...</span>
-    </div>
-  )
-}
+export const logCreate = () => (
+  <div className="text-[11px] text-emerald-400 font-mono">
+    Opening deployment canvas inside path: /start...
+  </div>
+);
+
+export const logHero = () => (
+  <div className="text-[11px] text-emerald-400 font-mono">
+    Returning root display terminal view matrix to main screen...
+  </div>
+);
 
 export const logPhilosophy = () => {
   return (
-    <div className="w-full text-[11px] bg-black border border-slate-800 rounded-lg p-4 text-slate-400 font-normal leading-relaxed max-w-3xl">
-      <div className="mb-4 pb-3 border-b border-slate-900">
-        <span className="text-slate-500 font-medium block uppercase tracking-wider mb-1">My Design Philosophy</span>
-        <p className="text-slate-200 text-[12px] font-medium italic">&quot;If it doesn&apos;t remove friction, it doesn&apos;t belong.&quot;</p>
+    <div className="w-full text-[11px] bg-black/40 border border-slate-800 rounded-lg p-4 text-slate-400 font-mono leading-relaxed max-w-full">
+      <div className="mb-3 pb-2 border-b border-slate-900">
+        <span className="text-slate-500 font-medium block uppercase tracking-wider mb-1">Product Execution Philosophy</span>
+        <p className="text-slate-200 text-[12px] font-medium italic">"If it does not remove user overhead, it does not belong in production."</p>
       </div>
-
-      <ul className="space-y-3.5">
-        <li className="flex flex-col gap-0.5">
-          <strong className="text-slate-200 font-medium">Research First:</strong>
-          <span>Replacing guesswork with analytics, session replays, and direct user feedback.</span>
-        </li>
-
-        <li className="flex flex-col gap-0.5">
-          <strong className="text-slate-200 font-medium">Built to Scale:</strong>
-          <span>Creating repeatable design systems that unify platforms and slash dev time.</span>
-        </li>
-
-        <li className="flex flex-col gap-0.5">
-          <strong className="text-slate-200 font-medium">Business Outcomes:</strong>
-          <span>Focusing on conversion, retention, and metrics over just pretty screens.</span>
-        </li>
-
-        <li className="flex flex-col gap-0.5">
-          <strong className="text-slate-200 font-medium">Ruthless Clarity:</strong>
-          <span>Eliminating visual clutter. If a pixel doesn&apos;t serve a clear purpose, it gets cut.</span>
-        </li>
-
-        <li className="flex flex-col gap-0.5">
-          <strong className="text-slate-200 font-medium">Universal Access:</strong>
-          <span>Starting every project with WCAG compliance as a core foundational pillar.</span>
-        </li>
+      <ul className="space-y-2">
+        <li><strong className="text-slate-200 font-medium">Data-Driven Logic:</strong> Shifting guesswork out of codebase structures into absolute analytical verification.</li>
+        <li><strong className="text-slate-200 font-medium">Scalable Blueprinting:</strong> Constructing modular, reusable component hooks that lower build times across platforms.</li>
+        <li><strong className="text-slate-200 font-medium">Impact Metrics:</strong> Valuing technical performance conversions and functional scale above decorative styling layouts.</li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export const logMail = () => {
-  return (
-    <div>
-      <span className="text-xs font-medium text-slate-400 block mb-1.5">Mail</span>
+export const logMail = () => (
+  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
+    <span className="text-gray-400 block mb-1">Direct Communication Matrix</span>
+    <a href="mailto:akhilshettym2003@gmail.com" className="text-cyan-400 hover:underline">
+      akhilshettym2003@gmail.com ↗
+    </a>
+  </div>
+);
 
-      <Link href="akhilshettym2003@gmail.com" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
+export const logLinkedin = () => (
+  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
+    <span className="text-gray-400 block mb-1">Professional Identity Link</span>
+    <a href="https://linkedin.com/in/akhilshettym" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+      linkedin.com/in/akhilshettym ↗
+    </a>
+  </div>
+);
 
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhilshettym2003@gmail.com
-        </span>
-      </Link>
+export const logInstagram = () => (
+  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
+    <span className="text-gray-400 block mb-1">Visual Log Feed</span>
+    <a href="https://www.instagram.com/akhil_shetty_m" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+      instagram.com/akhil_shetty_m ↗
+    </a>
+  </div>
+);
 
-      <div className="text-[10px] text-slate-600 mt-1.5 pl-1">
-        → /socials for all profiles
-      </div>
-    </div>
-  )
-}
-
-export const logLinkedin = () => {
-  return (
-    <div>
-      <span className="text-xs font-medium text-slate-400 block mb-1.5">LinkedIn</span>
-
-      <Link href="https://linkedin.com/in/akhilshettym" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          IN: Akhil Shetty M
-        </span>
-
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /in/akhilshettym
-        </span>
-      </Link>
-
-      <div className="text-[10px] text-slate-600 mt-1.5 pl-1">
-        → /socials for all profiles
-      </div>
-    </div>
-  )
-}
-
-export const logInstagram = () => {
-  return (
-    <div>
-      <span className="text-xs font-medium text-slate-400 block mb-1.5">Instagram</span>
-
-      <Link href="https://www.instagram.com/akhil_shetty_m" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          INSTA: Akhil Shetty M
-        </span>
-
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhil_shetty_m
-        </span>
-      </Link>
-
-      <div className="text-[10px] text-slate-600 mt-1.5 pl-1">
-        → /socials for all profiles
-      </div>
-    </div>
-  )
-}
-
-export const logSalesforce = () => {
-  return (
-    <div>
-      <span className="text-xs font-medium text-slate-400 block mb-1.5">Salesforce</span>
-
-      <Link href="https://www.salesforce.com/trailblazer/akhilshettym" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          SF: Akhil Shetty M
-        </span>
-
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhilshettym
-        </span>
-      </Link>
-
-      <div className="text-[10px] text-slate-600 mt-1.5 pl-1">
-        → /socials for all profiles
-      </div>
-    </div>
-  )
-}
+export const logSalesforce = () => (
+  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
+    <span className="text-gray-400 block mb-1">Trailblazer Identity Profile</span>
+    <a href="https://www.salesforce.com/trailblazer/akhilshettym" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
+      salesforce.com/trailblazer/akhilshettym ↗
+    </a>
+  </div>
+);
 
 export const logSocials = () => {
   return (
-    <div>
-      <span className="text-xs font-medium text-slate-400 block mb-1.5">Socials</span>
-
-      <Link href="akhilshettym2003@gmail.com" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          MAIL: Akhil Shetty M
-        </span>
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhilshettym2003@gmail.com
-        </span>
-      </Link>
-
-      <Link href="https://linkedin.com/in/akhilshettym" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          IN: Akhil Shetty M
-        </span>
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /in/akhilshettym
-        </span>
-      </Link>
-
-      <Link href="https://www.instagram.com/akhil_shetty_m" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          INSTA: Akhil Shetty M
-        </span>
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhil_shetty_m
-        </span>
-      </Link>
-
-      <Link href="https://github.com/akhilshettyym" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          GITHUB: Akhil Shetty M
-        </span>
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhilshettyym
-        </span>
-      </Link>
-
-      <Link href="https://www.salesforce.com/trailblazer/akhilshettym" target="_blank" rel="noopener noreferrer" className="group w-full text-[11px] flex items-center justify-between bg-black border border-slate-800 hover:border-slate-200 rounded-md p-3 text-slate-500 font-normal transition-all duration-300 cursor-pointer">
-        <span className="text-slate-400 font-medium group-hover:text-white transition-colors duration-300">
-          SF: Akhil Shetty M
-        </span>
-
-        <span className="text-slate-600 group-hover:text-slate-400 transition-colors duration-300">
-          /akhilshettym
-        </span>
-      </Link>
-
-      <div className="text-[10px] text-slate-600 mt-1.5 pl-1">
-        → /philosophy for my design philosophy
-      </div>
+    <div className="space-y-2 max-w-full text-[11px] font-mono">
+      <span className="text-xs font-medium text-slate-400 block mb-1">System Profile Endpoints</span>
+      {[
+        { label: "MAIL", val: "akhilshettym2003@gmail.com", url: "mailto:akhilshettym2003@gmail.com" },
+        { label: "LINKEDIN", val: "linkedin.com/in/akhilshettym", url: "https://linkedin.com/in/akhilshettym" },
+        { label: "GITHUB", val: "github.com/akhilshettyym", url: "https://github.com/akhilshettyym" },
+        { label: "SALESFORCE", val: "trailblazer/akhilshettym", url: "https://www.salesforce.com/trailblazer/akhilshettym" }
+      ].map((soc, i) => (
+        <div key={i} className="flex justify-between items-center bg-black border border-slate-800 p-2 rounded hover:border-slate-400 transition-all">
+          <span className="text-slate-400">{soc.label}:</span>
+          <a href={soc.url} target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">{soc.val}</a>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export const logSudoHire = () => {
   return (
-    <div className="w-full max-w-md bg-black border border-slate-800 rounded-md p-3.5 font-mono text-[11px] leading-relaxed select-none">
-      <div className="text-slate-400">
-        [sudo] password for visitor: <span className="text-slate-700">********</span>
-      </div>
+    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-3.5 font-mono text-[11px] leading-relaxed">
+      <div className="text-slate-400">[sudo] password for visitor: <span className="text-slate-700">********</span></div>
       <div className="flex flex-wrap items-center gap-x-2 mt-1">
-        <span className="text-emerald-500 font-medium">✓ Authentication successful.</span>
-        <span className="text-slate-500">Establishing secure connection...</span>
+        <span className="text-emerald-500 font-medium">✓ System Authentication verified.</span>
       </div>
-      <div className="text-slate-300 mt-3 pt-2.5 border-t border-slate-900 font-semibold flex items-center gap-1.5">
-        <span className="text-emerald-400">&gt;</span> Successfully sent
+      <div className="text-slate-300 mt-3 pt-2 border-t border-slate-900 font-semibold">
+        &gt; Offer profile securely queued for evaluation.
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logrmrf = () => {
   return (
-    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
-      <div className="flex flex-col gap-1.5 text-slate-400">
-        <div>Removing doubts/impostor-syndrome... done</div>
-        <div>Removing doubts/will-he-deliver... done</div>
-        <div>Removing doubts/is-he-expensive... done</div>
-        <div>Removing doubts/can-he-lead... done</div>
-
+    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
+      <div className="flex flex-col gap-0.5 text-slate-400">
+        <div>Removing local/ambiguity... done</div>
+        <div>Removing local/impostor-syndrome... done</div>
+        <div>Removing project/delivery-risk... done</div>
         <div className="text-emerald-400 font-bold mt-2 pt-2 border-t border-slate-900">
-          ✦ All doubts removed. You should definitely hire me.
+          ✦ Workspace stack cleared. Ready to start building together.
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logCoffee = () => {
   return (
-    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-normal select-none">
-      <div className="text-slate-600 font-bold whitespace-pre mb-2.5">
+    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px]">
+      <div className="text-slate-500 font-bold whitespace-pre mb-2 text-xs">
         {"( ( ) )\n........\n| |] \\ /\n`----´"}
       </div>
-
-      <div className="flex flex-col gap-1 text-slate-400">
-        <div className="flex items-center gap-1.5">
-          <span>Design fuel level:</span>
-          <span className="text-emerald-400">[████████████████░░░░]</span>
-          <span className="text-slate-200 font-medium">80%</span>
+      <div className="space-y-1 text-slate-400">
+        <div className="flex items-center gap-2">
+          <span>Engine Status:</span>
+          <span className="text-emerald-400">[██████████████░░░░░]</span>
+          <span className="text-white">75% Optimized</span>
         </div>
-
-        <div>
-          <span className="text-slate-500">Status:</span>{" "}
-          <span className="text-slate-300 font-medium">Caffeinated and pixel-pushing</span>
-        </div>
-
-        <div>
-          <span className="text-slate-500">Daily intake:</span>{" "}
-          <span className="text-slate-300 font-medium">Yes</span>
-        </div>
+        <div>Context: Fully compiled, pushing updates.</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logCatReadme = () => {
   return (
-    <div className="w-full max-w-4xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
-      <div className="flex items-center gap-2 border-b border-slate-900 pb-2 mb-3 text-slate-500 font-medium">
-        <span className="text-emerald-500">#</span>
-        <span>README.md</span>
+    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
+      <div className="flex items-center gap-2 border-b border-slate-900 pb-2 mb-3 text-slate-500">
+        <span className="text-emerald-500">#</span> <span>README.md</span>
       </div>
-
-      <div className="space-y-3.5 text-slate-400">
-        <p className="text-slate-200 font-medium"> Hey, you found this. Nice. </p>
-        <p> If you&apos;re reading this, you&apos;re probably the kind of person who inspects elements, reads source code, and appreciates the details. We&apos;d get along. </p>
-        <p> I believe the best design is invisible. It doesn&apos;t make you think about the interface — it makes you think about your goals. Every pixel I push is in service of that belief. </p>
-        <p> The world has enough pretty mockups that never ship. I build things that do. </p>
-
-        <div className="pt-2 text-slate-300 font-medium text-right italic">
-          — Akhil
-        </div>
+      <div className="space-y-2 text-slate-400">
+        <p className="text-slate-200 font-medium">Welcome to the inner shell layer.</p>
+        <p>I believe design isn't skin-deep decoration; it's structural optimization. Good code elements disappear cleanly into the user experience framework, helping consumers convert decisions instantly.</p>
+        <p>The web is saturated with concepts that never reach compilation. I focus completely on shipping clean production components.</p>
+        <div className="pt-2 text-slate-300 text-right font-medium italic">— Akhil</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logPingAkhil = () => {
   return (
-    <div className="w-full max-w-xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
-      <div className="text-slate-500 mb-1">
-        PING akhil.shetty (192.168.1.337): 56 data bytes
+    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
+      <div className="text-slate-500 mb-1">PING akhil.shetty.mumbai (192.168.1.337): 56 data bytes</div>
+      <div className="space-y-0.5 text-slate-400">
+        <div>64 bytes from local.network: icmp_seq=0 ttl=64 time=0.1ms <span className="text-emerald-400 ml-2">— Network connection fully established</span></div>
+        <div>64 bytes from local.network: icmp_seq=1 ttl=64 time=0.2ms <span className="text-emerald-400 ml-2">— System ready for contract modules</span></div>
+        <div>64 bytes from local.network: icmp_seq=2 ttl=64 time=0.1ms <span className="text-emerald-400 ml-2">— Engineering response cycles optimized</span></div>
       </div>
-
-      <div className="flex flex-col gap-0.5">
-        <div className="text-slate-400">
-          64 bytes from Iasi: icmp_seq=0 ttl=64 time=0.1ms <span className="text-emerald-400 font-medium ml-1.5">— Always online</span>
-        </div>
-
-        <div className="text-slate-400">
-          64 bytes from Iasi: icmp_seq=1 ttl=64 time=0.2ms <span className="text-emerald-400 font-medium ml-1.5">— Available for great projects</span>
-        </div>
-
-        <div className="text-slate-400">
-          64 bytes from Iasi: icmp_seq=2 ttl=64 time=0.1ms <span className="text-emerald-400 font-medium ml-1.5">— Responds faster than your current designer</span>
-        </div>
-
-        <div className="text-slate-400">
-          64 bytes from Iasi: icmp_seq=3 ttl=64 time=0.3ms <span className="text-emerald-400 font-medium ml-1.5">— Will not ghost you</span>
-        </div>
-      </div>
-
-      <div className="mt-3 pt-2.5 border-t border-slate-950 text-slate-500">
-        <div>--- akhil.shetty ping statistics ---</div>
-        <div className="text-slate-400 mt-0.5">
-          4 packets transmitted, 4 received, <span className="text-emerald-500 font-medium">0% packet loss</span>
-        </div>
+      <div className="mt-3 pt-2 border-t border-slate-900 text-slate-500">
+        <div>--- network statistics ---</div>
+        <div className="text-slate-400 mt-0.5">3 packets transmitted, 3 received, <span className="text-emerald-500">0% packet loss</span></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logSecrets = () => {
   return (
-    <div className="mt-2 space-y-2">
-      <div><span className="font-bold text-white">Secret Commands</span><br />Shhh... you found the cheat sheet.</div>
-      <div className="grid grid-cols-[120px_1fr] gap-x-2">
-        <span className="text-blue-400">sudo hire akhil</span><span>Fake contract with progress bar</span>
-        <span className="text-blue-400">rm -rf doubts</span><span>Remove all your doubts</span>
-        <span className="text-blue-400">/coffee</span><span>Design fuel status</span>
-        <span className="text-blue-400">ls</span><span>Skills as Linux files</span>
-        <span className="text-blue-400">cat readme.md</span><span>A hidden personal message</span>
-        <span className="text-blue-400">ping akhil</span><span>Am I available? Find out</span>
-        <span className="text-blue-400">whoami</span><span>The terminal knows you</span>
-        <span className="text-blue-400">exit</span><span>Try to leave. I dare you.</span>
+    <div className="mt-2 text-[11px] font-mono space-y-2">
+      <div><span className="font-bold text-white">Privileged Script Directory</span></div>
+      <div className="grid grid-cols-[140px_1fr] gap-x-2 text-gray-300">
+        <span className="text-blue-400">sudo hire akhil</span><span>Simulate recruitment contract execution</span>
+        <span className="text-blue-400">rm -rf doubts</span><span>Clear project delivery doubt parameters</span>
+        <span className="text-blue-400">/coffee</span><span>Display system runtime fuel index</span>
+        <span className="text-blue-400">ls</span><span>Output skill trees as standard terminal listings</span>
+        <span className="text-blue-400">cat readme.md</span><span>Output core development principles manifest</span>
+        <span className="text-blue-400">ping akhil</span><span>Verify network accessibility statistics</span>
+        <span className="text-blue-400">whoami</span><span>Display client environment values</span>
+        <span className="text-blue-400">exit / close</span><span>Terminate terminal window instances</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export const logWhoAmI = () => {
-  return (
-    <div className="mt-2">
-      You&apos;re the person about to hire a great designer.<br />
-      (Trust the terminal. It knows things.)<br /><br />
-      Type /secrets if you like finding hidden things.
-    </div>
-  )
-}
+export const logWhoAmI = () => (
+  <div className="mt-2 text-[11px] font-mono leading-relaxed">
+    Identity: Authenticated Visitor Node.<br />
+    Action Status: Ready to execute operational commands.<br />
+    💡 Hint: Try executing <span className="text-cyan-400">/secrets</span> to view hidden configuration systems.
+  </div>
+);
 
 export const logLocation = () => {
   return (
-    <div className="w-full max-w-xl bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed select-none">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-slate-400">
-
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-slate-500">Location:</span>
-            <span className="text-slate-200 font-medium flex items-center gap-1">
-              <span>📍</span> Mumbai, India
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-slate-500">Coverage:</span>
-            <span className="text-slate-300 flex items-center gap-1">
-              <span>🌍</span> Working across Asia
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-slate-500">Timezone:</span>
-            <span className="text-slate-300 flex items-center gap-1">
-              <span>🕐</span> Indian Standard Time
-            </span>
-          </div>
-        </div>
-
+    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px]">
+      <div className="space-y-1 text-slate-400">
+        <div><span className="text-slate-500">Coordinates:</span> <span className="text-slate-200">📍 Mumbai, Maharashtra, India</span></div>
+        <div><span className="text-slate-500">Availability:</span> <span className="text-slate-300">Remote Operations World-Wide</span></div>
+        <div><span className="text-slate-500">Timezone Context:</span> <span className="text-slate-300">GMT +5:30 (IST)</span></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const logls = () => {
   return (
-    <div className="mt-2 whitespace-pre">
-      drwxr-xr-x akhil design-systems.exe{"\n"}
-      drwxr-xr-x akhil ux-research.doc{"\n"}
-      -rwxr-xr-x akhil figma-mastery.cfg{"\n"}
-      -rw-r--r-- akhil pixel-perfection.so{"\n"}
-      -rwxr-xr-x akhil strategic-thinking.bin{"\n"}
-      drwxr-xr-x akhil workshop-facilitation/{"\n"}
-      -rw-r--r-- akhil accessibility.a11y
+    <div className="mt-2 font-mono text-[11px] text-gray-300 whitespace-pre">
+      drwxr-xr-x  user  staff   128B Jul 19 20:30 design-systems.conf{"\n"}
+      drwxr-xr-x  user  staff   256B Jul 19 20:30 frontend-architecture.cfg{"\n"}
+      -rwxr-xr-x  user  staff   4.2K Jul 19 20:30 production-scaling.bin{"\n"}
+      -rw-r--r--  user  staff   912B Jul 19 20:30 fullstack-matrix.json{"\n"}
+      -rw-r--r--  user  staff   1.4K Jul 19 20:30 accessibility-wcag.a11y
     </div>
-  )
-}
+  );
+};
 
 export const logHelp = () => {
   return (
-    <div className="mt-2 space-y-4">
-      <div><span className="font-bold text-white">Available Commands</span></div>
+    <div className="mt-2 text-[11px] font-mono space-y-4">
+      <div><span className="font-bold text-white">System Command Index</span></div>
       <div>
-        <span className="font-bold text-white">Navigation</span>
-        <div className="grid grid-cols-[120px_1fr] gap-x-2 mt-1 text-gray-300">
-          <span className="text-blue-400">/help</span><span>List all available commands</span>
-          <span className="text-blue-400">/about</span><span>Who is Akhil Shetty M?</span>
-          <span className="text-blue-400">/skills</span><span>Featured projects & case studies</span>
-          <span className="text-blue-400">/achievements</span><span>Companies I&apos;ve worked with</span>
-          <span className="text-blue-400">/projects</span><span>Expertise & capabilities</span>
-          <span className="text-blue-400">/experience</span><span>My design philosophy</span>
-          <span className="text-blue-400">/socials</span><span>Social profiles & links</span>
-          <span className="text-blue-400">/philosophy</span><span>Get in touch</span>
-          <span className="text-blue-400">/clear</span><span>Clear the terminal</span>
+        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">Core Paths</span>
+        <div className="grid grid-cols-[140px_1fr] gap-x-2 mt-1 text-gray-300">
+          <span className="text-blue-400">/help</span><span>Render available shell command trees</span>
+          <span className="text-blue-400">/about</span><span>Print biographical & focus data metrics</span>
+          <span className="text-blue-400">/skills</span><span>Output expertise matrices & stack levels</span>
+          <span className="text-blue-400">/experience</span><span>List historic and modern work timelines</span>
+          <span className="text-blue-400">/projects</span><span>Route view to case studies & deployments</span>
+          <span className="text-blue-400">/achievements</span><span>Navigate view parameters down to honors</span>
+          <span className="text-blue-400">/philosophy</span><span>Render underlying code execution beliefs</span>
+          <span className="text-blue-400">/socials</span><span>Compile external connection endpoints</span>
+          <span className="text-blue-400">/clear</span><span>Flush active screen log array buffers</span>
         </div>
       </div>
       <div>
-        <span className="font-bold text-white">Projects</span>
-        <div className="grid grid-cols-[120px_1fr] gap-x-2 mt-1 text-gray-300">
-          <span className="text-blue-400">/signals</span><span>Research Integrity Platform</span>
-          <span className="text-blue-400">/anylyze</span><span>Analytics Data Platform</span>
-          <span className="text-blue-400">/liveu</span><span>Signa Design System</span>
-          <span className="text-blue-400">/tuiasi</span><span>University Redesign</span>
-          <span className="text-blue-400">/resnet</span><span>Hospitality Design System</span>
+        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">Project Deep Links</span>
+        <div className="grid grid-cols-[140px_1fr] gap-x-2 mt-1 text-gray-300">
+          <span className="text-blue-400">/signals</span><span>Research Integrity Platform setup</span>
+          <span className="text-blue-400">/anylyze</span><span>Analytics Data Engine view</span>
+          <span className="text-blue-400">/liveu</span><span>Signa Component Framework layout</span>
+          <span className="text-blue-400">/tuiasi</span><span>Academic Ecosystem Design system</span>
+          <span className="text-blue-400">/resnet</span><span>Hospitality System UI module</span>
         </div>
       </div>
-      <div>Aliases: /projects, /about, hire akhil, /mail<br /></div>
     </div>
-  )
-}
+  );
+};

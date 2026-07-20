@@ -3,13 +3,13 @@
 import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
-import { CLOUD_SHADER } from "@/utils/basic";
 import { SiRevealdotjs } from "react-icons/si";
 import LimpModal from "@/components/basic/LimpModal";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
 import WeatherIcon from "@/components/basic/WeatherIcon";
 import LiquidGlass from "@/components/basic/LiquidGlass";
+import { CLOUD_SHADER, HERO_SHADER } from "@/utils/basic";
 import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
 import WordCarousel from "@/components/basic/WordCarousel";
 import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
@@ -17,103 +17,9 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
 import { LoadingContext } from "@/components/basic/LoaderWrapper";
+import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-
-// --- FLUID SIMULATION SHADERS ---
-const simulationVertexShader = `
-varying vec2 vUv;
-void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 1.0);
-}
-`;
-
-const simulationFragmentShader = `
-uniform sampler2D textureA;
-uniform sampler2D textTexture;
-uniform vec2 mouse;
-uniform vec2 resolution;
-uniform float time;
-uniform int frame;
-
-varying vec2 vUv;
-const float delta = 1.4;
-
-void main() {
-    vec2 uv = vUv;
-    if(frame == 0){
-        gl_FragColor = vec4(0.0);
-        return;
-    }
-
-    vec4 data = texture2D(textureA, uv);
-    float pressure = data.x;
-    float pVel = data.y;
-
-    vec2 texelSize = 1.0 / resolution;
-
-    float p_right = texture2D(textureA, uv + vec2(texelSize.x, 0.0)).x;
-    float p_left  = texture2D(textureA, uv - vec2(texelSize.x, 0.0)).x;
-    float p_up    = texture2D(textureA, uv + vec2(0.0, texelSize.y)).x;
-    float p_down  = texture2D(textureA, uv - vec2(0.0, texelSize.y)).x;
-
-    if(uv.x <= texelSize.x) p_left = p_right;
-    if(uv.x >= 1.0 - texelSize.x) p_right = p_left;
-    if(uv.y <= texelSize.y) p_down = p_up;
-    if(uv.y >= 1.0 - texelSize.y) p_up = p_down;
-
-    pVel += delta * (-2.0 * pressure + p_right + p_left) / 4.0;
-    pVel += delta * (-2.0 * pressure + p_up + p_down) / 4.0;
-
-    pressure += delta * pVel;
-    pVel -= 0.005 * delta * pressure;
-
-    pVel *= 0.90;
-    pressure *= 0.92;
-
-    vec2 mouseUV = mouse / resolution;
-
-    if(mouse.x > 0.0){
-        float radius = 0.08;
-        float dist = distance(uv, mouseUV);
-        if(dist < radius){
-            // Reading '.r' channel for the text fluid physics mask
-            float isText = texture2D(textTexture, uv).r;
-            float influence = mix(0.1, 4.0, isText);
-            pressure += influence * (1.0 - dist / radius);
-        }
-    }
-
-    gl_FragColor = vec4(pressure, pVel, (p_right - p_left) * 0.5, (p_up - p_down) * 0.5);
-}
-`;
-
-const renderVertexShader = `
-varying vec2 vUv;
-void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 1.0);
-}
-`;
-
-const renderFragmentShader = `
-uniform sampler2D textureA;
-uniform sampler2D textureB;
-varying vec2 vUv;
-
-void main() {
-    vec4 data = texture2D(textureA, vUv);
-    vec2 distortion = data.zw * 0.25; 
-
-    // Read the red channel to isolate the text shape
-    float textMask = texture2D(textureB, clamp(vUv + distortion, 0.0, 1.0)).r;
-
-    // Clean, bold white text over clouds (0.95 opacity)
-    gl_FragColor = vec4(vec3(1.0), textMask * 0.95);
-}
-`;
 
 function isSameScene(a, b) {
     if (!a || !b) return false;
@@ -261,7 +167,6 @@ const HeroSection = () => {
             canvas.height = h;
             const ctx = canvas.getContext("2d");
 
-            // Mask background
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, w, h);
 
@@ -271,36 +176,28 @@ const HeroSection = () => {
 
             const text = "AKHIL SHETTY";
 
-            // 1. Emulate 'font-black'
             const baseFontSize = 100;
             ctx.font = `900 ${baseFontSize}px "Arial Black", "Impact", system-ui, sans-serif`;
 
-            // 2. Emulate 'tracking-[-0.09em]' using native letterSpacing (if browser supports it)
             if ('letterSpacing' in ctx) {
                 ctx.letterSpacing = "-0.09em";
             }
 
             const textWidth = ctx.measureText(text).width;
 
-            // 3. Emulate 'clamp(..., 8vw, 4.5rem)' 
-            // We cap the absolute pixel width so it doesn't get massive on desktop screens.
-            // 750 physical pixels is roughly equivalent to a 6rem max container.
             const maxPhysicalWidth = 750 * dpr;
             const targetWidth = Math.min(w * 0.70, maxPhysicalWidth);
 
-            // 4. Uniform scaling factor (1:1 ratio, no vertical stretch)
             const globalScale = targetWidth / textWidth;
 
             ctx.save();
             ctx.translate(w / 2, h / 2);
             ctx.scale(globalScale, globalScale);
 
-            // Slight stroke to keep it thick/heavy
             ctx.strokeStyle = "#ffffff";
             ctx.lineWidth = baseFontSize * 0.02;
             ctx.lineJoin = "round";
 
-            // Draw full string natively kerned
             ctx.fillText(text, 0, 0);
             ctx.strokeText(text, 0, 0);
 
@@ -328,6 +225,33 @@ const HeroSection = () => {
                 fluidMouse.x = e.touches[0].clientX * dpr;
                 fluidMouse.y = (window.innerHeight - e.touches[0].clientY) * dpr;
             }
+        };
+
+        const timer = createThreeTimer();
+        let frameCount = 0;
+
+        const renderFullScene = () => {
+            if (!renderer || !camera) return;
+
+            simMaterial.uniforms.frame.value = frameCount;
+            simMaterial.uniforms.time.value = performance.now() * 0.001;
+            simMaterial.uniforms.textureA.value = rtA.texture;
+
+            renderer.setRenderTarget(rtB);
+            renderer.render(simScene, orthoCamera);
+
+            renderer.setRenderTarget(null);
+            renderer.clear();
+            renderer.render(scene, camera);
+
+            renderMaterial.uniforms.textureA.value = rtB.texture;
+            renderer.autoClear = false;
+            renderer.render(textRenderScene, orthoCamera);
+            renderer.autoClear = true;
+
+            const temp = rtA;
+            rtA = rtB;
+            rtB = temp;
         };
 
         const onResize = () => {
@@ -359,11 +283,8 @@ const HeroSection = () => {
                 oldTex.dispose();
             }
 
-            if (isTier2 && renderer && camera) renderer.render(scene, camera);
+            if (isTier2) renderFullScene();
         };
-
-        const timer = createThreeTimer();
-        let frameCount = 0;
 
         const animate = () => {
             if (!isAnimating || isDisposed) return;
@@ -378,10 +299,7 @@ const HeroSection = () => {
             }
 
             if (visibility.frameSkipInterval === Infinity) {
-                if (renderer && camera) {
-                    renderer.clear();
-                    renderer.render(scene, camera);
-                }
+                renderFullScene();
                 resumeTimeoutId = window.setTimeout(() => {
                     animationId = requestAnimationFrame(animate);
                 }, 300);
@@ -414,27 +332,7 @@ const HeroSection = () => {
                 camera.position.z = 8000;
             }
 
-            if (renderer && camera) {
-                simMaterial.uniforms.frame.value = frameCount;
-                simMaterial.uniforms.time.value = performance.now() * 0.001;
-                simMaterial.uniforms.textureA.value = rtA.texture;
-
-                renderer.setRenderTarget(rtB);
-                renderer.render(simScene, orthoCamera);
-
-                renderer.setRenderTarget(null);
-                renderer.clear();
-                renderer.render(scene, camera);
-
-                renderMaterial.uniforms.textureA.value = rtB.texture;
-                renderer.autoClear = false;
-                renderer.render(textRenderScene, orthoCamera);
-                renderer.autoClear = true;
-
-                const temp = rtA;
-                rtA = rtB;
-                rtB = temp;
-            }
+            renderFullScene();
 
             if (isTier2) return;
             animationId = requestAnimationFrame(animate);
@@ -486,8 +384,8 @@ const HeroSection = () => {
                         time: { value: 0 },
                         frame: { value: 0 },
                     },
-                    vertexShader: simulationVertexShader,
-                    fragmentShader: simulationFragmentShader,
+                    vertexShader: HERO_SHADER.simulationVertexShader,
+                    fragmentShader: HERO_SHADER.simulationFragmentShader,
                 });
 
                 renderMaterial = new THREE.ShaderMaterial({
@@ -495,8 +393,8 @@ const HeroSection = () => {
                         textureA: { value: null },
                         textureB: { value: textTexture },
                     },
-                    vertexShader: renderVertexShader,
-                    fragmentShader: renderFragmentShader,
+                    vertexShader: HERO_SHADER.renderVertexShader,
+                    fragmentShader: HERO_SHADER.renderFragmentShader,
                     transparent: true,
                     depthWrite: false,
                     depthTest: false,

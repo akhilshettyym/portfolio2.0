@@ -17,6 +17,7 @@ export default function CustomButton({ title, onClick, width = 180, height = 56,
 
   return (
     <button type="button" onClick={onClick} disabled={disabled} className={`inline-block disabled:cursor-not-allowed disabled:opacity-60 ${className}`}>
+
       <motion.div onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
@@ -27,6 +28,7 @@ export default function CustomButton({ title, onClick, width = 180, height = 56,
           <div className="flex w-3/4 items-center justify-start bg-zinc-900 px-5">
             <span className="text-xs font-medium uppercase text-white"> {" "}{title}{" "} </span>
           </div>
+
           <div className="flex w-1/4 items-center justify-center border-l border-white/10 bg-zinc-800 text-white">
             <motion.div animate={{ x: isHovered ? 3 : 0, y: isHovered ? -3 : 0 }} transition={{ duration: 0.25, ease: "easeOut" }}>
               <ArrowIcon />

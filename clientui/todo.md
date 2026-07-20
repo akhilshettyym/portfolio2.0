@@ -22,18 +22,14 @@
 
 **optimizations** & **rebuilds** -
 
-- [backend] how to make the requests faster.
+- [adminui] - add a full loader while the request is in process.
 
-- [adminui] - add a loader while the request is in process.
+- [adminui] - requests are slow, check why the request is taking longer.
 
-- [adminui] - check why the request is taking longer.
-
-- [adminui] - add a favicon, and all the meta data and shits.
+- [adminui] - add a favicon(done), and all the meta data and shits.
 
 
 - [clientui] - `Check this` - select accurate, and inside deny the option.
-
-
 
 
 
@@ -44,32 +40,39 @@
 - [clientui] - `heroSection.jsx` - rebuild shades of clouds and background.
 
 
-
-
 - [clientui] - `ConsoleModal.jsx` - update commands.
-
-
-
 
 
 - [clientui] - `MySocials.jsx` - Rebuild from scratch.
 - [clientui] - `MySocials.jsx` - Let the Socials section draw from the right and snap to the screen and then continue to scroll down.
 
 
-
-
-
-
 - [clientui] - page roll from bottom to top
-
 
 
 - [clientui] - `Footer.jsx` - Set footer image right.
 
-- [clientui] - `MyExperience.jsx` - rebuild from scratch. (not lookign great).
+- [clientui] - `MyExperience.jsx` - rebuild from scratch. (not looking great).
 
 
+I use cookies for analytics. Just page views and basic usage data so I can see what's working. No tracking you around the internet. Privacy policy
 
+that's fine
+no thanks
+
+
+I want you to design three cards - with sharp corners and and the edge should be in black and I want another box inside again with a black line, (border). Ang thi should look like a frame. And inside I want these info. College, from - to, CGPA/%, what class (add dummy data). I want this as subtle and simple as possible. I want the texts in black and bg in white, you can just add shades and nothing else. I want this to look cool. 
+
+- Currently I have this - which renders one card each - 
+const education_cards = [
+  "/my_experience/education/edu_be.svg",
+  "/my_experience/education/edu_be.svg",
+  "/my_experience/education/edu_be.svg",
+];
+
+So I want you to create three cards where I should be able to replace this with that function so that instead of this that renders.
+
+- Add whats my tech stack.
 
 - [clientui] - `performance` - Lazy load kicking in early exposing the herosection.
 
@@ -91,3 +94,28 @@
 
 
 
+
+timeline    - reactjs              -  this week.
+            - nodejs & expressjs   -  next week
+
+
+Think of me as a beginner who just finished javascript. Now I want to dive into reactjs, I want you to give me all the topics which are there in reatc
+---
+
+- reactjs
+    redux
+    zustand
+
+### backend:
+    - nodejs
+    - expressjs
+
+### database:
+    - mongodb
+    - mysql
+    - postgresql
+
+### ui/ux:
+    - html
+    - css
+    - javascript

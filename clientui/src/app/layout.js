@@ -26,22 +26,33 @@ export const metadata = {
     default: "Akhil Shetty | Full Stack Developer",
     template: "%s | Akhil Shetty",
   },
-  description: "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
-  keywords: ["Akhil Shetty", "Full Stack Developer", "Next.js Developer", "React Developer", "Portfolio"],
+  description:
+    "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
+  keywords: [
+    "Akhil Shetty",
+    "Full Stack Developer",
+    "Next.js Developer",
+    "React Developer",
+    "Portfolio",
+  ],
   authors: [{ name: "Akhil Shetty" }],
   creator: "Akhil Shetty",
   openGraph: {
     title: "Akhil Shetty | Full Stack Developer",
-    description: "Performance-minded portfolio, selected work, experience, and ways to start a project with Akhil Shetty.",
+    description:
+      "Performance-minded portfolio, selected work, experience, and ways to start a project with Akhil Shetty.",
     type: "website",
     locale: "en_US",
     siteName: "Akhil Shetty",
-    images: [{ url: "/my-image.png", width: 1200, height: 630, alt: "Akhil Shetty" }],
+    images: [
+      { url: "/my-image.png", width: 1200, height: 630, alt: "Akhil Shetty" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Akhil Shetty | Full Stack Developer",
-    description: "Full stack developer focused on fast, stable, production-grade web experiences.",
+    description:
+      "Full stack developer focused on fast, stable, production-grade web experiences.",
     images: ["/my-image.png"],
   },
   robots: {
@@ -51,31 +62,25 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
         <PerformanceBootstrap>
-
           <LenisProvider>
-            <LoaderWrapper>
-
-              <NavbarWrapper>
+            {/* <LoaderWrapper> */}
+              {/* <NavbarWrapper>
                 <Navbar />
-              </NavbarWrapper>
+              </NavbarWrapper> */}
 
               <main id="main-content" className="relative pt-25 flex flex-col min-h-screen bg-white">
                 <ToastContainer />
 
-                <div className="grow">
-                  {children}
-                </div>
+                <div className="grow">{children}</div>
               </main>
 
-              <EmergencyCTA />
-              <Footer />
-
-            </LoaderWrapper>
+              {/* <EmergencyCTA /> */}
+              {/* <Footer /> */}
+            {/* </LoaderWrapper> */}
           </LenisProvider>
         </PerformanceBootstrap>
       </body>

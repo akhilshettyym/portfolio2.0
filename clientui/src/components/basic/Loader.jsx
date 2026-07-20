@@ -9,25 +9,7 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-
-const GREETINGS = [
-  "Hello", // English
-  "こんにちは", // Japanese
-  "Bonjour", // French
-  "Hola", // Spanish
-  "Ciao", // Italian
-  "你好", // Mandarin
-  "Olá", // Portuguese
-  "Привет", // Russian
-  "مرحباً", // Arabic
-  "안녕하세요", // Korean
-  "Γεια σας", // Greek
-  "สวัสดี", // Thai
-  "Ahoj", // Czech
-  "Xin chào", // Vietnamese
-  "नमस्ते", // Hindi
-  "ನಮಸ್ಕಾರ", // Kannada
-];
+import { GREETINGS } from "@/utils/basic";
 
 export default function Loader({ onFinish }) {
   const containerRef = useRef(null);

@@ -41,21 +41,71 @@ const generateMachineCode = (width, height) => {
   return output;
 };
 
-const education_cards = [
-  // "/my_experience/education/edu_sslc.svg",
-  // "/my_experience/education/edu_puc.svg",
-  "/my_experience/education/edu_be.svg",
-  "/my_experience/education/edu_be.svg",
-  "/my_experience/education/edu_be.svg",
+const experienceData = [
+  {
+    company: "Tech Innovations Inc.",
+    period: "2022 — Present",
+    stack: "React, Next.js",
+    role: "Frontend Developer",
+  },
+  {
+    company: "Digital Solutions LLC",
+    period: "2020 — 2022",
+    stack: "Vue, Node.js",
+    role: "Fullstack Engineer",
+  },
+  {
+    company: "Freelance / Open Source",
+    period: "2018 — 2020",
+    stack: "HTML, CSS, JS",
+    role: "Web Developer",
+  },
 ];
 
-const experience_cards = [
-  // "/my_experience/education/edu_sslc.svg",
-  // "/my_experience/education/edu_puc.svg",
-  "/my_experience/education/edu_be.svg",
-  "/my_experience/education/edu_be.svg",
-  "/my_experience/education/edu_be.svg",
-];
+const ExperienceCard = ({ data, isActive }) => {
+  return (
+    <div
+      className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none hidden-layer"
+        }`}
+    >
+      <div className="w-full h-full border-[3px] border-black bg-zinc-100 p-[10px]">
+        <div className="relative flex h-full w-full flex-col justify-between border-[2px] border-black bg-white p-5 shadow-sm">
+          
+          <div>
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-400">
+              Work Log
+            </p>
+            <h2 className="mb-3 text-2xl font-black uppercase leading-tight tracking-wide text-black">
+              {data.role}
+            </h2>
+            <div className="mb-4 h-[2px] w-12 bg-black"></div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-800">
+              {data.company}
+            </h3>
+          </div>
+
+          {/* Bottom Section: Timeline & Stack */}
+          <div className="mt-4 flex items-end justify-between border-t-2 border-black pt-4">
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">
+                Timeline
+              </span>
+              <span className="text-sm font-bold text-black">{data.period}</span>
+            </div>
+            <div className="flex flex-col text-right">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">
+                Core Stack
+              </span>
+              <span className="text-sm font-black text-black">{data.stack}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ----------------------------------------------
 
 const MyExperience = () => {
   const { isTier2 } = usePerformanceTier();
@@ -427,7 +477,7 @@ const MyExperience = () => {
       window.removeEventListener("resize", handleResize);
       if (particleSystem) particleSystem.stop();
       if (particleScanner) particleScanner.stop();
-    };
+    }
   }, [isTier2, isVisible]);
 
   const handleDragStart = (clientX) => {
@@ -561,9 +611,14 @@ const MyExperience = () => {
               return (
                 <div key={idx} className="card-wrapper">
                   <div className="card card-normal">
-                    <Image src={experience_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === "experience" ? "opacity-100 style-visible" : "opacity-0 absolute hidden-layer"}`} alt="Experience Stream View" fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: "cover" }} />
-
-                    <Image src={education_cards[currentCardIndex]} className={`card-image transition-opacity duration-500 ${activeLog === "education" ? "opacity-100 style-visible" : "opacity-0 absolute hidden-layer"}`} alt="Education Stream View" fill unoptimized sizes="400px" priority={idx < UNIQUE_CARD_COUNT} style={{ objectFit: "cover" }} />
+                    <ExperienceCard
+                      data={experienceData[currentCardIndex]}
+                      isActive={activeLog === "experience"}
+                    />
+                    {/* <EducationCard
+                      data={educationData[currentCardIndex]}
+                      isActive={activeLog === "education"}
+                    /> */}
                   </div>
 
                   <div className="card card-ascii">

@@ -70,7 +70,9 @@ export default function DashboardPage() {
         <div className="p-4 md:p-6 max-w-6xl w-full mx-auto bg-white">
             <div className="flex justify-between items-center border-b border-black pb-4 mb-6">
                 <h1 className="font-mono font-semibold uppercase tracking-normal text-lg">Inbound Leads</h1>
-                <span className="font-semibold text-xs border border-black px-3 py-1.5 bg-black text-white"> Count: {leads.length} </span>
+                <div className="flex items-center gap-3">
+                    <span className="font-semibold text-xs border border-black px-3 py-1.5 bg-black text-white"> Count: {leads.length} </span>
+                </div>
             </div>
 
             {leads.length === 0 ? (
@@ -114,7 +116,7 @@ export default function DashboardPage() {
                                     </div>
                                 )}
 
-                                <p className="text-sm pt-1 leading-relaxed break-words whitespace-pre-wrap font-sans text-black">
+                                <p className="text-sm pt-1 leading-relaxed wrap-break-word whitespace-pre-wrap font-sans text-black">
                                     {lead.message}
                                 </p>
 

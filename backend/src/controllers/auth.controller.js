@@ -68,14 +68,12 @@ export async function adminLoginController(req, res) {
 
     return res.status(200).json({
       success: true,
-      token: token,
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
       },
-      expiresIn: 24 * 60 * 60 * 1000,
     });
   } catch (error) {
     console.error("Login Controller Error:", error);

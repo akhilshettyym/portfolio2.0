@@ -102,7 +102,7 @@ export default function CreateSomething() {
         setStatus({ type: "", message: "" });
 
         try {
-            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+            const baseUrl = "http://localhost:8000";
 
             let payload = {
                 name: formData.name.trim(),

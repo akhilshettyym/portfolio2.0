@@ -1,4 +1,5 @@
 "use client";
+
 import GlobalCursor from "@/components/GlobalCursor";
 import { TIER_EVENT, PERF_TIERS } from "@/utils/storage";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";

@@ -4,6 +4,7 @@ import SelectedWorks from "@/components/SelectedWorks";
 import MyExperienceTiered from "@/components/TieredComponents/MyExperienceTiered";
 import GithubGraphQlTiered from "@/components/TieredComponents/GithubGraphQlTiered";
 import MyHorizontailReveal from "../MyHorizontailReveal";
+import Salesforce from "../Salesforce";
 
 export default function WorkLayout() {
 
@@ -17,9 +18,11 @@ export default function WorkLayout() {
       <section id="experience">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
           {/* <MyExperienceTiered /> */}
-          <MyHorizontailReveal />
+          {/* <MyHorizontailReveal /> */}
         </LazyLoad>
       </section>
+
+      <Salesforce />
 
       <section id="github">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>

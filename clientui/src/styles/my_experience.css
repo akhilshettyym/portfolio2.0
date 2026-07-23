@@ -110,7 +110,6 @@
   left: 0;
   width: 400px;
   height: 250px;
-  border-radius: 16px;
   overflow: hidden;
 }
 
@@ -145,7 +144,6 @@
   position: absolute;
   clip-path: inset(0 0 0 var(--clip-left, 0%));
   border: 1px solid #000000;
-  border-radius: 16px;
 }
 
 .ascii-content {

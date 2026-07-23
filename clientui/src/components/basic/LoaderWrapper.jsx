@@ -1,8 +1,8 @@
 "use client";
 
 import "@/styles/intro_entrance.css";
-import Loader from "@/components/basic/Loader";
 import { INTRO_SEEN } from "@/utils/storage";
+import Loader from "@/components/basic/Loader";
 import PageReveal from "@/components/basic/PageReveal";
 import CinematicIntro from "@/components/CinematicIntro";
 import { createContext, useEffect, useRef, useState } from "react";

@@ -665,6 +665,97 @@ export const CLOUD_SHADER = {
     }`,
 };
 
+export const HERO_SHADER = {
+  simulationVertexShader: `
+  varying vec2 vUv;
+  void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 1.0);
+  }
+  `,
+
+  simulationFragmentShader: `
+  uniform sampler2D textureA;
+  uniform sampler2D textTexture;
+  uniform vec2 mouse;
+  uniform vec2 resolution;
+  uniform float time;
+  uniform int frame;
+  
+  varying vec2 vUv;
+  const float delta = 1.4;
+  
+  void main() {
+      vec2 uv = vUv;
+      if(frame == 0){
+          gl_FragColor = vec4(0.0);
+          return;
+      }
+  
+      vec4 data = texture2D(textureA, uv);
+      float pressure = data.x;
+      float pVel = data.y;
+  
+      vec2 texelSize = 1.0 / resolution;
+  
+      float p_right = texture2D(textureA, uv + vec2(texelSize.x, 0.0)).x;
+      float p_left  = texture2D(textureA, uv - vec2(texelSize.x, 0.0)).x;
+      float p_up    = texture2D(textureA, uv + vec2(0.0, texelSize.y)).x;
+      float p_down  = texture2D(textureA, uv - vec2(0.0, texelSize.y)).x;
+  
+      if(uv.x <= texelSize.x) p_left = p_right;
+      if(uv.x >= 1.0 - texelSize.x) p_right = p_left;
+      if(uv.y <= texelSize.y) p_down = p_up;
+      if(uv.y >= 1.0 - texelSize.y) p_up = p_down;
+  
+      pVel += delta * (-2.0 * pressure + p_right + p_left) / 4.0;
+      pVel += delta * (-2.0 * pressure + p_up + p_down) / 4.0;
+  
+      pressure += delta * pVel;
+      pVel -= 0.005 * delta * pressure;
+  
+      pVel *= 0.90;
+      pressure *= 0.92;
+  
+      vec2 mouseUV = mouse / resolution;
+  
+      if(mouse.x > 0.0){
+          float radius = 0.08;
+          float dist = distance(uv, mouseUV);
+          if(dist < radius){
+              float isText = texture2D(textTexture, uv).r;
+              float influence = mix(0.1, 4.0, isText);
+              pressure += influence * (1.0 - dist / radius);
+          }
+      }
+  
+      gl_FragColor = vec4(pressure, pVel, (p_right - p_left) * 0.5, (p_up - p_down) * 0.5);
+  }
+  `,
+
+  renderVertexShader: `
+  varying vec2 vUv;
+  void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 1.0);
+  }
+  `,
+
+  renderFragmentShader: `
+  uniform sampler2D textureA;
+  uniform sampler2D textureB;
+  varying vec2 vUv;
+  
+  void main() {
+      vec4 data = texture2D(textureA, vUv);
+      vec2 distortion = data.zw * 0.25; 
+  
+      float textMask = texture2D(textureB, clamp(vUv + distortion, 0.0, 1.0)).r;
+      gl_FragColor = vec4(vec3(1.0), textMask * 0.95);
+  }
+  `,
+};
+
 
 /* SubjectProfile */
 export const fadeInContainer = {
@@ -703,4 +794,25 @@ export const welcomeTexts = [
   "LET'S CREATE SOMETHING REMARKABLE.",
   "CRAFTING DIGITAL EXPERIENCES FOR YOU.",
   "READY TO BRING IDEAS TO LIFE?",
+];
+
+
+/* Loader.jsx */
+export const GREETINGS = [
+  "Hello", // English
+  "こんにちは", // Japanese
+  "Bonjour", // French
+  "Hola", // Spanish
+  "Ciao", // Italian
+  "你好", // Mandarin
+  "Olá", // Portuguese
+  "Привет", // Russian
+  "مرحباً", // Arabic
+  "안녕하세요", // Korean
+  "Γεια σας", // Greek
+  "สวัสดี", // Thai
+  "Ahoj", // Czech
+  "Xin chào", // Vietnamese
+  "नमस्ते", // Hindi
+  "ನಮಸ್ಕಾರ", // Kannada
 ];

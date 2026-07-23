@@ -3,9 +3,9 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
-import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
@@ -102,7 +102,7 @@ export default function CreateSomething() {
         setStatus({ type: "", message: "" });
 
         try {
-            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
             let payload = {
                 name: formData.name.trim(),

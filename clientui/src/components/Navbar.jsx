@@ -34,9 +34,9 @@ function scrambleTo(setText, finalText) {
 }
 
 function GlitchNavItem({ href, label, active, delay = 0 }) {
-  const [text, setText] = useState(label);
-  const resetRef = useRef(null);
   const ref = useRef(null);
+  const resetRef = useRef(null);
+  const [text, setText] = useState(label);
   const [width, setWidth] = useState(null);
 
   useEffect(() => {
@@ -62,8 +62,7 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
 
   return (
     <Link href={href}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
+      onMouseEnter={handleEnter} onMouseLeave={handleLeave}
       className={`px-2 py-2 text-[11px] font-bold uppercase tracking-tight transition text-center inline-flex justify-center items-center min-w-10 ${active
         ? "bg-black text-white"
         : "bg-black/5 text-gray-700 hover:bg-black hover:text-white"
@@ -75,10 +74,10 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
 }
 
 const Navbar = () => {
-  const [time, setTime] = useState("");
-  const [consoleOpen, setConsoleOpen] = useState(false);
   const pathname = usePathname();
+  const [time, setTime] = useState("");
   const { isTier2 } = usePerformanceTier();
+  const [consoleOpen, setConsoleOpen] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {

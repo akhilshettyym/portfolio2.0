@@ -158,6 +158,7 @@ export function benchmarkAnimationFrame(durationMs = 850) {
 }
 
 export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
+
     if (gpu.caveatBlocked) return PERF_TIERS.LOW;
 
     let score = 0;

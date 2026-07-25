@@ -1,0 +1,49 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "portfolio v2.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "npx nodemon server.js",
+    "start": "node server.js",
+    "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "validate": "npm run format:check && npm run lint && npm run jest",
+    "test": "npm run validate"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
+  },
+  "author": "akhilshettym",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.3",
+    "validator": "^13.15.35"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.7.0",
+    "jest": "^30.3.0",
+    "prettier": "^3.9.6",
+    "supertest": "^7.2.2"
+  }
+}

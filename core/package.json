@@ -1,0 +1,44 @@
+{
+  "name": "core",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "jest": "jest",
+    "jest:watch": "jest --watch",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "validate": "npm run format:check && npm run lint && npm run jest",
+    "test": "npm run validate"
+  },
+  "dependencies": {
+    "next": "16.2.11",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-icons": "^5.7.0",
+    "react-toastify": "^11.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.11",
+    "eslint-config-prettier": "^10.1.8",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "prettier": "^3.9.6",
+    "tailwindcss": "^4"
+  },
+  "allowScripts": {
+    "sharp@0.35.0": true,
+    "unrs-resolver@1.12.2": true
+  },
+  "overrides": {
+    "postcss": "^8.5.18",
+    "sharp": "^0.35.0"
+  }
+}

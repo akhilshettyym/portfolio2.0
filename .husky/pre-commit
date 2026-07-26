@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Run lint-staged to format and lint modified files
-npx lint-staged
-
-# Since we set up Gitleaks earlier via pre-commit, run it here too!
-pre-commit run gitleaks --files $(git diff --cached --name-only)

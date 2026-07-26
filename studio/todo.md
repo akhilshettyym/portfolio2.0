@@ -89,9 +89,8 @@ no thanks
 - prettier, code formatting tests.
 - npm audit (ci/cd)
 
-
-
 - Husky + lint-staged - before commit run.
+
 ---
 
 1. The Missing Testing Layers:
@@ -101,7 +100,6 @@ While Jest covers the internals, you need tests that simulate real user behavior
 End-to-End (E2E) Testing: Jest tests components in isolation or small groups. E2E tests spin up the whole app and test the entire user journey (e.g., logging in, adding to cart, checking out).
 
 Recommended Tools: axe-core (can be integrated directly into your Jest or Playwright tests).
-
 
 3. Deep Security & Compliance:
 
@@ -124,7 +122,6 @@ Recommended Tools: `Husky + lint-staged` (so it only tests the files that were a
 
 Where to start?
 Don't try to add all of these at once, or your team will mutiny. Start with Husky/Prettier for instant quality-of-life improvements, enforce a Jest coverage threshold, and then look into Playwright for your critical user paths.
-
 
 ---
 

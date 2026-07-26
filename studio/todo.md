@@ -62,8 +62,6 @@ no thanks
 
 ---
 
-- Husky + lint-staged - before commit run.
-
 ### Checklists:
 
 #### adminui -
@@ -89,101 +87,12 @@ no thanks
 - lint tests.
 - jest for unit and integration tests of the only api.
 - prettier, code formatting tests.
-- Husky + lint-staged - before commit run.
 - npm audit (ci/cd)
 
+
+
+- Husky + lint-staged - before commit run.
 ---
-
-### vercel v0
-
-I have this structure where ADMIN_URL is for the adminui which is deployed on vercel as (https://portfolio-adminui.vercel.app).
-And CLIENT_URL is http://localhost:3000 currently as its yet to be deployed.
-
-The Backend is deployed on render as - (https://portfolio-backend-cjvf.onrender.com).
-
-Descriptions -
-
-- I should now be able to POST data from clientui.
-- I should be able to login, get inquiries, delete inquiries and logout from adminui.
-
-I have set the env variables in backend as stated above.
-
-Now if I try to call the API from my deployed backend from my clientui am not able to get the proper response or the API is showing Network Error. I want you to check and let me know what could be tehe issue for this.
-
-- If I try to make the API call from adminui - login it works. But it takes very very long time to get into the dashboard.
-  Its taking very long just for the first time, if I logout and login again then that is faster.
-  I want two things now, first check why its taking so long for the calls. And secondly in adminui add full page loader when logging in and logging out.
-
-- Also once I login I can see the token in the response, is that normal or this shouldn't be shown at all. If shouldn't be shown then remove it without affecting the working.
-
-- [adminui]
-  For the adminui I have not added any metadata and things which should be production grade, I have not done that. Add all the metadata details and SEO optimization to the admin ui.
-
-Fix these issues, I should be able to POST data from the clienui which is running on localhost.
-
-- Also one more thing. Isn't it a bad query where am fetching all the inquiries at a time ? Shouldn't this be done in few bundles ? fetch 10 quries once, and show a load more button at the bottom and clicking that fetch the next 10 ?
-  Doing this is better is what I felt, go on and do all these changes.
-
----
-
-### CI/CD description
-
-I have a portfolio website which is built from scratch. I have built this project in a basic way. This is my file folder structure -
-portfolio2.0
-
-- adminui
-- clientui
-- backend
-  portfolio2.0 is a github repo. And inside this repo I have these folders. The folders which are present is itself a standalone projects.
-
-- adminui - it is a full fledge next js project with app router file system.
-- clientui is one more nextjs project with app router file system.
-- backend is the one which powers both of these above projects, where I have built API's from scratch, with nodejs and expressjs.
-
-- clientui - has a form submission mechanism where user of this where user can talk to me, once the form is filled and cliked connect or something a post api is triggered and then this is stored in mongodb database.
-
-- backend - so the above form submission and the storing of data in the db is handled by nodejs and the express server.
-  I have few API's built here which are as follows -
-
-1. POST - which takes the user input from the clientui and stores it in the mongodb.
-2. GET - which gets all the form submissions from the user.
-3. DELETE - delete the enquiries from the user.
-4. POST - login for admin
-5. POST - logout for admin
-   These are the API's built in backend.
-
-So the adminui comes into picture here where me who's done this can Login to the UI and check all the datas or quiries by the user. I have the option to delete and Logout as well.
-
-So this what I have done upto now.
-
-I have already deployed the adminui project in vercel, and backend in render. SO these two are up and running now.
-
-The problem or security concern now is, as soon as I push my code to main or the base branch in my github, a deployment is triggered and the code goes live to production. No tests are performed nothing.
-
-What I am thinking now is to write a CI/CD in github actions so that once the code is pushed to the main branch or PR is merged, All the tests should be ran, And if any of the tests fail then build should be stopped and the code shouldn't go live.
-
-And I want two env variables where one will be in the dev point of view and one more with production point of view.
-
-I want all the security checks to happen, and the tests what I have written in such a way that,
-adminui - whatever tests are there should run in sequence one after the other.
-backend - again tests should run one after other.
-clientui - again tests one after other.
-And these three tests should run asynchronously.
-
-Once all these tests passes, code should be merged and goes live.
-
-Also I am planning to deploy the clientui in vercel as well. It is in progress and will be done.
-
-I might not have complete understanding yet, guide me through this production grade setup. (Since this is a portfolio website setup, let this be free tier, we will skip the paid options).
-
----
-
-So for the above project, I have written lint tests, jest unit and integration tests, and npm audit happens.
-Is there any other tests suggested to be added or configured which follows good coding practices ?
-
-You’ve already built a solid foundation! Having linting, unit/integration tests, and dependency vulnerability scans (npm audit) means you’re already ahead of a lot of dev teams.
-
-If you want to take your project from "functional" to "bulletproof" and adopt industry-standard best practices, here are the missing puzzle pieces you should consider adding to your pipeline, categorized by what they solve.
 
 1. The Missing Testing Layers:
 
@@ -193,17 +102,6 @@ End-to-End (E2E) Testing: Jest tests components in isolation or small groups. E2
 
 Recommended Tools: axe-core (can be integrated directly into your Jest or Playwright tests).
 
-2. Code Quality & Health Guardrails:
-
-Tests are only useful if they cover the right code, and formatting should be automated so you don't argue about semicolons in Code Reviews.
-
-Code Coverage Thresholds: You have Jest, but are you enforcing it? You can configure Jest to fail the build if your test coverage drops below a certain percentage (e.g., 80% statement coverage).
-
-How: Add coverageThreshold to your jest.config.js.
-
-Automated Formatting: Linters catch code smells; formatters fix style. If you aren't using one, couple your linter with a strict formatter.
-
-Recommended Tool: Prettier.
 
 3. Deep Security & Compliance:
 
@@ -226,6 +124,9 @@ Recommended Tools: `Husky + lint-staged` (so it only tests the files that were a
 
 Where to start?
 Don't try to add all of these at once, or your team will mutiny. Start with Husky/Prettier for instant quality-of-life improvements, enforce a Jest coverage threshold, and then look into Playwright for your critical user paths.
+
+
+---
 
 base branch strict
 github actions

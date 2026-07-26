@@ -1,0 +1,14 @@
+{
+  "core/**/*.{js,jsx,ts,tsx}": [
+    "npm run format:fix --prefix core --",
+    "npm run lint --prefix core --"
+  ],
+  "gateway/**/*.{js,ts}": [
+    "npm run format:fix --prefix gateway --",
+    "npm run lint --prefix gateway --"
+  ],
+  "studio/**/*.{js,jsx,ts,tsx}": [
+    "npm run format:fix --prefix studio --",
+    "npm run lint --prefix studio --"
+  ]
+}

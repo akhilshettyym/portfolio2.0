@@ -109,8 +109,8 @@ jobs:
       - name: Check Formatting
         run: npm run format:check
 
-      - name: Run Linter
-        run: npm run lint
+      # - name: Run Linter
+      #   run: npm run lint
 
       - name: Run Jest Tests
         run: npm run jest

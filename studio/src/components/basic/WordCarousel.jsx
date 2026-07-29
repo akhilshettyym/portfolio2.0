@@ -36,16 +36,12 @@ export default function WordCarousel() {
     <span className="carousel">
       <span
         className={`carousel-track ${isResetting ? "no-transition" : ""}`}
-        style={{ transform: `translate3d(0, -${currentIndex * 1.2}em, 0)` }}
-      >
+        style={{ transform: `translate3d(0, -${currentIndex * 1.2}em, 0)` }}>
         {loopedWords.map((word, index) => {
           const isActive = index === currentIndex;
 
           return (
-            <span
-              key={index}
-              className={`carousel-item ${isActive ? "active" : "inactive"}`}
-            >
+            <span key={index} className={`carousel-item ${isActive ? "active" : "inactive"}`}>
               {" "}
               {word}{" "}
             </span>

@@ -5,21 +5,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import {
-  PROJECTS,
-  CARD_WIDTH,
-  CARD_HEIGHT,
-  CTA_WIDTH,
-  CTA_HEIGHT,
-  EDGE_PADDING,
-} from "@/utils/basic";
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { PROJECTS, CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 function clamp(value, min, max) {
@@ -82,19 +69,15 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
             : isLargeDevice
               ? "max-h-[75vh] top-15 max-w-2xl"
               : "max-h-[85vh] max-w-md"
-        }`}
-      >
+        }`}>
         <div className="flex items-center justify-between border-b border-white/10 p-4">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
-              Selected Work
-            </span>
+            <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">Selected Work</span>
             <span className="text-sm font-medium">0{project.id}</span>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 transition-colors active:bg-white/20"
-          >
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 transition-colors active:bg-white/20">
             <FaXmark size={16} />
           </button>
         </div>
@@ -104,31 +87,19 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
             <div className="flex flex-col gap-5">
               {project.image && !skipImage && (
                 <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    unoptimized
-                    priority
-                    className="object-cover"
-                  />
+                  <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
                 </div>
               )}
 
               <div>
                 <h3 className="text-2xl font-medium">{project.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/80">
-                  {project.description}
-                </p>
+                <p className="mt-3 text-sm leading-relaxed text-white/80">{project.description}</p>
               </div>
 
               {project.stack && project.stack.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
                   {project.stack.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs"
-                    >
+                    <span key={item} className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs">
                       {item}
                     </span>
                   ))}
@@ -138,9 +109,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
           ) : (
             <div className="py-12 text-center">
               <h3 className="text-2xl font-medium">COMING SOON</h3>
-              <p className="mt-2 text-sm text-white/60">
-                Project details will be revealed soon.
-              </p>
+              <p className="mt-2 text-sm text-white/60">Project details will be revealed soon.</p>
             </div>
           )}
         </div>
@@ -151,8 +120,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-[#f97316] py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98]"
-            >
+              className="flex w-full items-center justify-center gap-2 rounded-md bg-[#f97316] py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98]">
               Visit Live Site
               <FaArrowUpRightFromSquare size={14} />
             </Link>
@@ -163,13 +131,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
   );
 }
 
-function FloatingProjectPreview({
-  project,
-  cardAnchor,
-  buttonAnchor,
-  onHold,
-  onRelease,
-}) {
+function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onRelease }) {
   const cardX = useMotionValue(cardAnchor.x);
   const cardY = useMotionValue(cardAnchor.y);
   const buttonX = useMotionValue(buttonAnchor.x);
@@ -198,16 +160,7 @@ function FloatingProjectPreview({
     cardY.set(cardAnchor.y);
     buttonX.set(buttonAnchor.x);
     buttonY.set(buttonAnchor.y);
-  }, [
-    cardAnchor.x,
-    cardAnchor.y,
-    buttonAnchor.x,
-    buttonAnchor.y,
-    cardX,
-    cardY,
-    buttonX,
-    buttonY,
-  ]);
+  }, [cardAnchor.x, cardAnchor.y, buttonAnchor.x, buttonAnchor.y, cardX, cardY, buttonX, buttonY]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -239,8 +192,7 @@ function FloatingProjectPreview({
           y: springCardY,
           perspective: 1400,
           transformStyle: "preserve-3d",
-        }}
-      >
+        }}>
         <motion.div
           style={{
             x: driftX,
@@ -250,54 +202,36 @@ function FloatingProjectPreview({
             transformStyle: "preserve-3d",
           }}
           whileHover={{ scale: 1.01 }}
-          className="relative"
-        >
+          className="relative">
           <div className="absolute -inset-6 rounded-[36px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),transparent_70%)] blur-2xl" />
 
           <motion.div
             initial={{ y: 6 }}
             animate={{ y: [0, -6, 0] }}
             transition={{ y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" } }}
-            className="relative h-130 w-212.5 overflow-hidden border border-white/10 bg-black shadow-[0_60px_140px_rgba(0,0,0,0.42)]"
-          >
+            className="relative h-130 w-212.5 overflow-hidden border border-white/10 bg-black shadow-[0_60px_140px_rgba(0,0,0,0.42)]">
             {hasContent ? (
               <>
-                <motion.div
-                  className="absolute inset-0"
-                  style={{ x: imageX, y: imageY, scale: 1.08 }}
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    unoptimized
-                    priority
-                    className="object-cover"
-                  />
+                <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
+                  <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
                 </motion.div>
                 <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/30 to-black/90" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_30%)]" />
 
                 <div className="absolute inset-0 flex flex-col justify-between p-7 text-white">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-[0.25em] opacity-70">
-                      Selected Work
-                    </span>
+                    <span className="text-xs uppercase tracking-[0.25em] opacity-70">Selected Work</span>
                     <span className="text-sm opacity-60">0{project.id}</span>
                   </div>
 
                   <div>
                     <h3 className="text-3xl font-medium">{project.title}</h3>
-                    <p className="mt-4 max-w-145 text-sm leading-relaxed text-white/80">
-                      {" "}
-                      {project.description}{" "}
-                    </p>
+                    <p className="mt-4 max-w-145 text-sm leading-relaxed text-white/80"> {project.description} </p>
                     <div className="mt-6 flex flex-wrap gap-2">
                       {project.stack.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full border border-white/20 px-3 py-1.5 text-xs backdrop-blur-md"
-                        >
+                          className="rounded-full border border-white/20 px-3 py-1.5 text-xs backdrop-blur-md">
                           {" "}
                           {item}{" "}
                         </span>
@@ -309,13 +243,9 @@ function FloatingProjectPreview({
             ) : (
               <div className="flex h-full items-center justify-center bg-black text-white">
                 <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/40">
-                    Selected Work
-                  </p>
+                  <p className="text-xs uppercase tracking-[0.3em] text-white/40">Selected Work</p>
                   <h3 className="mt-5 text-4xl font-medium">COMING SOON</h3>
-                  <p className="mt-4 text-white/60">
-                    Project details will be revealed soon.
-                  </p>
+                  <p className="mt-4 text-white/60">Project details will be revealed soon.</p>
                 </div>
               </div>
             )}
@@ -330,19 +260,13 @@ function FloatingProjectPreview({
           exit={{ opacity: 0, scale: 0.94 }}
           transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="pointer-events-none fixed left-0 top-0 z-60 hidden lg:block"
-          style={{ x: springButtonX, y: springButtonY }}
-        >
-          <div
-            onPointerEnter={onHold}
-            onPointerLeave={onRelease}
-            className="pointer-events-auto"
-          >
+          style={{ x: springButtonX, y: springButtonY }}>
+          <div onPointerEnter={onHold} onPointerLeave={onRelease} className="pointer-events-auto">
             <Link
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-13 items-center gap-2 rounded-full border-2 border-white bg-[#f97316] px-5 py-3 text-sm font-semibold text-black shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]"
-            >
+              className="inline-flex h-13 items-center gap-2 rounded-full border-2 border-white bg-[#f97316] px-5 py-3 text-sm font-semibold text-black shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]">
               Visit Live Site
               <FaArrowUpRightFromSquare size={16} />
             </Link>
@@ -384,11 +308,8 @@ export default function SelectedWorks() {
     if (renderPopupModal) return;
     cancelClear();
 
-    const hasPointerCoords =
-      typeof event?.clientX === "number" && typeof event?.clientY === "number";
-    const point = hasPointerCoords
-      ? { x: event.clientX, y: event.clientY }
-      : getFallbackPointerPoint();
+    const hasPointerCoords = typeof event?.clientX === "number" && typeof event?.clientY === "number";
+    const point = hasPointerCoords ? { x: event.clientX, y: event.clientY } : getFallbackPointerPoint();
 
     setActiveProject(index);
     setCardAnchor(getCardPosition());
@@ -396,12 +317,7 @@ export default function SelectedWorks() {
   };
 
   const handleMove = (event) => {
-    if (
-      renderPopupModal ||
-      typeof event?.clientX !== "number" ||
-      typeof event?.clientY !== "number"
-    )
-      return;
+    if (renderPopupModal || typeof event?.clientX !== "number" || typeof event?.clientY !== "number") return;
     setButtonAnchor(getButtonPosition(event.clientX, event.clientY));
   };
 
@@ -438,9 +354,7 @@ export default function SelectedWorks() {
       <div className="mx-auto max-w-[1600px] px-10 py-10">
         <div className="mb-5">
           <div className="relative px-10 py-2 text-xs tracking-widest">
-            <div className="pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2">
-              ©001
-            </div>
+            <div className="pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2">©001</div>
           </div>
 
           <div className="overflow-hidden">
@@ -449,8 +363,7 @@ export default function SelectedWorks() {
               style={{
                 fontFeatureSettings: '"ss01" on, "ss02" on',
                 transform: "scaleX(1.5)",
-              }}
-            >
+              }}>
               SELECTED /
             </h1>
           </div>
@@ -458,8 +371,7 @@ export default function SelectedWorks() {
           <div className="-mt-3 overflow-hidden">
             <h1
               className="flex w-full items-baseline justify-between whitespace-nowrap text-[clamp(3rem,5vw,3rem)] md:text-[clamp(4rem,5vw,2rem)] font-black leading-[0.82] tracking-[-0.09em] text-black/90 will-change-transform"
-              style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}
-            >
+              style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
               <span>. WORKS</span>
               <span className="ml-auto mr-5 text-sm tracking-normal"> 24-26 </span>
             </h1>
@@ -491,16 +403,10 @@ export default function SelectedWorks() {
                   color: isActive ? "#ffffff" : "#000000",
                 }}
                 transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative cursor-pointer border-t border-black outline-none select-none"
-              >
-                <div
-                  className={`grid grid-cols-12 gap-6 ${renderPopupModal ? "py-5" : "px-10 py-5"}`}
-                >
+                className="group relative cursor-pointer border-t border-black outline-none select-none">
+                <div className={`grid grid-cols-12 gap-6 ${renderPopupModal ? "py-5" : "px-10 py-5"}`}>
                   <div className="col-span-12 md:col-span-5">
-                    <h3 className="text-2xl font-medium md:text-4xl">
-                      {" "}
-                      {project.title}{" "}
-                    </h3>
+                    <h3 className="text-2xl font-medium md:text-4xl"> {project.title} </h3>
                     <p className="mt-2 text-sm opacity-70"> {project.tagline} </p>
                   </div>
                   <div className="hidden md:block md:col-span-3" />

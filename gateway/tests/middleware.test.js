@@ -50,9 +50,7 @@ describe("Middlewares", () => {
 
     it("should append adminId to request and fire next() if token is authorized", async () => {
       req.headers.authorization = "Bearer structural_admin_token";
-      jest
-        .spyOn(jwt, "verify")
-        .mockReturnValue({ userId: "admin_id_789", role: "ADMIN" });
+      jest.spyOn(jwt, "verify").mockReturnValue({ userId: "admin_id_789", role: "ADMIN" });
 
       await protectAdminRoute(req, res, next);
 

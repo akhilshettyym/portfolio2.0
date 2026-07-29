@@ -28,21 +28,18 @@ export default function Error({ error, reset }) {
         )}
 
         <p className="text-gray-500 text-sm mb-6">
-          We&apos;ve logged this error and will look into it. Try refreshing the page or
-          come back later.
+          We&apos;ve logged this error and will look into it. Try refreshing the page or come back later.
         </p>
 
         <button
           onClick={() => reset()}
-          className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors mb-3"
-        >
+          className="w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors mb-3">
           Try Again
         </button>
 
         <Link
           href="/"
-          className="block w-full bg-gray-100 text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-        >
+          className="block w-full bg-gray-100 text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
           Go Home
         </Link>
       </div>

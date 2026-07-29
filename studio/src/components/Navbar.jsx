@@ -20,9 +20,7 @@ function scrambleTo(setText, finalText) {
   const original = finalText.split("");
 
   const interval = setInterval(() => {
-    const newText = original
-      .map((_char, i) => (i < frame ? original[i] : randomChar()))
-      .join("");
+    const newText = original.map((_char, i) => (i < frame ? original[i] : randomChar())).join("");
     setText(newText);
     frame++;
 
@@ -66,12 +64,9 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       className={`px-2 py-2 text-[11px] font-bold uppercase tracking-tight transition text-center inline-flex justify-center items-center min-w-10 ${
-        active
-          ? "bg-black text-white"
-          : "bg-black/5 text-gray-700 hover:bg-black hover:text-white"
+        active ? "bg-black text-white" : "bg-black/5 text-gray-700 hover:bg-black hover:text-white"
       }`}
-      style={width ? { width: Math.max(width, 60) } : {}}
-    >
+      style={width ? { width: Math.max(width, 60) } : {}}>
       <span ref={ref} className="whitespace-nowrap">
         {" "}
         {text}{" "}
@@ -164,18 +159,8 @@ const Navbar = () => {
         <div className="sm:hidden w-full px-4 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 relative cursor-pointer"
-                onClick={() => window.location.reload()}
-              >
-                <Image
-                  src="/akhil.svg"
-                  alt="Akhil"
-                  fill
-                  className="object-contain"
-                  unoptimized
-                  priority
-                />
+              <div className="w-12 h-12 relative cursor-pointer" onClick={() => window.location.reload()}>
+                <Image src="/akhil.svg" alt="Akhil" fill className="object-contain" unoptimized priority />
               </div>
 
               <nav aria-label="Mobile Navigation" className="flex gap-2">
@@ -183,8 +168,7 @@ const Navbar = () => {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wide transition ${pathname === item.href ? "bg-black text-white" : "bg-black/10 text-black"}`}
-                  >
+                    className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wide transition ${pathname === item.href ? "bg-black text-white" : "bg-black/10 text-black"}`}>
                     {item.label}
                   </Link>
                 ))}
@@ -193,11 +177,9 @@ const Navbar = () => {
 
             <div
               className="relative flex flex-col items-center justify-center group cursor-pointer z-10"
-              onClick={() => setConsoleOpen((prev) => !prev)}
-            >
+              onClick={() => setConsoleOpen((prev) => !prev)}>
               <div
-                className={`absolute right-full top-1/2 -translate-y-1/2 flex items-center overflow-hidden transition-all duration-300 ease-out ${consoleOpen ? "w-22 opacity-100 mr-2" : "w-0 opacity-0 mr-0"} bg-black text-white`}
-              >
+                className={`absolute right-full top-1/2 -translate-y-1/2 flex items-center overflow-hidden transition-all duration-300 ease-out ${consoleOpen ? "w-22 opacity-100 mr-2" : "w-0 opacity-0 mr-0"} bg-black text-white`}>
                 <div className="px-3 py-1 text-[10px] whitespace-nowrap flex items-center">
                   <span className="mr-1">{">_"}</span>
                   <span>console</span>
@@ -206,20 +188,8 @@ const Navbar = () => {
               </div>
               <div className="w-6 h-6 border-2 border-black flex items-center justify-center transition-all duration-200 active:scale-90 group-hover:bg-black">
                 <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <line
-                    x2="100"
-                    y2="100"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    className="group-hover:stroke-white"
-                  />
-                  <line
-                    x1="100"
-                    y2="100"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    className="group-hover:stroke-white"
-                  />
+                  <line x2="100" y2="100" stroke="currentColor" strokeWidth="6" className="group-hover:stroke-white" />
+                  <line x1="100" y2="100" stroke="currentColor" strokeWidth="6" className="group-hover:stroke-white" />
                 </svg>
               </div>
             </div>
@@ -232,8 +202,7 @@ const Navbar = () => {
               <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
                 <div
                   className="w-12 h-12 flex items-center justify-center relative group cursor-pointer"
-                  onClick={() => window.location.reload()}
-                >
+                  onClick={() => window.location.reload()}>
                   <div className="relative w-full h-full overflow-hidden rounded-md">
                     <Image
                       src="/akhil.svg"
@@ -249,8 +218,7 @@ const Navbar = () => {
 
               <nav
                 aria-label="Desktop Navigation"
-                className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]"
-              >
+                className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]">
                 {navItems.map((item, i) => (
                   <GlitchNavItem
                     key={item.label}
@@ -277,35 +245,14 @@ const Navbar = () => {
                 ) : (
                   <div className="flex w-max animate-marquee">
                     {[...Array(2)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2"
-                      >
-                        <span className="mx-6">
-                          {" "}
-                          Full Stack Developer — 4+ Years Building Production Systems{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          MERN Stack Architecture & Implementation{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          Scalable Backend Systems & API Design{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          Dockerized Workflows & Containerization{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          Performance Optimization & Reliability{" "}
-                        </span>
+                      <div key={i} className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2">
+                        <span className="mx-6"> Full Stack Developer — 4+ Years Building Production Systems </span>
+                        <span className="mx-6"> MERN Stack Architecture & Implementation </span>
+                        <span className="mx-6"> Scalable Backend Systems & API Design </span>
+                        <span className="mx-6"> Dockerized Workflows & Containerization </span>
+                        <span className="mx-6"> Performance Optimization & Reliability </span>
                         <span className="mx-6"> End-to-End Feature Ownership </span>
-                        <span className="mx-6">
-                          {" "}
-                          Clean UI Systems & Interaction Design{" "}
-                        </span>
+                        <span className="mx-6"> Clean UI Systems & Interaction Design </span>
                         <span className="mx-6"> Shipping Fast, Stable Code </span>
                       </div>
                     ))}
@@ -317,31 +264,21 @@ const Navbar = () => {
             <div className="ml-auto relative flex items-center gap-3 shrink-0 min-w-40 justify-end opacity-0 animate-[navbar-enter_0.6s_ease-out_0.4s_forwards]">
               <button
                 onClick={() => setConsoleOpen((prev) => !prev)}
-                className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} bg-black text-white px-4 text-[11px] overflow-hidden`}
-              >
+                className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} bg-black text-white px-4 text-[11px] overflow-hidden`}>
                 <span className="mr-2">{">_"}</span>
-                <span className="uppercase tracking-wide whitespace-nowrap">
-                  console{" "}
-                </span>
+                <span className="uppercase tracking-wide whitespace-nowrap">console </span>
                 <span className="ml-1 animate-blink">|</span>
-                <span className="ml-2 uppercase tracking-wide whitespace-nowrap opacity-60">
-                  {" "}
-                  run command{" "}
-                </span>
+                <span className="ml-2 uppercase tracking-wide whitespace-nowrap opacity-60"> run command </span>
               </button>
 
               <div
-                className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen ? "opacity-0" : "opacity-100"}`}
-              >
+                className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen ? "opacity-0" : "opacity-100"}`}>
                 <div className="font-bold">
                   {" "}
                   AKHIL SHETTY M <span className="font-light">, IN</span>
                 </div>
                 <div>{time || "—:—:— --"}</div>
-                <div
-                  key={ip}
-                  className="text-[8px] font-semibold uppercase tracking-[0.25em] text-black/50"
-                >
+                <div key={ip} className="text-[8px] font-semibold uppercase tracking-[0.25em] text-black/50">
                   {" "}
                   connection <span className="inline-block w-25 text-right"> {ip} </span>
                 </div>
@@ -349,13 +286,11 @@ const Navbar = () => {
 
               <div
                 onClick={() => setConsoleOpen((prev) => !prev)}
-                className="w-10 aspect-square flex items-center justify-center relative overflow-hidden bg-white/40 transition-all duration-300 cursor-pointer z-40 hover:bg-black hover:text-white"
-              >
+                className="w-10 aspect-square flex items-center justify-center relative overflow-hidden bg-white/40 transition-all duration-300 cursor-pointer z-40 hover:bg-black hover:text-white">
                 <svg
                   viewBox="0 0 100 100"
                   className={`w-full h-full transition-all duration-300 ${consoleOpen ? "scale-70 rotate-90" : ""}`}
-                  preserveAspectRatio="none"
-                >
+                  preserveAspectRatio="none">
                   <SiGnometerminal size={100} />
                 </svg>
               </div>

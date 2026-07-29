@@ -45,23 +45,17 @@ function LoginForm() {
     <>
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-          <div className="font-mono text-sm uppercase tracking-widest text-black px-6 py-3">
-            Verifying...
-          </div>
+          <div className="font-mono text-sm uppercase tracking-widest text-black px-6 py-3">Verifying...</div>
         </div>
       )}
 
       <div className="flex-1 flex items-center justify-center p-4 bg-white">
         <div className="w-full max-w-sm border border-black p-6 bg-white">
-          <h2 className="font-mono font-bold uppercase tracking-normal text-center mb-6 text-lg">
-            Admin Login
-          </h2>
+          <h2 className="font-mono font-bold uppercase tracking-normal text-center mb-6 text-lg">Admin Login</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block font-mono text-xs uppercase mb-1">
-                Email Address
-              </label>
+              <label className="block font-mono text-xs uppercase mb-1">Email Address</label>
               <input
                 type="email"
                 required
@@ -85,8 +79,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full border border-black bg-black text-white p-3 text-xs uppercase font-mono tracking-wider hover:bg-white hover:text-black transition-colors duration-150 disabled:opacity-50"
-            >
+              className="w-full border border-black bg-black text-white p-3 text-xs uppercase font-mono tracking-wider hover:bg-white hover:text-black transition-colors duration-150 disabled:opacity-50">
               Enter Dashboard
             </button>
           </form>

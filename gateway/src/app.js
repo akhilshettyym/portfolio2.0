@@ -108,8 +108,7 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "An unexpected server error occurred";
 
-  const responseMessage =
-    process.env.NODE_ENV === "production" ? "Internal Server Error" : message;
+  const responseMessage = process.env.NODE_ENV === "production" ? "Internal Server Error" : message;
 
   res.status(statusCode).json({
     success: false,

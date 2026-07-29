@@ -14,8 +14,7 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const username = searchParams.get("username");
-    const from =
-      searchParams.get("from") || `${new Date().getFullYear()}-01-01T00:00:00Z`;
+    const from = searchParams.get("from") || `${new Date().getFullYear()}-01-01T00:00:00Z`;
     const to = searchParams.get("to") || `${new Date().getFullYear()}-12-31T23:59:59Z`;
 
     if (!username) {
@@ -23,10 +22,7 @@ export async function GET(req) {
     }
 
     if (!process.env.GITHUB_GRAPHQL_API || !process.env.GITHUB_TOKEN) {
-      return NextResponse.json(
-        { error: "GitHub API configuration is missing" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "GitHub API configuration is missing" }, { status: 500 });
     }
 
     const cacheKey = getCacheKey(username, from, to);

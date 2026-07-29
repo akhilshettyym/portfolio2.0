@@ -32,9 +32,7 @@ describe("DashboardPage", () => {
     expect(screen.getByText(/loading inquiries stack/i)).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/no inbound portfolio inquiries found/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/no inbound portfolio inquiries found/i)).toBeInTheDocument();
     });
   });
 

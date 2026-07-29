@@ -61,9 +61,7 @@ describe("Backend API Suite", () => {
         message: "Short",
       };
 
-      const res = await request(app)
-        .post("/api/user/contact-inquiry")
-        .send(invalidPayload);
+      const res = await request(app).post("/api/user/contact-inquiry").send(invalidPayload);
 
       expect(res.statusCode).toBe(400);
       expect(res.body.success).toBe(false);
@@ -78,9 +76,7 @@ describe("Backend API Suite", () => {
         message: "We need a massive fullstack software system built immediately.",
       };
 
-      const res = await request(app)
-        .post("/api/user/contact-inquiry")
-        .send(incompleteWorkPayload);
+      const res = await request(app).post("/api/user/contact-inquiry").send(incompleteWorkPayload);
 
       expect(res.statusCode).toBe(400);
       expect(res.body.success).toBe(false);
@@ -140,14 +136,9 @@ describe("Backend API Suite", () => {
     });
 
     it("should grant access to get-all-inquiries when a verified Admin token cookie is provided", async () => {
-      const signedAdminToken = jwt.sign(
-        { userId: "admin123", role: "ADMIN" },
-        process.env.JWT_SECRET,
-      );
+      const signedAdminToken = jwt.sign({ userId: "admin123", role: "ADMIN" }, process.env.JWT_SECRET);
 
-      const mockInquiriesList = [
-        { name: "John Doe", message: "Testing dashboard visibility" },
-      ];
+      const mockInquiriesList = [{ name: "John Doe", message: "Testing dashboard visibility" }];
 
       ContactInquiry.find = jest.fn().mockImplementation(() => ({
         sort: jest.fn().mockResolvedValue(mockInquiriesList),

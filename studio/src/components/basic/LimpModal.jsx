@@ -43,8 +43,7 @@ export default function LimpModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative mx-5 w-full max-w-md overflow-hidden border border-white/20 bg-white p-6 md:p-6 z-10"
-          >
+            className="relative mx-5 w-full max-w-md overflow-hidden border border-white/20 bg-white p-6 md:p-6 z-10">
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
               <motion.div
                 animate={{ opacity: [0.3, 0, 0.3] }}
@@ -61,26 +60,18 @@ export default function LimpModal() {
 
             <div className="relative z-10">
               <div className="mb-2">
-                <div className="text-lg font-extrabold uppercase tracking-wide text-black">
-                  Limp Mode
-                </div>
+                <div className="text-lg font-extrabold uppercase tracking-wide text-black">Limp Mode</div>
               </div>
 
               <div className="mb-5 space-y-3 text-justify">
                 <p className="text-sm text-gray-400">
-                  Performance optimization is active to ensure an ultra-smooth frame rate.
-                  To maintain a fast, stable interface, selected animations and advanced
-                  visual effects have been streamlined.
+                  Performance optimization is active to ensure an ultra-smooth frame rate. To maintain a fast, stable
+                  interface, selected animations and advanced visual effects have been streamlined.
                 </p>
               </div>
 
               <div className="w-full sm:w-auto flex justify-end">
-                <CustomButton
-                  title="Got it"
-                  onClick={handleDismiss}
-                  width={180}
-                  height={40}
-                />
+                <CustomButton title="Got it" onClick={handleDismiss} width={180} height={40} />
               </div>
             </div>
           </motion.div>

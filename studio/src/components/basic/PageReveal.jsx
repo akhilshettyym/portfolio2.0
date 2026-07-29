@@ -12,8 +12,7 @@ export default function PageReveal({ active, children }) {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-9999 pointer-events-none overflow-hidden"
-          >
+            className="fixed inset-0 z-9999 pointer-events-none overflow-hidden">
             <motion.div
               initial={{ height: "50%" }}
               animate={{ height: ["50%", "24%", "0%"] }}

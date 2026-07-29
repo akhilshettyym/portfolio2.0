@@ -111,8 +111,7 @@ export function CurtainText({ children, delay = 0, className = "" }) {
       <motion.div
         initial={{ y: "108%", opacity: 0 }}
         animate={{ y: "0%", opacity: 1 }}
-        transition={{ duration: 0.9, delay, ease: [0.77, 0, 0.175, 1] }}
-      >
+        transition={{ duration: 0.9, delay, ease: [0.77, 0, 0.175, 1] }}>
         {children}
       </motion.div>
     </div>
@@ -170,8 +169,7 @@ export function CodeRain({ active }) {
               left: `${line.x}%`,
               top: `${line.y}%`,
               transform: `translate(-50%, -50%) rotate(${(idx % 5) - 2}deg)`,
-            }}
-          >
+            }}>
             {line.text}
           </motion.div>
         ))}
@@ -240,8 +238,7 @@ export function GlitchField({ active, seed }) {
             }}
             transition={{ duration: 0.18, delay: i * 0.03, ease: "linear" }}
             className="absolute font-mono text-[10px] uppercase tracking-[0.35em] text-white/70 md:text-[11px]"
-            style={{ left: config.left, top: config.top }}
-          >
+            style={{ left: config.left, top: config.top }}>
             {config.useGlitch ? <GlitchText>{bit}</GlitchText> : bit}
           </motion.div>
         );
@@ -268,9 +265,7 @@ function BottomCurtain({ active }) {
 
 export function SceneShell({ dark, curtain = false, children }) {
   return (
-    <div
-      className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}
-    >
+    <div className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}>
       {curtain ? <BottomCurtain active /> : null}
       <div className={`absolute inset-0 ${dark ? "bg-black" : "bg-white"}`} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.08),transparent_40%)] opacity-40" />
@@ -282,9 +277,7 @@ export function SceneShell({ dark, curtain = false, children }) {
 
 export function SceneShell2({ dark, curtain = false, children }) {
   return (
-    <div
-      className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}
-    >
+    <div className={`relative h-screen w-full overflow-hidden ${dark ? "bg-black text-white" : "bg-white text-black"}`}>
       {curtain ? <BottomCurtain active /> : null}
 
       <div className={`absolute inset-0 z-0 ${dark ? "bg-black" : "bg-white"}`} />
@@ -307,17 +300,16 @@ export const logAbout = () => {
     <div className="text-[11px] text-justify leading-relaxed max-w-full">
       <span className="block text-white font-medium mt-2">About Akhil Shetty</span>
       <p className="mt-1">
-        A <span className="text-white font-medium">computer science graduate</span> from
-        Mangalore, Karnataka, who turned systemic curiosity into a full-time engineering
-        habit. Having graduated from St. Joseph Engineering College, I am currently based
-        in Mumbai, accelerating products as an{" "}
+        A <span className="text-white font-medium">computer science graduate</span> from Mangalore, Karnataka, who
+        turned systemic curiosity into a full-time engineering habit. Having graduated from St. Joseph Engineering
+        College, I am currently based in Mumbai, accelerating products as an{" "}
         <span className="text-white font-medium">IT Developer</span>.
       </p>
 
       <span className="block text-white font-medium mt-3">Core Focus</span>
       <p className="mt-1">
-        Building high-performance code, fine-tuning infrastructure latency, and mapping
-        pixel-perfect layout architectures across scalable user systems.
+        Building high-performance code, fine-tuning infrastructure latency, and mapping pixel-perfect layout
+        architectures across scalable user systems.
       </p>
 
       <div className="pt-3 text-slate-500 select-none">
@@ -396,11 +388,10 @@ export const logSkills = () => {
       </div>
 
       <div className="mt-6 border-t border-neutral-800 pt-3">
-        <p className="text-[11px] text-neutral-500 mb-1">// environment stack matrix</p>
+        <p className="text-[11px] text-neutral-500 mb-1"> {"// environment stack matrix"} </p>
         <p className="leading-relaxed text-neutral-400">
-          <span className="text-neutral-200 font-semibold">Tools & Tech:</span> Core Java
-          • JavaScript • Next.js • MySQL • TypeScript • Node.js • Express • Material UI •
-          React • HTML/CSS • Figma • Git • GitHub • REST APIs
+          <span className="text-neutral-200 font-semibold">Tools & Tech:</span> Core Java • JavaScript • Next.js • MySQL
+          • TypeScript • Node.js • Express • Material UI • React • HTML/CSS • Figma • Git • GitHub • REST APIs
         </p>
       </div>
     </div>
@@ -408,15 +399,11 @@ export const logSkills = () => {
 };
 
 export const logAchievements = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">
-    Navigating window down to achievements section...
-  </div>
+  <div className="text-[11px] text-emerald-400 font-mono">Navigating window down to achievements section...</div>
 );
 
 export const logProjects = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">
-    Syncing workspace environment context to /work...
-  </div>
+  <div className="text-[11px] text-emerald-400 font-mono">Syncing workspace environment context to /work...</div>
 );
 
 export const logExperience = () => {
@@ -447,14 +434,12 @@ export const logExperience = () => {
       ].map((exp, idx) => (
         <div
           key={idx}
-          className="rounded-md border border-neutral-800 bg-black/30 p-4 text-[11px] font-mono text-neutral-300"
-        >
+          className="rounded-md border border-neutral-800 bg-black/30 p-4 text-[11px] font-mono text-neutral-300">
           <div className="mb-2 flex items-start justify-between border-b border-neutral-800/60 pb-2">
             <div>
               <p className={`text-[11px] ${exp.color}`}>$ status --active</p>
               <h3 className="text-[11px] text-neutral-100 font-bold">
-                {exp.title}{" "}
-                <span className="text-neutral-500 font-normal">({exp.role})</span>
+                {exp.title} <span className="text-neutral-500 font-normal">({exp.role})</span>
               </h3>
             </div>
             <span className="text-[11px] text-neutral-500">{exp.date}</span>
@@ -473,17 +458,14 @@ export const logGithub = () => (
       href="https://github.com/akhilshettyym"
       target="_blank"
       rel="noreferrer"
-      className="text-cyan-400 hover:underline"
-    >
+      className="text-cyan-400 hover:underline">
       github.com/akhilshettyym ↗
     </a>
   </div>
 );
 
 export const logCreate = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">
-    Opening deployment canvas inside path: /start...
-  </div>
+  <div className="text-[11px] text-emerald-400 font-mono">Opening deployment canvas inside path: /start...</div>
 );
 
 export const logHero = () => (
@@ -500,24 +482,21 @@ export const logPhilosophy = () => {
           Product Execution Philosophy
         </span>
         <p className="text-slate-200 text-[12px] font-medium italic">
-          "If it does not remove user overhead, it does not belong in production."
+          {"If it does not remove user overhead, it does not belong in production."}
         </p>
       </div>
       <ul className="space-y-2">
         <li>
-          <strong className="text-slate-200 font-medium">Data-Driven Logic:</strong>{" "}
-          Shifting guesswork out of codebase structures into absolute analytical
-          verification.
+          <strong className="text-slate-200 font-medium">Data-Driven Logic:</strong> Shifting guesswork out of codebase
+          structures into absolute analytical verification.
         </li>
         <li>
-          <strong className="text-slate-200 font-medium">Scalable Blueprinting:</strong>{" "}
-          Constructing modular, reusable component hooks that lower build times across
-          platforms.
+          <strong className="text-slate-200 font-medium">Scalable Blueprinting:</strong> Constructing modular, reusable
+          component hooks that lower build times across platforms.
         </li>
         <li>
-          <strong className="text-slate-200 font-medium">Impact Metrics:</strong> Valuing
-          technical performance conversions and functional scale above decorative styling
-          layouts.
+          <strong className="text-slate-200 font-medium">Impact Metrics:</strong> Valuing technical performance
+          conversions and functional scale above decorative styling layouts.
         </li>
       </ul>
     </div>
@@ -540,8 +519,7 @@ export const logLinkedin = () => (
       href="https://linkedin.com/in/akhilshettym"
       target="_blank"
       rel="noreferrer"
-      className="text-cyan-400 hover:underline"
-    >
+      className="text-cyan-400 hover:underline">
       linkedin.com/in/akhilshettym ↗
     </a>
   </div>
@@ -554,8 +532,7 @@ export const logInstagram = () => (
       href="https://www.instagram.com/akhil_shetty_m"
       target="_blank"
       rel="noreferrer"
-      className="text-cyan-400 hover:underline"
-    >
+      className="text-cyan-400 hover:underline">
       instagram.com/akhil_shetty_m ↗
     </a>
   </div>
@@ -568,8 +545,7 @@ export const logSalesforce = () => (
       href="https://www.salesforce.com/trailblazer/akhilshettym"
       target="_blank"
       rel="noreferrer"
-      className="text-cyan-400 hover:underline"
-    >
+      className="text-cyan-400 hover:underline">
       salesforce.com/trailblazer/akhilshettym ↗
     </a>
   </div>
@@ -578,9 +554,7 @@ export const logSalesforce = () => (
 export const logSocials = () => {
   return (
     <div className="space-y-2 max-w-full text-[11px] font-mono">
-      <span className="text-xs font-medium text-slate-400 block mb-1">
-        System Profile Endpoints
-      </span>
+      <span className="text-xs font-medium text-slate-400 block mb-1">System Profile Endpoints</span>
       {[
         {
           label: "MAIL",
@@ -605,15 +579,9 @@ export const logSocials = () => {
       ].map((soc, i) => (
         <div
           key={i}
-          className="flex justify-between items-center bg-black border border-slate-800 p-2 rounded hover:border-slate-400 transition-all"
-        >
+          className="flex justify-between items-center bg-black border border-slate-800 p-2 rounded hover:border-slate-400 transition-all">
           <span className="text-slate-400">{soc.label}:</span>
-          <a
-            href={soc.url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-cyan-400 hover:underline"
-          >
+          <a href={soc.url} target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
             {soc.val}
           </a>
         </div>
@@ -629,9 +597,7 @@ export const logSudoHire = () => {
         [sudo] password for visitor: <span className="text-slate-700">********</span>
       </div>
       <div className="flex flex-wrap items-center gap-x-2 mt-1">
-        <span className="text-emerald-500 font-medium">
-          ✓ System Authentication verified.
-        </span>
+        <span className="text-emerald-500 font-medium">✓ System Authentication verified.</span>
       </div>
       <div className="text-slate-300 mt-3 pt-2 border-t border-slate-900 font-semibold">
         &gt; Offer profile securely queued for evaluation.
@@ -682,13 +648,12 @@ export const logCatReadme = () => {
       <div className="space-y-2 text-slate-400">
         <p className="text-slate-200 font-medium">Welcome to the inner shell layer.</p>
         <p>
-          I believe design isn't skin-deep decoration; it's structural optimization. Good
-          code elements disappear cleanly into the user experience framework, helping
-          consumers convert decisions instantly.
+          I believe design isn&apos;t skin-deep decoration; it&apos;s structural optimization. Good code elements
+          disappear cleanly into the user experience framework, helping consumers convert decisions instantly.
         </p>
         <p>
-          The web is saturated with concepts that never reach compilation. I focus
-          completely on shipping clean production components.
+          The web is saturated with concepts that never reach compilation. I focus completely on shipping clean
+          production components.
         </p>
         <div className="pt-2 text-slate-300 text-right font-medium italic">— Akhil</div>
       </div>
@@ -699,34 +664,25 @@ export const logCatReadme = () => {
 export const logPingAkhil = () => {
   return (
     <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
-      <div className="text-slate-500 mb-1">
-        PING akhil.shetty.mumbai (192.168.1.337): 56 data bytes
-      </div>
+      <div className="text-slate-500 mb-1">PING akhil.shetty.mumbai (192.168.1.337): 56 data bytes</div>
       <div className="space-y-0.5 text-slate-400">
         <div>
           64 bytes from local.network: icmp_seq=0 ttl=64 time=0.1ms{" "}
-          <span className="text-emerald-400 ml-2">
-            — Network connection fully established
-          </span>
+          <span className="text-emerald-400 ml-2">— Network connection fully established</span>
         </div>
         <div>
           64 bytes from local.network: icmp_seq=1 ttl=64 time=0.2ms{" "}
-          <span className="text-emerald-400 ml-2">
-            — System ready for contract modules
-          </span>
+          <span className="text-emerald-400 ml-2">— System ready for contract modules</span>
         </div>
         <div>
           64 bytes from local.network: icmp_seq=2 ttl=64 time=0.1ms{" "}
-          <span className="text-emerald-400 ml-2">
-            — Engineering response cycles optimized
-          </span>
+          <span className="text-emerald-400 ml-2">— Engineering response cycles optimized</span>
         </div>
       </div>
       <div className="mt-3 pt-2 border-t border-slate-900 text-slate-500">
         <div>--- network statistics ---</div>
         <div className="text-slate-400 mt-0.5">
-          3 packets transmitted, 3 received,{" "}
-          <span className="text-emerald-500">0% packet loss</span>
+          3 packets transmitted, 3 received, <span className="text-emerald-500">0% packet loss</span>
         </div>
       </div>
     </div>
@@ -767,8 +723,7 @@ export const logWhoAmI = () => (
     <br />
     Action Status: Ready to execute operational commands.
     <br />
-    💡 Hint: Try executing <span className="text-cyan-400">/secrets</span> to view hidden
-    configuration systems.
+    💡 Hint: Try executing <span className="text-cyan-400">/secrets</span> to view hidden configuration systems.
   </div>
 );
 
@@ -812,9 +767,7 @@ export const logHelp = () => {
         <span className="font-bold text-white">System Command Index</span>
       </div>
       <div>
-        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">
-          Core Paths
-        </span>
+        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">Core Paths</span>
         <div className="grid grid-cols-[140px_1fr] gap-x-2 mt-1 text-gray-300">
           <span className="text-blue-400">/help</span>
           <span>Render available shell command trees</span>
@@ -837,9 +790,7 @@ export const logHelp = () => {
         </div>
       </div>
       <div>
-        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">
-          Project Deep Links
-        </span>
+        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">Project Deep Links</span>
         <div className="grid grid-cols-[140px_1fr] gap-x-2 mt-1 text-gray-300">
           <span className="text-blue-400">/signals</span>
           <span>Research Integrity Platform setup</span>

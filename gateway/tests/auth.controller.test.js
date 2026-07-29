@@ -1,8 +1,5 @@
 import { jest, describe, it, expect, beforeEach, afterEach } from "@jest/globals";
-import {
-  adminLoginController,
-  adminLogoutController,
-} from "../src/controllers/auth.controller.js";
+import { adminLoginController, adminLogoutController } from "../src/controllers/auth.controller.js";
 import AdminModel from "../src/models/adminModel.js";
 import jwt from "jsonwebtoken";
 
@@ -93,11 +90,7 @@ describe("Auth Controllers", () => {
       await adminLoginController(req, res);
 
       expect(jwt.sign).toHaveBeenCalled();
-      expect(res.cookie).toHaveBeenCalledWith(
-        "token",
-        "mocked_token",
-        expect.any(Object),
-      );
+      expect(res.cookie).toHaveBeenCalledWith("token", "mocked_token", expect.any(Object));
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,

@@ -10,10 +10,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
-import {
-  getQualityPreset,
-  getRendererPixelRatio,
-} from "@/lib/performance/applyQualityTier";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 function BubbleScene() {
   const canvasRef = useRef(null);
@@ -39,12 +36,7 @@ function BubbleScene() {
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog("#ffffff", 20, 52);
 
-    const camera = new THREE.PerspectiveCamera(
-      30,
-      wrapper.clientWidth / wrapper.clientHeight,
-      0.1,
-      1000,
-    );
+    const camera = new THREE.PerspectiveCamera(30, wrapper.clientWidth / wrapper.clientHeight, 0.1, 1000);
     camera.position.set(0, 0.3, 24);
 
     const renderer = new THREE.WebGLRenderer({
@@ -97,11 +89,7 @@ function BubbleScene() {
       const entryRadius = 2.5 + (index % 9) * 0.32;
 
       bubble.scale.set(0.05, 0.05, 0.05);
-      bubble.position.set(
-        Math.cos(entryAngle) * entryRadius,
-        -6 + Math.sin(entryAngle) * 1.2,
-        -6 - (index % 7) * 0.2,
-      );
+      bubble.position.set(Math.cos(entryAngle) * entryRadius, -6 + Math.sin(entryAngle) * 1.2, -6 - (index % 7) * 0.2);
 
       bubble.userData = {
         originalPosition: new THREE.Vector3(pos.x, pos.y, pos.z),
@@ -192,8 +180,7 @@ function BubbleScene() {
           const minDistance = (radiusA + radiusB) * 1.3;
           const distanceSquared = bubbleA.position.distanceToSquared(bubbleB.position);
 
-          if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance)
-            continue;
+          if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance) continue;
 
           const distance = Math.sqrt(distanceSquared);
           tempVector.subVectors(bubbleB.position, bubbleA.position).normalize();
@@ -227,12 +214,9 @@ function BubbleScene() {
           const { originalPosition, velocity, floatOffset } = bubble.userData;
 
           if (!isTier2) {
-            const targetY =
-              originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
-            const targetX =
-              originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
-            const targetZ =
-              originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
+            const targetY = originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
+            const targetX = originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
+            const targetZ = originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
             velocity.x += (targetX - bubble.position.x) * returnStrength;
             velocity.y += (targetY - bubble.position.y) * returnStrength;
             velocity.z += (targetZ - bubble.position.z) * returnStrength;
@@ -361,14 +345,7 @@ function BubbleScene() {
       textures.forEach((texture) => texture.dispose());
       renderer.dispose();
     };
-  }, [
-    isTier2,
-    quality.antialias,
-    quality.bubbleCollisionLimit,
-    shouldReduceMotion,
-    tier,
-    isMobile,
-  ]);
+  }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier, isMobile]);
 
   return (
     <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
@@ -385,18 +362,14 @@ function BubbleScene() {
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         viewport={{ once: true, amount: 0.4 }}
-        className="bubble-content relative z-10 w-full max-w-6xl mx-auto px-6 -mt-8"
-      >
+        className="bubble-content relative z-10 w-full max-w-6xl mx-auto px-6 -mt-8">
         <div className="bubble-content-inner">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
             {BUBBLE_TEXT_GROUPS.map((group) => (
               <div
                 key={group.summary}
-                className="flex flex-col space-y-2 p-4 border border-neutral-200 bg-white shadow-[4px_4px_0px_#000000]"
-              >
-                <p className="text-sm font-sans text-neutral-800 leading-relaxed font-medium">
-                  {group.summary}
-                </p>
+                className="flex flex-col space-y-2 p-4 border border-neutral-200 bg-white shadow-[4px_4px_0px_#000000]">
+                <p className="text-sm font-sans text-neutral-800 leading-relaxed font-medium">{group.summary}</p>
               </div>
             ))}
           </div>

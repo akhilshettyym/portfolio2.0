@@ -41,9 +41,7 @@ describe("CreateSomething Component", () => {
     render(<CreateSomething />);
 
     expect(screen.getByPlaceholderText("What should I call you?")).toBeInTheDocument();
-    expect(
-      screen.queryByPlaceholderText("Company or project name"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("Company or project name")).not.toBeInTheDocument();
   });
 
   it("shows validation error if required fields are missing", async () => {
@@ -72,9 +70,7 @@ describe("CreateSomething Component", () => {
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Your message body must be at least 10 characters long."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Your message body must be at least 10 characters long.")).toBeInTheDocument();
     });
   });
 
@@ -88,19 +84,14 @@ describe("CreateSomething Component", () => {
     fireEvent.change(screen.getByPlaceholderText("How I'll reach you"), {
       target: { value: "jane@test.com" },
     });
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Provide an overview of objectives, tech requirements, scope...",
-      ),
-      { target: { value: "Valid message length here" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Provide an overview of objectives, tech requirements, scope..."), {
+      target: { value: "Valid message length here" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Please fill out your Organization and Role details."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Please fill out your Organization and Role details.")).toBeInTheDocument();
     });
   });
 
@@ -120,19 +111,14 @@ describe("CreateSomething Component", () => {
     fireEvent.change(screen.getByPlaceholderText("e.g. Founder, Product Lead"), {
       target: { value: "CEO" },
     });
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Provide an overview of objectives, tech requirements, scope...",
-      ),
-      { target: { value: "Valid message length here" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Provide an overview of objectives, tech requirements, scope..."), {
+      target: { value: "Valid message length here" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Please select at least one engineering project service type."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Please select at least one engineering project service type.")).toBeInTheDocument();
     });
   });
 
@@ -153,19 +139,14 @@ describe("CreateSomething Component", () => {
       target: { value: "CEO" },
     });
     fireEvent.click(screen.getByText("Web Development"));
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Provide an overview of objectives, tech requirements, scope...",
-      ),
-      { target: { value: "Valid message length here" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Provide an overview of objectives, tech requirements, scope..."), {
+      target: { value: "Valid message length here" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Please select an estimated allocation budget option."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Please select an estimated allocation budget option.")).toBeInTheDocument();
     });
   });
 

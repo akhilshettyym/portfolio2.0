@@ -10,13 +10,7 @@ import { useDeviceType } from "@/hooks/useDeviceType";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 
 function splitLetters(text) {
   return Array.from(text);
@@ -39,8 +33,7 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
             delay: delay + index * 0.015,
           }}
           className="inline-block"
-          style={{ whiteSpace: char === " " ? "pre" : "normal" }}
-        >
+          style={{ whiteSpace: char === " " ? "pre" : "normal" }}>
           {char === " " ? "\u00A0" : char}
         </motion.span>
       ))}
@@ -56,16 +49,10 @@ const MarqueeLine = ({ text, large }) => {
       <motion.div
         className="flex w-max items-center gap-6 whitespace-nowrap"
         transition={{ duration: 46, ease: "linear", repeat: Infinity }}
-        animate={marqueeAnimation}
-      >
+        animate={marqueeAnimation}>
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="flex items-center gap-6">
-            <span
-              className={`font-bold text-black/90 ${large ? "text-[5rem]" : "text-[2rem]"}`}
-            >
-              {" "}
-              {text}{" "}
-            </span>
+            <span className={`font-bold text-black/90 ${large ? "text-[5rem]" : "text-[2rem]"}`}> {text} </span>
             <span className="h-3 w-3 rounded-full bg-black/90 sm:h-4 sm:w-4" />
           </div>
         ))}
@@ -79,12 +66,10 @@ const MarqueeLineLow = ({ text, large, isMobile }) => {
     <div className="relative overflow-hidden py-2">
       <motion.div
         className="flex w-max items-center gap-6 whitespace-nowrap"
-        transition={{ duration: 46, ease: "linear", repeat: Infinity }}
-      >
+        transition={{ duration: 46, ease: "linear", repeat: Infinity }}>
         <div className="flex items-center gap-6">
           <span
-            className={`font-bold text-black/90 ${large ? (isMobile ? "text-[3rem]" : "text-[5rem]") : "text-[2rem]"}`}
-          >
+            className={`font-bold text-black/90 ${large ? (isMobile ? "text-[3rem]" : "text-[5rem]") : "text-[2rem]"}`}>
             {" "}
             {text}{" "}
           </span>
@@ -115,15 +100,17 @@ const Footer = () => {
     offset: ["start end", "end start"],
   });
 
-  const sectionPadding = useSpring(
-    useTransform(scrollYProgress, [0, 0.28, 0.42, 0.56, 1], [50, 50, 30, 0, 0]),
-    { stiffness: 72, damping: 20, mass: 0.9 },
-  );
+  const sectionPadding = useSpring(useTransform(scrollYProgress, [0, 0.28, 0.42, 0.56, 1], [50, 50, 30, 0, 0]), {
+    stiffness: 72,
+    damping: 20,
+    mass: 0.9,
+  });
 
-  const revealLift = useSpring(
-    useTransform(scrollYProgress, [0, 0.28, 0.55, 1], [16, 10, 0, 0]),
-    { stiffness: 80, damping: 22, mass: 0.8 },
-  );
+  const revealLift = useSpring(useTransform(scrollYProgress, [0, 0.28, 0.55, 1], [16, 10, 0, 0]), {
+    stiffness: 80,
+    damping: 22,
+    mass: 0.8,
+  });
 
   const shellShadow = useTransform(
     scrollYProgress,
@@ -136,23 +123,11 @@ const Footer = () => {
     ],
   );
 
-  const curtainOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.12, 0.3, 0.56, 1],
-    [1, 0.96, 0.84, 0.42, 0],
-  );
+  const curtainOpacity = useTransform(scrollYProgress, [0, 0.12, 0.3, 0.56, 1], [1, 0.96, 0.84, 0.42, 0]);
 
-  const gridOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.18, 0.5, 1],
-    [0.18, 0.14, 0.08, 0],
-  );
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.18, 0.5, 1], [0.18, 0.14, 0.08, 0]);
 
-  const glowOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.12, 0.34, 0.7, 1],
-    [0.32, 0.22, 0.12, 0.04, 0],
-  );
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.12, 0.34, 0.7, 1], [0.32, 0.22, 0.12, 0.04, 0]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -186,25 +161,16 @@ const Footer = () => {
     goToTop();
   };
 
-  const topOverlayOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.5, 1],
-    [0.7, 0.5, 0.2, 0],
-  );
+  const topOverlayOpacity = useTransform(scrollYProgress, [0, 0.2, 0.5, 1], [0.7, 0.5, 0.2, 0]);
 
-  const topBorderOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.18, 0.45, 1],
-    [0.85, 0.5, 0.18, 0],
-  );
+  const topBorderOpacity = useTransform(scrollYProgress, [0, 0.18, 0.45, 1], [0.85, 0.5, 0.18, 0]);
 
   const renderTierOneFooter = () => {
     return (
       <motion.section
         ref={sectionRef}
         style={prefersReducedMotion ? undefined : { padding: sectionPadding }}
-        className="relative z-50 w-full bg-white text-black p-12.5"
-      >
+        className="relative z-50 w-full bg-white text-black p-12.5">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <motion.div
             style={{ opacity: glowOpacity }}
@@ -223,11 +189,8 @@ const Footer = () => {
         </div>
 
         <motion.div
-          style={
-            prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }
-          }
-          className="relative mx-auto min-h-svh w-full overflow-hidden bg-white z-10"
-        >
+          style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }}
+          className="relative mx-auto min-h-svh w-full overflow-hidden bg-white z-10">
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_20%,transparent_45%)]"
@@ -247,10 +210,7 @@ const Footer = () => {
                   <div className="flex h-full w-full flex-col gap-4">
                     <div className="flex flex-1 items-center justify-center p-4 text-indigo-900">
                       <div className="overflow-hidden">
-                        <MarqueeLine
-                          large={true}
-                          text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."
-                        />
+                        <MarqueeLine large={true} text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
                         <MarqueeLine text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
                       </div>
                     </div>
@@ -259,9 +219,7 @@ const Footer = () => {
                       <div className="flex h-full w-full flex-col gap-4">
                         <div className="flex-1 rounded-md">
                           <div className="flex flex-row gap-4 h-full w-full">
-                            <div className="flex-1 bg-gray-300 rounded-md p-4">
-                              This section is built to feel alive
-                            </div>
+                            <div className="flex-1 bg-gray-300 rounded-md p-4">This section is built to feel alive</div>
 
                             <div className="flex-1 bg-gray-200 rounded-md p-4">
                               <div className="absolute top-4 right-5 z-10 bg-gray-200 mt-1">
@@ -280,10 +238,7 @@ const Footer = () => {
                         </div>
 
                         <div className="flex-1 rounded-md">
-                          <motion.p
-                            {...animatedCard}
-                            className="text-balance text-[15px] text-black/80"
-                          >
+                          <motion.p {...animatedCard} className="text-balance text-[15px] text-black/80">
                             <AnimatedWord
                               delay={0.06}
                               text="This section is built to feel alive: the footer peeks into the viewport, then smoothly expands to fill the screen with a clean white background, subtle grain, repeated typography, and an award-inspired content layout that feels both playful and intentional."
@@ -309,9 +264,7 @@ const Footer = () => {
                       />
                     </div>
 
-                    <div className="w-[50%] bg-white rounded-md p-3 border border-slate-100">
-                      ABOUT
-                    </div>
+                    <div className="w-[50%] bg-white rounded-md p-3 border border-slate-100">ABOUT</div>
                   </div>
 
                   <div className="relative flex h-[65%] flex-col justify-between overflow-hidden rounded-md border border-slate-200 p-5">
@@ -327,8 +280,7 @@ const Footer = () => {
                               href={social.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="group relative block overflow-hidden bg-white px-4 py-1 transition-all duration-300 hover:-translate-y-1"
-                            >
+                              className="group relative block overflow-hidden bg-white px-4 py-1 transition-all duration-300 hover:-translate-y-1">
                               <div className="relative flex items-center gap-3">
                                 <div className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-100">
                                   <Icon className="text-base text-slate-600 group-hover:text-indigo-600" />
@@ -344,12 +296,7 @@ const Footer = () => {
                     </div>
 
                     <div className="flex justify-end mt-2">
-                      <CustomButton
-                        title="Let's Get In Contact"
-                        onClick={handleNavigation}
-                        width="250"
-                        height="45"
-                      />
+                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
                     </div>
                   </div>
                 </div>
@@ -359,9 +306,7 @@ const Footer = () => {
             <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4 py-5">
               <div className="mb-5 flex h-[20vh] w-full gap-2 bg-gray-300 p-2">
                 <div className="flex h-full w-[20%] flex-col rounded-md border border-slate-200 bg-white p-4 text-black shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">
-                    Made in india
-                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">Made in india</p>
 
                   <div className="mt-auto flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400">
                     <span> 2026 </span> <span> v1.0 </span>
@@ -381,9 +326,8 @@ const Footer = () => {
                 <div className="flex w-[80%] flex-col gap-2">
                   <div className="group relative flex-2 overflow-hidden border border-slate-200 bg-white p-2 shadow-sm">
                     <p className="text-sm leading-relaxed text-slate-700">
-                      Think more, design less. Build intentionally. Refactor ruthlessly.
-                      Simplify until it breaks. Ship often. Leave the web better than you
-                      found it. Build hooks, not walls. For best results, pair with
+                      Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
+                      often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
                       coffee, curiosity, and a dash of skepticism.
                     </p>
                   </div>
@@ -418,8 +362,7 @@ const Footer = () => {
               <div className="absolute top-5 right-5 z-10">
                 <button
                   onClick={goToTop}
-                  className="flex items-center gap-1.5 text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer"
-                >
+                  className="flex items-center gap-1.5 text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
                   <span className="uppercase"> Back To Top </span>
                   <Image
                     src="/footer/barcode_name.svg"
@@ -454,10 +397,7 @@ const Footer = () => {
 
   const renderTierTwoFooter = () => {
     return (
-      <motion.section
-        ref={sectionRef}
-        className="relative z-50 w-full bg-white text-black overflow-hidden"
-      >
+      <motion.section ref={sectionRef} className="relative z-50 w-full bg-white text-black overflow-hidden">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <motion.div
             style={{ opacity: glowOpacity }}
@@ -476,11 +416,8 @@ const Footer = () => {
         </div>
 
         <motion.div
-          style={
-            prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }
-          }
-          className="relative mx-auto min-h-svh w-full overflow-hidden rounded-none bg-white z-10 flex flex-col justify-between"
-        >
+          style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shellShadow }}
+          className="relative mx-auto min-h-svh w-full overflow-hidden rounded-none bg-white z-10 flex flex-col justify-between">
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08),rgba(255,255,255,0.02)_20%,transparent_45%)]"
@@ -504,34 +441,19 @@ const Footer = () => {
                           <MarqueeLineLow
                             isMobile={isMobile}
                             large={true}
-                            text={
-                              isMobile
-                                ? "CREATIVELY"
-                                : "A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."
-                            }
+                            text={isMobile ? "CREATIVELY" : "A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."}
                           />
                           <MarqueeLineLow
                             isMobile={isMobile}
-                            text={
-                              isMobile
-                                ? "DRIVEN DESIGNER"
-                                : "DRIVEN DESIGNER & DEVELOPER."
-                            }
+                            text={isMobile ? "DRIVEN DESIGNER" : "DRIVEN DESIGNER & DEVELOPER."}
                           />
                         </>
                       ) : (
                         <>
-                          <MarqueeLine
-                            large={true}
-                            text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."
-                          />
+                          <MarqueeLine large={true} text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
                           <MarqueeLine
                             isMobile={isMobile}
-                            text={
-                              isMobile
-                                ? "DRIVEN DESIGNER"
-                                : "DRIVEN DESIGNER & DEVELOPER."
-                            }
+                            text={isMobile ? "DRIVEN DESIGNER" : "DRIVEN DESIGNER & DEVELOPER."}
                           />
                         </>
                       )}
@@ -546,8 +468,7 @@ const Footer = () => {
                         </div>
 
                         <div
-                          className={`flex-1 bg-gray-200 rounded-md relative ${isMobile ? "min-h-15" : "p-4 min-h-20"}`}
-                        >
+                          className={`flex-1 bg-gray-200 rounded-md relative ${isMobile ? "min-h-15" : "p-4 min-h-20"}`}>
                           <div className="absolute top-2 sm:top-4 sm:right-5 z-10 bg-gray-200">
                             <Image
                               src="/footer/animated_zigzag.gif"
@@ -563,11 +484,9 @@ const Footer = () => {
 
                       <div className="w-full rounded-md mt-2">
                         <p className="text-balance text-xs sm:text-[15px] text-black/80 text-justify leading-relaxed">
-                          This section is built to feel alive: the footer peeks into the
-                          viewport, then smoothly expands to fill the screen with a clean
-                          white background, subtle grain, repeated typography, and an
-                          award-inspired content layout that feels both playful and
-                          intentional.
+                          This section is built to feel alive: the footer peeks into the viewport, then smoothly expands
+                          to fill the screen with a clean white background, subtle grain, repeated typography, and an
+                          award-inspired content layout that feels both playful and intentional.
                         </p>
                       </div>
                     </div>
@@ -607,8 +526,7 @@ const Footer = () => {
                               href={social.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="group relative block overflow-hidden bg-white px-3 py-1.5 border border-slate-50 rounded-md transition-all duration-300 hover:-translate-y-1"
-                            >
+                              className="group relative block overflow-hidden bg-white px-3 py-1.5 border border-slate-50 rounded-md transition-all duration-300 hover:-translate-y-1">
                               <div className="relative flex items-center gap-3">
                                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100">
                                   <Icon className="text-sm text-slate-600 group-hover:text-indigo-600" />
@@ -639,9 +557,7 @@ const Footer = () => {
             <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 py-5 mt-auto">
               <div className="mb-5 flex flex-col md:flex-row w-full gap-3 bg-gray-100 md:bg-gray-300 p-2 rounded-md">
                 <div className="flex h-auto md:h-full w-full md:w-[25%] lg:w-[20%] flex-col justify-between rounded-md border border-slate-200 bg-white p-4 text-black shadow-sm gap-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Made in india
-                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Made in india</p>
 
                   <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-slate-400 font-mono">
                     <span> 2026 </span> <span> v1.0 </span>
@@ -663,9 +579,8 @@ const Footer = () => {
                 <div className="flex w-full md:w-[75%] lg:w-[80%] flex-col gap-2">
                   <div className="group relative flex-1 overflow-hidden border border-slate-200 bg-white p-2 sm:p-4 rounded-md shadow-sm">
                     <p className="text-xs sm:text-sm leading-relaxed text-slate-700 text-pretty">
-                      Think more, design less. Build intentionally. Refactor ruthlessly.
-                      Simplify until it breaks. Ship often. Leave the web better than you
-                      found it. Build hooks, not walls. For best results, pair with
+                      Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
+                      often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
                       coffee, curiosity, and a dash of skepticism.
                     </p>
                   </div>
@@ -700,8 +615,7 @@ const Footer = () => {
               <div className="absolute top-2 right-4 sm:top-5 sm:right-5 z-20">
                 <button
                   onClick={goToTop}
-                  className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer"
-                >
+                  className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
                   <span className="uppercase"> Back To Top </span>
                   <Image
                     src="/footer/barcode_name.svg"
@@ -718,8 +632,7 @@ const Footer = () => {
               <div className="absolute top-2 left-4 sm:top-5 sm:left-10 z-20">
                 <button
                   onClick={handleNavigation}
-                  className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer"
-                >
+                  className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-black/50 hover:opacity-70 transition-opacity cursor-pointer">
                   <span className="uppercase">Am probably not sleeping, Hit me up</span>
                 </button>
               </div>

@@ -7,10 +7,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const DynamicGithubGraphQl = dynamic(() => import("@/components/GithubGraphQl"), {
   loading: () => (
-    <div
-      style={{ width: "100%", height: "300px", background: "#ffffff" }}
-      className="w-full animate-pulse"
-    />
+    <div style={{ width: "100%", height: "300px", background: "#ffffff" }} className="w-full animate-pulse" />
   ),
   ssr: false,
 });
@@ -29,35 +26,17 @@ export default function GithubGraphQlTiered(props) {
   }, []);
 
   if (!mounted || !ready) {
-    return (
-      <div
-        ref={ref}
-        style={{ width: "100%", minHeight: "420px", background: "#ffffff" }}
-      />
-    );
+    return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "#ffffff" }} />;
   }
 
   if (isTier2 && !shouldRender) {
-    return (
-      <div
-        ref={ref}
-        style={{ width: "100%", minHeight: "420px", background: "#ffffff" }}
-      />
-    );
+    return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "#ffffff" }} />;
   }
 
   return (
     <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
-      <Suspense
-        fallback={
-          <div style={{ width: "100%", height: "300px", background: "#ffffff" }} />
-        }
-      >
-        <DynamicGithubGraphQl
-          {...props}
-          isTieredWrapper={isTier2}
-          forceTriggerAnimation={shouldRender}
-        />
+      <Suspense fallback={<div style={{ width: "100%", height: "300px", background: "#ffffff" }} />}>
+        <DynamicGithubGraphQl {...props} isTieredWrapper={isTier2} forceTriggerAnimation={shouldRender} />
       </Suspense>
     </div>
   );

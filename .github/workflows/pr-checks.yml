@@ -1,4 +1,4 @@
-name: PR Checks
+name: production
 
 on:
   pull_request:
@@ -12,16 +12,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          # Critical: Gitleaks needs the commit history to see what changed in the PR
           fetch-depth: 0
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Note: If your repository belongs to a GitHub Organization (not a personal account),
-          # you must obtain a free license from gitleaks.io and add it as a repository secret:
-          # GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
   core-checks:
     name: Core (Admin UI) Checks
@@ -113,8 +109,8 @@ jobs:
       - name: Check Formatting
         run: npm run format:check
 
-      # - name: Run Linter
-      #   run: npm run lint
+      - name: Run Linter
+        run: npm run lint
 
       - name: Run Jest Tests
         run: npm run jest

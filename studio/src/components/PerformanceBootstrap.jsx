@@ -3,11 +3,7 @@
 import GlobalCursor from "@/components/GlobalCursor";
 import { TIER_EVENT, PERF_TIERS } from "@/utils/storage";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import {
-  calibratePerformance,
-  getSavedTier,
-  savePerformanceTier,
-} from "@/lib/performance/performanceTier";
+import { calibratePerformance, getSavedTier, savePerformanceTier } from "@/lib/performance/performanceTier";
 
 export const PerformanceTierContext = createContext(null);
 
@@ -53,10 +49,7 @@ export default function PerformanceBootstrap({ children }) {
     const originalWarn = console.warn;
     console.warn = (...args) => {
       const first = args[0];
-      if (
-        typeof first === "string" &&
-        first.includes("THREE.Clock: This module has been deprecated")
-      ) {
+      if (typeof first === "string" && first.includes("THREE.Clock: This module has been deprecated")) {
         return;
       }
       originalWarn(...args);

@@ -8,12 +8,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const DynamicMySocials = dynamic(() => import("@/components/MySocials"), {
   ssr: false,
-  loading: () => (
-    <div
-      style={{ minHeight: "500px", background: "#ffffff" }}
-      className="w-full animate-pulse"
-    />
-  ),
+  loading: () => <div style={{ minHeight: "500px", background: "#ffffff" }} className="w-full animate-pulse" />,
 });
 
 export default function MySocialsTiered(props) {
@@ -28,12 +23,7 @@ export default function MySocialsTiered(props) {
   }, []);
 
   if (!mounted || !ready) {
-    return (
-      <div
-        ref={ref}
-        style={{ width: "100%", minHeight: "500px", background: "#ffffff" }}
-      />
-    );
+    return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />;
   }
 
   if (isTier2 || isMobile) {
@@ -41,21 +31,12 @@ export default function MySocialsTiered(props) {
   }
 
   if (!shouldRender) {
-    return (
-      <div
-        ref={ref}
-        style={{ width: "100%", minHeight: "500px", background: "#ffffff" }}
-      />
-    );
+    return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />;
   }
 
   return (
     <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
-      <Suspense
-        fallback={
-          <div style={{ minHeight: "500px", background: "#ffffff" }} className="w-full" />
-        }
-      >
+      <Suspense fallback={<div style={{ minHeight: "500px", background: "#ffffff" }} className="w-full" />}>
         <DynamicMySocials {...props} isTieredWrapper={isTier2} />
       </Suspense>
     </div>

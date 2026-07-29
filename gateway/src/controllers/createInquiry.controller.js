@@ -7,32 +7,20 @@ import ContactInquiry from "../models/userModel.js";
  */
 export const createInquiry = async (req, res) => {
   try {
-    const {
-      name,
-      email,
-      organization,
-      role,
-      purpose,
-      projectType,
-      budget,
-      deadline,
-      message,
-    } = req.body;
+    const { name, email, organization, role, purpose, projectType, budget, deadline, message } = req.body;
 
     const recentInquiry = await ContactInquiry.findOne({ email }).sort({
       createdAt: -1,
     });
 
     if (recentInquiry) {
-      const timeSinceLastInquiry =
-        Date.now() - new Date(recentInquiry.createdAt).getTime();
+      const timeSinceLastInquiry = Date.now() - new Date(recentInquiry.createdAt).getTime();
       const fiveMinutesInMs = 5 * 60 * 1000;
 
       if (timeSinceLastInquiry < fiveMinutesInMs) {
         return res.status(429).json({
           success: false,
-          message:
-            "Please wait 5 minutes before submitting another inquiry from this email.",
+          message: "Please wait 5 minutes before submitting another inquiry from this email.",
         });
       }
     }
@@ -97,9 +85,7 @@ export const createInquiry = async (req, res) => {
           );
         }
 
-        const formattedMessage = message
-          ? `>>> ${sanitizeString(message)}`
-          : "*No message provided.*";
+        const formattedMessage = message ? `>>> ${sanitizeString(message)}` : "*No message provided.*";
         fields.push({
           name: "Message",
           value: formattedMessage,
@@ -153,9 +139,7 @@ export const createInquiry = async (req, res) => {
         console.error("Error preparing Discord webhook:", webhookError.message);
       }
     } else {
-      console.warn(
-        "DISCORD_WEBHOOK_URL is not defined. Inquiry created but no notification sent.",
-      );
+      console.warn("DISCORD_WEBHOOK_URL is not defined. Inquiry created but no notification sent.");
     }
 
     return res.status(201).json({

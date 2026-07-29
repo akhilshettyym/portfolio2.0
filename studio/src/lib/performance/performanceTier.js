@@ -16,10 +16,7 @@ export function getSavedTier() {
     const stored = w.localStorage.getItem(PERF_TIER);
     return isValidTier(stored) ? stored : null;
   } catch (error) {
-    console.warn(
-      "PerformanceEngine: Storage read blocked by browser security restrictions:",
-      error.message,
-    );
+    console.warn("PerformanceEngine: Storage read blocked by browser security restrictions:", error.message);
     return null;
   }
 }
@@ -36,18 +33,12 @@ export function savePerformanceTier(tier) {
     try {
       w.localStorage.removeItem(LEGACY_TIER);
     } catch (cleanupError) {
-      console.debug(
-        "PerformanceEngine: Failed to remove legacy migration keys:",
-        cleanupError.message,
-      );
+      console.debug("PerformanceEngine: Failed to remove legacy migration keys:", cleanupError.message);
     }
 
     w.dispatchEvent(new CustomEvent(TIER_EVENT, { detail: tier }));
   } catch (writeError) {
-    console.error(
-      "PerformanceEngine: State synchronization failed to save locally:",
-      writeError.message,
-    );
+    console.error("PerformanceEngine: State synchronization failed to save locally:", writeError.message);
   }
 }
 
@@ -69,12 +60,8 @@ export function probeGPUInfo() {
     vendor: "unknown",
     renderer: "unknown",
     maxTextureSize: 0,
-    hardwareConcurrency:
-      typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2,
-    deviceMemory:
-      typeof navigator !== "undefined" && navigator.deviceMemory
-        ? navigator.deviceMemory
-        : 4,
+    hardwareConcurrency: typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2,
+    deviceMemory: typeof navigator !== "undefined" && navigator.deviceMemory ? navigator.deviceMemory : 4,
     isWebGL2Available: false,
     caveatBlocked: true,
   };
@@ -126,9 +113,7 @@ export function probeGPUInfo() {
     vendor,
     renderer,
     maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE) || 0,
-    isWebGL2Available:
-      typeof WebGL2RenderingContext !== "undefined" &&
-      gl instanceof WebGL2RenderingContext,
+    isWebGL2Available: typeof WebGL2RenderingContext !== "undefined" && gl instanceof WebGL2RenderingContext,
     caveatBlocked: false,
   };
 

@@ -22,10 +22,7 @@ export default function EmergencyCTA() {
       <div className="relative z-10">
         <div className="relative flex flex-row items-center overflow-hidden w-full bg-white px-10">
           <div className="flex-1 rounded-lg text-sm px-4 overflow-hidden min-w-0 flex items-center">
-            <button
-              onClick={handleRedirection}
-              className="group block w-full cursor-pointer"
-            >
+            <button onClick={handleRedirection} className="group block w-full cursor-pointer">
               {isTier2 ? (
                 <>
                   <div className="flex whitespace-nowrap">
@@ -39,8 +36,7 @@ export default function EmergencyCTA() {
                   {Array.from({ length: 6 }).map((_, i) => (
                     <span
                       key={i}
-                      className="mx-8 text-sm uppercase tracking-normal font-medium text-black transition-colors duration-200 group-hover:text-indigo-600 group-hover:underline decoration-2 underline-offset-4 pointer-events-none"
-                    >
+                      className="mx-8 text-sm uppercase tracking-normal font-medium text-black transition-colors duration-200 group-hover:text-indigo-600 group-hover:underline decoration-2 underline-offset-4 pointer-events-none">
                       IN CASE OF EMERGENCY. PLEASE GO BACK AND VIEW ALL PROJECTS
                     </span>
                   ))}
@@ -71,10 +67,7 @@ export default function EmergencyCTA() {
           </div>
 
           <div className="flex-1 rounded-lg text-sm px-4 overflow-hidden min-w-0 flex items-center">
-            <button
-              onClick={handleRedirection}
-              className="group block w-full cursor-pointer"
-            >
+            <button onClick={handleRedirection} className="group block w-full cursor-pointer">
               {isTier2 ? (
                 <>
                   <div className="flex whitespace-nowrap">
@@ -88,8 +81,7 @@ export default function EmergencyCTA() {
                   {Array.from({ length: 6 }).map((_, i) => (
                     <span
                       key={i}
-                      className="mx-8 text-xs md:text-sm uppercase tracking-normal font-medium text-black transition-colors duration-200 group-hover:text-indigo-600 group-hover:underline decoration-2 underline-offset-4 pointer-events-none"
-                    >
+                      className="mx-8 text-xs md:text-sm uppercase tracking-normal font-medium text-black transition-colors duration-200 group-hover:text-indigo-600 group-hover:underline decoration-2 underline-offset-4 pointer-events-none">
                       IN CASE OF EMERGENCY. PLEASE GO BACK AND VIEW ALL PROJECTS
                     </span>
                   ))}

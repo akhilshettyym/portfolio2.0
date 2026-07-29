@@ -11,8 +11,7 @@
     "test:watch": "jest --watch",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "validate": "npm run format:check && npm run lint && npm run jest",
-    "test": "npm run validate"
+    "validate": "npm run format:check && npm run lint && npm run jest"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

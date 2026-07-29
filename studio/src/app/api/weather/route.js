@@ -10,10 +10,7 @@ export async function GET(request) {
 
     url.searchParams.set("latitude", latitude);
     url.searchParams.set("longitude", longitude);
-    url.searchParams.set(
-      "current",
-      "temperature_2m,weather_code,is_day,cloud_cover,wind_speed_10m",
-    );
+    url.searchParams.set("current", "temperature_2m,weather_code,is_day,cloud_cover,wind_speed_10m");
     url.searchParams.set("daily", "sunrise,sunset");
     url.searchParams.set("timezone", "auto");
 

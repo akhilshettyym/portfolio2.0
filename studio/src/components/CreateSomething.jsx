@@ -8,16 +8,7 @@ import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
 
-const InputField = ({
-  label,
-  name,
-  placeholder,
-  value,
-  onChange,
-  type = "text",
-  autoComplete,
-  required = false,
-}) => {
+const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
   return (
     <div>
       <label className="text-xs uppercase tracking-wide text-neutral-500">
@@ -56,9 +47,7 @@ export default function CreateSomething() {
 
   const toggleService = (serviceId) => {
     setSelectedServices((prev) =>
-      prev.includes(serviceId)
-        ? prev.filter((item) => item !== serviceId)
-        : [...prev, serviceId],
+      prev.includes(serviceId) ? prev.filter((item) => item !== serviceId) : [...prev, serviceId],
     );
   };
 
@@ -162,8 +151,7 @@ export default function CreateSomething() {
       ShowToast.success(response?.data?.message);
     } catch (error) {
       console.error("Submission Error Pipeline Logs:", error.response?.data || error);
-      const errorMessage =
-        error.response?.data?.message || error.message || "Validation Error detected.";
+      const errorMessage = error.response?.data?.message || error.message || "Validation Error detected.";
       setStatus({ type: "error", message: errorMessage });
       ShowToast.error(errorMessage);
     } finally {
@@ -187,8 +175,7 @@ export default function CreateSomething() {
                     setPurpose("say_hi");
                     setStatus({ type: "", message: "" });
                   }}
-                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}
-                >
+                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
                   Just Say Hi
                 </button>
 
@@ -198,8 +185,7 @@ export default function CreateSomething() {
                     setPurpose("work");
                     setStatus({ type: "", message: "" });
                   }}
-                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}
-                >
+                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
                   {isMobile ? "Build Project" : "Build A Project"}
                 </button>
               </div>
@@ -242,8 +228,7 @@ export default function CreateSomething() {
                       required={true}
                     />
                     <p className="text-[10px] text-neutral-400 tracking-widest pl-0.5">
-                      Please enter a valid email address so I can reliably get back to
-                      you.
+                      Please enter a valid email address so I can reliably get back to you.
                     </p>
                   </div>
 
@@ -276,8 +261,7 @@ export default function CreateSomething() {
                     About The Project
                   </h3>
                   <label className="mb-6 block text-[11px] uppercase tracking-wider text-neutral-400">
-                    What development service model do you need?{" "}
-                    <span className="text-red-600">*</span>
+                    What development service model do you need? <span className="text-red-600">*</span>
                   </label>
 
                   <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -288,8 +272,7 @@ export default function CreateSomething() {
                           key={service.id}
                           type="button"
                           onClick={() => toggleService(service.id)}
-                          className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-200 rounded-none text-xs uppercase tracking-wide ${checked ? "border-black bg-black text-white" : "border-neutral-200 bg-white text-black  hover:border-black"}`}
-                        >
+                          className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-200 rounded-none text-xs uppercase tracking-wide ${checked ? "border-black bg-black text-white" : "border-neutral-200 bg-white text-black  hover:border-black"}`}>
                           <span> {service.label} </span>
                           {checked && <CheckIcon className="text-sm shrink-0 ml-2" />}
                         </button>
@@ -307,17 +290,12 @@ export default function CreateSomething() {
                         <select
                           value={budget}
                           onChange={(e) => setBudget(e.target.value)}
-                          className="w-full appearance-none bg-transparent px-5 py-4 outline-none text-xs uppercase tracking-wider rounded-none pr-12 cursor-pointer text-black"
-                        >
+                          className="w-full appearance-none bg-transparent px-5 py-4 outline-none text-xs uppercase tracking-wider rounded-none pr-12 cursor-pointer text-black">
                           <option value="" className="bg-white text-black">
                             Select range allocation
                           </option>
                           {BUDGET_OPTIONS.map((item) => (
-                            <option
-                              key={item.id}
-                              value={item.id}
-                              className="bg-white text-black"
-                            >
+                            <option key={item.id} value={item.id} className="bg-white text-black">
                               {item.label}
                             </option>
                           ))}
@@ -338,8 +316,7 @@ export default function CreateSomething() {
 
               <div>
                 <h3 className="mb-6 text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
-                  {purpose === "work" ? "Project Details" : "Your Message"}{" "}
-                  <span className="text-red-600">*</span>
+                  {purpose === "work" ? "Project Details" : "Your Message"} <span className="text-red-600">*</span>
                 </h3>
                 <textarea
                   rows={6}
@@ -359,20 +336,13 @@ export default function CreateSomething() {
                 {status.message && (
                   <p
                     className={`text-xs tracking-wide w-full sm:w-auto text-center sm:text-right ${status.type === "success" ? "text-emerald-700" : "text-red-700 font-bold"}`}
-                    aria-live="polite"
-                  >
+                    aria-live="polite">
                     {status.message}
                   </p>
                 )}
                 <div className="w-full sm:w-auto flex justify-end">
                   <CustomButton
-                    title={
-                      loading
-                        ? "Processing..."
-                        : purpose === "work"
-                          ? "Submit Project Request"
-                          : "Send Message"
-                    }
+                    title={loading ? "Processing..." : purpose === "work" ? "Submit Project Request" : "Send Message"}
                     onClick={handleSubmit}
                     width={290}
                     height={50}

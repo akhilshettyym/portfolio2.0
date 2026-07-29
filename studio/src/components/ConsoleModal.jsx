@@ -12,8 +12,7 @@ const AnimatedOutput = ({ children }) => {
 
   return (
     <div
-      className={`transition-all duration-500 ease-out origin-top ${isVisible ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-75 -translate-y-2"}`}
-    >
+      className={`transition-all duration-500 ease-out origin-top ${isVisible ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-75 -translate-y-2"}`}>
       {children}
     </div>
   );
@@ -43,16 +42,7 @@ function ConsoleModal({ isOpen, onClose }) {
 
   const pendingScrollRef = useRef(null);
 
-  const HINTS = [
-    "/skills",
-    "/projects",
-    "/experience",
-    "/socials",
-    "whoami",
-    "/secrets",
-    "clear",
-    "/philosophy",
-  ];
+  const HINTS = ["/skills", "/projects", "/experience", "/socials", "whoami", "/secrets", "clear", "/philosophy"];
 
   useEffect(() => {
     if (isOpen) {
@@ -78,10 +68,7 @@ function ConsoleModal({ isOpen, onClose }) {
 
       if (bootPhase === "loading") {
         setBootProgress(0);
-        setBootLogs([
-          "$ npm install @akhilshetty/portfolio-core",
-          "npm info it worked if it ends with ok",
-        ]);
+        setBootLogs(["$ npm install @akhilshetty/portfolio-core", "npm info it worked if it ends with ok"]);
       }
       return () => window.clearTimeout(renderHandle);
     } else {
@@ -89,7 +76,7 @@ function ConsoleModal({ isOpen, onClose }) {
       const closeHandle = window.setTimeout(() => setRender(false), 300);
       return () => window.clearTimeout(closeHandle);
     }
-  }, [isOpen]);
+  }, [isOpen, bootPhase]);
 
   useEffect(() => {
     if (isOpen && bootPhase === "loading") {
@@ -282,33 +269,25 @@ function ConsoleModal({ isOpen, onClose }) {
   return createPortal(
     <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/20 backdrop-blur-sm transition-all duration-300">
       <div
-        className={`relative flex flex-col bg-[#0c0c0c] border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${getAnimationClasses()} ${isExpanded ? "w-[60vw] h-[60vh]" : "w-150 h-100 max-w-[95vw] max-h-[85vh]"}`}
-      >
+        className={`relative flex flex-col bg-[#0c0c0c] border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${getAnimationClasses()} ${isExpanded ? "w-[60vw] h-[60vh]" : "w-150 h-100 max-w-[95vw] max-h-[85vh]"}`}>
         <div className="h-8 bg-[#1e1e1e] border-b border-white/5 flex items-center px-4 w-full select-none shrink-0">
           <div className="flex space-x-2">
             <button
               onClick={handleClose}
-              className="w-3.5 h-3.5 bg-[#ff5f56] rounded-full hover:bg-[#ff5f56]/80 flex items-center justify-center transition-colors group/btn"
-            >
-              <span className="text-[8px] text-black/60 opacity-0 group-hover/btn:opacity-100">
-                ✕
-              </span>
+              className="w-3.5 h-3.5 bg-[#ff5f56] rounded-full hover:bg-[#ff5f56]/80 flex items-center justify-center transition-colors group/btn">
+              <span className="text-[8px] text-black/60 opacity-0 group-hover/btn:opacity-100">✕</span>
             </button>
             <button
               onClick={handleMinimize}
-              className="w-3.5 h-3.5 bg-[#ffbd2e] rounded-full hover:bg-[#ffbd2e]/80 flex items-center justify-center transition-colors group/btn"
-            >
+              className="w-3.5 h-3.5 bg-[#ffbd2e] rounded-full hover:bg-[#ffbd2e]/80 flex items-center justify-center transition-colors group/btn">
               <span className="text-[10px] text-black/60 opacity-0 group-hover/btn:opacity-100 leading-none mb-1">
                 -
               </span>
             </button>
             <button
               onClick={handleExpand}
-              className="w-3.5 h-3.5 bg-[#27c93f] rounded-full hover:bg-[#27c93f]/80 flex items-center justify-center transition-colors group/btn"
-            >
-              <span className="text-[8px] text-black/60 opacity-0 group-hover/btn:opacity-100 leading-none">
-                ⤢
-              </span>
+              className="w-3.5 h-3.5 bg-[#27c93f] rounded-full hover:bg-[#27c93f]/80 flex items-center justify-center transition-colors group/btn">
+              <span className="text-[8px] text-black/60 opacity-0 group-hover/btn:opacity-100 leading-none">⤢</span>
             </button>
           </div>
           <div className="flex-1 text-center text-gray-400 text-xs font-mono font-medium">
@@ -318,8 +297,7 @@ function ConsoleModal({ isOpen, onClose }) {
 
         <div
           className="flex-1 min-h-0 p-5 bg-[#0c0c0c] text-green-400 font-mono text-xs md:text-sm overflow-y-auto overscroll-contain cursor-text select-text pr-3 scrollbar-thin [scrollbar-color:#333_#0c0c0c] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#0c0c0c] [&::-webkit-scrollbar-thumb]:bg-[#333] [&::-webkit-scrollbar-thumb]:rounded"
-          onClick={handleTerminalClick}
-        >
+          onClick={handleTerminalClick}>
           {bootPhase !== "complete" && (
             <div className="flex flex-col space-y-1 opacity-90">
               {bootLogs.map((log, index) => (
@@ -330,9 +308,7 @@ function ConsoleModal({ isOpen, onClose }) {
 
               {bootPhase === "loading" && (
                 <div className="mt-2">
-                  <p className="whitespace-pre text-cyan-400 select-none">
-                    {getProgressBar()}
-                  </p>
+                  <p className="whitespace-pre text-cyan-400 select-none">{getProgressBar()}</p>
                 </div>
               )}
 
@@ -352,28 +328,21 @@ function ConsoleModal({ isOpen, onClose }) {
           {bootPhase === "complete" && (
             <div className="flex flex-col space-y-1">
               <div className="mb-6">
-                <p className="text-gray-400">
-                  Last login: {new Date().toString().split(" GMT")[0]} on ttys000
-                </p>
+                <p className="text-gray-400">Last login: {new Date().toString().split(" GMT")[0]} on ttys000</p>
                 <p className="text-gray-400 mt-1">
-                  Type <span className="text-cyan-400 font-bold">/help</span> to see
-                  available commands.
+                  Type <span className="text-cyan-400 font-bold">/help</span> to see available commands.
                 </p>
               </div>
 
               {history.map((item, i) => (
                 <div key={i} className="mb-4">
                   <div className="flex items-center">
-                    <span className="text-emerald-400 mr-2 font-semibold">
-                      user@macbook:~$
-                    </span>
+                    <span className="text-emerald-400 mr-2 font-semibold">user@macbook:~$</span>
                     <span className="text-white">{item.command}</span>
                   </div>
 
                   {item.processing ? (
-                    <div className="text-gray-500 mt-1 animate-pulse">
-                      Processing command...
-                    </div>
+                    <div className="text-gray-500 mt-1 animate-pulse">Processing command...</div>
                   ) : item.output ? (
                     <AnimatedOutput>
                       <div className="text-gray-300 mt-2">
@@ -393,13 +362,8 @@ function ConsoleModal({ isOpen, onClose }) {
                   <div className="text-gray-500 text-[10px] mb-1 opacity-60 select-none">
                     💡 Recommended: <span className="text-gray-400">{hint}</span>
                   </div>
-                  <form
-                    onSubmit={handleCommandSubmit}
-                    className="flex items-center relative"
-                  >
-                    <span className="text-emerald-400 mr-2 font-semibold select-none">
-                      user@macbook:~$
-                    </span>
+                  <form onSubmit={handleCommandSubmit} className="flex items-center relative">
+                    <span className="text-emerald-400 mr-2 font-semibold select-none">user@macbook:~$</span>
                     <div className="relative flex-1 flex items-center">
                       <input
                         ref={inputRef}

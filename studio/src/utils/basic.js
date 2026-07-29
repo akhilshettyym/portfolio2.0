@@ -20,20 +20,7 @@ import {
   WiMoonAltWaningCrescent3,
 } from "react-icons/wi";
 
-export const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+export const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export const WORDS = [
   "CORE JAVA",
@@ -188,13 +175,11 @@ export const DEFAULT_CARDS = [
 ];
 
 export const RADII = [
-  1, 0.6, 0.8, 0.4, 0.9, 0.7, 0.9, 0.3, 0.2, 0.5, 0.6, 0.4, 0.5, 0.6, 0.7, 0.3, 0.4, 0.8,
-  0.7, 0.5, 0.4, 0.6, 0.35, 0.38, 0.9, 0.3, 0.6, 0.4, 0.2, 0.35, 0.5, 0.15, 0.2, 0.25,
-  0.4, 0.8, 0.76, 0.8, 1, 0.8, 0.7, 0.8, 0.3, 0.5, 0.6, 0.55, 0.42, 0.75, 0.66, 0.6, 0.7,
-  0.5, 0.6, 0.35, 0.35, 0.35, 0.8, 0.6, 0.7, 0.8, 0.4, 0.89, 0.3, 0.3, 0.6, 0.4, 0.2,
-  0.52, 0.5, 0.15, 0.2, 0.25, 0.4, 0.8, 0.76, 0.8, 1, 0.8, 0.7, 0.8, 0.3, 0.5, 0.6, 0.8,
-  0.7, 0.75, 0.66, 0.6, 0.7, 0.5, 0.6, 0.35, 0.35, 0.35, 0.8, 0.6, 0.7, 0.8, 0.4, 0.89,
-  0.3,
+  1, 0.6, 0.8, 0.4, 0.9, 0.7, 0.9, 0.3, 0.2, 0.5, 0.6, 0.4, 0.5, 0.6, 0.7, 0.3, 0.4, 0.8, 0.7, 0.5, 0.4, 0.6, 0.35,
+  0.38, 0.9, 0.3, 0.6, 0.4, 0.2, 0.35, 0.5, 0.15, 0.2, 0.25, 0.4, 0.8, 0.76, 0.8, 1, 0.8, 0.7, 0.8, 0.3, 0.5, 0.6, 0.55,
+  0.42, 0.75, 0.66, 0.6, 0.7, 0.5, 0.6, 0.35, 0.35, 0.35, 0.8, 0.6, 0.7, 0.8, 0.4, 0.89, 0.3, 0.3, 0.6, 0.4, 0.2, 0.52,
+  0.5, 0.15, 0.2, 0.25, 0.4, 0.8, 0.76, 0.8, 1, 0.8, 0.7, 0.8, 0.3, 0.5, 0.6, 0.8, 0.7, 0.75, 0.66, 0.6, 0.7, 0.5, 0.6,
+  0.35, 0.35, 0.35, 0.8, 0.6, 0.7, 0.8, 0.4, 0.89, 0.3,
 ];
 
 export const POSITIONS = [
@@ -324,11 +309,7 @@ export const TOTAL_SCENES = 14;
 
 export const DARK_START_SCENE = 6;
 
-export const INTROLINES = [
-  "Asking questions is important...",
-  "Right ?...",
-  "So let's start with one.",
-];
+export const INTROLINES = ["Asking questions is important...", "Right ?...", "So let's start with one."];
 
 export const BUILDINGLINES = [
   "Building isn't hard.",
@@ -348,12 +329,7 @@ export const PROBLEMQUESTIONS = [
   "Code is the last step.",
 ];
 
-export const AICLAIMS = [
-  "YES.",
-  "AI can write code.",
-  "AI can refactor code.",
-  "AI can deploy code.",
-];
+export const AICLAIMS = ["YES.", "AI can write code.", "AI can refactor code.", "AI can deploy code."];
 
 export const BUSINESSQUESTIONS = [
   "Can it understand your business?",

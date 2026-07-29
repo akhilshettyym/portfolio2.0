@@ -135,9 +135,7 @@ describe("Inquiry Controllers", () => {
     it("should successfully delete lead and return 200 status", async () => {
       const validId = new mongoose.Types.ObjectId().toString();
       req.params.id = validId;
-      jest
-        .spyOn(ContactInquiry, "findByIdAndDelete")
-        .mockResolvedValue({ name: "Jane Smith" });
+      jest.spyOn(ContactInquiry, "findByIdAndDelete").mockResolvedValue({ name: "Jane Smith" });
 
       await deleteInquiryDetails(req, res);
 

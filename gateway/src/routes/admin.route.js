@@ -24,11 +24,6 @@ const adminLimiter = rateLimit({
 router.get("/get-all-inquiries", protectAdminRoute, adminLimiter, getAllInquiries);
 
 /* DELETE /api/admin/delete-details/:id */
-router.delete(
-  "/delete-details/:id",
-  protectAdminRoute,
-  adminLimiter,
-  deleteInquiryDetails,
-);
+router.delete("/delete-details/:id", protectAdminRoute, adminLimiter, deleteInquiryDetails);
 
 export default router;

@@ -8,10 +8,7 @@ import { hasLocationPreference } from "@/utils/weather-scene";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import {
-  getQualityPreset,
-  getRendererPixelRatio,
-} from "@/lib/performance/applyQualityTier";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import { GREETINGS } from "@/utils/basic";
 
 export default function Loader({ onFinish }) {
@@ -73,11 +70,7 @@ export default function Loader({ onFinish }) {
 
         const hasPreference = typeof window !== "undefined" && hasLocationPreference();
 
-        if (
-          !hasPreference &&
-          !modalTriggeredRef.current &&
-          next >= pausePointRef.current
-        ) {
+        if (!hasPreference && !modalTriggeredRef.current && next >= pausePointRef.current) {
           modalTriggeredRef.current = true;
           setIsPaused(true);
           setShowLocationModal(true);
@@ -110,12 +103,7 @@ export default function Loader({ onFinish }) {
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0xffffff, 6, 18);
 
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000,
-    );
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = isMobile ? 6 : 5;
 
     const renderer = new THREE.WebGLRenderer({
@@ -211,10 +199,7 @@ export default function Loader({ onFinish }) {
     }, 300);
   };
 
-  const greetingIndex = Math.min(
-    Math.floor((progress / 100) * GREETINGS.length),
-    GREETINGS.length - 1,
-  );
+  const greetingIndex = Math.min(Math.floor((progress / 100) * GREETINGS.length), GREETINGS.length - 1);
 
   return (
     <div className="fixed inset-0 z-999 overflow-hidden bg-white">
@@ -254,8 +239,7 @@ export default function Loader({ onFinish }) {
                 style={{
                   opacity: offset === 0 ? 1 : 0,
                   transform: `translateY(${offset * 32}px)`,
-                }}
-              >
+                }}>
                 {greeting}
               </span>
             );
@@ -266,8 +250,7 @@ export default function Loader({ onFinish }) {
       <div className="absolute bottom-12 w-full flex justify-center text-center px-6 z-10 pointer-events-none">
         <h1
           className="text-[clamp(0.5em,2vw,1.5rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform"
-          style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}
-        >
+          style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
           AKHIL SHETTY M
         </h1>
       </div>

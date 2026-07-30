@@ -54,7 +54,6 @@ Calibration Algorithm: Metrics are processed into a unified numeric engine score
     State Caching: Calibration values are compiled once and stored in the user's localStorage to expedite secondary page hits.
 
 #### 2. Contextual Environment Engine (Geolocation & Weather Integration):
-
  
 The thematic lighting, background environments, and structural elements of the app adapt directly to the user's real-world time and local weather patterns via a tiered access flow:
 
@@ -69,7 +68,6 @@ The thematic lighting, background environments, and structural elements of the a
 ### Service Component Breakdowns:
 
 #### clientui (The Showcase Platform) -
-
  
 The primary user portal designed as a high-fidelity immersive workspace.
 
@@ -89,7 +87,6 @@ The primary user portal designed as a high-fidelity immersive workspace.
 
 #### backend (The Application Gateway):
 
- 
 A production-hardened API routing data and handling secure access logic.
 
 - **Inquiry Ingestion**: A structured POST endpoint validation pipeline routing data directly to MongoDB.
@@ -102,10 +99,7 @@ A production-hardened API routing data and handling secure access logic.
 
 - **Testing Lifecycle**: Rigorously isolated utilizing automated Jest unit testing for core schemas/middleware, combined with Supertest validation layers across HTTP components.
 
- 
-
 #### adminui (The Metrics Control Panel):
-
  
 A lightweight dashboard constructed strictly for managing application states.
 

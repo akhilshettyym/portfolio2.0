@@ -115,7 +115,7 @@ export default function Loader({ onFinish }) {
     const scene = new THREE.Scene();
 
     // Dynamic Fog based on theme (white for light, black for dark/metal)
-    const fogColor = (theme === "dark" || theme === "metal") ? 0x000000 : 0xffffff;
+    const fogColor = theme === "dark" || theme === "metal" ? 0x000000 : 0xffffff;
     scene.fog = new THREE.Fog(fogColor, 6, 18);
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -221,7 +221,7 @@ export default function Loader({ onFinish }) {
   const greetingIndex = Math.min(Math.floor((progress / 100) * GREETINGS.length), GREETINGS.length - 1);
 
   return (
-    <div className={`fixed inset-0 z-[999] overflow-hidden ${bgColorClass}`}>
+    <div className={`fixed inset-0 z-999 overflow-hidden ${bgColorClass}`}>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.10),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.06),transparent_55%)]" />

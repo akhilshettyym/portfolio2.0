@@ -179,12 +179,10 @@ export default function SubjectProfile() {
         {" "}
         <div className="w-full flex flex-col lg:flex-row gap-8">
           {" "}
-
           <motion.div
             variants={itemReveal}
             className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group">
             {" "}
-
             <ScrollMarquee
               texts={["ABOUT ME"]}
               baseSpeed={1.5}
@@ -193,7 +191,6 @@ export default function SubjectProfile() {
               direct={true}
               className="border-b border-slate-200/80"
             />
-
             <ScrollMarquee texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />{" "}
             <div className="mt-4">
               {" "}
@@ -206,23 +203,17 @@ export default function SubjectProfile() {
                 architectural, and scalable.{" "}
               </p>{" "}
             </div>{" "}
-
           </motion.div>{" "}
-
           <motion.div
             variants={itemReveal}
             className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-between shadow-sm rounded-2xl">
             {" "}
-
             <div className="relative w-full h-48 md:h-40 mb-6 border border-slate-100 bg-slate-950 overflow-hidden rounded-2xl group shadow-inner">
               {" "}
-
               <div className="absolute top-3 left-3 bg-black/60 backdrop-blur px-2 py-1 text-[10px] font-mono text-slate-300 tracking-wider rounded border border-white/10 uppercase">
                 live_node_status // active{" "}
-
               </div>{" "}
             </div>{" "}
-
             <p className="text-slate-600 text-sm md:text-base leading-relaxed font-light text-justify">
               Every project I build intentionally bridges{" "}
               <span className="text-slate-900 font-medium">
@@ -232,11 +223,8 @@ export default function SubjectProfile() {
               contemporary headless stacks, tailored APIs, and purposeful interactions, I unlock flawless deployment
               performance.{" "}
             </p>{" "}
-
           </motion.div>{" "}
-
         </div>{" "}
-
         <motion.div
           variants={itemReveal}
           className="w-full border border-slate-900 bg-white p-8 md:p-12 relative shadow-xl rounded-xl">

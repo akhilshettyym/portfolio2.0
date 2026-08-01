@@ -65,8 +65,8 @@ export default function LimpModal() {
 
               <div className="mb-5 space-y-3 text-justify">
                 <p className="text-sm text-gray-400">
-                  Hey! To keep everything running lightning-fast on your device, we've dialed back a few of the heavier
-                  visual effects. Enjoy a smooth, seamless ride!
+                  Hey! To keep everything running lightning-fast on your device, we&apos;ve dialed back a few of the
+                  heavier visual effects. Enjoy a smooth, seamless ride!
                 </p>
               </div>
 

@@ -17,14 +17,14 @@ export default function PageReveal({ active, children }) {
               initial={{ height: "50%" }}
               animate={{ height: ["50%", "24%", "0%"] }}
               transition={{ duration: 2.5, times: [0, 0.45, 1], ease: [0.2, 1, 0.36, 1] }}
-              className="absolute top-0 left-0 right-0 bg-white"
+              className="absolute top-0 left-0 right-0 bg-black"
             />
 
             <motion.div
               initial={{ height: "50%" }}
               animate={{ height: ["50%", "24%", "0%"] }}
               transition={{ duration: 2.5, times: [0, 0.45, 1], ease: [0.2, 1, 0.36, 1] }}
-              className="absolute bottom-0 left-0 right-0 bg-white"
+              className="absolute bottom-0 left-0 right-0 bg-black"
             />
 
             <motion.div
@@ -35,7 +35,7 @@ export default function PageReveal({ active, children }) {
                 width: ["50%", "16%", "0%"],
               }}
               transition={{ duration: 2.5, times: [0, 0.45, 1], ease: [0.2, 1, 0.36, 1] }}
-              className="absolute left-0 bg-white"
+              className="absolute left-0 bg-black"
             />
 
             <motion.div
@@ -46,14 +46,14 @@ export default function PageReveal({ active, children }) {
                 width: ["50%", "16%", "0%"],
               }}
               transition={{ duration: 2.5, times: [0, 0.45, 1], ease: [0.2, 1, 0.36, 1] }}
-              className="absolute right-0 bg-white"
+              className="absolute right-0 bg-black"
             />
 
             <motion.div
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: [0.6, 1, 1.4], opacity: [0, 0.18, 0] }}
               transition={{ duration: 2.5, times: [0, 0.4, 1], ease: "easeOut" }}
-              className="absolute left-1/2 top-1/2 h-55 w-55 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white blur-3xl"
+              className="absolute left-1/2 top-1/2 h-55 w-55 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black blur-3xl"
             />
           </motion.div>
         )}

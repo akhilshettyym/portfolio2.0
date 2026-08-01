@@ -1111,7 +1111,7 @@ export default function CinematicIntro({ onComplete }) {
       {revealPhase !== "done" && (
         <div className="fixed inset-0 z-9999 pointer-events-none">
           <motion.div
-            className="absolute top-0 left-0 w-full h-1/2 bg-black/10 z-50"
+            className="absolute top-0 left-0 w-full h-1/2 bg-black z-50"
             initial={{
               y: "0%",
               borderBottomLeftRadius: "0%",
@@ -1130,7 +1130,7 @@ export default function CinematicIntro({ onComplete }) {
           />
 
           <motion.div
-            className="absolute bottom-0 left-0 w-full h-1/2 bg-black/10 z-50"
+            className="absolute bottom-0 left-0 w-full h-1/2 bg-black z-50"
             initial={{ y: "0%", borderTopLeftRadius: "0%", borderTopRightRadius: "0%" }}
             animate={{
               y: revealPhase === "peel" ? "100%" : "0%",
@@ -1177,7 +1177,7 @@ export default function CinematicIntro({ onComplete }) {
           initial={false}
           animate={{ opacity: ready ? 0.5 : 0.95 }}
           transition={{ duration: 0.4 }}
-          className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-current/10 bg-current/5 px-4 py-2 text-[10px] uppercase tracking-normal text-current backdrop-blur-sm">
+          className="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2 px-4 py-2 font-bold text-[10px] uppercase tracking-normal text-current backdrop-blur-sm">
           {ready ? (scene === 3 ? "Drive the timeline" : "Scroll") : "Hold"}
         </motion.div>
       )}

@@ -6,6 +6,7 @@ import Image from "next/image";
 import ConsoleModal from "./ConsoleModal";
 import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
+import ModeSwitch from "@/components/ModeSwitch";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
@@ -231,7 +232,7 @@ const Navbar = () => {
               </nav>
             </div>
 
-            <div className="w-230 mx-8 border-l border-black/20 overflow-hidden hidden sm:block relative opacity-0 animate-[navbar-enter_0.6s_ease-out_0.3s_forwards]">
+            <div className="w-230 mx-6 border-l border-black/20 overflow-hidden hidden sm:block relative opacity-0 animate-[navbar-enter_0.6s_ease-out_0.3s_forwards]">
               <div className="pointer-events-none absolute left-0 top-0 h-full w-12 z-10 bg-linear-to-r from-white/60 to-transparent" />
               <div className="pointer-events-none absolute right-0 top-0 h-full w-12 z-10 bg-linear-to-l from-white/60 to-transparent" />
 
@@ -261,6 +262,10 @@ const Navbar = () => {
               </div>
             </div>
 
+            <div className="mr-5 mt-2">
+              <ModeSwitch />
+            </div>
+
             <div className="ml-auto relative flex items-center gap-3 shrink-0 min-w-40 justify-end opacity-0 animate-[navbar-enter_0.6s_ease-out_0.4s_forwards]">
               <button
                 onClick={() => setConsoleOpen((prev) => !prev)}
@@ -279,8 +284,7 @@ const Navbar = () => {
                 </div>
                 <div>{time || "—:—:— --"}</div>
                 <div key={ip} className="text-[8px] font-semibold uppercase tracking-[0.25em] text-black/50">
-                  {" "}
-                  connection <span className="inline-block w-25 text-right"> {ip} </span>
+                  connection<span className="inline-block w-25 text-right"> {ip} </span>
                 </div>
               </div>
 

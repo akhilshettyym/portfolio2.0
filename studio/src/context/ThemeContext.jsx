@@ -1,0 +1,41 @@
+"use client";
+
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+const ThemeContext = createContext(undefined);
+
+const THEMES = ["light", "dark", "metal"];
+
+export const ThemeProvider = ({ children }) => {
+    const [theme, setTheme] = useState("light");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        const storedTheme = localStorage.getItem("site-theme");
+        if (storedTheme && THEMES.includes(storedTheme)) {
+            setTheme(storedTheme);
+        }
+        setMounted(true);
+    }, []);
+
+    const cycleTheme = () => {
+        setTheme((prevTheme) => {
+            const currentIndex = THEMES.indexOf(prevTheme);
+            const nextIndex = (currentIndex + 1) % THEMES.length;
+            const newTheme = THEMES[nextIndex];
+
+            localStorage.setItem("site-theme", newTheme);
+            return newTheme;
+        });
+    };
+
+    return <ThemeContext.Provider value={{ theme, cycleTheme, mounted }}>{children}</ThemeContext.Provider>;
+};
+
+export const useTheme = () => {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error("useTheme must be used within a ThemeProvider");
+    }
+    return context;
+};

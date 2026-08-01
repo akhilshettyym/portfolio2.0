@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
@@ -58,20 +59,22 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-black">
         <PerformanceBootstrap>
           <LenisProvider>
-            <LoaderWrapper>
-              <NavbarWrapper>
-                <Navbar />
-              </NavbarWrapper>
+            <ThemeProvider>
+              <LoaderWrapper>
+                <NavbarWrapper>
+                  <Navbar />
+                </NavbarWrapper>
 
-              <main id="main-content" className="relative pt-25 flex flex-col min-h-screen bg-white">
-                <ToastContainer />
+                <main id="main-content" className="relative pt-25 flex flex-col min-h-screen bg-white">
+                  <ToastContainer />
 
-                <div className="grow">{children}</div>
-              </main>
+                  <div className="grow">{children}</div>
+                </main>
 
-              <EmergencyCTA />
-              <Footer />
-            </LoaderWrapper>
+                <EmergencyCTA />
+                <Footer />
+              </LoaderWrapper>
+            </ThemeProvider>
           </LenisProvider>
         </PerformanceBootstrap>
       </body>

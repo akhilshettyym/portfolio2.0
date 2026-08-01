@@ -48,13 +48,13 @@ export default function LimpModal() {
               <motion.div
                 animate={{ opacity: [0.3, 0, 0.3] }}
                 transition={{ duration: 5, repeat: Infinity, repeatDelay: 2 }}
-                className="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
+                className="absolute top-0 h-px w-full bg-linear-to-r from-transparent via-cyan-500 to-transparent"
               />
 
               <motion.div
                 animate={{ opacity: [0, 0.3, 0] }}
                 transition={{ duration: 5, repeat: Infinity, repeatDelay: 2.3 }}
-                className="absolute bottom-1/3 h-px w-full bg-gradient-to-r from-transparent via-purple-500 to-transparent"
+                className="absolute bottom-1/3 h-px w-full bg-linear-to-r from-transparent via-purple-500 to-transparent"
               />
             </div>
 
@@ -65,8 +65,8 @@ export default function LimpModal() {
 
               <div className="mb-5 space-y-3 text-justify">
                 <p className="text-sm text-gray-400">
-                  Performance optimization is active to ensure an ultra-smooth frame rate. To maintain a fast, stable
-                  interface, selected animations and advanced visual effects have been streamlined.
+                  Hey! To keep everything running lightning-fast on your device, we've dialed back a few of the heavier
+                  visual effects. Enjoy a smooth, seamless ride!
                 </p>
               </div>
 

@@ -29,7 +29,6 @@ export default function MySocials() {
   const globeRotateX = useSpring(mouseY, { stiffness: 60, damping: 15 });
   const globeRotateY = useSpring(mouseX, { stiffness: 60, damping: 15 });
 
-  // 1. FIXED LINTER WARNING: Copy timeouts.current to a local variable
   useEffect(() => {
     const currentTimeouts = timeouts.current;
 
@@ -102,7 +101,6 @@ export default function MySocials() {
       <div className="absolute inset-x-0 bottom-0 h-px bg-black/15" />
 
       <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-10">
-        {/* 2. FIXED ROTATION: Parent handles the Parallax Tilt (X and Y axis) */}
         <motion.div
           style={{
             rotateX: globeRotateX,
@@ -110,7 +108,6 @@ export default function MySocials() {
             transformStyle: "preserve-3d",
           }}
           className="flex h-150 w-100 items-center justify-center">
-          {/* Child handles the continuous Earth-like spin (Y axis) */}
           <motion.div
             animate={{ rotateY: [0, 360] }}
             transition={{

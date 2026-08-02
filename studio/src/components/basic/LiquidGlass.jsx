@@ -17,14 +17,10 @@ export default function LiquidGlass({
   const { isTier2 } = usePerformanceTier();
 
   return (
-    <div
-      className={`flex items-center justify-center ${padding} ${className}`}
-      {...props}
-    >
+    <div className={`flex items-center justify-center ${padding} ${className}`} {...props}>
       <div
         className="relative rounded-[2.5rem] shadow-2xl border border-white/40 backdrop-blur-md"
-        style={{ width, height }}
-      >
+        style={{ width, height }}>
         <div className="absolute inset-0 overflow-hidden rounded-[2.5rem]">
           <div className="absolute inset-0 bg-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[28px_28px] opacity-30" />
@@ -40,21 +36,12 @@ export default function LiquidGlass({
                 toneMapping: THREE.ACESFilmicToneMapping,
                 toneMappingExposure: 1.15,
               }}
-              style={{ background: "transparent" }}
-            >
+              style={{ background: "transparent" }}>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.65} />
-                <directionalLight
-                  position={[10, 12, 8]}
-                  intensity={2.8}
-                  color="#ffffff"
-                />
+                <directionalLight position={[10, 12, 8]} intensity={2.8} color="#ffffff" />
                 <pointLight position={[-12, -8, -10]} intensity={1.6} color="#e0e7ff" />
-                <OrbitControls
-                  enablePan={false}
-                  enableZoom={false}
-                  enableRotate={false}
-                />
+                <OrbitControls enablePan={false} enableZoom={false} enableRotate={false} />
               </Suspense>
             </Canvas>
           )}

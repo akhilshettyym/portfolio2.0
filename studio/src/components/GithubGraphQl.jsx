@@ -1,26 +1,42 @@
 "use client";
 
-import { FaGitAlt } from "react-icons/fa";
 import { MONTHS } from "@/utils/basic";
+import { FaGitAlt } from "react-icons/fa";
 import { CACHE_BASE } from "@/utils/storage";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
 import { CACHE_DURATION_MS } from "@/utils/cache";
+import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion";
+import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
+
+function useIsMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) => {
+  const { theme } = useTheme();
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  const [mounted, setMounted] = useState(false);
   const [total, setTotal] = useState(0);
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasEnteredViewport, setHasEnteredViewport] = useState(false);
+
+  const [isVisibleState, setIsVisibleState] = useState(false);
+  const [hasEnteredViewportState, setHasEnteredViewportState] = useState(false);
+
+  const isVisible = forceTriggerAnimation || isVisibleState;
+  const hasEnteredViewport = forceTriggerAnimation || hasEnteredViewportState;
+
   const motionTotal = useMotionValue(0);
 
   const panelRef = useRef(null);
@@ -31,9 +47,35 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
   const [coffeeNotif, setCoffeeNotif] = useState(null);
   const [commitNotif, setCommitNotif] = useState(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const styles = {
+    container: isDark ? "bg-[#0a0a0a] text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black",
+    card: isDark
+      ? "bg-[#111] border-white/10"
+      : isMetal
+        ? "bg-[#110000] border-red-500/20"
+        : "bg-white border-gray-200",
+    textPrimary: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
+    textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80",
+    textMuted: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50",
+    textFaded: isDark ? "text-gray-500" : isMetal ? "text-red-900" : "text-gray-500",
+    spinnerBase: "border-2 rounded-full h-4 w-4 animate-spin",
+    spinnerColor: isDark
+      ? "border-white/20 border-t-white"
+      : isMetal
+        ? "border-red-500/20 border-t-red-500"
+        : "border-gray-300 border-t-black",
+  };
+
+  const themeColors = isDark
+    ? ["#1f1f1f", "#444444", "#666666", "#999999", "#eeeeee"]
+    : isMetal
+      ? ["#1a0505", "#4d0a0a", "#991b1b", "#dc2626", "#f87171"]
+      : ["#ebedf0", "#cccccc", "#999999", "#555555", "#111111"];
 
   const range = useMemo(() => {
     if (!mounted) return { from: "", to: "" };
@@ -82,20 +124,13 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
             const parsed = JSON.parse(diskRecord);
             const now = Date.now();
 
-            if (
-              parsed &&
-              parsed.timestamp &&
-              now - parsed.timestamp < CACHE_DURATION_MS
-            ) {
+            if (parsed && parsed.timestamp && now - parsed.timestamp < CACHE_DURATION_MS) {
               processPayload(parsed.data);
               setLoading(false);
               return;
             }
           } catch (e) {
-            console.warn(
-              "Stale disk storage verification fault, clearing cache key...",
-              e,
-            );
+            console.warn("Stale disk storage verification fault, clearing cache key...", e);
             localStorage.removeItem(cacheKey);
           }
         }
@@ -113,8 +148,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
         const responseData = await response.json();
         if (!active || !responseData) return;
 
-        const calendar =
-          responseData?.data?.user?.contributionsCollection?.contributionCalendar;
+        const calendar = responseData?.data?.user?.contributionsCollection?.contributionCalendar;
 
         if (calendar) {
           const recordToCache = {
@@ -126,10 +160,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
         }
       } catch (err) {
         if (err.name !== "AbortError") {
-          console.error(
-            "GitHub primary data synchronization pipeline error:",
-            err.message,
-          );
+          console.error("GitHub primary data synchronization pipeline error:", err.message);
         }
       } finally {
         if (active) setLoading(false);
@@ -146,7 +177,6 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
   useEffect(() => {
     if (isTier2 || loading || !hasEnteredViewport) {
-      setCommitDisplay(total.toString());
       return undefined;
     }
 
@@ -222,21 +252,15 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
   };
 
   useEffect(() => {
-    if (forceTriggerAnimation) {
-      setIsVisible(true);
-      setHasEnteredViewport(true);
-      return undefined;
-    }
-
-    if (!panelRef.current) return undefined;
+    if (forceTriggerAnimation || !panelRef.current) return undefined;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          setHasEnteredViewport(true);
+          setIsVisibleState(true);
+          setHasEnteredViewportState(true);
         } else {
-          setIsVisible(false);
+          setIsVisibleState(false);
         }
       },
       { threshold: 0.08 },
@@ -279,13 +303,11 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
   if (!mounted) {
     return (
-      <div className="w-full min-h-60 flex items-center justify-center bg-white">
+      <div className="w-full min-h-60 flex items-center justify-center bg-transparent">
         <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-black" />
       </div>
     );
   }
-
-  const themeColors = ["#ebedf0", "#cccccc", "#999999", "#555555", "#111111"];
 
   const renderMobile = () => {
     return (
@@ -299,8 +321,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                 animate={{ opacity: 1, y: -12, scale: 1 }}
                 exit={{ opacity: 0, y: -24, scale: 1.5 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
-                className="absolute top-3 right-12 text-[10px] font-semibold text-black"
-              >
+                className={`absolute top-3 right-12 text-[10px] font-semibold ${styles.textPrimary}`}>
                 +{aiNotif.value}
               </motion.div>
             )}
@@ -308,12 +329,11 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
           <motion.p
             onHoverStart={() => triggerGlitch("100M+", setAiDisplay)}
-            className="cursor-default text-[15px] font-black tracking-tight text-black/80"
-          >
+            className={`cursor-default text-[15px] font-black tracking-tight ${styles.textSecondary}`}>
             {aiDisplay}
           </motion.p>
 
-          <p className="flex items-center mt-1 text-[10px] font-bold tracking-tight text-black/50">
+          <p className={`flex items-center mt-1 text-[10px] font-bold tracking-tight ${styles.textMuted}`}>
             AI tokens used
           </p>
         </div>
@@ -327,8 +347,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                 animate={{ opacity: 1, y: -12, scale: 1 }}
                 exit={{ opacity: 0, y: -24, scale: 1.5 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
-                className="absolute top-3 right-12 text-[10px] font-semibold text-gray-500"
-              >
+                className={`absolute top-3 right-12 text-[10px] font-semibold ${styles.textFaded}`}>
                 +{coffeeNotif.value}
               </motion.div>
             )}
@@ -336,12 +355,11 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
           <motion.p
             onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)}
-            className="cursor-default text-[15px] font-black tracking-tight text-black/80"
-          >
+            className={`cursor-default text-[15px] font-black tracking-tight ${styles.textSecondary}`}>
             {coffeeDisplay}
           </motion.p>
 
-          <p className="flex items-center mt-1 text-[10px] font-bold tracking-tight text-black/50">
+          <p className={`flex items-center mt-1 text-[10px] font-bold tracking-tight ${styles.textMuted}`}>
             Coffees drank
           </p>
         </div>
@@ -355,8 +373,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                 animate={{ opacity: 1, y: -12, scale: 1 }}
                 exit={{ opacity: 0, y: -24, scale: 1.5 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
-                className="absolute top-3 right-12 text-[11px] font-semibold text-gray-500"
-              >
+                className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textFaded}`}>
                 +{commitNotif.value}
               </motion.div>
             )}
@@ -364,12 +381,11 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
           <motion.p
             onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)}
-            className="cursor-default text-[15px] font-black tracking-tight text-black"
-          >
+            className={`cursor-default text-[15px] font-black tracking-tight ${styles.textPrimary}`}>
             {displayedCommitCount}
           </motion.p>
 
-          <p className="flex items-center mt-1 text-[10px] font-bold tracking-wider text-black/50">
+          <p className={`flex items-center mt-1 text-[10px] font-bold tracking-wider ${styles.textMuted}`}>
             Code Commits
           </p>
         </div>
@@ -383,8 +399,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
       initial={{ opacity: 0, y: 35, filter: "blur(8px)" }}
       animate={hasEnteredViewport ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{ duration: isTier2 ? 0.2 : 0.75, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full p-6 md:p-8 bg-white text-black"
-    >
+      className={`w-full p-6 md:p-8 transition-colors duration-500 ${styles.container}`}>
       {isMobile ? (
         renderMobile()
       ) : (
@@ -398,8 +413,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                   animate={{ opacity: 1, y: -12, scale: 1 }}
                   exit={{ opacity: 0, y: -24, scale: 1.5 }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="absolute top-3 right-12 text-[11px] font-semibold text-black"
-                >
+                  className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textPrimary}`}>
                   +{aiNotif.value}
                 </motion.div>
               )}
@@ -407,12 +421,11 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
             <motion.p
               onHoverStart={() => triggerGlitch("100M+", setAiDisplay)}
-              className="cursor-default text-[26px] font-black tracking-tight text-black/80"
-            >
+              className={`cursor-default text-[26px] font-black tracking-tight ${styles.textSecondary}`}>
               {aiDisplay}
             </motion.p>
 
-            <p className="flex items-center mt-2 text-xs font-bold tracking-wider text-black/50">
+            <p className={`flex items-center mt-2 text-xs font-bold tracking-wider ${styles.textMuted}`}>
               <span className="mr-1.5">
                 <GiRaiseZombie size={18} />
               </span>
@@ -429,8 +442,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                   animate={{ opacity: 1, y: -12, scale: 1 }}
                   exit={{ opacity: 0, y: -24, scale: 1.5 }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="absolute top-3 right-12 text-[11px] font-semibold text-gray-500"
-                >
+                  className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textFaded}`}>
                   +{coffeeNotif.value}
                 </motion.div>
               )}
@@ -438,13 +450,12 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
             <motion.p
               onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)}
-              className="cursor-default text-[26px] font-black tracking-tight text-black/80"
-            >
+              className={`cursor-default text-[26px] font-black tracking-tight ${styles.textSecondary}`}>
               {coffeeDisplay}
             </motion.p>
 
-            <p className="flex items-center mt-2 text-xs font-bold tracking-wider text-gray-500">
-              <span className="mr-1.5 text-gray-600">
+            <p className={`flex items-center mt-2 text-xs font-bold tracking-wider ${styles.textFaded}`}>
+              <span className={`mr-1.5 ${isDark ? "text-white/60" : isMetal ? "text-red-700" : "text-gray-600"}`}>
                 <DiCoffeescript size={18} />
               </span>
               Coffees drank
@@ -460,8 +471,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                   animate={{ opacity: 1, y: -12, scale: 1 }}
                   exit={{ opacity: 0, y: -24, scale: 1.5 }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="absolute top-3 right-12 text-[11px] font-semibold text-gray-500"
-                >
+                  className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textFaded}`}>
                   +{commitNotif.value}
                 </motion.div>
               )}
@@ -469,12 +479,11 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
             <motion.p
               onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)}
-              className="cursor-default text-[26px] font-black tracking-tight text-black"
-            >
+              className={`cursor-default text-[26px] font-black tracking-tight ${styles.textPrimary}`}>
               {displayedCommitCount}
             </motion.p>
 
-            <p className="flex items-center mt-2 text-xs font-bold tracking-wider text-black/50">
+            <p className={`flex items-center mt-2 text-xs font-bold tracking-wider ${styles.textMuted}`}>
               <span className="mr-1.5">
                 <FaGitAlt size={18} />
               </span>
@@ -485,31 +494,28 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
       )}
 
       <div className="mb-5 text-center">
-        <h2 className="text-xl md:text-2xl font-black tracking-tight text-black/80 uppercase">
+        <h2 className={`text-xl md:text-2xl font-black tracking-tight uppercase ${styles.textSecondary}`}>
           My Personal GitHub Activity
         </h2>
-        <p className="mt-1 text-xs italic text-gray-500 font-medium">
+        <p className={`mt-1 text-xs italic font-medium ${styles.textFaded}`}>
           (Work commits are hiding in another dimension)
         </p>
       </div>
 
-      <div className="min-h-60 w-full rounded-xl border border-gray-200 bg-white p-4 md:p-6 shadow-sm">
+      <div className={`min-h-60 w-full rounded-xl p-4 md:p-6 shadow-sm transition-colors duration-500 ${styles.card}`}>
         {loading ? (
           <div className="flex h-65 items-center justify-center">
             <div className="flex items-center gap-3">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-black" />
-              <p className="text-sm font-medium text-black/50">
-                Loading contributions...
-              </p>
+              <div className={`${styles.spinnerBase} ${styles.spinnerColor}`} />
+              <p className={`text-sm font-medium ${styles.textMuted}`}>Loading contributions...</p>
             </div>
           </div>
         ) : (
           <>
             {weeks.length > 0 && (
               <div
-                className={`mb-3 ml-8 grid text-[10px] font-bold uppercase tracking-wider text-gray-500 ${isMobile ? "max-w-85 mx-auto" : ""}`}
-                style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}
-              >
+                className={`mb-3 ml-8 grid text-[10px] font-bold uppercase tracking-wider ${styles.textFaded} ${isMobile ? "max-w-85 mx-auto" : ""}`}
+                style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}>
                 {monthLabels.map((month) => (
                   <div key={month.index} style={{ gridColumnStart: month.index + 1 }}>
                     {month.label}
@@ -519,7 +525,8 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
             )}
 
             <div className="flex w-full justify-center md:justify-start">
-              <div className="mr-3 flex flex-col justify-between py-1 text-[10px] font-bold text-gray-500 uppercase">
+              <div
+                className={`mr-3 flex flex-col justify-between py-1 text-[10px] font-bold uppercase ${styles.textFaded}`}>
                 <span> Mon </span>
                 <span> Wed </span>
                 <span> Fri </span>
@@ -530,8 +537,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                   className={`grid flex-1 gap-1 overflow-hidden ${isMobile ? "max-w-85" : ""}`}
                   style={{
                     gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
-                  }}
-                >
+                  }}>
                   {weeks.map((week, weekIndex) => (
                     <div key={weekIndex} className="grid grid-rows-7 gap-1">
                       {week.contributionDays.map((day, dayIndex) => {
@@ -543,21 +549,18 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                         if (count > 5 && count <= 10) backgroundColor = themeColors[3];
                         if (count > 10) backgroundColor = themeColors[4];
 
-                        const staggerDelay = isTier2
-                          ? 0
-                          : weekIndex * 0.012 + dayIndex * 0.002;
+                        const staggerDelay = isTier2 ? 0 : weekIndex * 0.012 + dayIndex * 0.002;
+                        const borderColor = isDark
+                          ? "border-white/5"
+                          : isMetal
+                            ? "border-red-500/10"
+                            : "border-black/5";
 
                         return (
                           <motion.div
                             key={day.date}
-                            initial={
-                              isTier2 ? false : { opacity: 0, scale: 0.1, rotateY: 90 }
-                            }
-                            animate={
-                              hasEnteredViewport
-                                ? { opacity: 1, scale: 1, rotateY: 0 }
-                                : {}
-                            }
+                            initial={isTier2 ? false : { opacity: 0, scale: 0.1, rotateY: 90 }}
+                            animate={hasEnteredViewport ? { opacity: 1, scale: 1, rotateY: 0 } : {}}
                             transition={
                               isTier2
                                 ? { duration: 0 }
@@ -579,7 +582,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                                   }
                             }
                             title={`${day.contributionCount} contributions on ${day.date}`}
-                            className="aspect-square w-full rounded-xs transition-all cursor-crosshair border border-black/5"
+                            className={`aspect-square w-full rounded-xs transition-all cursor-crosshair border ${borderColor}`}
                             style={{ backgroundColor }}
                           />
                         );
@@ -588,21 +591,22 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
                   ))}
                 </div>
               ) : (
-                <div className="flex-1 flex items-center justify-center py-12 text-sm text-gray-400 font-medium text-center">
-                  No tracking log history discovered within this date range scope
-                  boundary.
+                <div
+                  className={`flex-1 flex items-center justify-center py-12 text-sm font-medium text-center ${styles.textFaded}`}>
+                  No tracking log history discovered within this date range scope boundary.
                 </div>
               )}
             </div>
 
-            <div className="mt-6 flex items-center justify-center text-[11px] font-bold uppercase tracking-wider text-gray-500">
+            <div
+              className={`mt-6 flex items-center justify-center text-[11px] font-bold uppercase tracking-wider ${styles.textFaded}`}>
               <div className="flex items-center gap-2">
                 <span> Less </span>
                 <div className="flex gap-1">
                   {themeColors.map((color) => (
                     <div
                       key={color}
-                      className="h-3 w-3 rounded-xs border border-black/5"
+                      className={`h-3 w-3 rounded-xs border ${isDark ? "border-white/5" : isMetal ? "border-red-500/10" : "border-black/5"}`}
                       style={{ backgroundColor: color }}
                     />
                   ))}

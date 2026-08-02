@@ -1,8 +1,18 @@
 "use client";
 
 import "@/styles/global_cursor.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+
+const emptySubscribe = () => () => {};
+
+function useIsMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 export default function GlobalCursor() {
   const cursorRef = useRef(null);
@@ -11,11 +21,8 @@ export default function GlobalCursor() {
   const lastUpdateRef = useRef({ x: 0, y: 0 });
 
   const { isTier2 } = usePerformanceTier();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   useEffect(() => {
     const cursor = cursorRef.current;

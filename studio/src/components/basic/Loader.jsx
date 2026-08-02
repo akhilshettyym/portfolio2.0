@@ -2,19 +2,18 @@
 
 import gsap from "gsap";
 import * as THREE from "three";
+import { GREETINGS } from "@/utils/basic";
+import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
 import LocationModal from "@/components/basic/LocationModal";
 import { hasLocationPreference } from "@/utils/weather-scene";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import {
-  getQualityPreset,
-  getRendererPixelRatio,
-} from "@/lib/performance/applyQualityTier";
-import { GREETINGS } from "@/utils/basic";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 export default function Loader({ onFinish }) {
+  const { theme } = useTheme();
   const containerRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
@@ -33,6 +32,15 @@ export default function Loader({ onFinish }) {
   const pausePointRef = useRef(null);
 
   const lastTimeRef = useRef(0);
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const bgColorClass = isDark || isMetal ? "bg-black" : "bg-white";
+  const textColorClass = isMetal ? "text-red-500" : isDark ? "text-white" : "text-black";
+  const textFadedClass = isMetal ? "text-red-500/40" : isDark ? "text-white/40" : "text-black/40";
+  const progressBgClass = isMetal ? "bg-red-500/20" : isDark ? "bg-white/20" : "bg-black/10";
+  const progressFillClass = isMetal ? "bg-red-500" : isDark ? "bg-white" : "bg-black";
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;
@@ -73,11 +81,7 @@ export default function Loader({ onFinish }) {
 
         const hasPreference = typeof window !== "undefined" && hasLocationPreference();
 
-        if (
-          !hasPreference &&
-          !modalTriggeredRef.current &&
-          next >= pausePointRef.current
-        ) {
+        if (!hasPreference && !modalTriggeredRef.current && next >= pausePointRef.current) {
           modalTriggeredRef.current = true;
           setIsPaused(true);
           setShowLocationModal(true);
@@ -108,14 +112,11 @@ export default function Loader({ onFinish }) {
     const container = containerRef.current;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0xffffff, 6, 18);
 
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000,
-    );
+    const fogColor = theme === "dark" || theme === "metal" ? 0x000000 : 0xffffff;
+    scene.fog = new THREE.Fog(fogColor, 6, 18);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = isMobile ? 6 : 5;
 
     const renderer = new THREE.WebGLRenderer({
@@ -146,9 +147,11 @@ export default function Loader({ onFinish }) {
 
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
+    const particleColor = theme === "metal" ? 0xff0000 : theme === "dark" ? 0xffffff : 0x111111;
+
     const material = new THREE.PointsMaterial({
       size: isMobile ? 0.025 : 0.02,
-      color: 0x111111,
+      color: particleColor,
       transparent: true,
       opacity: 0.9,
       depthWrite: false,
@@ -190,7 +193,7 @@ export default function Loader({ onFinish }) {
       renderer.dispose();
       container?.removeChild(renderer.domElement);
     };
-  }, [mounted, isMobile, quality.antialias, quality.particleMultiplier, tier]);
+  }, [mounted, isMobile, quality.antialias, quality.particleMultiplier, tier, theme]);
 
   useEffect(() => {
     if (!done) return;
@@ -211,20 +214,17 @@ export default function Loader({ onFinish }) {
     }, 300);
   };
 
-  const greetingIndex = Math.min(
-    Math.floor((progress / 100) * GREETINGS.length),
-    GREETINGS.length - 1,
-  );
+  const greetingIndex = Math.min(Math.floor((progress / 100) * GREETINGS.length), GREETINGS.length - 1);
 
   return (
-    <div className="fixed inset-0 z-999 overflow-hidden bg-white">
+    <div className={`fixed inset-0 z-999 overflow-hidden ${bgColorClass}`}>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.10),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.06),transparent_55%)]" />
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-blue-50/10 to-transparent" />
       </div>
 
-      <div className="absolute inset-0 pointer-events-none text-black/40 text-xl font-light">
+      <div className={`absolute inset-0 pointer-events-none text-xl font-light ${textFadedClass}`}>
         <div className="absolute top-8 left-8"> + </div>
         <div className="absolute top-8 right-8"> + </div>
         <div className="absolute bottom-8 left-8"> + </div>
@@ -233,8 +233,8 @@ export default function Loader({ onFinish }) {
 
       <div ref={containerRef} className="absolute inset-0" />
 
-      <div className="absolute top-0 left-0 w-full h-1.5 bg-black/10 z-50">
-        <div className="h-full bg-black" style={{ width: `${progress}%` }} />
+      <div className={`absolute top-0 left-0 w-full h-1.5 z-50 ${progressBgClass}`}>
+        <div className={`h-full ${progressFillClass}`} style={{ width: `${progress}%` }} />
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
@@ -250,12 +250,11 @@ export default function Loader({ onFinish }) {
             return (
               <span
                 key={`${greeting}-${idx}`}
-                className="absolute text-[22px] font-bold tracking-tight text-black transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                className={`absolute text-[22px] font-bold tracking-tight transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] ${textColorClass}`}
                 style={{
                   opacity: offset === 0 ? 1 : 0,
                   transform: `translateY(${offset * 32}px)`,
-                }}
-              >
+                }}>
                 {greeting}
               </span>
             );
@@ -265,9 +264,8 @@ export default function Loader({ onFinish }) {
 
       <div className="absolute bottom-12 w-full flex justify-center text-center px-6 z-10 pointer-events-none">
         <h1
-          className="text-[clamp(0.5em,2vw,1.5rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform"
-          style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}
-        >
+          className={`text-[clamp(0.5em,2vw,1.5rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${textColorClass}`}
+          style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
           AKHIL SHETTY M
         </h1>
       </div>

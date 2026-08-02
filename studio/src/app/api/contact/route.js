@@ -49,10 +49,7 @@ export async function POST(request) {
 
   if (!webhookUrl) {
     if (process.env.NODE_ENV === "production") {
-      return NextResponse.json(
-        { error: "Contact delivery is not configured yet." },
-        { status: 503 },
-      );
+      return NextResponse.json({ error: "Contact delivery is not configured yet." }, { status: 503 });
     }
 
     console.info("Contact inquiry received:", payload);
@@ -66,10 +63,7 @@ export async function POST(request) {
   });
 
   if (!response.ok) {
-    return NextResponse.json(
-      { error: "Unable to deliver the contact request right now." },
-      { status: 502 },
-    );
+    return NextResponse.json({ error: "Unable to deliver the contact request right now." }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true, delivery: "webhook" });

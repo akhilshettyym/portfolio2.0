@@ -6,9 +6,7 @@ import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const DynamicCardStackReveal = dynamic(() => import("@/components/CardStackReveal"), {
-  loading: () => (
-    <div style={{ width: "100%", height: "500px", background: "#ffffff" }} />
-  ),
+  loading: () => <div style={{ width: "100%", height: "500px", background: "#ffffff" }} />,
   ssr: false,
 });
 
@@ -23,30 +21,16 @@ export default function CardStackRevealTiered(props) {
   }, []);
 
   if (!mounted || !ready) {
-    return (
-      <div
-        ref={ref}
-        style={{ width: "100%", minHeight: "500px", background: "#ffffff" }}
-      />
-    );
+    return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />;
   }
 
   if (isTier2 && !shouldRender) {
-    return (
-      <div
-        ref={ref}
-        style={{ width: "100%", minHeight: "500px", background: "#ffffff" }}
-      />
-    );
+    return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />;
   }
 
   return (
     <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
-      <Suspense
-        fallback={
-          <div style={{ width: "100%", height: "500px", background: "#ffffff" }} />
-        }
-      >
+      <Suspense fallback={<div style={{ width: "100%", height: "500px", background: "#ffffff" }} />}>
         <DynamicCardStackReveal {...props} isTieredWrapper={isTier2} />
       </Suspense>
     </div>

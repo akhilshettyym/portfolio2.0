@@ -1,10 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import { protectAdminRoute } from "../middleware/auth.middleware.js";
-import {
-  adminLoginController,
-  adminLogoutController,
-} from "../controllers/auth.controller.js";
+import { adminLoginController, adminLogoutController } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 

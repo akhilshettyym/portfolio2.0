@@ -1,0 +1,20 @@
+@keyframes sleekMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-sleek-marquee {
+  display: flex;
+  width: max-content;
+  animation: sleekMarquee 25s linear infinite;
+}
+.animate-sleek-marquee:hover {
+  animation-play-state: paused;
+}
+.fade-edges {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}

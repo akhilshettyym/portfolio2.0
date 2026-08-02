@@ -3,11 +3,14 @@
 import "@/styles/navbar.css";
 import Link from "next/link";
 import Image from "next/image";
+import Logo from "@/components/Logo";
 import ConsoleModal from "./ConsoleModal";
 import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
+import ModeSwitch from "@/components/ModeSwitch";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { useTheme } from "@/context/ThemeContext";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -20,9 +23,7 @@ function scrambleTo(setText, finalText) {
   const original = finalText.split("");
 
   const interval = setInterval(() => {
-    const newText = original
-      .map((_char, i) => (i < frame ? original[i] : randomChar()))
-      .join("");
+    const newText = original.map((_char, i) => (i < frame ? original[i] : randomChar())).join("");
     setText(newText);
     frame++;
 
@@ -33,7 +34,7 @@ function scrambleTo(setText, finalText) {
   }, 30);
 }
 
-function GlitchNavItem({ href, label, active, delay = 0 }) {
+function GlitchNavItem({ href, label, active, delay = 0, theme }) {
   const ref = useRef(null);
   const resetRef = useRef(null);
   const [text, setText] = useState(label);
@@ -60,18 +61,26 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
     }, 120);
   };
 
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const activeClass = isMetal ? "bg-red-500 text-black" : isDark ? "bg-white text-black" : "bg-black text-white";
+
+  const inactiveClass = isMetal
+    ? "bg-red-500/10 text-red-500/80 hover:bg-red-500 hover:text-black"
+    : isDark
+      ? "bg-white/10 text-gray-300 hover:bg-white hover:text-black"
+      : "bg-black/5 text-gray-700 hover:bg-black hover:text-white";
+
   return (
     <Link
       href={href}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       className={`px-2 py-2 text-[11px] font-bold uppercase tracking-tight transition text-center inline-flex justify-center items-center min-w-10 ${
-        active
-          ? "bg-black text-white"
-          : "bg-black/5 text-gray-700 hover:bg-black hover:text-white"
+        active ? activeClass : inactiveClass
       }`}
-      style={width ? { width: Math.max(width, 60) } : {}}
-    >
+      style={width ? { width: Math.max(width, 60) } : {}}>
       <span ref={ref} className="whitespace-nowrap">
         {" "}
         {text}{" "}
@@ -81,10 +90,57 @@ function GlitchNavItem({ href, label, active, delay = 0 }) {
 }
 
 const Navbar = () => {
+  const { theme } = useTheme();
   const pathname = usePathname();
   const [time, setTime] = useState("");
   const { isTier2 } = usePerformanceTier();
   const [consoleOpen, setConsoleOpen] = useState(false);
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const headerBgClass =
+    isDark || isMetal
+      ? "bg-black/30 supports-backdrop-filter:bg-black/20 border-white/10"
+      : "bg-white/30 supports-backdrop-filter:bg-white/20 border-black/10";
+
+  const textColorClass = isMetal ? "text-red-500" : isDark ? "text-white" : "text-black";
+  const textMutedClass = isMetal ? "text-red-500/50" : isDark ? "text-white/50" : "text-black/50";
+
+  const mobileNavActiveClass = isMetal
+    ? "bg-red-500 text-black"
+    : isDark
+      ? "bg-white text-black"
+      : "bg-black text-white";
+
+  const mobileNavInactiveClass = isMetal
+    ? "bg-red-500/10 text-red-500"
+    : isDark
+      ? "bg-white/10 text-white"
+      : "bg-black/10 text-black";
+
+  const consoleSlideClass = isMetal ? "bg-red-500 text-black" : isDark ? "bg-white text-black" : "bg-black text-white";
+
+  const mobileMenuIconGroupClass = isMetal
+    ? "border-red-500 group-hover:bg-red-500 text-red-500 group-hover:text-black"
+    : isDark
+      ? "border-white group-hover:bg-white text-white group-hover:text-black"
+      : "border-black group-hover:bg-black text-black group-hover:text-white";
+
+  const marqueeFadeLeft = isDark || isMetal ? "from-black/60" : "from-white/60";
+  const marqueeFadeRight = isDark || isMetal ? "from-black/60" : "from-white/60";
+
+  const marqueeDiv1 = isMetal ? "bg-red-500/30" : isDark ? "bg-white/30" : "bg-black/30";
+  const marqueeDiv2 = isMetal ? "bg-red-500/60" : isDark ? "bg-white/60" : "bg-black/60";
+
+  const terminalBgClass = isDark || isMetal ? "bg-white/10" : "bg-white/40";
+  const terminalHoverClass = isMetal
+    ? "hover:bg-red-500 hover:text-black"
+    : isDark
+      ? "hover:bg-white hover:text-black"
+      : "hover:bg-black hover:text-white";
+
+  const logoInvertClass = isDark || isMetal ? "invert brightness-0" : "";
 
   useEffect(() => {
     const updateTime = () => {
@@ -160,19 +216,17 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 bg-white/30 backdrop-blur-md supports-backdrop-filter:bg-white/20 border-b border-black/10">
+      <header
+        className={`fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b transition-colors duration-300 ${headerBgClass} ${textColorClass}`}>
         <div className="sm:hidden w-full px-4 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 relative cursor-pointer"
-                onClick={() => window.location.reload()}
-              >
+              <div className="w-12 h-12 relative cursor-pointer" onClick={() => window.location.reload()}>
                 <Image
                   src="/akhil.svg"
                   alt="Akhil"
                   fill
-                  className="object-contain"
+                  className={`object-contain transition-all duration-300 ${logoInvertClass}`}
                   unoptimized
                   priority
                 />
@@ -183,8 +237,7 @@ const Navbar = () => {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wide transition ${pathname === item.href ? "bg-black text-white" : "bg-black/10 text-black"}`}
-                  >
+                    className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wide transition ${pathname === item.href ? mobileNavActiveClass : mobileNavInactiveClass}`}>
                     {item.label}
                   </Link>
                 ))}
@@ -193,64 +246,42 @@ const Navbar = () => {
 
             <div
               className="relative flex flex-col items-center justify-center group cursor-pointer z-10"
-              onClick={() => setConsoleOpen((prev) => !prev)}
-            >
+              onClick={() => setConsoleOpen((prev) => !prev)}>
               <div
-                className={`absolute right-full top-1/2 -translate-y-1/2 flex items-center overflow-hidden transition-all duration-300 ease-out ${consoleOpen ? "w-22 opacity-100 mr-2" : "w-0 opacity-0 mr-0"} bg-black text-white`}
-              >
+                className={`absolute right-full top-1/2 -translate-y-1/2 flex items-center overflow-hidden transition-all duration-300 ease-out ${consoleOpen ? "w-22 opacity-100 mr-2" : "w-0 opacity-0 mr-0"} ${consoleSlideClass}`}>
                 <div className="px-3 py-1 text-[10px] whitespace-nowrap flex items-center">
                   <span className="mr-1">{">_"}</span>
                   <span>console</span>
                   <span className="ml-1 animate-blink">|</span>
                 </div>
               </div>
-              <div className="w-6 h-6 border-2 border-black flex items-center justify-center transition-all duration-200 active:scale-90 group-hover:bg-black">
+              <div
+                className={`w-6 h-6 border-2 flex items-center justify-center transition-all duration-200 active:scale-90 ${mobileMenuIconGroupClass}`}>
                 <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <line
-                    x2="100"
-                    y2="100"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    className="group-hover:stroke-white"
-                  />
-                  <line
-                    x1="100"
-                    y2="100"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    className="group-hover:stroke-white"
-                  />
+                  <line x2="100" y2="100" stroke="currentColor" strokeWidth="6" />
+                  <line x1="100" y2="100" stroke="currentColor" strokeWidth="6" />
                 </svg>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="hidden sm:block px-10 w-full text-black pt-5 pb-5">
+        <div className="hidden sm:block px-10 w-full pt-6 pb-6">
           <div className="flex items-center">
             <div className="flex items-center gap-3 shrink-0">
               <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
                 <div
                   className="w-12 h-12 flex items-center justify-center relative group cursor-pointer"
-                  onClick={() => window.location.reload()}
-                >
+                  onClick={() => window.location.reload()}>
                   <div className="relative w-full h-full overflow-hidden rounded-md">
-                    <Image
-                      src="/akhil.svg"
-                      alt="Akhil"
-                      unoptimized
-                      fill
-                      priority
-                      className="object-contain rotate-2 transition-all duration-300 ease-out group-hover:rotate-0 group-hover:scale-105 group-hover:-translate-y-0.5"
-                    />
+                    <Logo />
                   </div>
                 </div>
               </div>
 
               <nav
                 aria-label="Desktop Navigation"
-                className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]"
-              >
+                className="flex gap-1 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.2s_forwards]">
                 {navItems.map((item, i) => (
                   <GlitchNavItem
                     key={item.label}
@@ -258,18 +289,24 @@ const Navbar = () => {
                     label={item.label}
                     active={pathname === item.href}
                     delay={200 + i * 120}
+                    theme={theme}
                   />
                 ))}
               </nav>
             </div>
 
-            <div className="w-230 mx-8 border-l border-black/20 overflow-hidden hidden sm:block relative opacity-0 animate-[navbar-enter_0.6s_ease-out_0.3s_forwards]">
-              <div className="pointer-events-none absolute left-0 top-0 h-full w-12 z-10 bg-linear-to-r from-white/60 to-transparent" />
-              <div className="pointer-events-none absolute right-0 top-0 h-full w-12 z-10 bg-linear-to-l from-white/60 to-transparent" />
+            <div
+              className={`w-230 mx-6 border-l overflow-hidden hidden sm:block relative opacity-0 animate-[navbar-enter_0.6s_ease-out_0.3s_forwards] ${isDark || isMetal ? "border-white/20" : "border-black/20"}`}>
+              <div
+                className={`pointer-events-none absolute left-0 top-0 h-full w-12 z-10 bg-linear-to-r to-transparent ${marqueeFadeLeft}`}
+              />
+              <div
+                className={`pointer-events-none absolute right-0 top-0 h-full w-12 z-10 bg-linear-to-l to-transparent ${marqueeFadeRight}`}
+              />
 
               <div className="absolute right-0 top-0 h-full flex z-20">
-                <div className="w-0.5 bg-black/30" />
-                <div className="w-1.25 bg-black/60" />
+                <div className={`w-0.5 ${marqueeDiv1}`} />
+                <div className={`w-1.25 ${marqueeDiv2}`} />
               </div>
               <div className="relative w-full overflow-hidden">
                 {isTier2 ? (
@@ -277,35 +314,14 @@ const Navbar = () => {
                 ) : (
                   <div className="flex w-max animate-marquee">
                     {[...Array(2)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2"
-                      >
-                        <span className="mx-6">
-                          {" "}
-                          Full Stack Developer — 4+ Years Building Production Systems{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          MERN Stack Architecture & Implementation{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          Scalable Backend Systems & API Design{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          Dockerized Workflows & Containerization{" "}
-                        </span>
-                        <span className="mx-6">
-                          {" "}
-                          Performance Optimization & Reliability{" "}
-                        </span>
+                      <div key={i} className="flex whitespace-nowrap text-[12px] uppercase tracking-tight py-2">
+                        <span className="mx-6"> Full Stack Developer — 4+ Years Building Production Systems </span>
+                        <span className="mx-6"> MERN Stack Architecture & Implementation </span>
+                        <span className="mx-6"> Scalable Backend Systems & API Design </span>
+                        <span className="mx-6"> Dockerized Workflows & Containerization </span>
+                        <span className="mx-6"> Performance Optimization & Reliability </span>
                         <span className="mx-6"> End-to-End Feature Ownership </span>
-                        <span className="mx-6">
-                          {" "}
-                          Clean UI Systems & Interaction Design{" "}
-                        </span>
+                        <span className="mx-6"> Clean UI Systems & Interaction Design </span>
                         <span className="mx-6"> Shipping Fast, Stable Code </span>
                       </div>
                     ))}
@@ -314,48 +330,39 @@ const Navbar = () => {
               </div>
             </div>
 
+            <div className="mr-5 mt-2">
+              <ModeSwitch />
+            </div>
+
             <div className="ml-auto relative flex items-center gap-3 shrink-0 min-w-40 justify-end opacity-0 animate-[navbar-enter_0.6s_ease-out_0.4s_forwards]">
               <button
                 onClick={() => setConsoleOpen((prev) => !prev)}
-                className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} bg-black text-white px-4 text-[11px] overflow-hidden`}
-              >
+                className={`absolute right-0 top-0 h-full flex items-center z-50 transition-all duration-300 ease-out ${consoleOpen ? "w-60 opacity-100" : "w-0 opacity-0 pointer-events-none"} ${consoleSlideClass} px-4 text-[11px] overflow-hidden`}>
                 <span className="mr-2">{">_"}</span>
-                <span className="uppercase tracking-wide whitespace-nowrap">
-                  console{" "}
-                </span>
+                <span className="uppercase tracking-wide whitespace-nowrap">console </span>
                 <span className="ml-1 animate-blink">|</span>
-                <span className="ml-2 uppercase tracking-wide whitespace-nowrap opacity-60">
-                  {" "}
-                  run command{" "}
-                </span>
+                <span className="ml-2 uppercase tracking-wide whitespace-nowrap opacity-60"> run command </span>
               </button>
 
               <div
-                className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen ? "opacity-0" : "opacity-100"}`}
-              >
+                className={`text-right text-[10px] uppercase tracking-widest hidden sm:block leading-tight w-full transition-opacity duration-300 ${consoleOpen ? "opacity-0" : "opacity-100"}`}>
                 <div className="font-bold">
                   {" "}
                   AKHIL SHETTY M <span className="font-light">, IN</span>
                 </div>
                 <div>{time || "—:—:— --"}</div>
-                <div
-                  key={ip}
-                  className="text-[8px] font-semibold uppercase tracking-[0.25em] text-black/50"
-                >
-                  {" "}
-                  connection <span className="inline-block w-25 text-right"> {ip} </span>
+                <div key={ip} className={`text-[8px] font-semibold uppercase tracking-[0.25em] ${textMutedClass}`}>
+                  connection<span className="inline-block w-25 text-right"> {ip} </span>
                 </div>
               </div>
 
               <div
                 onClick={() => setConsoleOpen((prev) => !prev)}
-                className="w-10 aspect-square flex items-center justify-center relative overflow-hidden bg-white/40 transition-all duration-300 cursor-pointer z-40 hover:bg-black hover:text-white"
-              >
+                className={`w-10 aspect-square flex items-center justify-center relative overflow-hidden transition-all duration-300 cursor-pointer z-40 ${terminalBgClass} ${terminalHoverClass}`}>
                 <svg
                   viewBox="0 0 100 100"
                   className={`w-full h-full transition-all duration-300 ${consoleOpen ? "scale-70 rotate-90" : ""}`}
-                  preserveAspectRatio="none"
-                >
+                  preserveAspectRatio="none">
                   <SiGnometerminal size={100} />
                 </svg>
               </div>

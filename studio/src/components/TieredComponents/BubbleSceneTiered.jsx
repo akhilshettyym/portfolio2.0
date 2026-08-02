@@ -5,9 +5,7 @@ import dynamic from "next/dynamic";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const LoadingFallback = () => (
-  <div style={{ width: "100%", minHeight: "400px", background: "#ffffff" }} />
-);
+const LoadingFallback = () => <div style={{ width: "100%", minHeight: "400px", background: "#ffffff" }} />;
 
 const BubbleScene = dynamic(() => import("@/components/BubbleScene"), {
   loading: LoadingFallback,

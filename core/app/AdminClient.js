@@ -38,23 +38,18 @@ export default function AdminClient({ children }) {
     <>
       {loggingOut && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-          <div className="font-mono text-sm uppercase tracking-widest text-black px-6 py-3">
-            Logging out...
-          </div>
+          <div className="font-mono text-sm uppercase tracking-widest text-black px-6 py-3">Logging out...</div>
         </div>
       )}
 
       {!isLoginPage && (
         <nav className="w-full border-b border-black py-5 px-6 flex justify-between items-center bg-white">
-          <span className="font-mono font-extrabold tracking-normal uppercase text-md">
-            AKHIL SHETTY // ADMIN
-          </span>
+          <span className="font-mono font-extrabold tracking-normal uppercase text-md">AKHIL SHETTY // ADMIN</span>
 
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            className="border-2 border-black px-4 py-2 text-sm uppercase font-mono tracking-normal hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-50"
-          >
+            className="border-2 border-black px-4 py-2 text-sm uppercase font-mono tracking-normal hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-50">
             {loggingOut ? "Exiting..." : "Logout"}
           </button>
         </nav>

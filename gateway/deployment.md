@@ -422,10 +422,7 @@ Update your route files to use validation middleware:
 import express from "express";
 import { validateAdminLogin } from "../middleware/validation.middleware.js";
 import { protectAdminRoute } from "../middleware/auth.middleware.js";
-import {
-  adminLoginController,
-  adminLogoutController,
-} from "../controllers/auth.controller.js";
+import { adminLoginController, adminLogoutController } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -461,12 +458,7 @@ import { deleteInquiryDetails } from "../controllers/deleteInquiryDetails.contro
 const router = express.Router();
 
 router.get("/get-all-inquiries", protectAdminRoute, getAllInquiries);
-router.delete(
-  "/delete-details/:id",
-  protectAdminRoute,
-  validateObjectId,
-  deleteInquiryDetails,
-);
+router.delete("/delete-details/:id", protectAdminRoute, validateObjectId, deleteInquiryDetails);
 
 export default router;
 ```
@@ -625,9 +617,7 @@ const contactInquirySchema = new mongoose.Schema({
   // ... schema definition
 });
 
-const ContactInquiry =
-  mongoose.models.ContactInquiry ||
-  mongoose.model("ContactInquiry", contactInquirySchema);
+const ContactInquiry = mongoose.models.ContactInquiry || mongoose.model("ContactInquiry", contactInquirySchema);
 
 export default ContactInquiry;
 ```
@@ -676,10 +666,7 @@ export const getAllInquiries = async (req, res) => {
     const limit = 20;
     const skip = (page - 1) * limit;
 
-    const inquiries = await ContactInquiry.find()
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .skip(skip);
+    const inquiries = await ContactInquiry.find().sort({ createdAt: -1 }).limit(limit).skip(skip);
 
     const total = await ContactInquiry.countDocuments();
 

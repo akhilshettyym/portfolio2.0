@@ -10,19 +10,13 @@ const contactInquiryLimiter = rateLimit({
   max: 5,
   message: {
     success: false,
-    message:
-      "Too many inquiries submitted from this IP. Please try again after 15 minutes.",
+    message: "Too many inquiries submitted from this IP. Please try again after 15 minutes.",
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 /* POST /api/user/contact-inquiry */
-router.post(
-  "/contact-inquiry",
-  contactInquiryLimiter,
-  validateContactInquiry,
-  createInquiry,
-);
+router.post("/contact-inquiry", contactInquiryLimiter, validateContactInquiry, createInquiry);
 
 export default router;

@@ -10,6 +10,18 @@ jest.mock("@/hooks/useDeviceType", () => ({
   useDeviceType: () => ({ isMobile: false }),
 }));
 
+jest.mock("@/context/ThemeContext", () => ({
+  useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
+}));
+
+jest.mock(
+  "../src/context/ThemeContext",
+  () => ({
+    useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
+  }),
+  { virtual: true },
+);
+
 jest.mock("@/components/basic/ShowToast", () => ({
   ShowToast: {
     success: jest.fn(),
@@ -41,9 +53,7 @@ describe("CreateSomething Component", () => {
     render(<CreateSomething />);
 
     expect(screen.getByPlaceholderText("What should I call you?")).toBeInTheDocument();
-    expect(
-      screen.queryByPlaceholderText("Company or project name"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("Company or project name")).not.toBeInTheDocument();
   });
 
   it("shows validation error if required fields are missing", async () => {
@@ -72,9 +82,7 @@ describe("CreateSomething Component", () => {
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Your message body must be at least 10 characters long."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Your message body must be at least 10 characters long.")).toBeInTheDocument();
     });
   });
 
@@ -88,19 +96,14 @@ describe("CreateSomething Component", () => {
     fireEvent.change(screen.getByPlaceholderText("How I'll reach you"), {
       target: { value: "jane@test.com" },
     });
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Provide an overview of objectives, tech requirements, scope...",
-      ),
-      { target: { value: "Valid message length here" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Provide an overview of objectives, tech requirements, scope..."), {
+      target: { value: "Valid message length here" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Please fill out your Organization and Role details."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Please fill out your Organization and Role details.")).toBeInTheDocument();
     });
   });
 
@@ -120,19 +123,14 @@ describe("CreateSomething Component", () => {
     fireEvent.change(screen.getByPlaceholderText("e.g. Founder, Product Lead"), {
       target: { value: "CEO" },
     });
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Provide an overview of objectives, tech requirements, scope...",
-      ),
-      { target: { value: "Valid message length here" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Provide an overview of objectives, tech requirements, scope..."), {
+      target: { value: "Valid message length here" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Please select at least one engineering project service type."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Please select at least one engineering project service type.")).toBeInTheDocument();
     });
   });
 
@@ -153,34 +151,29 @@ describe("CreateSomething Component", () => {
       target: { value: "CEO" },
     });
     fireEvent.click(screen.getByText("Web Development"));
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Provide an overview of objectives, tech requirements, scope...",
-      ),
-      { target: { value: "Valid message length here" } },
-    );
+    fireEvent.change(screen.getByPlaceholderText("Provide an overview of objectives, tech requirements, scope..."), {
+      target: { value: "Valid message length here" },
+    });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Please select an estimated allocation budget option."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Please select an estimated allocation budget option.")).toBeInTheDocument();
     });
   });
 
   it("trims whitespace and formats payload correctly before submitting", async () => {
-    axios.post.mockResolvedValueOnce({ status: 200, data: { success: true } });
+    axios.post.mockResolvedValueOnce({ status: 200, data: { success: true, message: "Success!" } });
     render(<CreateSomething />);
 
     fireEvent.change(screen.getByPlaceholderText("What should I call you?"), {
-      target: { value: "  John Doe  " },
+      target: { value: "  John Doe  " },
     });
     fireEvent.change(screen.getByPlaceholderText("How I'll reach you"), {
       target: { value: " JOHN@TEST.com " },
     });
     fireEvent.change(screen.getByPlaceholderText("Write your message here..."), {
-      target: { value: "  Hello, just saying hi!  " },
+      target: { value: "  Hello, just saying hi!  " },
     });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
@@ -196,6 +189,7 @@ describe("CreateSomething Component", () => {
         },
         expect.any(Object),
       );
+      expect(ShowToast.success).toHaveBeenCalledWith("Success!", { theme: "light" });
     });
   });
 
@@ -205,6 +199,7 @@ describe("CreateSomething Component", () => {
       response: { data: { message: "Email already submitted recently." } },
     });
     render(<CreateSomething />);
+
     fireEvent.change(screen.getByPlaceholderText("What should I call you?"), {
       target: { value: "John" },
     });
@@ -214,12 +209,15 @@ describe("CreateSomething Component", () => {
     fireEvent.change(screen.getByPlaceholderText("Write your message here..."), {
       target: { value: "Valid message here" },
     });
+
     fireEvent.click(screen.getByTestId("submit-btn"));
+
     await waitFor(() => {
       expect(screen.getByText("Email already submitted recently.")).toBeInTheDocument();
-      expect(ShowToast.error).toHaveBeenCalledWith("Email already submitted recently.");
+      expect(ShowToast.error).toHaveBeenCalledWith("Email already submitted recently.", { theme: "light" });
       expect(ShowToast.success).not.toHaveBeenCalled();
     });
+
     consoleSpy.mockRestore();
   });
 });

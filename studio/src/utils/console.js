@@ -25,29 +25,13 @@ import {
   logWhoAmI,
 } from "@/utils/funct";
 
-const NON_SLASH_COMMANDS = [
-  "clear",
-  "close",
-  "ls",
-  "whoami",
-  "exit",
-  "sudo",
-  "rm",
-  "cat",
-  "ping",
-  "git",
-  "work",
-  "me",
-];
+const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work", "me"];
 
 export function normalizeConsoleCommand(value) {
   const command = value.trim().toLowerCase();
 
   if (!command) return "";
-  if (
-    command.startsWith("/") ||
-    NON_SLASH_COMMANDS.some((item) => command.startsWith(item))
-  ) {
+  if (command.startsWith("/") || NON_SLASH_COMMANDS.some((item) => command.startsWith(item))) {
     return command;
   }
 

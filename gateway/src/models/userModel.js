@@ -91,8 +91,6 @@ const contactInquirySchema = new mongoose.Schema(
 
 contactInquirySchema.index({ email: 1, createdAt: -1 });
 
-const ContactInquiry =
-  mongoose.models.ContactInquiry ||
-  mongoose.model("ContactInquiry", contactInquirySchema);
+const ContactInquiry = mongoose.models.ContactInquiry || mongoose.model("ContactInquiry", contactInquirySchema);
 
 export default ContactInquiry;

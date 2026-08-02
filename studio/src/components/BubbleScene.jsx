@@ -4,24 +4,60 @@ import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
 import { memo, useEffect, useRef } from "react";
+import { useTheme } from "@/context/ThemeContext";
 import { BUBBLE_TEXT_GROUPS } from "@/utils/basic";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, useReducedMotion } from "framer-motion";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
-import {
-  getQualityPreset,
-  getRendererPixelRatio,
-} from "@/lib/performance/applyQualityTier";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 function BubbleScene() {
+  const { theme } = useTheme();
   const canvasRef = useRef(null);
   const wrapperRef = useRef(null);
+  const fogRef = useRef(null);
+  const lightRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
   const { tier, isTier2 } = usePerformanceTier();
   const { isMobile } = useDeviceType();
   const quality = getQualityPreset(tier);
+
+  const isDark = theme === "dark" || theme === "metal";
+  const isMetal = theme === "metal";
+
+  const styles = {
+    section: isDark ? "bg-black" : "bg-white",
+    card:
+      theme === "dark"
+        ? "border-white/20 bg-black shadow-[4px_4px_0px_#ffffff]"
+        : theme === "metal"
+          ? "border-red-500/30 bg-black shadow-[4px_4px_0px_#ef4444]"
+          : "border-neutral-200 bg-white shadow-[4px_4px_0px_#000000]",
+    text: theme === "dark" ? "text-white" : theme === "metal" ? "text-red-500" : "text-neutral-800",
+    orbitBorder: isDark ? "border-white/10" : "border-black/10",
+    fadeGradient: isDark ? "from-black via-black/90 to-transparent" : "from-white via-white/90 to-transparent",
+  };
+
+  const scenePanelBg = isMetal
+    ? "radial-gradient(circle at 50% 30%, rgba(239, 68, 68, 0.15), rgba(0, 0, 0, 0) 38%), linear-gradient(180deg, rgba(0, 0, 0, 0.96) 0%, rgba(10, 10, 10, 0.88) 44%, rgba(0, 0, 0, 1) 100%)"
+    : isDark
+      ? "radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.15), rgba(0, 0, 0, 0) 38%), linear-gradient(180deg, rgba(0, 0, 0, 0.96) 0%, rgba(10, 10, 10, 0.88) 44%, rgba(0, 0, 0, 1) 100%)"
+      : "radial-gradient(circle at 50% 30%, rgba(191, 219, 254, 0.28), rgba(255, 255, 255, 0) 38%), linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 250, 255, 0.88) 44%, rgba(255, 255, 255, 1) 100%)";
+
+  const gridLineColor = isDark ? "rgba(255, 255, 255, 0.06)" : "rgba(0, 0, 0, 0.045)";
+  const gridBackground = `linear-gradient(${gridLineColor} 1px, transparent 1px), linear-gradient(90deg, ${gridLineColor} 1px, transparent 1px)`;
+
+  useEffect(() => {
+    if (fogRef.current) {
+      fogRef.current.color.setHex(isDark ? 0x000000 : 0xffffff);
+    }
+    if (lightRef.current) {
+      const lightColor = isMetal ? 0xff4444 : isDark ? 0xffffff : 0xdbeafe;
+      lightRef.current.color.setHex(lightColor);
+    }
+  }, [isDark, isMetal]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,30 +71,29 @@ function BubbleScene() {
     let mouseMoveTimeout;
     let resizeObserver;
     let frame = 0;
+    let cachedIntersects = [];
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog("#ffffff", 20, 52);
 
-    const camera = new THREE.PerspectiveCamera(
-      30,
-      wrapper.clientWidth / wrapper.clientHeight,
-      0.1,
-      1000,
-    );
+    const initialFogColor = isDark ? "#000000" : "#ffffff";
+    scene.fog = new THREE.Fog(initialFogColor, 20, 52);
+    fogRef.current = scene.fog;
+
+    const camera = new THREE.PerspectiveCamera(30, wrapper.clientWidth / wrapper.clientHeight, 0.1, 1000);
     camera.position.set(0, 0.3, 24);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
       antialias: quality.antialias,
-      powerPreference: tier === "tier_1" ? "high-performance" : "default",
+      powerPreference: "default",
     });
 
     renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
-    renderer.setPixelRatio(getRendererPixelRatio(tier, isTier2 ? 1 : 1.6));
+    const maxPixelRatio = isTier2 ? 1 : 1.25;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMapping = THREE.NoToneMapping;
 
     const loader = new THREE.TextureLoader();
     const textures = TEXTURE_PATHS.map((name) => {
@@ -68,12 +103,14 @@ function BubbleScene() {
     });
 
     scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const directionalLight = new THREE.DirectionalLight("#dbeafe", 0.8);
+
+    const initialLightColor = isMetal ? "#ff4444" : isDark ? "#ffffff" : "#dbeafe";
+    const directionalLight = new THREE.DirectionalLight(initialLightColor, 0.8);
     directionalLight.position.set(8, 12, 10);
     scene.add(directionalLight);
+    lightRef.current = directionalLight;
 
     const group = new THREE.Group();
-
     const baseScaleFactor = isMobile ? 0.75 : 1.0;
     const targetZRotation = isMobile ? -(Math.PI / 2) : 0;
 
@@ -97,11 +134,7 @@ function BubbleScene() {
       const entryRadius = 2.5 + (index % 9) * 0.32;
 
       bubble.scale.set(0.05, 0.05, 0.05);
-      bubble.position.set(
-        Math.cos(entryAngle) * entryRadius,
-        -6 + Math.sin(entryAngle) * 1.2,
-        -6 - (index % 7) * 0.2,
-      );
+      bubble.position.set(Math.cos(entryAngle) * entryRadius, -6 + Math.sin(entryAngle) * 1.2, -6 - (index % 7) * 0.2);
 
       bubble.userData = {
         originalPosition: new THREE.Vector3(pos.x, pos.y, pos.z),
@@ -131,12 +164,7 @@ function BubbleScene() {
       const duration = shouldReduceMotion || isTier2 ? 0.35 : 1.55;
       const scaleDuration = shouldReduceMotion || isTier2 ? 0.35 : 1.25;
 
-      gsap.to(group.rotation, {
-        x: 0,
-        z: targetZRotation,
-        duration,
-        ease: "power3.out",
-      });
+      gsap.to(group.rotation, { x: 0, z: targetZRotation, duration, ease: "power3.out" });
       gsap.to(group.scale, {
         x: baseScaleFactor,
         y: baseScaleFactor,
@@ -149,20 +177,8 @@ function BubbleScene() {
         const delay = shouldReduceMotion || isTier2 ? 0 : Math.min(index * 0.012, 0.8);
         const target = bubble.userData.originalPosition;
 
-        gsap.to(bubble.material, {
-          opacity: 1,
-          duration: 0.45,
-          delay,
-          ease: "power2.out",
-        });
-        gsap.to(bubble.position, {
-          x: target.x,
-          y: target.y,
-          z: target.z,
-          duration,
-          delay,
-          ease: "expo.out",
-        });
+        gsap.to(bubble.material, { opacity: 1, duration: 0.45, delay, ease: "power2.out" });
+        gsap.to(bubble.position, { x: target.x, y: target.y, z: target.z, duration, delay, ease: "expo.out" });
         gsap.to(bubble.scale, {
           x: bubble.userData.baseScale,
           y: bubble.userData.baseScale,
@@ -188,12 +204,10 @@ function BubbleScene() {
         const localLimit = Math.min(i + 12, bubbles.length);
         for (let j = i + 1; j < localLimit; j += 1) {
           const bubbleB = bubbles[j];
-          const radiusB = bubbleB.userData.radius;
-          const minDistance = (radiusA + radiusB) * 1.3;
+          const minDistance = (radiusA + bubbleB.userData.radius) * 1.3;
           const distanceSquared = bubbleA.position.distanceToSquared(bubbleB.position);
 
-          if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance)
-            continue;
+          if (distanceSquared === 0 || distanceSquared >= minDistance * minDistance) continue;
 
           const distance = Math.sqrt(distanceSquared);
           tempVector.subVectors(bubbleB.position, bubbleA.position).normalize();
@@ -217,34 +231,32 @@ function BubbleScene() {
       const time = performance.now() * floatSpeed;
 
       if (loadingComplete) {
-        let intersects = [];
-        if (mouse.x !== -10 && mouse.y !== -10) {
-          raycaster.setFromCamera(mouse, camera);
-          intersects = raycaster.intersectObjects(bubbles, false);
+        if (frame % 5 === 0) {
+          if (mouse.x !== -10 && mouse.y !== -10) {
+            raycaster.setFromCamera(mouse, camera);
+            cachedIntersects = raycaster.intersectObjects(bubbles, false);
+          } else {
+            cachedIntersects = [];
+          }
         }
 
         bubbles.forEach((bubble) => {
           const { originalPosition, velocity, floatOffset } = bubble.userData;
 
           if (!isTier2) {
-            const targetY =
-              originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude;
-            const targetX =
-              originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08;
-            const targetZ =
-              originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12;
-            velocity.x += (targetX - bubble.position.x) * returnStrength;
-            velocity.y += (targetY - bubble.position.y) * returnStrength;
-            velocity.z += (targetZ - bubble.position.z) * returnStrength;
+            velocity.x +=
+              (originalPosition.x + Math.cos(time * 0.8 + floatOffset) * 0.08 - bubble.position.x) * returnStrength;
+            velocity.y +=
+              (originalPosition.y + Math.sin(time + floatOffset) * floatAmplitude - bubble.position.y) * returnStrength;
+            velocity.z +=
+              (originalPosition.z + Math.sin(time * 0.65 + floatOffset) * 0.12 - bubble.position.z) * returnStrength;
           }
 
-          const isHovered = intersects.some((hit) => hit.object === bubble);
+          const isHovered = cachedIntersects.some((hit) => hit.object === bubble);
 
           if (isHovered) {
             tempVector.subVectors(bubble.position, camera.position).normalize();
-            if (!isTier2) {
-              velocity.addScaledVector(tempVector, mouseForce);
-            }
+            if (!isTier2) velocity.addScaledVector(tempVector, mouseForce);
           }
 
           if (isHovered && !bubble.userData.hovered) {
@@ -255,9 +267,7 @@ function BubbleScene() {
               duration: 0.35,
               ease: "power3.out",
             });
-          }
-
-          if (!isHovered && bubble.userData.hovered) {
+          } else if (!isHovered && bubble.userData.hovered) {
             bubble.userData.hovered = false;
             gsap.to(bubble.scale, {
               x: bubble.userData.baseScale,
@@ -274,7 +284,7 @@ function BubbleScene() {
           bubble.lookAt(camera.position);
         });
 
-        if (!isTier2 && frame % 3 === 0) {
+        if (!isTier2 && frame % 4 === 0) {
           handleCollisions();
         }
       }
@@ -299,9 +309,7 @@ function BubbleScene() {
       ([entry]) => {
         if (entry.isIntersecting) {
           startLoop();
-          if (entry.intersectionRatio > 0) {
-            startAnimation();
-          }
+          if (entry.intersectionRatio > 0) startAnimation();
         } else {
           stopLoop();
         }
@@ -335,7 +343,7 @@ function BubbleScene() {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-      renderer.setPixelRatio(getRendererPixelRatio(tier, isTier2 ? 1 : 1.6));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
       renderer.render(scene, camera);
     };
 
@@ -361,21 +369,28 @@ function BubbleScene() {
       textures.forEach((texture) => texture.dispose());
       renderer.dispose();
     };
-  }, [
-    isTier2,
-    quality.antialias,
-    quality.bubbleCollisionLimit,
-    shouldReduceMotion,
-    tier,
-    isMobile,
-  ]);
+  }, [isTier2, quality.antialias, quality.bubbleCollisionLimit, shouldReduceMotion, tier, isMobile, isDark, isMetal]);
 
   return (
-    <section className="bubble-wrapper relative w-full pb-12 flex flex-col justify-center bg-[#0a0a0a]">
-      <div ref={wrapperRef} className="bubble-scene-panel relative w-full min-h-100">
-        <div className="bubble-grid" aria-hidden="true" />
-        <div className="bubble-orbit bubble-orbit-one mt-10" aria-hidden="true" />
-        <div className="bubble-orbit bubble-orbit-two mt-5" aria-hidden="true" />
+    <section
+      className={`bubble-wrapper relative w-full pb-12 flex flex-col justify-center transition-colors duration-500 ${styles.section}`}>
+      <div
+        ref={wrapperRef}
+        className="bubble-scene-panel relative w-full min-h-100 transition-all duration-500"
+        style={{ background: scenePanelBg }}>
+        <div
+          className="bubble-grid transition-all duration-500"
+          aria-hidden="true"
+          style={{ backgroundImage: gridBackground }}
+        />
+        <div
+          className={`bubble-orbit bubble-orbit-one mt-10 transition-colors duration-500 ${styles.orbitBorder}`}
+          aria-hidden="true"
+        />
+        <div
+          className={`bubble-orbit bubble-orbit-two mt-5 transition-colors duration-500 ${styles.orbitBorder}`}
+          aria-hidden="true"
+        />
 
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
       </div>
@@ -385,16 +400,15 @@ function BubbleScene() {
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         viewport={{ once: true, amount: 0.4 }}
-        className="bubble-content relative z-10 w-full max-w-6xl mx-auto px-6 -mt-8"
-      >
+        className={`bubble-content relative z-10 w-full max-w-6xl mx-auto px-6 -mt-8 bg-linear-to-t ${styles.fadeGradient}`}>
         <div className="bubble-content-inner">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
             {BUBBLE_TEXT_GROUPS.map((group) => (
               <div
                 key={group.summary}
-                className="flex flex-col space-y-2 p-4 border border-neutral-200 bg-white shadow-[4px_4px_0px_#000000]"
-              >
-                <p className="text-sm font-sans text-neutral-800 leading-relaxed font-medium">
+                className={`flex flex-col space-y-2 p-4 border transition-colors duration-300 ${styles.card}`}>
+                <p
+                  className={`text-sm font-sans leading-relaxed font-medium transition-colors duration-300 ${styles.text}`}>
                   {group.summary}
                 </p>
               </div>

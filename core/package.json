@@ -11,8 +11,7 @@
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "validate": "npm run format:check && npm run lint && npm run jest",
-    "test": "npm run validate"
+    "validate": "npm run format:check && npm run lint && npm run jest"
   },
   "dependencies": {
     "next": "16.2.11",

@@ -4,6 +4,7 @@ import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
 import { SiRevealdotjs } from "react-icons/si";
+import { useTheme } from "@/context/ThemeContext";
 import LimpModal from "@/components/basic/LimpModal";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
@@ -27,6 +28,9 @@ function isSameScene(a, b) {
 }
 
 const HeroSection = () => {
+  const { theme } = useTheme();
+  const isDarkOrMetal = theme === "dark" || theme === "metal";
+
   const btnRef = useRef(null);
   const sectionRef = useRef(null);
   const speedRef = useRef(0.8);
@@ -39,15 +43,10 @@ const HeroSection = () => {
 
   const { triggerIntroRestart } = useContext(LoadingContext);
   const { tier, ready, isTier2 } = usePerformanceTier();
-  const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(
-    containerRef,
-    tier,
-  );
+  const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
 
   const quality = getQualityPreset(tier);
-  const maxCloudPlanes = quality.cloudPlanes
-    ? Math.floor(quality.cloudPlanes * 1.5)
-    : 1500;
+  const maxCloudPlanes = quality.cloudPlanes ? Math.floor(quality.cloudPlanes * 1.5) : 1500;
 
   const pausedRef = useRef(false);
   const sceneAssetsRef = useRef(null);
@@ -62,14 +61,18 @@ const HeroSection = () => {
   }, [paused]);
 
   useEffect(() => {
-    if (ready) {
-      const timer = setTimeout(() => {
-        setShowModal(true);
-      }, 5000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowModal(false);
+    if (!ready) {
+      const resetTimer = setTimeout(() => {
+        setShowModal(false);
+      }, 0);
+      return () => clearTimeout(resetTimer);
     }
+
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, [ready]);
 
   useEffect(() => {
@@ -384,12 +387,7 @@ const HeroSection = () => {
 
         if (isDisposed) return;
 
-        camera = new THREE.PerspectiveCamera(
-          30,
-          window.innerWidth / window.innerHeight,
-          1,
-          3000,
-        );
+        camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
         camera.position.z = 6000;
 
         renderer = new THREE.WebGLRenderer({
@@ -554,8 +552,7 @@ const HeroSection = () => {
 
       if (renderer) {
         renderer.dispose();
-        if (container.contains(renderer.domElement))
-          container.removeChild(renderer.domElement);
+        if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
       }
     };
   }, [quality.antialias, maxCloudPlanes, sceneAssets, tier, isTier2]);
@@ -579,20 +576,19 @@ const HeroSection = () => {
   const handleRestartIntroScene = () => triggerIntroRestart();
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12"
-    >
+    <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
       {showModal && <LimpModal />}
 
       <div className="wrapper">
         <div
           ref={containerRef}
-          className="canvas-bg absolute inset-0 z-0"
+          className={`canvas-bg absolute inset-0 z-0 ${isDarkOrMetal ? "bg-black" : ""}`}
           style={{
-            backgroundImage: sceneAssets
-              ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")`
-              : "none",
+            backgroundImage: isDarkOrMetal
+              ? "none"
+              : sceneAssets
+                ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")`
+                : "none",
           }}
         />
 
@@ -603,8 +599,7 @@ const HeroSection = () => {
               onClick={handleCloudControl}
               aria-label={paused ? "Resume animation" : "Pause animation"}
               disabled={isTier2}
-              className={`group absolute top-3 left-1/2 -translate-x-1/2 h-11 w-11 z-20`}
-            >
+              className={`group absolute top-3 left-1/2 -translate-x-1/2 h-11 w-11 z-20`}>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative z-10 flex h-10 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
                   {paused ? (
@@ -622,14 +617,10 @@ const HeroSection = () => {
             <button
               type="button"
               onClick={handleRestartIntroScene}
-              className="group absolute top-14 left-1/2 -translate-x-1/2 h-12 w-12 z-20"
-            >
+              className="group absolute top-14 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="mr-1/2 relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
-                  <SiRevealdotjs
-                    size={15}
-                    className="translate-x-[0.5px] text-black/50"
-                  />
+                  <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
                 </div>
               </div>
               <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
@@ -653,8 +644,7 @@ const HeroSection = () => {
             OPTIMIZE SCALE x LATENCY <br />
           </span>
           <span className="line strong">
-            <span className="text-md uppercase tracking-tight"> OPS </span>{" "}
-            <WordCarousel />
+            <span className="text-md uppercase tracking-tight"> OPS </span> <WordCarousel />
           </span>
 
           <button ref={btnRef} type="button" className="btn">
@@ -680,8 +670,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400"
-        >
+          className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
           <div className="relative px-10 py-4 text-xs tracking-widest">
             <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
               ©001

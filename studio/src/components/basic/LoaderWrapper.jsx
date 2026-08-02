@@ -77,17 +77,13 @@ export default function LoaderWrapper({ children }) {
   };
 
   return (
-    <LoadingContext.Provider
-      value={{ isLoading: loading, navReady, triggerIntroRestart }}
-    >
+    <LoadingContext.Provider value={{ isLoading: loading, navReady, triggerIntroRestart }}>
       {loading && <Loader onFinish={() => setLoading(false)} />}
 
       {!loading && showIntro && <CinematicIntro onComplete={handleIntroComplete} />}
 
       <PageReveal active={revealActive}>
-        <div
-          className={`relative transition-opacity duration-500 ${revealActive ? "opacity-100" : "opacity-0"}`}
-        >
+        <div className={`relative transition-opacity duration-500 ${revealActive ? "opacity-100" : "opacity-0"}`}>
           {(shouldMountChildren || hasSeenIntro) && children}
         </div>
       </PageReveal>

@@ -3,10 +3,7 @@ import { SCENE_CACHE, LOCATION_MODE } from "@/utils/storage";
 import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
 
 async function fetchWeather(latitude, longitude) {
-  const response = await fetch(
-    `/api/weather?latitude=${latitude}&longitude=${longitude}`,
-    { cache: "no-store" },
-  );
+  const response = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error("Weather fetch failed");

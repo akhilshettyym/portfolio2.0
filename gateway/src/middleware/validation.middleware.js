@@ -17,12 +17,7 @@ export const validateContactInquiry = (req, res, next) => {
     });
   }
 
-  if (
-    !message ||
-    typeof message !== "string" ||
-    message.length < 10 ||
-    message.length > 5000
-  ) {
+  if (!message || typeof message !== "string" || message.length < 10 || message.length > 5000) {
     return res.status(400).json({
       success: false,
       message: "Message must be between 10-5000 characters",
@@ -37,15 +32,7 @@ export const validateContactInquiry = (req, res, next) => {
   }
 
   if (purpose === "work") {
-    const validProjectTypes = [
-      "frontend",
-      "backend",
-      "fullstack",
-      "mobile_app",
-      "cms",
-      "ci_cd",
-      "other",
-    ];
+    const validProjectTypes = ["frontend", "backend", "fullstack", "mobile_app", "cms", "ci_cd", "other"];
     const validBudgets = ["under_1k", "1k_5k", "5k_10k", "10k_plus", "not_sure"];
 
     if (!projectType || !validProjectTypes.includes(projectType)) {
@@ -63,11 +50,7 @@ export const validateContactInquiry = (req, res, next) => {
     }
   }
 
-  if (
-    req.body.organization &&
-    typeof req.body.organization === "string" &&
-    req.body.organization.length > 200
-  ) {
+  if (req.body.organization && typeof req.body.organization === "string" && req.body.organization.length > 200) {
     return res.status(400).json({
       success: false,
       message: "Organization name must be less than 200 characters",

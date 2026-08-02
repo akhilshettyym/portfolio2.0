@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
+import { useTheme } from "@/context/ThemeContext";
 
 const ScrollMarquee = ({
   texts = ["DEFAULT TEXT"],
@@ -17,10 +18,12 @@ const ScrollMarquee = ({
   showIcon = false,
   className = "",
   direct = false,
+  theme,
 }) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const { isTier2 } = usePerformanceTier();
   const { ref: marqueeRef, isVisible } = useViewportDetection({ threshold: 0.05 });
+
   useEffect(() => {
     if (texts.length <= 1 || !isVisible) return;
     const interval = setInterval(() => {
@@ -28,9 +31,15 @@ const ScrollMarquee = ({
     }, 3500);
     return () => clearInterval(interval);
   }, [texts, isVisible]);
+
   const currentText = texts[currentTextIndex];
   const speed = Math.max(0.5, baseSpeed);
   const duration = 25 / speed;
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+  const textColorClass = isDark ? "text-white" : isMetal ? "text-red-500" : "text-slate-900";
+
   return (
     <div
       ref={marqueeRef}
@@ -38,7 +47,7 @@ const ScrollMarquee = ({
       {" "}
       {isTier2 ? (
         <h2
-          className={`font-black uppercase tracking-tight text-slate-900 bg-clip-text ${variant === "large" ? "text-[clamp(3.5rem,6vw,5.5rem)]" : "text-[clamp(1.1rem,4vw,1.4rem)]"}`}>
+          className={`font-black uppercase tracking-tight bg-clip-text ${textColorClass} ${variant === "large" ? "text-[clamp(3.5rem,6vw,5.5rem)]" : "text-[clamp(1.1rem,4vw,1.4rem)]"}`}>
           {currentText}{" "}
         </h2>
       ) : (
@@ -52,36 +61,44 @@ const ScrollMarquee = ({
             repeatType: "loop",
           }}
           style={{ transformOrigin: "left center" }}>
-          <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />
-          <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} />{" "}
+          <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} theme={theme} />
+          <MarqueeContent text={currentText} variant={variant} showIcon={showIcon} theme={theme} />{" "}
         </motion.div>
       )}{" "}
     </div>
   );
 };
 
-const MarqueeContent = ({ text, variant, showIcon }) => (
-  <div className="flex items-center gap-10 shrink-0">
-    {" "}
-    <AnimatePresence mode="wait">
+const MarqueeContent = ({ text, variant, showIcon, theme }) => {
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+  const textColorClass = isDark ? "text-white" : isMetal ? "text-red-500" : "text-slate-900";
+  const iconColorClass = isDark ? "text-white/80" : isMetal ? "text-red-500/80" : "text-black/80";
+
+  return (
+    <div className="flex items-center gap-10 shrink-0">
       {" "}
-      <motion.h2
-        key={text}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className={`font-black uppercase tracking-tight text-slate-900 bg-clip-text ${variant === "large" ? "text-[clamp(3.5rem,6vw,5.5rem)]" : "text-[clamp(1.1rem,4vw,1.4rem)]"}`}>
-        {text}{" "}
-      </motion.h2>{" "}
-    </AnimatePresence>
-    {showIcon && <IoIdCardOutline size={40} className="text-black/80" />}{" "}
-  </div>
-);
+      <AnimatePresence mode="wait">
+        {" "}
+        <motion.h2
+          key={text}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className={`font-black uppercase tracking-tight bg-clip-text ${textColorClass} ${variant === "large" ? "text-[clamp(3.5rem,6vw,5.5rem)]" : "text-[clamp(1.1rem,4vw,1.4rem)]"}`}>
+          {text}{" "}
+        </motion.h2>{" "}
+      </AnimatePresence>
+      {showIcon && <IoIdCardOutline size={40} className={iconColorClass} />}{" "}
+    </div>
+  );
+};
 
 export default function SubjectProfile() {
-  const [carouselIndex, setCarouselIndex] = useState(0);
+  const { theme } = useTheme();
   const { isMobile } = useDeviceType();
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const { ref: sectionRef, isVisible: isSectionVisible } = useViewportDetection({ threshold: 0.05 });
 
   useEffect(() => {
@@ -92,10 +109,87 @@ export default function SubjectProfile() {
     return () => clearInterval(interval);
   }, [isSectionVisible]);
 
+  const getStyles = (currentTheme) => {
+    const dark = currentTheme === "dark";
+    const metal = currentTheme === "metal";
+    return {
+      section: dark
+        ? "bg-black text-white selection:bg-white selection:text-black"
+        : metal
+          ? "bg-black text-red-500 selection:bg-red-500 selection:text-black"
+          : "bg-white text-slate-900 selection:bg-slate-900 selection:text-white",
+      h1Main: dark ? "text-white" : metal ? "text-red-500" : "text-black",
+      h1Sub: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-black/90",
+      h2Sub: dark ? "text-white/95" : metal ? "text-red-500/95" : "text-black/95",
+      pSub: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
+      subProfileText: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-black/50",
+      coordsGroup: dark ? "text-white/35" : metal ? "text-red-500/35" : "text-black/35",
+      coordDatePre: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
+      coordDate: dark ? "text-white/70" : metal ? "text-red-500/70" : "text-black/70",
+      lineStatic: dark ? "bg-white/10" : metal ? "bg-red-500/20" : "bg-black/6",
+      lineAnim: dark ? "bg-white/60" : metal ? "bg-red-500/60" : "bg-black/40",
+      lineStaticThin: dark ? "bg-white/10" : metal ? "bg-red-500/10" : "bg-black/8",
+      gridLines: dark ? "rgba(255, 255, 255, 0.1)" : metal ? "rgba(239, 68, 68, 0.1)" : "rgba(148, 163, 184, 0.1)",
+      cardBg: dark ? "bg-black border-white/20" : metal ? "bg-black border-red-500/30" : "bg-white border-slate-200/80",
+      textBody: dark ? "text-white/70" : metal ? "text-red-500/70" : "text-slate-600",
+      textHighlight: dark ? "text-white" : metal ? "text-red-500" : "text-slate-900",
+      textHighlightBg: dark ? "bg-white text-black" : metal ? "bg-red-500 text-black" : "bg-slate-100 text-slate-950",
+      underline: dark ? "decoration-white/50" : metal ? "decoration-red-500/50" : "decoration-slate-300",
+      nodeStatus: dark
+        ? "border-white/20 bg-black"
+        : metal
+          ? "border-red-500/20 bg-black"
+          : "border-slate-100 bg-slate-950",
+      nodeStatusText: dark
+        ? "text-white/70 border-white/20 bg-black/60"
+        : metal
+          ? "text-red-500 border-red-500/20 bg-black/60"
+          : "text-slate-300 border-white/10 bg-black/60",
+      mainCard: dark ? "bg-black border-white" : metal ? "bg-black border-red-500" : "bg-white border-slate-900",
+      borderCorner: dark ? "border-white" : metal ? "border-red-500" : "border-slate-900",
+      workflowBox: dark
+        ? "bg-white/5 border-white"
+        : metal
+          ? "bg-red-950/20 border-red-500"
+          : "bg-slate-50/80 border-slate-900",
+      workflowLabel: dark ? "text-white/60" : metal ? "text-red-500/60" : "text-slate-500",
+      workflowText: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-slate-700",
+      workflowArrow: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-black/60",
+      hoverCard: dark
+        ? "bg-white/5 border-white/20 hover:border-white"
+        : metal
+          ? "bg-red-950/10 border-red-500/20 hover:border-red-500"
+          : "bg-slate-50/40 border-slate-200 hover:border-slate-400",
+      hoverCardText: dark
+        ? "text-white/60 group-hover:text-white"
+        : metal
+          ? "text-red-500/60 group-hover:text-red-500"
+          : "text-slate-600 group-hover:text-slate-900",
+      imgCardContainer: dark
+        ? "border-white/20 bg-black"
+        : metal
+          ? "border-red-500/30 bg-black"
+          : "border-slate-200 bg-slate-50",
+      imgPlaceholder: dark ? "bg-white/10" : metal ? "bg-red-500/10" : "bg-slate-200",
+      sysPanel: dark
+        ? "bg-black/90 border-white/20 text-white"
+        : metal
+          ? "bg-black/90 border-red-500/30 text-red-500"
+          : "bg-slate-900/90 border-slate-700/50 text-white",
+      sysDot: metal ? "bg-red-500" : "bg-emerald-400",
+      sysHeader: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-slate-200",
+      sysText: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-slate-400",
+      marqueeBorder: dark ? "border-white/20" : metal ? "border-red-500/30" : "border-slate-200/80",
+      textH3: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-slate-800",
+    };
+  };
+
+  const styles = getStyles(theme);
+
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-white text-slate-900 font-sans selection:bg-slate-900 selection:text-white py-12 px-4 md:px-12 overflow-hidden">
+      className={`relative w-full min-h-screen font-sans py-12 px-4 md:px-12 overflow-hidden ${styles.section}`}>
       {" "}
       <div className="relative z-10">
         {" "}
@@ -106,7 +200,7 @@ export default function SubjectProfile() {
             <div className="overflow-hidden">
               {" "}
               <h1
-                className="text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] text-black will-change-transform"
+                className={`text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${styles.h1Main}`}
                 style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                 FULL STACK{" "}
               </h1>{" "}
@@ -114,7 +208,7 @@ export default function SubjectProfile() {
             <div className="-mt-3 overflow-hidden">
               {" "}
               <h1
-                className="text-[clamp(3rem,5vw,3rem)] font-black leading-[0.82] tracking-[-0.12em] text-black/90 will-change-transform"
+                className={`text-[clamp(3rem,5vw,3rem)] font-black leading-[0.82] tracking-[-0.12em] will-change-transform ${styles.h1Sub}`}
                 style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                 DEVELOPER{" "}
               </h1>{" "}
@@ -125,10 +219,11 @@ export default function SubjectProfile() {
             transition={{ ...FADEUP.transition, delay: 0.08 }}
             className="flex flex-col items-start justify-end pb-2 text-left md:col-span-4 md:items-end md:text-right">
             {" "}
-            <h2 className="text-[clamp(2.3rem,4vw,4rem)] font-black leading-[0.9] tracking-[-0.08em] text-black/95 will-change-transform">
+            <h2
+              className={`text-[clamp(2.3rem,4vw,4rem)] font-black leading-[0.9] tracking-[-0.08em] will-change-transform ${styles.h2Sub}`}>
               / FROM <br /> MUMBAI, MH{" "}
             </h2>{" "}
-            <p className="mt-2 max-w-70 text-[11px] uppercase leading-relaxed tracking-normal text-black/45">
+            <p className={`mt-2 max-w-70 text-[11px] uppercase leading-relaxed tracking-normal ${styles.pSub}`}>
               The art of hacking social{" "}
             </p>{" "}
           </motion.div>{" "}
@@ -139,34 +234,34 @@ export default function SubjectProfile() {
         <div className="mx-auto max-w-8xl">
           {" "}
           <div className="relative flex items-center justify-between gap-6">
-            <span className="text-[12px] uppercase tracking-normal text-black/50">/ Subject Profile</span>{" "}
-            <div className="hidden items-center gap-5 font-mono text-[10px] uppercase tracking-normal text-black/35 md:flex">
+            <span className={`text-[12px] uppercase tracking-normal ${styles.subProfileText}`}>/ Subject Profile</span>{" "}
+            <div
+              className={`hidden items-center gap-5 font-mono text-[10px] uppercase tracking-normal md:flex ${styles.coordsGroup}`}>
               <span>12.8761 N</span>
               <span>74.8316 E</span>{" "}
             </div>{" "}
             <div className="flex items-center gap-4 font-mono">
-              <span className="text-[10px] uppercase tracking-normal text-black/45">@03-29</span>{" "}
+              <span className={`text-[10px] uppercase tracking-normal ${styles.coordDatePre}`}>@03-29</span>{" "}
               <div className="relative h-px w-14 overflow-hidden">
-                <div className="absolute inset-0 bg-black/8" />{" "}
+                <div className={`absolute inset-0 ${styles.lineStaticThin}`} />{" "}
                 <motion.div
-                  className="absolute top-0 h-px w-6 bg-black/40 blur-[0.5px]"
+                  className={`absolute top-0 h-px w-6 blur-[0.5px] ${styles.lineAnim}`}
                   animate={isSectionVisible ? { x: ["-120%", "250%"] } : { x: "-120%" }}
                   transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }}
                 />{" "}
               </div>
-              <span className="text-[10px] uppercase tracking-normal text-black/70">2026</span>{" "}
+              <span className={`text-[10px] uppercase tracking-normal ${styles.coordDate}`}>2026</span>{" "}
             </div>{" "}
           </div>{" "}
           <div className="relative mt-5 h-px overflow-hidden">
-            <div className="absolute inset-0 bg-black/6" />{" "}
+            <div className={`absolute inset-0 ${styles.lineStatic}`} />{" "}
           </div>{" "}
         </div>{" "}
       </motion.div>{" "}
       <div
         className="absolute inset-0 z-0 opacity-15 pointer-events-none"
         style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)",
+          backgroundImage: `linear-gradient(to right, ${styles.gridLines} 1px, transparent 1px), linear-gradient(to bottom, ${styles.gridLines} 1px, transparent 1px)`,
           backgroundSize: "48px 48px",
         }}
       />{" "}
@@ -181,22 +276,24 @@ export default function SubjectProfile() {
           {" "}
           <motion.div
             variants={itemReveal}
-            className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group">
+            className={`flex-1 border p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group ${styles.cardBg}`}>
             {" "}
             <ScrollMarquee
+              theme={theme}
               texts={["ABOUT ME"]}
               baseSpeed={1.5}
               variant="large"
               showIcon={true}
               direct={true}
-              className="border-b border-slate-200/80"
+              className={`border-b ${styles.marqueeBorder}`}
             />
-            <ScrollMarquee texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />{" "}
+            <ScrollMarquee theme={theme} texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />{" "}
             <div className="mt-4">
               {" "}
-              <p className="text-slate-600 text-lg leading-relaxed font-light text-justify">
+              <p className={`text-lg leading-relaxed font-light text-justify ${styles.textBody}`}>
                 I am a multidisciplinary creator{" "}
-                <span className="text-slate-900 font-semibold underline decoration-slate-300 decoration-2 underline-offset-4">
+                <span
+                  className={`font-semibold underline decoration-2 underline-offset-4 ${styles.textHighlight} ${styles.underline}`}>
                   engineering high-impact digital experiences{" "}
                 </span>{" "}
                 at the intersection of robust code and beautiful design. My methodology is inherently systematic,
@@ -206,17 +303,19 @@ export default function SubjectProfile() {
           </motion.div>{" "}
           <motion.div
             variants={itemReveal}
-            className="flex-1 border border-slate-200/80 bg-white p-6 flex flex-col justify-between shadow-sm rounded-2xl">
+            className={`flex-1 border p-6 flex flex-col justify-between shadow-sm rounded-2xl ${styles.cardBg}`}>
             {" "}
-            <div className="relative w-full h-48 md:h-40 mb-6 border border-slate-100 bg-slate-950 overflow-hidden rounded-2xl group shadow-inner">
+            <div
+              className={`relative w-full h-48 md:h-40 mb-6 border overflow-hidden rounded-2xl group shadow-inner ${styles.nodeStatus}`}>
               {" "}
-              <div className="absolute top-3 left-3 bg-black/60 backdrop-blur px-2 py-1 text-[10px] font-mono text-slate-300 tracking-wider rounded border border-white/10 uppercase">
+              <div
+                className={`absolute top-3 left-3 backdrop-blur px-2 py-1 text-[10px] font-mono tracking-wider rounded border uppercase ${styles.nodeStatusText}`}>
                 live_node_status // active{" "}
               </div>{" "}
             </div>{" "}
-            <p className="text-slate-600 text-sm md:text-base leading-relaxed font-light text-justify">
+            <p className={`text-sm md:text-base leading-relaxed font-light text-justify ${styles.textBody}`}>
               Every project I build intentionally bridges{" "}
-              <span className="text-slate-900 font-medium">
+              <span className={`font-medium ${styles.textHighlight}`}>
                 user psychology with comprehensive engineering strategy{" "}
               </span>
               . I build web ecosystems that are visually striking and structurally bulletproof. By leveraging
@@ -227,19 +326,23 @@ export default function SubjectProfile() {
         </div>{" "}
         <motion.div
           variants={itemReveal}
-          className="w-full border border-slate-900 bg-white p-8 md:p-12 relative shadow-xl rounded-xl">
+          className={`w-full border p-8 md:p-12 relative shadow-xl rounded-xl ${styles.mainCard}`}>
           {" "}
-          <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-slate-900 -translate-x-3 translate-y-3" />{" "}
-          <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-slate-900 translate-x-3 -translate-y-3" />{" "}
+          <div
+            className={`absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 -translate-x-3 translate-y-3 ${styles.borderCorner}`}
+          />{" "}
+          <div
+            className={`absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 translate-x-3 -translate-y-3 ${styles.borderCorner}`}
+          />{" "}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
             {" "}
             <div className="lg:col-span-8 flex flex-col justify-between gap-10">
               {" "}
               <div>
                 {" "}
-                <h3 className="text-xl font-light leading-relaxed text-slate-800 tracking-tight text-justify">
+                <h3 className={`text-xl font-light leading-relaxed tracking-tight text-justify ${styles.textH3}`}>
                   I craft technical design solutions that help forward-thinking brands truly differentiate. With over{" "}
-                  <span className="text-slate-950 font-semibold bg-slate-100 px-2 py-0.5 rounded">
+                  <span className={`font-semibold px-2 py-0.5 rounded ${styles.textHighlightBg}`}>
                     3-4 years of tech experience{" "}
                   </span>
                   , I specialize in designing beautiful software interfaces and transforming them into high-performing
@@ -248,9 +351,11 @@ export default function SubjectProfile() {
                   integrations.{" "}
                 </h3>{" "}
               </div>{" "}
-              <div className="min-h-30 border-l-4 border-slate-900 pl-6 relative flex flex-col justify-center bg-slate-50/80 py-2 pr-4 shadow-sm">
+              <div
+                className={`min-h-30 border-l-4 pl-6 relative flex flex-col justify-center py-2 pr-4 shadow-sm ${styles.workflowBox}`}>
                 {" "}
-                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 flex items-center gap-2">
+                <div
+                  className={`text-[11px] font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2 ${styles.workflowLabel}`}>
                   Operational Workflow Ethos{" "}
                 </div>{" "}
                 <div className="relative min-h-18 w-full flex items-center">
@@ -265,8 +370,8 @@ export default function SubjectProfile() {
                       transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute w-full">
                       {" "}
-                      <p className="text-sm md:text-base font-medium text-slate-700 leading-normal">
-                        <span className="text-black/60 font-bold mr-1.5">&gt;</span>
+                      <p className={`text-sm md:text-base font-medium leading-normal ${styles.workflowText}`}>
+                        <span className={`font-bold mr-1.5 ${styles.workflowArrow}`}>&gt;</span>
                         {carouselData[carouselIndex % carouselData.length]}{" "}
                       </p>{" "}
                     </motion.div>{" "}
@@ -277,21 +382,21 @@ export default function SubjectProfile() {
                 {" "}
                 <motion.div
                   whileHover={{ y: -4, boxShadow: "0 12px 30px -10px rgba(0,0,0,0.08)" }}
-                  className="border border-slate-200 bg-slate-50/40 p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group hover:border-slate-400">
+                  className={`border p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group ${styles.hoverCard}`}>
                   {" "}
-                  <p className="text-xs font-medium text-slate-600 group-hover:text-slate-900 transition-colors text-justify">
+                  <p className={`text-xs font-medium transition-colors text-justify ${styles.hoverCardText}`}>
                     I design spaces with structural intention, merging the precise creative layouts of{" "}
-                    <span className="text-slate-950 font-semibold">Figma</span>, code flexibility of modern frameworks,
-                    and advanced scroll magic driven by{" "}
-                    <span className="text-slate-950 font-semibold">GSAP / Framer Motion</span>. These are strategic
-                    tools configured to capture complete market attention.{" "}
+                    <span className={`font-semibold ${styles.textHighlight}`}>Figma</span>, code flexibility of modern
+                    frameworks, and advanced scroll magic driven by{" "}
+                    <span className={`font-semibold ${styles.textHighlight}`}>GSAP / Framer Motion</span>. These are
+                    strategic tools configured to capture complete market attention.{" "}
                   </p>{" "}
                 </motion.div>{" "}
                 <motion.div
                   whileHover={{ y: -4, boxShadow: "0 12px 30px -10px rgba(0,0,0,0.08)" }}
-                  className="border border-slate-200 bg-slate-50/40 p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group hover:border-slate-400">
+                  className={`border p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group ${styles.hoverCard}`}>
                   {" "}
-                  <p className="text-xs font-medium text-slate-600 group-hover:text-slate-900 transition-colors text-justify">
+                  <p className={`text-xs font-medium transition-colors text-justify ${styles.hoverCardText}`}>
                     Available for select freelance contracts, engineering high-tier enterprise modules, standalone
                     applications, and automated deployments. I maximize client trust through direct accountability,
                     transparency, and scalable architecture buildouts.{" "}
@@ -299,24 +404,31 @@ export default function SubjectProfile() {
                 </motion.div>{" "}
               </div>{" "}
             </div>{" "}
-            <div className="lg:col-span-4 relative h-full min-h-100 border border-slate-200 p-2 group bg-slate-50 shadow-inner">
+            <div
+              className={`lg:col-span-4 relative h-full min-h-100 border p-2 group shadow-inner ${styles.imgCardContainer}`}>
               {" "}
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-slate-900 rounded-tl -translate-x-0.5 -translate-y-0.5" />{" "}
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-slate-900 rounded-br translate-x-0.5 translate-y-0.5" />{" "}
-              <div className="relative w-full h-100 bg-slate-200 overflow-hidden rounded-lg">
+              <div
+                className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 rounded-tl -translate-x-0.5 -translate-y-0.5 ${styles.borderCorner}`}
+              />{" "}
+              <div
+                className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`}
+              />{" "}
+              <div className={`relative w-full h-100 overflow-hidden rounded-lg ${styles.imgPlaceholder}`}>
                 {/* Image element placeholder */}{" "}
               </div>{" "}
               <div
-                className={`absolute bottom-4 left-4 bg-slate-900/90 text-white backdrop-blur-md border border-slate-700/50 p-3 shadow-xl font-mono select-none rounded-lg ${isMobile ? "w-60" : "w-70"}`}>
+                className={`absolute bottom-4 left-4 backdrop-blur-md border p-3 shadow-xl font-mono select-none rounded-lg ${styles.sysPanel} ${isMobile ? "w-60" : "w-70"}`}>
                 {" "}
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   {" "}
                   <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />{" "}
-                    <p className="text-[10px] text-slate-200 font-bold tracking-wider">CORE_SYS // ENGR.AV2</p>{" "}
+                    <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${styles.sysDot}`} />{" "}
+                    <p className={`text-[10px] font-bold tracking-wider ${styles.sysHeader}`}>
+                      CORE_SYS // ENGR.AV2
+                    </p>{" "}
                   </div>{" "}
                 </div>{" "}
-                <p className="text-[9px] text-slate-400 tracking-wide">LATENCY: OPTIMAL // LOC: GLOBAL</p>{" "}
+                <p className={`text-[9px] tracking-wide ${styles.sysText}`}>LATENCY: OPTIMAL // LOC: GLOBAL</p>{" "}
               </div>{" "}
             </div>{" "}
           </div>{" "}

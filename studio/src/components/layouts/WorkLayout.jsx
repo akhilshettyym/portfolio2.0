@@ -18,7 +18,11 @@ export default function WorkLayout() {
         </LazyLoad>
       </section>
 
-      <TrackTrail />
+      <section id="salesforce">
+        <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+          <TrackTrail />
+        </LazyLoad>
+      </section>
 
       <section id="github">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>

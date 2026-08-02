@@ -4,6 +4,7 @@ import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { motion } from "framer-motion";
 import { SiRevealdotjs } from "react-icons/si";
+import { useTheme } from "@/context/ThemeContext";
 import LimpModal from "@/components/basic/LimpModal";
 import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
@@ -27,6 +28,9 @@ function isSameScene(a, b) {
 }
 
 const HeroSection = () => {
+  const { theme } = useTheme();
+  const isDarkOrMetal = theme === "dark" || theme === "metal";
+
   const btnRef = useRef(null);
   const sectionRef = useRef(null);
   const speedRef = useRef(0.8);
@@ -578,11 +582,13 @@ const HeroSection = () => {
       <div className="wrapper">
         <div
           ref={containerRef}
-          className="canvas-bg absolute inset-0 z-0"
+          className={`canvas-bg absolute inset-0 z-0 ${isDarkOrMetal ? "bg-black" : ""}`}
           style={{
-            backgroundImage: sceneAssets
-              ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")`
-              : "none",
+            backgroundImage: isDarkOrMetal
+              ? "none"
+              : sceneAssets
+                ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")`
+                : "none",
           }}
         />
 

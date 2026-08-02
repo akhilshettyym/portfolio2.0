@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import React, { useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { ShowToast } from "@/components/basic/ShowToast";
@@ -9,9 +10,22 @@ import CustomButton from "@/components/basic/CustomButton";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const labelClass = isDark ? "text-white/60" : isMetal ? "text-red-500/60" : "text-neutral-500";
+  const inputClass = `mt-2 w-full border px-5 py-4 outline-none transition-colors rounded-none text-sm ${
+    isDark
+      ? "border-white/20 bg-[#111] text-white focus:border-white"
+      : isMetal
+        ? "border-red-500/20 bg-[#110000] text-red-500 focus:border-red-500"
+        : "border-neutral-300 bg-white text-black focus:border-black"
+  }`;
+
   return (
     <div>
-      <label className="text-xs uppercase tracking-wide text-neutral-500">
+      <label className={`text-xs uppercase tracking-wide ${labelClass}`}>
         {label} {required && <span className="text-red-600">*</span>}
       </label>
       <input
@@ -21,13 +35,14 @@ const InputField = ({ label, name, placeholder, value, onChange, type = "text", 
         onChange={onChange}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        className="mt-2 w-full border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm"
+        className={inputClass}
       />
     </div>
   );
 };
 
 export default function CreateSomething() {
+  const { theme } = useTheme();
   const [purpose, setPurpose] = useState("say_hi");
   const [budget, setBudget] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,6 +50,48 @@ export default function CreateSomething() {
   const [selectedServices, setSelectedServices] = useState([]);
 
   const { isMobile } = useDeviceType();
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const styles = {
+    section: isDark ? "bg-[#0a0a0a] text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black",
+    textMuted: isDark ? "text-white/40" : isMetal ? "text-red-500/40" : "text-neutral-400",
+    textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-neutral-700",
+    dividerSoft: isDark ? "border-white/10" : isMetal ? "border-red-500/10" : "border-neutral-100",
+    dividerHeavy: isDark ? "border-white" : isMetal ? "border-red-500" : "border-black",
+
+    btnActive: isDark
+      ? "bg-white border-white text-black"
+      : isMetal
+        ? "bg-red-500 border-red-500 text-black"
+        : "bg-black border-black text-white",
+
+    btnInactive: isDark
+      ? "bg-transparent border-white/20 text-white hover:border-white"
+      : isMetal
+        ? "bg-transparent border-red-500/25 text-red-500 hover:border-red-500"
+        : "bg-white border-neutral-200 text-black hover:border-black",
+
+    selectContainer: isDark
+      ? "border-white/20 focus-within:border-white bg-[#111]"
+      : isMetal
+        ? "border-red-500/20 focus-within:border-red-500 bg-[#110000]"
+        : "border-neutral-300 focus-within:border-black bg-white",
+
+    selectOption: isDark ? "bg-[#111] text-white" : isMetal ? "bg-[#110000] text-red-500" : "bg-white text-black",
+    selectText: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
+
+    textarea: isDark
+      ? "border-white/20 bg-[#111] text-white focus:border-white"
+      : isMetal
+        ? "border-red-500/20 bg-[#110000] text-red-500 focus:border-red-500"
+        : "border-neutral-300 bg-white text-black focus:border-black",
+
+    successText: isDark || isMetal ? "text-emerald-400" : "text-emerald-700",
+    errorText: isDark || isMetal ? "text-red-400 font-bold" : "text-red-700 font-bold",
+    labelClass: isDark ? "text-white/60" : isMetal ? "text-red-500/60" : "text-neutral-500",
+  };
 
   const [formData, setFormData] = useState({
     name: "",
@@ -148,24 +205,24 @@ export default function CreateSomething() {
           message: "Inquiry successfully recorded!",
         });
       }
-      ShowToast.success(response?.data?.message);
+      ShowToast.success(response?.data?.message, { theme });
     } catch (error) {
       console.error("Submission Error Pipeline Logs:", error.response?.data || error);
       const errorMessage = error.response?.data?.message || error.message || "Validation Error detected.";
       setStatus({ type: "error", message: errorMessage });
-      ShowToast.error(errorMessage);
+      ShowToast.error(errorMessage, { theme });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className={`w-full bg-white py-12 text-black ${isMobile ? "" : "p-10"}`}>
+    <section className={`w-full transition-colors duration-500 ${styles.section} ${isMobile ? "" : "p-10"}`}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="gap-12">
           <div className="w-full">
             <div className={isMobile ? "mb-5" : "mb-10"}>
-              <label className="text-xs uppercase tracking-widest text-neutral-400 block mb-3">
+              <label className={`text-xs uppercase tracking-widest block mb-3 ${styles.textMuted}`}>
                 Select Form Purpose Track
               </label>
               <div className="grid grid-cols-2 gap-4 max-w-md">
@@ -175,7 +232,7 @@ export default function CreateSomething() {
                     setPurpose("say_hi");
                     setStatus({ type: "", message: "" });
                   }}
-                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "say_hi" ? styles.btnActive : styles.btnInactive}`}>
                   Just Say Hi
                 </button>
 
@@ -185,13 +242,14 @@ export default function CreateSomething() {
                     setPurpose("work");
                     setStatus({ type: "", message: "" });
                   }}
-                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? "bg-black border-black text-white" : "bg-white border-neutral-200 text-black hover:border-black"}`}>
+                  className={`${isMobile ? "py-3" : "py-4"} px-5 text-xs font-bold uppercase tracking-wider border transition-all text-center rounded-none ${purpose === "work" ? styles.btnActive : styles.btnInactive}`}>
                   {isMobile ? "Build Project" : "Build A Project"}
                 </button>
               </div>
             </div>
 
-            <p className="text-left text-xl md:text-2xl font-light leading-relaxed text-neutral-700 border-t border-neutral-100 pt-6">
+            <p
+              className={`text-left text-xl md:text-2xl font-light leading-relaxed border-t pt-6 transition-colors duration-500 ${styles.textSecondary} ${styles.dividerSoft}`}>
               {purpose === "say_hi"
                 ? "Drop your details below to say hello, ask a general question, or just connect!"
                 : "Let's turn your idea into code. Tell me about your organization and project requirements below."}
@@ -199,7 +257,8 @@ export default function CreateSomething() {
 
             <form onSubmit={handleSubmit} className="mt-12 space-y-12">
               <div>
-                <h3 className="mb-6 text-sm font-bold uppercase tracking-widest border-b border-black pb-2 flex justify-between items-baseline w-full">
+                <h3
+                  className={`mb-6 text-sm font-bold uppercase tracking-widest border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy}`}>
                   <span> About You </span>
                   <span className="text-[10px] font-normal tracking-normal text-red-500 capitalize">
                     {" "}
@@ -227,7 +286,7 @@ export default function CreateSomething() {
                       placeholder="How I'll reach you"
                       required={true}
                     />
-                    <p className="text-[10px] text-neutral-400 tracking-widest pl-0.5">
+                    <p className={`text-[10px] tracking-widest pl-0.5 ${styles.textMuted}`}>
                       Please enter a valid email address so I can reliably get back to you.
                     </p>
                   </div>
@@ -257,10 +316,11 @@ export default function CreateSomething() {
 
               {purpose === "work" && (
                 <div className="animate-fadeIn">
-                  <h3 className="mb-2 text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
+                  <h3
+                    className={`mb-2 text-sm font-bold uppercase tracking-widest border-b pb-2 transition-colors duration-500 ${styles.dividerHeavy}`}>
                     About The Project
                   </h3>
-                  <label className="mb-6 block text-[11px] uppercase tracking-wider text-neutral-400">
+                  <label className={`mb-6 block text-[11px] uppercase tracking-wider ${styles.textMuted}`}>
                     What development service model do you need? <span className="text-red-600">*</span>
                   </label>
 
@@ -272,7 +332,7 @@ export default function CreateSomething() {
                           key={service.id}
                           type="button"
                           onClick={() => toggleService(service.id)}
-                          className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-200 rounded-none text-xs uppercase tracking-wide ${checked ? "border-black bg-black text-white" : "border-neutral-200 bg-white text-black  hover:border-black"}`}>
+                          className={`relative flex items-center justify-between border px-5 py-4 transition-all duration-200 rounded-none text-xs uppercase tracking-wide ${checked ? styles.btnActive : styles.btnInactive}`}>
                           <span> {service.label} </span>
                           {checked && <CheckIcon className="text-sm shrink-0 ml-2" />}
                         </button>
@@ -282,25 +342,27 @@ export default function CreateSomething() {
 
                   <div className="mt-10 grid gap-10 grid-cols-1 sm:grid-cols-2">
                     <div>
-                      <label className="text-xs uppercase tracking-wide text-neutral-500">
+                      <label className={`text-xs uppercase tracking-wide ${styles.labelClass}`}>
                         Project Budget Allocation <span className="text-red-600">*</span>
                       </label>
 
-                      <div className="relative mt-2 border border-neutral-300 transition-colors focus-within:border-black bg-white">
+                      <div className={`relative mt-2 border transition-colors ${styles.selectContainer}`}>
                         <select
                           value={budget}
                           onChange={(e) => setBudget(e.target.value)}
-                          className="w-full appearance-none bg-transparent px-5 py-4 outline-none text-xs uppercase tracking-wider rounded-none pr-12 cursor-pointer text-black">
-                          <option value="" className="bg-white text-black">
+                          className={`w-full appearance-none bg-transparent px-5 py-4 outline-none text-xs uppercase tracking-wider rounded-none pr-12 cursor-pointer ${styles.selectText}`}>
+                          <option value="" className={styles.selectOption}>
                             Select range allocation
                           </option>
                           {BUDGET_OPTIONS.map((item) => (
-                            <option key={item.id} value={item.id} className="bg-white text-black">
+                            <option key={item.id} value={item.id} className={styles.selectOption}>
                               {item.label}
                             </option>
                           ))}
                         </select>
-                        <ChevronIcon className="absolute right-5 top-1/2 -translate-y-1/2 text-base pointer-events-none text-neutral-500" />
+                        <ChevronIcon
+                          className={`absolute right-5 top-1/2 -translate-y-1/2 text-base pointer-events-none ${styles.textMuted}`}
+                        />
                       </div>
                     </div>
                     <InputField
@@ -315,7 +377,8 @@ export default function CreateSomething() {
               )}
 
               <div>
-                <h3 className="mb-6 text-sm font-bold uppercase tracking-widest border-b border-black pb-2">
+                <h3
+                  className={`mb-6 text-sm font-bold uppercase tracking-widest border-b pb-2 transition-colors duration-500 ${styles.dividerHeavy}`}>
                   {purpose === "work" ? "Project Details" : "Your Message"} <span className="text-red-600">*</span>
                 </h3>
                 <textarea
@@ -328,14 +391,14 @@ export default function CreateSomething() {
                       ? "Provide an overview of objectives, tech requirements, scope..."
                       : "Write your message here..."
                   }
-                  className="mt-2 w-full resize-none border border-neutral-300 px-5 py-4 outline-none transition-colors focus:border-black rounded-none text-sm font-sans"
+                  className={`mt-2 w-full resize-none border px-5 py-4 outline-none transition-colors rounded-none text-sm font-sans ${styles.textarea}`}
                 />
               </div>
 
               <div className="mt-10 flex flex-col sm:flex-row justify-end items-center gap-6">
                 {status.message && (
                   <p
-                    className={`text-xs tracking-wide w-full sm:w-auto text-center sm:text-right ${status.type === "success" ? "text-emerald-700" : "text-red-700 font-bold"}`}
+                    className={`text-xs tracking-wide w-full sm:w-auto text-center sm:text-right ${status.type === "success" ? styles.successText : styles.errorText}`}
                     aria-live="polite">
                     {status.message}
                   </p>
@@ -356,7 +419,7 @@ export default function CreateSomething() {
           <div className="hidden lg:block" />
         </div>
 
-        <p className="border-b border-black mt-10" />
+        <p className={`border-b mt-10 transition-colors duration-500 ${styles.dividerHeavy}`} />
       </div>
     </section>
   );

@@ -1,30 +1,71 @@
 import { getCardState } from "@/utils/funct";
 import { motion, useMotionTemplate, useTransform } from "framer-motion";
 
-export default function FloatingCard({ card, index, progress, hoveredCard, setHoveredCard }) {
+const getThemeTransforms = (theme) => {
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  if (isDark) {
+    return {
+      bg: ["rgba(10,10,10,0.42)", "rgba(10,10,10,0.98)"],
+      border: ["rgba(255,255,255,0.05)", "rgba(255,255,255,0.15)"],
+      shadow: ["0 30px 80px rgba(0,0,0,0.5)", "0 40px 120px rgba(255,255,255,0.08)"],
+    };
+  }
+
+  if (isMetal) {
+    return {
+      bg: ["rgba(10,10,10,0.42)", "rgba(10,10,10,0.98)"],
+      border: ["rgba(239,68,68,0.15)", "rgba(239,68,68,0.30)"],
+      shadow: ["0 30px 80px rgba(0,0,0,0.5)", "0 40px 120px rgba(239,68,68,0.15)"],
+    };
+  }
+
+  return {
+    bg: ["rgba(255,255,255,0.42)", "rgba(255,255,255,0.98)"],
+    border: ["rgba(255,255,255,0.70)", "rgba(0,0,0,0.08)"],
+    shadow: ["0 30px 80px rgba(0,0,0,0.08)", "0 40px 120px rgba(0,0,0,0.14)"],
+  };
+};
+
+export default function FloatingCard({ card, index, progress, hoveredCard, setHoveredCard, theme = "light" }) {
   const stateX = useTransform(progress, (v) => getCardState(v, index).x);
   const stateY = useTransform(progress, (v) => getCardState(v, index).y);
-
   const stateScale = useTransform(progress, (v) => getCardState(v, index).scale);
-
   const stateOpacity = useTransform(progress, (v) => getCardState(v, index).opacity);
-
   const stateRotate = useTransform(progress, (v) => getCardState(v, index).rotate);
-
   const stateBlur = useTransform(progress, (v) => getCardState(v, index).blur);
 
   const blurFilter = useMotionTemplate`blur(${stateBlur}px)`;
-
   const finalized = useTransform(progress, [0.5, 0.9], [0, 1]);
 
-  const background = useTransform(finalized, [0, 1], ["rgba(255,255,255,0.42)", "rgba(255,255,255,0.98)"]);
-
-  const border = useTransform(finalized, [0, 1], ["rgba(255,255,255,0.70)", "rgba(0,0,0,0.08)"]);
-
-  const shadow = useTransform(finalized, [0, 1], ["0 30px 80px rgba(0,0,0,0.08)", "0 40px 120px rgba(0,0,0,0.14)"]);
+  const themeTransforms = getThemeTransforms(theme);
+  const background = useTransform(finalized, [0, 1], themeTransforms.bg);
+  const border = useTransform(finalized, [0, 1], themeTransforms.border);
+  const shadow = useTransform(finalized, [0, 1], themeTransforms.shadow);
 
   const isHovered = hoveredCard === index;
   const hasHoveredCard = hoveredCard !== -1;
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const styles = {
+    badge: isDark
+      ? "border-white/20 bg-black/40 text-white/55"
+      : isMetal
+        ? "border-red-500/30 bg-black/40 text-red-500/70"
+        : "border-black/10 bg-white/70 text-black/55",
+    title: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
+    caption: isDark ? "text-white/45" : isMetal ? "text-red-500/45" : "text-black/45",
+    desc: isDark ? "text-white/70" : isMetal ? "text-red-200/70" : "text-black/68",
+    divider: isDark ? "bg-white/10" : isMetal ? "bg-red-500/20" : "bg-black/10",
+    button: isDark
+      ? "border-white/20 bg-white text-black hover:bg-white/90 shadow-[0_12px_30px_rgba(255,255,255,0.15)]"
+      : isMetal
+        ? "border-red-500/20 bg-red-500 text-black hover:bg-red-600 shadow-[0_12px_30px_rgba(239,68,68,0.15)]"
+        : "border-black/10 bg-black text-white hover:bg-black/90 shadow-[0_12px_30px_rgba(0,0,0,0.18)]",
+  };
 
   return (
     <motion.div
@@ -47,7 +88,7 @@ export default function FloatingCard({ card, index, progress, hoveredCard, setHo
         transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ pointerEvents: hasHoveredCard && !isHovered ? "none" : "auto" }}>
         <motion.article
-          className="relative overflow-hidden rounded-lg border backdrop-blur-3xl"
+          className="relative overflow-hidden rounded-lg border backdrop-blur-3xl transition-colors duration-300"
           style={{ background, borderColor: border, boxShadow: shadow }}
           animate={{ y: isHovered ? -8 : 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
@@ -55,7 +96,8 @@ export default function FloatingCard({ card, index, progress, hoveredCard, setHo
           onHoverEnd={() => setHoveredCard(-1)}>
           <div className="relative flex min-h-120 flex-col p-6">
             <div className="mb-6 flex items-start justify-between gap-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-black/55">
+              <div
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] transition-colors duration-300 ${styles.badge}`}>
                 ©0{String(index + 1).padStart(2, "")}
               </div>
             </div>
@@ -63,25 +105,31 @@ export default function FloatingCard({ card, index, progress, hoveredCard, setHo
             <div className="flex-1">
               <div className="overflow-hidden">
                 <h1
-                  className="text-[35px] leading-[0.75] font-black tracking-[-0.08em] text-black will-change-transform uppercase"
+                  className={`text-[35px] leading-[0.75] font-black tracking-[-0.08em] will-change-transform uppercase transition-colors duration-300 ${styles.title}`}
                   style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                   {" "}
                   {card.title}{" "}
                 </h1>
               </div>
-              <p className="mt-3 max-w-[20rem] text-sm font-medium tracking-tight text-black/45"> {card.caption} </p>
-              <p className="mt-5 text-md text-black/68">{card.description}</p>
+              <p
+                className={`mt-3 max-w-[20rem] text-sm font-medium tracking-tight transition-colors duration-300 ${styles.caption}`}>
+                {card.caption}
+              </p>
+              <p className={`mt-5 text-md transition-colors duration-300 ${styles.desc}`}>{card.description}</p>
             </div>
 
             <div className="mt-7">
-              <div className="mb-4 flex items-center justify-between text-xs uppercase tracking-normal text-black/45">
+              <div
+                className={`mb-4 flex items-center justify-between text-xs uppercase tracking-normal transition-colors duration-300 ${styles.caption}`}>
                 <span> Timeline </span>
                 <span> {card.year} </span>
               </div>
-              <div className="h-px w-full bg-black/10" />
+
+              {/* Divider Line */}
+              <div className={`h-px w-full transition-colors duration-300 ${styles.divider}`} />
 
               <div className="mt-5 flex items-center justify-between gap-3">
-                <div className="text-xs text-black/45"> Decrypt </div>
+                <div className={`text-xs transition-colors duration-300 ${styles.caption}`}> Decrypt </div>
 
                 <motion.a
                   href={card.href}
@@ -89,7 +137,7 @@ export default function FloatingCard({ card, index, progress, hoveredCard, setHo
                   rel="noopener noreferrer"
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -1 }}
-                  className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-black px-5 py-3 text-xs font-semibold  text-white tracking-tight shadow-[0_12px_30px_rgba(0,0,0,0.18)] transition-all hover:bg-black/90">
+                  className={`inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs font-semibold tracking-tight transition-all duration-300 ${styles.button}`}>
                   <span> {card.cta} </span>
                   <span aria-hidden="true"> ↗ </span>
                 </motion.a>

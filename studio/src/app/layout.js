@@ -9,6 +9,7 @@ import { Montserrat, Geist_Mono } from "next/font/google";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import LoaderWrapper from "@/components/basic/LoaderWrapper";
 import PerformanceBootstrap from "@/components/PerformanceBootstrap";
+import ThemeLayoutWrapper from "@/components/basic/ThemeLayoutWrapper";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -65,11 +66,10 @@ export default function RootLayout({ children }) {
                   <Navbar />
                 </NavbarWrapper>
 
-                <main id="main-content" className="relative pt-25 flex flex-col min-h-screen bg-white">
+                <ThemeLayoutWrapper>
                   <ToastContainer />
-
                   <div className="grow">{children}</div>
-                </main>
+                </ThemeLayoutWrapper>
 
                 <EmergencyCTA />
                 <Footer />

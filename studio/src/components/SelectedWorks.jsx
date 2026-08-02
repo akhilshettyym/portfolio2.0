@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { PROJECTS, CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
-import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(value, max));
@@ -43,9 +44,29 @@ function getFallbackPointerPoint() {
   };
 }
 
-function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }) {
+function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, theme }) {
   const skipImage = isCompactDevice || isLargeDevice;
   const hasContent = Boolean(project.image && project.description);
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const modalBg = isDark ? "bg-[#111111] text-white" : isMetal ? "bg-[#110000] text-red-500" : "bg-white text-black";
+  const overlayBg = isDark || isMetal ? "bg-black/60" : "bg-black/40";
+  const borderClass = isDark ? "border-white/10" : isMetal ? "border-red-500/20" : "border-black/10";
+  const textMuted = isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50";
+  const textBody = isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80";
+  const tagClass = isDark
+    ? "border-white/20 bg-white/5"
+    : isMetal
+      ? "border-red-500/20 bg-red-500/10"
+      : "border-black/20 bg-black/5";
+  const closeBtn = isDark
+    ? "bg-white/10 active:bg-white/20"
+    : isMetal
+      ? "bg-red-500/10 active:bg-red-500/20 text-red-500"
+      : "bg-black/5 active:bg-black/10";
+  const ctaBtn = isMetal ? "bg-red-600 text-white" : "bg-[#f97316] text-black";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -54,7 +75,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className={`absolute inset-0 backdrop-blur-sm ${overlayBg}`}
       />
 
       <motion.div
@@ -62,22 +83,21 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-
-        className={`relative z-10 flex w-full flex-col overflow-hidden rounded-lg bg-black text-white shadow-2xl ${
+        className={`relative z-10 flex w-full flex-col overflow-hidden rounded-lg shadow-2xl transition-colors duration-300 ${modalBg} ${
           isCompactDevice
             ? "max-h-[65vh] top-10 max-w-xl"
             : isLargeDevice
               ? "max-h-[75vh] top-15 max-w-2xl"
               : "max-h-[85vh] max-w-md"
         }`}>
-        <div className="flex items-center justify-between border-b border-white/10 p-4">
+        <div className={`flex items-center justify-between border-b p-4 ${borderClass}`}>
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">Selected Work</span>
+            <span className={`text-[10px] uppercase tracking-[0.25em] ${textMuted}`}>Selected Work</span>
             <span className="text-sm font-medium">0{project.id}</span>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 transition-colors active:bg-white/20">
+            className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${closeBtn}`}>
             <FaXmark size={16} />
           </button>
         </div>
@@ -86,20 +106,20 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
           {hasContent ? (
             <div className="flex flex-col gap-5">
               {project.image && !skipImage && (
-                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10">
+                <div className={`relative aspect-video w-full overflow-hidden rounded-xl border ${borderClass}`}>
                   <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
                 </div>
               )}
 
               <div>
                 <h3 className="text-2xl font-medium">{project.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/80">{project.description}</p>
+                <p className={`mt-3 text-sm leading-relaxed ${textBody}`}>{project.description}</p>
               </div>
 
               {project.stack && project.stack.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
                   {project.stack.map((item) => (
-                    <span key={item} className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs">
+                    <span key={item} className={`rounded-full border px-3 py-1.5 text-xs ${tagClass}`}>
                       {item}
                     </span>
                   ))}
@@ -109,18 +129,18 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
           ) : (
             <div className="py-12 text-center">
               <h3 className="text-2xl font-medium">COMING SOON</h3>
-              <p className="mt-2 text-sm text-white/60">Project details will be revealed soon.</p>
+              <p className={`mt-2 text-sm ${textMuted}`}>Project details will be revealed soon.</p>
             </div>
           )}
         </div>
 
         {hasContent && project.url && (
-          <div className="border-t border-white/10 p-4">
+          <div className={`border-t p-4 ${borderClass}`}>
             <Link
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-[#f97316] py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98]">
+              className={`flex w-full items-center justify-center gap-2 rounded-md py-3.5 text-sm font-semibold transition-transform active:scale-[0.98] ${ctaBtn}`}>
               Visit Live Site
               <FaArrowUpRightFromSquare size={14} />
             </Link>
@@ -131,7 +151,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice }
   );
 }
 
-function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onRelease }) {
+function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onRelease, theme }) {
   const cardX = useMotionValue(cardAnchor.x);
   const cardY = useMotionValue(cardAnchor.y);
   const buttonX = useMotionValue(buttonAnchor.x);
@@ -172,12 +192,37 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
       mouseY.set(clamp(dy, -1, 1));
     };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   const hasContent = Boolean(project.image && project.description);
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const cardBgClass = isDark
+    ? "bg-black border-white/10 text-white"
+    : isMetal
+      ? "bg-[#050000] border-red-500/30 text-red-500"
+      : "bg-white border-black/10 text-black";
+  const gradientOverlay =
+    isDark || isMetal
+      ? "bg-linear-to-b from-black/10 via-black/30 to-black/90"
+      : "bg-linear-to-b from-white/10 via-white/50 to-white/95";
+
+  const accentGlow = isDark ? "rgba(255,255,255,0.18)" : isMetal ? "rgba(239,68,68,0.25)" : "rgba(0,0,0,0.1)";
+  const patternOverlay =
+    isDark || isMetal
+      ? "bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_30%)]"
+      : "bg-[radial-gradient(circle_at_top_left,rgba(0,0,0,0.08),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(0,0,0,0.04),transparent_30%)]";
+
+  const textBody = isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80";
+  const tagClass = isDark
+    ? "border-white/20"
+    : isMetal
+      ? "border-red-500/30 bg-red-500/10"
+      : "border-black/20 bg-black/5";
+  const btnClass = isMetal ? "border-red-600 bg-red-600 text-white" : "border-white bg-[#f97316] text-black";
 
   return (
     <>
@@ -194,31 +239,28 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
           transformStyle: "preserve-3d",
         }}>
         <motion.div
-          style={{
-            x: driftX,
-            y: driftY,
-            rotateX,
-            rotateY,
-            transformStyle: "preserve-3d",
-          }}
+          style={{ x: driftX, y: driftY, rotateX, rotateY, transformStyle: "preserve-3d" }}
           whileHover={{ scale: 1.01 }}
           className="relative">
-          <div className="absolute -inset-6 rounded-[36px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),transparent_70%)] blur-2xl" />
+          <div
+            className="absolute -inset-6 rounded-[36px] blur-2xl"
+            style={{ backgroundImage: `radial-gradient(circle at center, ${accentGlow}, transparent 70%)` }}
+          />
 
           <motion.div
             initial={{ y: 6 }}
             animate={{ y: [0, -6, 0] }}
             transition={{ y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" } }}
-            className="relative h-130 w-212.5 overflow-hidden border border-white/10 bg-black shadow-[0_60px_140px_rgba(0,0,0,0.42)]">
+            className={`relative h-130 w-212.5 overflow-hidden border shadow-[0_60px_140px_rgba(0,0,0,0.42)] ${cardBgClass}`}>
             {hasContent ? (
               <>
                 <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
                   <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
                 </motion.div>
-                <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/30 to-black/90" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_30%)]" />
+                <div className={`absolute inset-0 ${gradientOverlay}`} />
+                <div className={`absolute inset-0 ${patternOverlay}`} />
 
-                <div className="absolute inset-0 flex flex-col justify-between p-7 text-white">
+                <div className="absolute inset-0 flex flex-col justify-between p-7 z-10">
                   <div className="flex items-center justify-between">
                     <span className="text-xs uppercase tracking-[0.25em] opacity-70">Selected Work</span>
                     <span className="text-sm opacity-60">0{project.id}</span>
@@ -226,14 +268,13 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
 
                   <div>
                     <h3 className="text-3xl font-medium">{project.title}</h3>
-                    <p className="mt-4 max-w-145 text-sm leading-relaxed text-white/80"> {project.description} </p>
+                    <p className={`mt-4 max-w-145 text-sm leading-relaxed ${textBody}`}> {project.description} </p>
                     <div className="mt-6 flex flex-wrap gap-2">
                       {project.stack.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full border border-white/20 px-3 py-1.5 text-xs backdrop-blur-md">
-                          {" "}
-                          {item}{" "}
+                          className={`rounded-full border px-3 py-1.5 text-xs backdrop-blur-md ${tagClass}`}>
+                          {item}
                         </span>
                       ))}
                     </div>
@@ -241,11 +282,11 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
                 </div>
               </>
             ) : (
-              <div className="flex h-full items-center justify-center bg-black text-white">
+              <div className="flex h-full items-center justify-center">
                 <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/40">Selected Work</p>
+                  <p className="text-xs uppercase tracking-[0.3em] opacity-40">Selected Work</p>
                   <h3 className="mt-5 text-4xl font-medium">COMING SOON</h3>
-                  <p className="mt-4 text-white/60">Project details will be revealed soon.</p>
+                  <p className="mt-4 opacity-60">Project details will be revealed soon.</p>
                 </div>
               </div>
             )}
@@ -266,7 +307,7 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-13 items-center gap-2 rounded-full border-2 border-white bg-[#f97316] px-5 py-3 text-sm font-semibold text-black shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98]">
+              className={`inline-flex h-13 items-center gap-2 rounded-full border-2 px-5 py-3 text-sm font-semibold shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98] ${btnClass}`}>
               Visit Live Site
               <FaArrowUpRightFromSquare size={16} />
             </Link>
@@ -278,6 +319,7 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
 }
 
 export default function SelectedWorks() {
+  const { theme } = useTheme();
   const { isMobile, isCompactDevice, isLargeDevice } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
@@ -289,6 +331,18 @@ export default function SelectedWorks() {
   const [cardAnchor, setCardAnchor] = useState({ x: 0, y: 0 });
   const [buttonAnchor, setButtonAnchor] = useState({ x: 0, y: 0 });
   const clearTimerRef = useRef(null);
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
+  const sectionBg = isDark ? "bg-black text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black";
+  const headerText = isDark ? "text-white/90" : isMetal ? "text-red-500/90" : "text-black/90";
+  const borderColor = isDark ? "border-white/20" : isMetal ? "border-red-500/30" : "border-black";
+
+  const defaultBg = isDark ? "#000000" : isMetal ? "#050000" : "#ffffff";
+  const defaultText = isDark ? "#ffffff" : isMetal ? "#ef4444" : "#000000";
+  const activeBg = isDark ? "#ffffff" : isMetal ? "#ef4444" : "#000000";
+  const activeText = isDark ? "#000000" : isMetal ? "#050000" : "#ffffff";
 
   const cancelClear = () => {
     if (clearTimerRef.current) {
@@ -350,7 +404,7 @@ export default function SelectedWorks() {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-white text-black">
+    <section className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>
       <div className="mx-auto max-w-[1600px] px-10 py-10">
         <div className="mb-5">
           <div className="relative px-10 py-2 text-xs tracking-widest">
@@ -359,7 +413,7 @@ export default function SelectedWorks() {
 
           <div className="overflow-hidden">
             <h1
-              className="inline-block origin-left text-[clamp(2.5em,5vw,4rem)] md:text-[clamp(4.5rem,9vw,5rem)] font-black leading-[0.7] tracking-[-0.09em] text-black will-change-transform"
+              className={`inline-block origin-left text-[clamp(2.5em,5vw,4rem)] md:text-[clamp(4.5rem,9vw,5rem)] font-black leading-[0.7] tracking-[-0.09em] will-change-transform ${isMetal ? "text-red-500" : isDark ? "text-white" : "text-black"}`}
               style={{
                 fontFeatureSettings: '"ss01" on, "ss02" on',
                 transform: "scaleX(1.5)",
@@ -370,7 +424,7 @@ export default function SelectedWorks() {
 
           <div className="-mt-3 overflow-hidden">
             <h1
-              className="flex w-full items-baseline justify-between whitespace-nowrap text-[clamp(3rem,5vw,3rem)] md:text-[clamp(4rem,5vw,2rem)] font-black leading-[0.82] tracking-[-0.09em] text-black/90 will-change-transform"
+              className={`flex w-full items-baseline justify-between whitespace-nowrap text-[clamp(3rem,5vw,3rem)] md:text-[clamp(4rem,5vw,2rem)] font-black leading-[0.82] tracking-[-0.09em] will-change-transform ${headerText}`}
               style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
               <span>. WORKS</span>
               <span className="ml-auto mr-5 text-sm tracking-normal"> 24-26 </span>
@@ -399,11 +453,11 @@ export default function SelectedWorks() {
                   }
                 }}
                 animate={{
-                  backgroundColor: isActive ? "#000000" : "#ffffff",
-                  color: isActive ? "#ffffff" : "#000000",
+                  backgroundColor: isActive ? activeBg : defaultBg,
+                  color: isActive ? activeText : defaultText,
                 }}
                 transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative cursor-pointer border-t border-black outline-none select-none">
+                className={`group relative cursor-pointer border-t outline-none select-none ${borderColor}`}>
                 <div className={`grid grid-cols-12 gap-6 ${renderPopupModal ? "py-5" : "px-10 py-5"}`}>
                   <div className="col-span-12 md:col-span-5">
                     <h3 className="text-2xl font-medium md:text-4xl"> {project.title} </h3>
@@ -422,7 +476,7 @@ export default function SelectedWorks() {
               </motion.div>
             );
           })}
-          <div className="border-t border-black" />
+          <div className={`border-t ${borderColor}`} />
         </div>
       </div>
 
@@ -435,6 +489,7 @@ export default function SelectedWorks() {
             buttonAnchor={buttonAnchor}
             onHold={cancelClear}
             onRelease={scheduleClear}
+            theme={theme}
           />
         )}
       </AnimatePresence>
@@ -446,6 +501,7 @@ export default function SelectedWorks() {
             onClose={() => setMobileModalProject(null)}
             isCompactDevice={isCompactDevice}
             isLargeDevice={isLargeDevice}
+            theme={theme}
           />
         )}
       </AnimatePresence>

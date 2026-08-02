@@ -2,6 +2,8 @@
 
 import gsap from "gsap";
 import * as THREE from "three";
+import { GREETINGS } from "@/utils/basic";
+import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
 import LocationModal from "@/components/basic/LocationModal";
 import { hasLocationPreference } from "@/utils/weather-scene";
@@ -9,8 +11,6 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
-import { GREETINGS } from "@/utils/basic";
-import { useTheme } from "@/context/ThemeContext";
 
 export default function Loader({ onFinish }) {
   const { theme } = useTheme();
@@ -33,7 +33,6 @@ export default function Loader({ onFinish }) {
 
   const lastTimeRef = useRef(0);
 
-  // Dynamic Tailwind Classes based on theme
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
 
@@ -114,7 +113,6 @@ export default function Loader({ onFinish }) {
 
     const scene = new THREE.Scene();
 
-    // Dynamic Fog based on theme (white for light, black for dark/metal)
     const fogColor = theme === "dark" || theme === "metal" ? 0x000000 : 0xffffff;
     scene.fog = new THREE.Fog(fogColor, 6, 18);
 
@@ -149,7 +147,6 @@ export default function Loader({ onFinish }) {
 
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
-    // Dynamic Particle Color based on theme
     const particleColor = theme === "metal" ? 0xff0000 : theme === "dark" ? 0xffffff : 0x111111;
 
     const material = new THREE.PointsMaterial({
@@ -197,7 +194,6 @@ export default function Loader({ onFinish }) {
       container?.removeChild(renderer.domElement);
     };
   }, [mounted, isMobile, quality.antialias, quality.particleMultiplier, tier, theme]);
-  // ^ Added 'theme' to dependencies so particles update if theme switches
 
   useEffect(() => {
     if (!done) return;

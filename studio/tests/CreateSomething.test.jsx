@@ -10,6 +10,18 @@ jest.mock("@/hooks/useDeviceType", () => ({
   useDeviceType: () => ({ isMobile: false }),
 }));
 
+jest.mock("@/context/ThemeContext", () => ({
+  useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
+}));
+
+jest.mock(
+  "../src/context/ThemeContext",
+  () => ({
+    useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
+  }),
+  { virtual: true },
+);
+
 jest.mock("@/components/basic/ShowToast", () => ({
   ShowToast: {
     success: jest.fn(),
@@ -151,17 +163,17 @@ describe("CreateSomething Component", () => {
   });
 
   it("trims whitespace and formats payload correctly before submitting", async () => {
-    axios.post.mockResolvedValueOnce({ status: 200, data: { success: true } });
+    axios.post.mockResolvedValueOnce({ status: 200, data: { success: true, message: "Success!" } });
     render(<CreateSomething />);
 
     fireEvent.change(screen.getByPlaceholderText("What should I call you?"), {
-      target: { value: "  John Doe  " },
+      target: { value: "  John Doe  " },
     });
     fireEvent.change(screen.getByPlaceholderText("How I'll reach you"), {
       target: { value: " JOHN@TEST.com " },
     });
     fireEvent.change(screen.getByPlaceholderText("Write your message here..."), {
-      target: { value: "  Hello, just saying hi!  " },
+      target: { value: "  Hello, just saying hi!  " },
     });
 
     fireEvent.click(screen.getByTestId("submit-btn"));
@@ -177,6 +189,7 @@ describe("CreateSomething Component", () => {
         },
         expect.any(Object),
       );
+      expect(ShowToast.success).toHaveBeenCalledWith("Success!", { theme: "light" });
     });
   });
 
@@ -186,6 +199,7 @@ describe("CreateSomething Component", () => {
       response: { data: { message: "Email already submitted recently." } },
     });
     render(<CreateSomething />);
+
     fireEvent.change(screen.getByPlaceholderText("What should I call you?"), {
       target: { value: "John" },
     });
@@ -195,12 +209,15 @@ describe("CreateSomething Component", () => {
     fireEvent.change(screen.getByPlaceholderText("Write your message here..."), {
       target: { value: "Valid message here" },
     });
+
     fireEvent.click(screen.getByTestId("submit-btn"));
+
     await waitFor(() => {
       expect(screen.getByText("Email already submitted recently.")).toBeInTheDocument();
-      expect(ShowToast.error).toHaveBeenCalledWith("Email already submitted recently.");
+      expect(ShowToast.error).toHaveBeenCalledWith("Email already submitted recently.", { theme: "light" });
       expect(ShowToast.success).not.toHaveBeenCalled();
     });
+
     consoleSpy.mockRestore();
   });
 });

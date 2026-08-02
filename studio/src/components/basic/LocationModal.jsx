@@ -1,10 +1,16 @@
 "use client";
 
+import { useTheme } from "@/context/ThemeContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { setLocationMode } from "@/utils/weather-scene";
 import CustomButton from "@/components/basic/CustomButton";
 
 export default function LocationModal({ open, onComplete }) {
+  const { theme } = useTheme();
+
+  const isDark = theme === "dark";
+  const isMetal = theme === "metal";
+
   const handleAccurate = () => {
     setLocationMode("accurate");
     onComplete();
@@ -13,6 +19,25 @@ export default function LocationModal({ open, onComplete }) {
   const handleFast = () => {
     setLocationMode("fast");
     onComplete();
+  };
+
+  const styles = {
+    modalBox: isDark
+      ? "bg-[#0a0a0a] border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.5)]"
+      : isMetal
+        ? "bg-black border-red-500/20 shadow-[0_25px_80px_rgba(0,0,0,0.8)]"
+        : "bg-white border-neutral-200 shadow-[0_25px_80px_rgba(0,0,0,0.08)]",
+
+    title: isDark ? "text-white" : isMetal ? "text-red-500" : "text-gray-900",
+    description: isDark ? "text-white/60" : isMetal ? "text-red-500/70" : "text-gray-600",
+
+    optionCard: isDark
+      ? "border-white/10 bg-white/[0.02]"
+      : isMetal
+        ? "border-red-500/20 bg-red-950/10"
+        : "border-zinc-200 bg-zinc-50/50",
+
+    optionText: isDark ? "text-white/40" : isMetal ? "text-red-500/50" : "text-gray-500",
   };
 
   return (
@@ -36,7 +61,7 @@ export default function LocationModal({ open, onComplete }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
-            className="relative w-115 overflow-hidden border border-white/10 bg-white p-6 shadow-[0_25px_80px_rgba(0,0,0,0.18)]">
+            className={`relative w-115 overflow-hidden border p-6 transition-colors duration-500 ${styles.modalBox}`}>
             <motion.div
               initial="hidden"
               animate="visible"
@@ -49,7 +74,7 @@ export default function LocationModal({ open, onComplete }) {
                   hidden: { opacity: 0, y: 10 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                className="text-xl font-semibold uppercase text-gray-900">
+                className={`text-xl font-semibold uppercase transition-colors duration-500 ${styles.title}`}>
                 Scene Personalization
               </motion.h2>
 
@@ -58,7 +83,7 @@ export default function LocationModal({ open, onComplete }) {
                   hidden: { opacity: 0, y: 10 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                className="mt-3 text-sm text-gray-600">
+                className={`mt-3 text-sm transition-colors duration-500 ${styles.description}`}>
                 Choose how weather is created for your scene.
               </motion.p>
 
@@ -71,8 +96,8 @@ export default function LocationModal({ open, onComplete }) {
                 <motion.div
                   whileHover={{ y: -2, scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  className="w-full border border-zinc-200 bg-zinc-50/50 p-4">
-                  <p className="mb-3 text-sm text-gray-500">
+                  className={`w-full border p-4 transition-colors duration-500 ${styles.optionCard}`}>
+                  <p className={`mb-3 text-sm transition-colors duration-500 ${styles.optionText}`}>
                     Uses your precise location. A browser permission prompt may appear.
                   </p>
 
@@ -84,8 +109,8 @@ export default function LocationModal({ open, onComplete }) {
                 <motion.div
                   whileHover={{ y: -2, scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  className="w-full border border-zinc-200 bg-zinc-50/50 p-4">
-                  <p className="mb-3 text-sm text-gray-500">
+                  className={`w-full border p-4 transition-colors duration-500 ${styles.optionCard}`}>
+                  <p className={`mb-3 text-sm transition-colors duration-500 ${styles.optionText}`}>
                     Uses city-level IP location. No permission prompt required.
                   </p>
 

@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { FADEUP } from "@/utils/basic";
+import { useTheme } from "@/context/ThemeContext";
 import { IoIdCardOutline } from "react-icons/io5";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
-import { useTheme } from "@/context/ThemeContext";
 
 const ScrollMarquee = ({
   texts = ["DEFAULT TEXT"],

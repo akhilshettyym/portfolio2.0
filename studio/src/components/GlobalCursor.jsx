@@ -1,8 +1,8 @@
 "use client";
 
 import "@/styles/global_cursor.css";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 const emptySubscribe = () => () => {};
 

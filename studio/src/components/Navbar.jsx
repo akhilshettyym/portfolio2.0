@@ -8,9 +8,9 @@ import ConsoleModal from "./ConsoleModal";
 import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
 import ModeSwitch from "@/components/ModeSwitch";
+import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { useTheme } from "@/context/ThemeContext";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -222,14 +222,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 relative cursor-pointer" onClick={() => window.location.reload()}>
-                <Image
-                  src="/akhil.svg"
-                  alt="Akhil"
-                  fill
-                  className={`object-contain transition-all duration-300 ${logoInvertClass}`}
-                  unoptimized
-                  priority
-                />
+                <Logo />
               </div>
 
               <nav aria-label="Mobile Navigation" className="flex gap-2">

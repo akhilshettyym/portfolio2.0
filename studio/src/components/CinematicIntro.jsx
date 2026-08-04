@@ -13,7 +13,7 @@ import {
   GlitchField,
   SceneShell,
   SceneShell2,
-} from "@/utils/funct";
+} from "@/utils/functions";
 import {
   INTROLINES,
   BUILDINGLINES,

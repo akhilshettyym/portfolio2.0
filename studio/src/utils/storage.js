@@ -13,6 +13,8 @@ export const LEGACY_TIER = "sys_legacy";
 
 export const TIER_EVENT = "tier-change";
 
+export const SITE_THEME = "site-theme";
+
 export const PERF_TIERS = {
   HIGH: "tier_1",
   LOW: "tier_2",

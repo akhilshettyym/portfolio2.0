@@ -1,4 +1,4 @@
-import { getCardState } from "@/utils/funct";
+import { getCardState } from "@/utils/functions";
 import { motion, useMotionTemplate, useTransform } from "framer-motion";
 
 const getThemeTransforms = (theme) => {

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import "@/styles/emergency_cta.css";
-import { goToTop } from "@/utils/funct";
+import { goToTop } from "@/utils/functions";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";

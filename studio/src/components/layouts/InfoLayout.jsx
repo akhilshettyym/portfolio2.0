@@ -31,11 +31,7 @@ export default function InfoLayout() {
         </LazyLoad>
       </section>
 
-      <section id="socials">
-        <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
-          <MySocialsTiered />
-        </LazyLoad>
-      </section>
+      <MySocialsTiered />
     </article>
   );
 }

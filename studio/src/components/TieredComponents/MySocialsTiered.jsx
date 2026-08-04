@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import LazyLoad from "@/components/basic/LazyLoad";
 import { Suspense, useEffect, useState } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
@@ -22,23 +23,29 @@ export default function MySocialsTiered(props) {
     return () => window.clearTimeout(handle);
   }, []);
 
-  if (!mounted || !ready) {
-    return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />;
-  }
-
-  if (isTier2 || isMobile) {
+  if (!mounted || !ready || isTier2 || isMobile) {
     return null;
   }
 
   if (!shouldRender) {
-    return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />;
+    return (
+      <section id="socials">
+        <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
+          <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "#ffffff" }} />
+        </LazyLoad>
+      </section>
+    );
   }
 
   return (
-    <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
-      <Suspense fallback={<div style={{ minHeight: "500px", background: "#ffffff" }} className="w-full" />}>
-        <DynamicMySocials {...props} isTieredWrapper={isTier2} />
-      </Suspense>
-    </div>
+    <section id="socials">
+      <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
+        <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
+          <Suspense fallback={<div style={{ minHeight: "500px", background: "#ffffff" }} className="w-full" />}>
+            <DynamicMySocials {...props} isTieredWrapper={isTier2} />
+          </Suspense>
+        </div>
+      </LazyLoad>
+    </section>
   );
 }

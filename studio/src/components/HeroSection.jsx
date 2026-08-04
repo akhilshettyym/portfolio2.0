@@ -576,7 +576,7 @@ const HeroSection = () => {
   const handleRestartIntroScene = () => triggerIntroRestart();
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
+    <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
       {showModal && <LimpModal />}
 
       <div className="wrapper">
@@ -693,7 +693,7 @@ const HeroSection = () => {
         <div className="corner" style={{ bottom: "40px", left: "40px" }} />
         <div className="corner" style={{ bottom: "40px", right: "40px" }} />
       </div>
-    </section>
+    </div>
   );
 };
 

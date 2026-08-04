@@ -11,7 +11,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
-import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
+import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 
 function BubbleScene() {
   const { theme } = useTheme();

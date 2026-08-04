@@ -4,29 +4,8 @@ import "@/styles/cinematic_intro.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  clamp,
-  useBodyLock,
-  useWheelDeck,
-  CurtainText,
-  CodeRain,
-  GlitchField,
-  SceneShell,
-  SceneShell2,
-} from "@/utils/funct";
-import {
-  INTROLINES,
-  BUILDINGLINES,
-  PROBLEMQUESTIONS,
-  AICLAIMS,
-  BUSINESSQUESTIONS,
-  VULNERABILITIES,
-  PHILOSOPHY,
-  REWINDLINES,
-  HISTORYBANDS,
-  TOTAL_SCENES,
-  DARK_START_SCENE,
-} from "@/utils/basic";
+import { clamp, useBodyLock, useWheelDeck, CurtainText, CodeRain, GlitchField, SceneShell, SceneShell2 } from "@/utils/functions";
+import { INTROLINES, BUILDINGLINES, PROBLEMQUESTIONS, AICLAIMS, BUSINESSQUESTIONS, VULNERABILITIES, PHILOSOPHY, REWINDLINES, HISTORYBANDS, TOTAL_SCENES, DARK_START_SCENE } from "@/utils/basic";
 
 export default function CinematicIntro({ onComplete }) {
   const [scene, setScene] = useState(0);

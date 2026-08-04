@@ -4,9 +4,9 @@ import Image from "next/image";
 import { FADEUP } from "@/utils/basic";
 import { useTheme } from "@/context/ThemeContext";
 import { IoIdCardOutline } from "react-icons/io5";
+import React, { useState, useEffect } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
@@ -187,7 +187,7 @@ export default function SubjectProfile() {
   const styles = getStyles(theme);
 
   return (
-    <section
+    <div
       ref={sectionRef}
       className={`relative w-full min-h-screen font-sans py-12 px-4 md:px-12 overflow-hidden ${styles.section}`}>
       {" "}
@@ -434,6 +434,6 @@ export default function SubjectProfile() {
           </div>{" "}
         </motion.div>{" "}
       </motion.div>{" "}
-    </section>
+    </div>
   );
 }

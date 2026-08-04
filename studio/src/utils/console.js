@@ -1,29 +1,4 @@
-import {
-  logAbout,
-  logAchievements,
-  logCatReadme,
-  logCoffee,
-  logCreate,
-  logExperience,
-  logGithub,
-  logHelp,
-  logHero,
-  logInstagram,
-  logLinkedin,
-  logLocation,
-  logls,
-  logMail,
-  logPhilosophy,
-  logPingAkhil,
-  logProjects,
-  logrmrf,
-  logSalesforce,
-  logSecrets,
-  logSkills,
-  logSocials,
-  logSudoHire,
-  logWhoAmI,
-} from "@/utils/funct";
+import { logAbout, logAchievements, logCatReadme, logCoffee, logCreate, logExperience, logGithub, logHelp, logHero, logInstagram, logLinkedin, logLocation, logls, logMail, logPhilosophy, logPingAkhil, logProjects, logrmrf, logSalesforce, logSecrets, logSkills, logSocials, logSudoHire, logWhoAmI } from "@/utils/functions";
 
 const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work", "me"];
 

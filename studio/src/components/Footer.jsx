@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SOCIALS } from "@/utils/basic";
-import { goToTop } from "@/utils/funct";
+import { goToTop } from "@/utils/functions";
 import { useRouter } from "next/navigation";
 import { FaRegCopyright } from "react-icons/fa6";
 import { useTheme } from "@/context/ThemeContext";

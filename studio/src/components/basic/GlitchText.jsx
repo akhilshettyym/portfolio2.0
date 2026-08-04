@@ -1,6 +1,6 @@
 "use client";
 
-import { randomChar } from "@/utils/funct";
+import { randomChar } from "@/utils/functions";
 import { useLenis } from "@/context/LenisContext";
 import { useEffect, useState, useRef } from "react";
 

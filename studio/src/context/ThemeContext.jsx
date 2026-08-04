@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_THEME } from "@/utils/storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext(undefined);
@@ -11,7 +12,7 @@ export const ThemeProvider = ({ children }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("site-theme");
+    const storedTheme = localStorage.getItem(SITE_THEME);
 
     const timer = setTimeout(() => {
       if (storedTheme && THEMES.includes(storedTheme)) {
@@ -29,7 +30,7 @@ export const ThemeProvider = ({ children }) => {
       const nextIndex = (currentIndex + 1) % THEMES.length;
       const newTheme = THEMES[nextIndex];
 
-      localStorage.setItem("site-theme", newTheme);
+      localStorage.setItem(SITE_THEME, newTheme);
       return newTheme;
     });
   };

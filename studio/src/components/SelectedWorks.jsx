@@ -404,7 +404,7 @@ export default function SelectedWorks() {
   }, []);
 
   return (
-    <section className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>
+    <div className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>
       <div className="mx-auto max-w-[1600px] px-10 py-10">
         <div className="mb-5">
           <div className="relative px-10 py-2 text-xs tracking-widest">
@@ -524,6 +524,6 @@ export default function SelectedWorks() {
           />
         )}
       </AnimatePresence>
-    </section>
+    </div>
   );
 }

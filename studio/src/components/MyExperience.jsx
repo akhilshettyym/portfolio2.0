@@ -109,19 +109,21 @@ export default function MyExperience() {
   const marqueeItems = [...EDUCATION_CARDS, ...EDUCATION_CARDS, ...EDUCATION_CARDS, ...EDUCATION_CARDS];
 
   return (
-    <div ref={targetRef} className={`relative h-[320vh] transition-colors duration-500 ${styles.section}`}>
-      <div className="sticky top-0 flex h-screen items-center justify-center px-4 sm:px-10 overflow-hidden">
+    <div ref={targetRef} className={`relative h-[300vh] transition-colors duration-500 ${styles.section}`}>
+      <div className="sticky top-0 flex h-dvh items-center justify-center px-3 sm:px-6 md:px-10 overflow-hidden">
         <div
           className={`absolute inset-0 pointer-events-none opacity-20 blur-3xl transition-all duration-700 ${isDark ? "bg-cyan-900/30" : isMetal ? "bg-red-600/30" : "bg-neutral-400/20"}`}
         />
 
         <div
-          className={`w-full max-w-7xl h-[80%] border-2 p-4 flex flex-col justify-between relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
+          className={`w-full max-w-7xl h-[75vh] md:h-[70vh] border-2 p-3 md:p-4 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
           <div
             ref={containerRef}
-            className={`w-full h-[68%] border flex items-center relative rounded-lg overflow-hidden transition-colors duration-500 ${styles.innerBox}`}>
-            <motion.div style={{ x }} className="w-max">
-              <div ref={trackRef} className="flex gap-8 items-center pl-[40vw] pr-[20vw] py-8">
+            className={`w-full flex-1 min-h-75 border flex items-center relative rounded-lg overflow-hidden transition-colors duration-500 ${styles.innerBox}`}>
+            <motion.div style={{ x }} className="w-max h-full flex items-center">
+              <div
+                ref={trackRef}
+                className="flex gap-6 sm:gap-8 items-center pl-[15vw] md:pl-[35vw] pr-[15vw] md:pr-[20vw] py-4 md:py-8 h-full">
                 {DUMMY_CARDS.map((card) => {
                   return (
                     <React.Fragment key={card.id}>
@@ -129,7 +131,7 @@ export default function MyExperience() {
                         style={{ rotate: card.tilt }}
                         whileHover={{ scale: 1.04, rotate: 0, zIndex: 30 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={`w-80 sm:w-90 h-56 border-2 flex flex-col justify-between shrink-0 p-4 relative rounded-lg transition-colors duration-300 group cursor-pointer z-10 ${styles.card}`}>
+                        className={`w-[75vw] sm:w-80 md:w-90 lg:w-100 h-64 sm:h-56 md:h-70 border-2 flex flex-col justify-between shrink-0 p-4 relative rounded-lg transition-colors duration-300 group cursor-pointer z-10 ${styles.card}`}>
                         <div className="flex justify-between items-center w-full">
                           <span
                             className={`text-[8px] font-mono uppercase tracking-widest px-2 py-1 rounded border ${styles.badge}`}>
@@ -154,7 +156,10 @@ export default function MyExperience() {
                             className={`text-md font-bold uppercase tracking-normal pb-1 border-b-2 ${styles.cardTitle}`}>
                             {card.title}
                           </h3>
-                          <p className={`mt-2 text-xs leading-relaxed ${styles.textMuted}`}>{card.description}</p>
+                          <p
+                            className={`mt-2 text-xs leading-relaxed line-clamp-3 md:line-clamp-none ${styles.textMuted}`}>
+                            {card.description}
+                          </p>
                         </div>
 
                         <div className="flex flex-wrap gap-2 pt-2">
@@ -168,7 +173,7 @@ export default function MyExperience() {
                       </motion.div>
 
                       {card.id < DUMMY_CARDS.length && (
-                        <div className="w-10 h-80 flex flex-col justify-center gap-2 shrink-0 pointer-events-none opacity-40">
+                        <div className="w-6 md:w-10 h-60 md:h-80 flex flex-col justify-center gap-2 shrink-0 pointer-events-none opacity-40">
                           <div className={`w-full h-1 ${styles.line}`} />
                         </div>
                       )}
@@ -179,53 +184,51 @@ export default function MyExperience() {
             </motion.div>
           </div>
 
-          <div className="mt-2">
-            <div
-              className={`w-full h-28 border flex items-center rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
-              <div className="animate-marquee-smooth flex gap-4 px-2 items-center whitespace-nowrap">
-                {marqueeItems.map((item, index) => {
-                  const uniqueKey = `${item.id}-${index}`;
-                  const cardStyle = getMarqueeCardStyle(item.variant);
+          <div
+            className={`w-full h-20 md:h-28 border flex items-center shrink-0 rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
+            <div className="animate-marquee-smooth flex gap-3 md:gap-4 px-2 items-center whitespace-nowrap">
+              {marqueeItems.map((item, index) => {
+                const uniqueKey = `${item.id}-${index}`;
+                const cardStyle = getMarqueeCardStyle(item.variant);
 
-                  return (
-                    <div
-                      key={uniqueKey}
-                      className={`w-65 h-20 border flex flex-col items-center justify-center px-3 py-2 text-center rounded-md shrink-0 transition-all duration-300 ease-in-out cursor-pointer group ${cardStyle}`}>
-                      {item.title && (
-                        <span className="text-[10px] font-bold tracking-wider uppercase truncate w-full">
-                          {item.title}
+                return (
+                  <div
+                    key={uniqueKey}
+                    className={`w-52 md:w-70 h-18.5 md:h-24 border flex flex-col items-center justify-center px-2 md:px-3 py-1 md:py-2 text-center rounded-md shrink-0 transition-all duration-300 ease-in-out cursor-pointer group ${cardStyle}`}>
+                    {item.title && (
+                      <span className="text-[9px] md:text-[10px] font-bold tracking-wider uppercase truncate w-full">
+                        {item.title}
+                      </span>
+                    )}
+
+                    {item.college && (
+                      <span className="text-[7px] md:text-[8px] font-mono font-medium tracking-wider uppercase truncate w-full opacity-80 transition-opacity duration-300">
+                        {item.college}
+                      </span>
+                    )}
+
+                    {item.major && (
+                      <span className="text-[7px] md:text-[8px] font-mono tracking-wider uppercase truncate w-full opacity-70 transition-opacity duration-300">
+                        {item.major}
+                      </span>
+                    )}
+
+                    <div className="flex items-center justify-between w-full mt-1 border-t border-current/20 pt-1 transition-colors duration-300">
+                      {item.timeline && (
+                        <span className="text-[7px] md:text-[8px] font-mono tracking-wider uppercase opacity-70 transition-opacity duration-300">
+                          {item.timeline}
                         </span>
                       )}
 
-                      {item.college && (
-                        <span className="text-[8px] font-mono font-medium tracking-wider uppercase truncate w-full opacity-80 transition-opacity duration-300">
-                          {item.college}
+                      {item.score && (
+                        <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-wider truncate max-w-20 md:max-w-30 text-right">
+                          {item.score}
                         </span>
                       )}
-
-                      {item.major && (
-                        <span className="text-[8px] font-mono tracking-wider uppercase truncate w-full opacity-70 transition-opacity duration-300">
-                          {item.major}
-                        </span>
-                      )}
-
-                      <div className="flex items-center justify-between w-full mt-1 border-t border-current/20 pt-1 transition-colors duration-300">
-                        {item.timeline && (
-                          <span className="text-[8px] font-mono tracking-wider uppercase opacity-70 transition-opacity duration-300">
-                            {item.timeline}
-                          </span>
-                        )}
-
-                        {item.score && (
-                          <span className="text-[8px] font-bold uppercase tracking-wider truncate max-w-[120px] text-right">
-                            {item.score}
-                          </span>
-                        )}
-                      </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

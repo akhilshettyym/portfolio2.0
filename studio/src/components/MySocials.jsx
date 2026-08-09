@@ -21,10 +21,10 @@ const THEME_STYLES = {
     textMain: "text-black",
     textMuted: "text-black/40",
     textHighlight: "text-black/80",
-    globeLines: "border-black/20",
-    globeEquator: "border-black/30",
+    globeLines: "border-black/80",
+    globeEquator: "border-black/80",
     divider: "via-black/15",
-    glow: "bg-black/[0.02]",
+    glow: "bg-black/[0.1]",
     trailCard: "shadow-black/10 bg-white/50 border-black/5",
   },
   dark: {
@@ -33,10 +33,10 @@ const THEME_STYLES = {
     textMain: "text-white",
     textMuted: "text-white/40",
     textHighlight: "text-white/80",
-    globeLines: "border-white/20",
-    globeEquator: "border-white/30",
+    globeLines: "border-white/80",
+    globeEquator: "border-white/80",
     divider: "via-white/15",
-    glow: "bg-white/[0.02]",
+    glow: "bg-white/[0.1]",
     trailCard: "shadow-white/10 bg-black/50 border-white/10",
   },
   metal: {
@@ -45,10 +45,10 @@ const THEME_STYLES = {
     textMain: "text-red-500",
     textMuted: "text-red-500/50",
     textHighlight: "text-red-500",
-    globeLines: "border-red-500/30",
-    globeEquator: "border-red-500/50",
+    globeLines: "border-red-500/80",
+    globeEquator: "border-red-500/80",
     divider: "via-red-500/20",
-    glow: "bg-red-500/[0.05]",
+    glow: "bg-red-500/[0.1]",
     trailCard: "shadow-red-500/20 bg-black/80 border-red-500/20",
   },
 };
@@ -229,18 +229,14 @@ export default function MySocials() {
           initial={{ scale: 0.95, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}>
-          <div
-            className={`text-xs font-semibold uppercase tracking-[0.4em] transition-colors duration-500 ${activeTheme.textSub}`}>
-            Network Nodes
-          </div>
           <h2
-            className={`mt-4 text-[clamp(3.5rem,8vw,5.5rem)] font-black uppercase leading-[0.85] tracking-tight transition-colors duration-500 ${activeTheme.textMain}`}>
+            className={`mt-4 text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black uppercase leading-[0.5] tracking-tighter md:tracking-[-0.09em] transition-colors duration-500 ${activeTheme.textMain}`}>
             Socials
           </h2>
           <h1
-            className={`mt-6 text-2xl font-medium uppercase md:text-4xl transition-colors duration-500 ${activeTheme.textMuted}`}>
-            Some Visuals <br />
-            <span className={activeTheme.textHighlight}>to get an idea</span>
+            className={`mt-8 text-xl font-light tracking-wide uppercase md:text-3xl transition-colors duration-500 ${activeTheme.textMuted}`}>
+            Let&apos;s connect <br />
+            <span className={`font-semibold ${activeTheme.textHighlight}`}>across the web</span>
           </h1>
         </motion.div>
       </div>

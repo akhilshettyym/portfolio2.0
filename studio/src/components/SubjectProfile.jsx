@@ -343,7 +343,7 @@ export default function SubjectProfile() {
                 <h3 className={`text-xl font-light leading-relaxed tracking-tight text-justify ${styles.textH3}`}>
                   I craft technical design solutions that help forward-thinking brands truly differentiate. With over{" "}
                   <span className={`font-semibold px-2 py-0.5 rounded ${styles.textHighlightBg}`}>
-                    3-4 years of tech experience{" "}
+                    3-4 years of tech experience
                   </span>
                   , I specialize in designing beautiful software interfaces and transforming them into high-performing
                   reality—spanning frontend architectures, comprehensive backend infrastructures, headless CMS

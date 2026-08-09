@@ -4,21 +4,13 @@ import Image from "next/image";
 import "@/styles/track_trail.css";
 import React, { memo } from "react";
 import { useTheme } from "@/context/ThemeContext";
-
-const DEFAULT_DATA = {
-  rankImg: "/trailhead/double-star-ranger.svg",
-  rankTitle: "Double Star Ranger",
-  points: "1,28,700",
-  superbadges: "14",
-  badges: "251",
-  trails: "24",
-};
+import { DEFAULT_TRAIL_DATA } from "@/utils/basic";
 
 const BASE_BANNERS = ["/trailhead/champion.svg", "/trailhead/innovator.svg"];
 
 const DEFAULT_BANNERS = Array(4).fill(BASE_BANNERS).flat();
 
-const TrackTrail = memo(({ data = DEFAULT_DATA, banners = DEFAULT_BANNERS }) => {
+const TrackTrail = memo(({ data = DEFAULT_TRAIL_DATA, banners = DEFAULT_BANNERS }) => {
   const { theme } = useTheme();
 
   const isDark = theme === "dark";
@@ -57,7 +49,7 @@ const TrackTrail = memo(({ data = DEFAULT_DATA, banners = DEFAULT_BANNERS }) => 
   };
 
   return (
-    <section className={`w-full py-12 px-4 md:px-8 lg:px-12 transition-colors duration-500 ${styles.wrapper}`}>
+    <div className={`w-full py-12 px-4 md:px-8 lg:px-12 transition-colors duration-500 ${styles.wrapper}`}>
       <div
         className={`w-full max-w-6xl mx-auto rounded-md border overflow-hidden flex flex-col lg:flex-row transition-all duration-500 group ${styles.container}`}>
         <div
@@ -112,7 +104,7 @@ const TrackTrail = memo(({ data = DEFAULT_DATA, banners = DEFAULT_BANNERS }) => 
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 });
 

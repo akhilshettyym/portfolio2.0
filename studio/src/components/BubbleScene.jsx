@@ -3,15 +3,27 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { BUBBLE_TEXT_GROUPS } from "@/utils/basic";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
-import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
+import { getQualityPreset } from "@/lib/performance/applyQualityTier";
+
+export const TECH_STACK = [
+  "React & Next.js",
+  "Three.js & WebGL",
+  "TypeScript",
+  "docker",
+  "Figma",
+  "Git & Github",
+  "Tailwind CSS",
+  "MongoDb",
+  "Node.js & Express.js",
+  "GSAP & Framer Motion",
+];
 
 function BubbleScene() {
   const { theme } = useTheme();
@@ -24,27 +36,21 @@ function BubbleScene() {
   const { isMobile } = useDeviceType();
   const quality = getQualityPreset(tier);
 
+  const [techIndex, setTechIndex] = useState(0);
+
   const isDark = theme === "dark" || theme === "metal";
   const isMetal = theme === "metal";
 
   const styles = {
     section: isDark ? "bg-black" : "bg-white",
-    card:
-      theme === "dark"
-        ? "border-white/20 bg-black shadow-[4px_4px_0px_#ffffff]"
-        : theme === "metal"
-          ? "border-red-500/30 bg-black shadow-[4px_4px_0px_#ef4444]"
-          : "border-neutral-200 bg-white shadow-[4px_4px_0px_#000000]",
     text: theme === "dark" ? "text-white" : theme === "metal" ? "text-red-500" : "text-neutral-800",
+    accent: isMetal ? "text-red-400" : isDark ? "text-blue-400" : "text-blue-600",
     orbitBorder: isDark ? "border-white/10" : "border-black/10",
     fadeGradient: isDark ? "from-black via-black/90 to-transparent" : "from-white via-white/90 to-transparent",
+    box: isDark
+      ? "bg-white/[0.04] border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      : "bg-black/[0.03] border-black/10 shadow-xl",
   };
-
-  const scenePanelBg = isMetal
-    ? "radial-gradient(circle at 50% 30%, rgba(239, 68, 68, 0.15), rgba(0, 0, 0, 0) 38%), linear-gradient(180deg, rgba(0, 0, 0, 0.96) 0%, rgba(10, 10, 10, 0.88) 44%, rgba(0, 0, 0, 1) 100%)"
-    : isDark
-      ? "radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.15), rgba(0, 0, 0, 0) 38%), linear-gradient(180deg, rgba(0, 0, 0, 0.96) 0%, rgba(10, 10, 10, 0.88) 44%, rgba(0, 0, 0, 1) 100%)"
-      : "radial-gradient(circle at 50% 30%, rgba(191, 219, 254, 0.28), rgba(255, 255, 255, 0) 38%), linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 250, 255, 0.88) 44%, rgba(255, 255, 255, 1) 100%)";
 
   const gridLineColor = isDark ? "rgba(255, 255, 255, 0.06)" : "rgba(0, 0, 0, 0.045)";
   const gridBackground = `linear-gradient(${gridLineColor} 1px, transparent 1px), linear-gradient(90deg, ${gridLineColor} 1px, transparent 1px)`;
@@ -58,6 +64,13 @@ function BubbleScene() {
       lightRef.current.color.setHex(lightColor);
     }
   }, [isDark, isMetal]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTechIndex((prev) => (prev + 1) % TECH_STACK.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -129,7 +142,7 @@ function BubbleScene() {
       });
 
       const bubble = new THREE.Sprite(material);
-      const scale = radius * 3.0;
+      const scale = radius * 3.2;
       const entryAngle = index * 0.62;
       const entryRadius = 2.5 + (index % 9) * 0.32;
 
@@ -376,8 +389,7 @@ function BubbleScene() {
       className={`bubble-wrapper relative w-full pb-12 flex flex-col justify-center transition-colors duration-500 ${styles.section}`}>
       <div
         ref={wrapperRef}
-        className="bubble-scene-panel relative w-full min-h-100 transition-all duration-500"
-        style={{ background: scenePanelBg }}>
+        className="bubble-scene-panel bg-transparent relative w-full min-h-100 transition-all duration-500">
         <div
           className="bubble-grid transition-all duration-500"
           aria-hidden="true"
@@ -400,19 +412,41 @@ function BubbleScene() {
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         viewport={{ once: true, amount: 0.4 }}
-        className={`bubble-content relative z-10 w-full max-w-6xl mx-auto px-6 -mt-8 bg-linear-to-t ${styles.fadeGradient}`}>
-        <div className="bubble-content-inner">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
-            {BUBBLE_TEXT_GROUPS.map((group) => (
-              <div
-                key={group.summary}
-                className={`flex flex-col space-y-2 p-4 border transition-colors duration-300 ${styles.card}`}>
-                <p
-                  className={`text-sm font-sans leading-relaxed font-medium transition-colors duration-300 ${styles.text}`}>
-                  {group.summary}
-                </p>
-              </div>
-            ))}
+        className={`bubble-content relative z-10 w-full max-w-6xl mx-auto px-4 -mt-8 bg-linear-to-t ${styles.fadeGradient}`}>
+        <div className="bubble-content-inner flex flex-col items-center justify-center pt-16 space-y-3 md:space-y-4">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
+            <h3
+              className={`text-xl md:text-2xl font-bold font-sans transition-colors duration-300 uppercase tracking-tight ${styles.text}`}>
+              What&apos;s my tech stack?
+            </h3>
+
+            <div className="relative h-8 md:h-10 w-full md:w-64 flex items-center justify-center md:justify-start overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={techIndex}
+                  initial={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ y: -20, opacity: 0, filter: "blur(4px)" }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className={`absolute font-bold text-lg md:text-2xl font-sans text-center md:text-left w-full truncate transition-colors duration-300 uppercase ${styles.accent}`}>
+                  {TECH_STACK[techIndex]}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          <div
+            className={`relative w-full max-w-8xl mx-auto px-5 py-4 md:px-8 md:py-5 rounded-xl backdrop-blur-md border transition-all duration-300 ${styles.box}`}>
+            <div
+              className="absolute inset-0 rounded-xl bg-linear-to-br from-white/10 via-white/5 to-transparent pointer-events-none"
+              aria-hidden="true"
+            />
+
+            <p
+              className={`relative z-10 text-center text-sm md:text-base leading-relaxed md:leading-normal font-sans font-medium transition-colors duration-300 opacity-90 ${styles.text}`}>
+              Architecting fluid user interfaces and high-throughput distributed systems—building resilient cloud
+              infrastructure engineered to maintain strict data consistency under critical enterprise workloads.
+            </p>
           </div>
         </div>
       </motion.div>

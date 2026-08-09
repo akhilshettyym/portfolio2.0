@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import { useTheme } from "@/context/ThemeContext";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
+import React, { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 
 const trailImages = [
@@ -13,25 +14,117 @@ const trailImages = [
   "/bubbles/bubbles.vscode.svg",
 ];
 
+const THEME_STYLES = {
+  light: {
+    bg: "bg-white",
+    textSub: "text-black/50",
+    textMain: "text-black",
+    textMuted: "text-black/40",
+    textHighlight: "text-black/80",
+    globeLines: "border-black/80",
+    globeEquator: "border-black/80",
+    divider: "via-black/15",
+    glow: "bg-black/[0.1]",
+    trailCard: "shadow-black/10 bg-white/50 border-black/5",
+  },
+  dark: {
+    bg: "bg-black",
+    textSub: "text-white/50",
+    textMain: "text-white",
+    textMuted: "text-white/40",
+    textHighlight: "text-white/80",
+    globeLines: "border-white/80",
+    globeEquator: "border-white/80",
+    divider: "via-white/15",
+    glow: "bg-white/[0.1]",
+    trailCard: "shadow-white/10 bg-black/50 border-white/10",
+  },
+  metal: {
+    bg: "bg-black",
+    textSub: "text-red-500/70",
+    textMain: "text-red-500",
+    textMuted: "text-red-500/50",
+    textHighlight: "text-red-500",
+    globeLines: "border-red-500/80",
+    globeEquator: "border-red-500/80",
+    divider: "via-red-500/20",
+    glow: "bg-red-500/[0.1]",
+    trailCard: "shadow-red-500/20 bg-black/80 border-red-500/20",
+  },
+};
+
+const WireframeGlobe = ({ size = 500, styles }) => {
+  const R = size / 2;
+
+  const meridians = Array.from({ length: 6 }).map((_, i) => (
+    <div
+      key={`meridian-${i}`}
+      className={`absolute inset-0 rounded-full border-[1.5px] transition-colors duration-500 ${styles.globeLines}`}
+      style={{ transform: `rotateY(${i * 30}deg)` }}
+    />
+  ));
+
+  const latitudes = [-75, -60, -45, -30, -15, 15, 30, 45, 60, 75].map((angle) => {
+    const rad = (angle * Math.PI) / 180;
+    const radius = R * Math.cos(rad);
+    const z = R * Math.sin(rad);
+    return (
+      <div
+        key={`latitude-${angle}`}
+        className={`absolute rounded-full border-[1.5px] transition-colors duration-500 ${styles.globeLines}`}
+        style={{
+          width: `${radius * 2}px`,
+          height: `${radius * 2}px`,
+          left: `${R - radius}px`,
+          top: `${R - radius}px`,
+          transform: `rotateX(90deg) translateZ(${z}px)`,
+        }}
+      />
+    );
+  });
+
+  return (
+    <div
+      className="relative"
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        transformStyle: "preserve-3d",
+      }}>
+      {meridians}
+      {latitudes}
+      <div
+        className={`absolute inset-0 rounded-full border-2 shadow-[0_0_15px_rgba(0,0,0,0.05)] transition-colors duration-500 ${styles.globeEquator}`}
+        style={{ transform: "rotateX(90deg)" }}
+      />
+    </div>
+  );
+};
+
 export default function MySocials() {
   const [trail, setTrail] = useState([]);
   const lastPosition = useRef({ x: 0, y: 0 });
   const imageIndex = useRef(0);
   const timeouts = useRef(new Set());
 
+  const { theme } = useTheme();
+  const activeTheme = THEME_STYLES[theme] || THEME_STYLES.light;
+
   const shouldReduceMotion = useReducedMotion();
-  const { tier } = usePerformanceTier();
-  const quality = getQualityPreset(tier);
+
+  const tierResult = usePerformanceTier() || { tier: "high" };
+  const tier = tierResult.tier;
+
+  const quality = useMemo(() => getQualityPreset(tier) || { socialTrailDistance: 40, socialTrailLifeMs: 800 }, [tier]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const globeRotateX = useSpring(mouseY, { stiffness: 60, damping: 15 });
-  const globeRotateY = useSpring(mouseX, { stiffness: 60, damping: 15 });
+  const globeRotateX = useSpring(mouseY, { stiffness: 40, damping: 20 });
+  const globeRotateY = useSpring(mouseX, { stiffness: 40, damping: 20 });
 
   useEffect(() => {
     const currentTimeouts = timeouts.current;
-
     return () => {
       currentTimeouts.forEach((id) => clearTimeout(id));
       currentTimeouts.clear();
@@ -47,10 +140,11 @@ export default function MySocials() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      mouseX.set(((x - centerX) / centerX) * 15);
-      mouseY.set(((y - centerY) / centerY) * -15);
+      mouseX.set(((x - centerX) / centerX) * 20);
+      mouseY.set(((y - centerY) / centerY) * -20);
 
       if (shouldReduceMotion) return;
+
       const distance = Math.hypot(x - lastPosition.current.x, y - lastPosition.current.y);
       if (distance < quality.socialTrailDistance) return;
 
@@ -65,11 +159,12 @@ export default function MySocials() {
         y,
         src: trailImages[imageIndex.current],
         zIndex: 20 + (imageIndex.current % 10),
+        rotation: Math.random() * 20 - 10,
       };
 
       imageIndex.current = (imageIndex.current + 1) % trailImages.length;
 
-      setTrail((prev) => [...prev.slice(-4), nextItem]);
+      setTrail((prev) => [...prev.slice(-5), nextItem]);
 
       const timeoutId = setTimeout(() => {
         setTrail((prev) => prev.filter((item) => item.id !== nextItem.id));
@@ -90,68 +185,86 @@ export default function MySocials() {
     <motion.section
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 80, filter: "blur(12px)" }}
+      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.22 }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      className="relative min-h-[72vh] overflow-hidden bg-white px-5 py-18 text-black md:min-h-screen md:px-10"
-      style={{ perspective: "1200px" }}>
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.035)_1px,transparent_1px)] bg-size-[25px_25px]" />
-      <div className="absolute inset-x-0 top-0 h-px bg-black/15" />
-      <div className="absolute inset-x-0 bottom-0 h-px bg-black/15" />
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      className={`relative min-h-[80vh] overflow-hidden px-5 py-18 md:min-h-screen md:px-10 flex flex-col justify-center transition-colors duration-500 ${activeTheme.bg}`}
+      style={{ perspective: "1500px" }}>
+      <div
+        className={`absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent transition-colors duration-500 ${activeTheme.divider}`}
+      />
+      <div
+        className={`absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent to-transparent transition-colors duration-500 ${activeTheme.divider}`}
+      />
 
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-10">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className={`h-150 w-150 rounded-full blur-[80px] transition-colors duration-500 ${activeTheme.glow}`} />
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-30">
         <motion.div
           style={{
             rotateX: globeRotateX,
             rotateY: globeRotateY,
             transformStyle: "preserve-3d",
           }}
-          className="flex h-150 w-100 items-center justify-center">
+          className="flex items-center justify-center">
           <motion.div
-            animate={{ rotateY: [0, 360] }}
+            animate={{ rotateY: [0, -360] }}
             transition={{
               repeat: Infinity,
-              duration: 35,
+              duration: 45,
               ease: "linear",
             }}
             style={{ transformStyle: "preserve-3d" }}>
-            <GlobeSVG />
+            <WireframeGlobe size={550} styles={activeTheme} />
           </motion.div>
         </motion.div>
       </div>
 
-      <div className="pointer-events-none relative z-10 mx-auto flex min-h-[56vh] w-full max-w-6xl flex-col justify-center gap-10 md:min-h-[78vh]">
-        <div className="pointer-events-auto relative text-center mix-blend-difference">
-          <div className="text-xs uppercase tracking-[0.32em] text-black/40">network nodes</div>
-          <h2 className="mt-3 text-[clamp(2.6rem,7vw,4rem)] font-black uppercase leading-[0.88] tracking-normal">
+      <div className="pointer-events-none relative z-10 mx-auto w-full max-w-6xl">
+        <motion.div
+          className="pointer-events-auto relative text-center"
+          initial={{ scale: 0.95, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}>
+          <h2
+            className={`mt-4 text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black uppercase leading-[0.5] tracking-tighter md:tracking-[-0.09em] transition-colors duration-500 ${activeTheme.textMain}`}>
             Socials
           </h2>
-          <h1 className="mt-4 text-3xl font-bold uppercase text-black/20 mix-blend-difference md:text-5xl">
-            Some Visuals <br />
-            to get an idea
+          <h1
+            className={`mt-8 text-xl font-light tracking-wide uppercase md:text-3xl transition-colors duration-500 ${activeTheme.textMuted}`}>
+            Let&apos;s connect <br />
+            <span className={`font-semibold ${activeTheme.textHighlight}`}>across the web</span>
           </h1>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="pointer-events-none absolute inset-0" style={{ zIndex: 20, top: "10.5%", height: "75%" }}>
+      <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
         <AnimatePresence>
           {trail.map((item) => (
             <motion.img
               key={item.id}
               src={item.src}
               alt="Decorative network node"
+              style={{
+                position: "absolute",
+                left: item.x,
+                top: item.y,
+                zIndex: item.zIndex,
+              }}
               initial={{
                 opacity: 0,
-                scale: 0.2,
-                x: item.x - 96,
-                y: item.y - 96,
+                scale: 0,
+                x: "-50%",
+                y: "-50%",
+                rotate: item.rotation,
               }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.2 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="absolute h-35 w-35 rounded-lg object-cover"
-              style={{ zIndex: item.zIndex }}
+              animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%", rotate: 0 }}
+              exit={{ opacity: 0, scale: 0.4, filter: "blur(10px)", x: "-50%", y: "-50%" }}
+              transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+              className={`max-h-40 max-w-40 h-auto w-auto rounded-2xl object-contain shadow-2xl backdrop-blur-sm p-2 border transition-colors duration-500 ${activeTheme.trailCard}`}
             />
           ))}
         </AnimatePresence>
@@ -159,17 +272,3 @@ export default function MySocials() {
     </motion.section>
   );
 }
-
-const GlobeSVG = () => (
-  <svg
-    viewBox="0 0 800 800"
-    width="100%"
-    height="100%"
-    xmlns="http://www.w3.org/2000/svg"
-    className="stroke-black/15 fill-transparent"
-    strokeWidth="2">
-    <circle cx="400" cy="400" r="380" />
-    <ellipse cx="400" cy="400" rx="380" ry="120" />
-    <ellipse cx="400" cy="400" rx="120" ry="380" />
-  </svg>
-);

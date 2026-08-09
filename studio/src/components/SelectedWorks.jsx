@@ -404,7 +404,7 @@ export default function SelectedWorks() {
   }, []);
 
   return (
-    <section className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>
+    <div className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>
       <div className="mx-auto max-w-[1600px] px-10 py-10">
         <div className="mb-5">
           <div className="relative px-10 py-2 text-xs tracking-widest">
@@ -463,7 +463,26 @@ export default function SelectedWorks() {
                     <h3 className="text-2xl font-medium md:text-4xl"> {project.title} </h3>
                     <p className="mt-2 text-sm opacity-70"> {project.tagline} </p>
                   </div>
-                  <div className="hidden md:block md:col-span-3" />
+
+                  <div className="flex items-center justify-between md:justify-end h-full">
+                    {" "}
+                    <div className="relative w-28 h-15 md:w-46 md:h-18 overflow-hidden rounded border border-current/20 bg-neutral-500/5 aspect-video shrink-0">
+                      {" "}
+                      {project.image ? (
+                        <Image src={project.image} alt={project.title} fill unoptimized className="object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center p-2 text-center">
+                          {" "}
+                          <h1 className="text-sm font-normal uppercase tracking-wider text-neutral-400 md:text-xs">
+                            Coming Soon{" "}
+                          </h1>{" "}
+                        </div>
+                      )}{" "}
+                    </div>
+                  </div>
+
+                  <div className="hidden md:block md:col-span-2" />
+
                   <div className="col-span-6 md:col-span-2">
                     <p className="mb-2 text-xs uppercase opacity-60"> When </p>
                     <p className="text-lg"> {project.when} </p>
@@ -505,6 +524,6 @@ export default function SelectedWorks() {
           />
         )}
       </AnimatePresence>
-    </section>
+    </div>
   );
 }

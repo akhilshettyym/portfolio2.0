@@ -2,6 +2,7 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import { createInquiry } from "../controllers/createInquiry.controller.js";
 import { validateContactInquiry } from "../middleware/validation.middleware.js";
+import { getPortfolioContent } from "../controllers/getPortfolioContent.controller.js";
 
 const router = express.Router();
 
@@ -18,5 +19,8 @@ const contactInquiryLimiter = rateLimit({
 
 /* POST /api/user/contact-inquiry */
 router.post("/contact-inquiry", contactInquiryLimiter, validateContactInquiry, createInquiry);
+
+/* GET /api/user/portfolio-content */
+router.get("/portfolio-content", getPortfolioContent);
 
 export default router;

@@ -44,7 +44,7 @@ function BubbleScene() {
   const styles = {
     section: isDark ? "bg-black" : "bg-white",
     text: theme === "dark" ? "text-white" : theme === "metal" ? "text-red-500" : "text-neutral-800",
-    accent: isMetal ? "text-red-400" : isDark ? "text-blue-400" : "text-blue-600",
+    accent: isMetal ? "text-red-400" : isDark ? "text-gray-500" : "text-gray-500",
     orbitBorder: isDark ? "border-white/10" : "border-black/10",
     fadeGradient: isDark ? "from-black via-black/90 to-transparent" : "from-white via-white/90 to-transparent",
     box: isDark

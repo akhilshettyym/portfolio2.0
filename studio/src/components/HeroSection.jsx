@@ -61,11 +61,9 @@ const HeroSection = () => {
   }, [paused]);
 
   useEffect(() => {
-    if (!ready) {
-      const resetTimer = setTimeout(() => {
-        setShowModal(false);
-      }, 0);
-      return () => clearTimeout(resetTimer);
+    if (!ready || tier !== "tier_2") {
+      setShowModal(false);
+      return;
     }
 
     const timer = setTimeout(() => {
@@ -73,7 +71,7 @@ const HeroSection = () => {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [ready]);
+  }, [ready, tier]);
 
   useEffect(() => {
     try {
@@ -609,7 +607,7 @@ const HeroSection = () => {
                   )}
                 </div>
               </div>
-              <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
+              <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[10px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
                 {isTier2 ? "DISABLED" : paused ? "Run Clouds" : "Stall Clouds"}
               </div>
             </button>
@@ -623,7 +621,7 @@ const HeroSection = () => {
                   <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
                 </div>
               </div>
-              <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[11px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
+              <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[10px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
                 Run Intro
               </div>
             </button>

@@ -23,8 +23,8 @@ export default function EmergencyCTA() {
     text: isMetal
       ? "text-red-500 group-hover:text-red-400 decoration-red-500"
       : isDark
-        ? "text-white group-hover:text-indigo-400 decoration-white"
-        : "text-black group-hover:text-indigo-600 decoration-black",
+        ? "text-white group-hover:text-gray-500 decoration-white"
+        : "text-black group-hover:text-gray-500 decoration-black",
     image: isDarkOrMetal ? "invert mix-blend-screen" : "mix-blend-multiply",
   };
 

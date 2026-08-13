@@ -10,6 +10,7 @@ import ModeSwitch from "@/components/ModeSwitch";
 import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { getNavbarStyles } from "@/utils/themeSwatch";
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -95,51 +96,7 @@ const Navbar = () => {
   const { isTier2 } = usePerformanceTier();
   const [consoleOpen, setConsoleOpen] = useState(false);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const headerBgClass =
-    isDark || isMetal
-      ? "bg-black/30 supports-backdrop-filter:bg-black/20 border-white/10"
-      : "bg-white/30 supports-backdrop-filter:bg-white/20 border-black/10";
-
-  const textColorClass = isMetal ? "text-red-500" : isDark ? "text-white" : "text-black";
-  const textMutedClass = isMetal ? "text-red-500/50" : isDark ? "text-white/50" : "text-black/50";
-
-  const mobileNavActiveClass = isMetal
-    ? "bg-red-500 text-black"
-    : isDark
-      ? "bg-white text-black"
-      : "bg-black text-white";
-
-  const mobileNavInactiveClass = isMetal
-    ? "bg-red-500/10 text-red-500"
-    : isDark
-      ? "bg-white/10 text-white"
-      : "bg-black/10 text-black";
-
-  const consoleSlideClass = isMetal ? "bg-red-500 text-black" : isDark ? "bg-white text-black" : "bg-black text-white";
-
-  const mobileMenuIconGroupClass = isMetal
-    ? "border-red-500 group-hover:bg-red-500 text-red-500 group-hover:text-black"
-    : isDark
-      ? "border-white group-hover:bg-white text-white group-hover:text-black"
-      : "border-black group-hover:bg-black text-black group-hover:text-white";
-
-  const marqueeFadeLeft = isDark || isMetal ? "from-black/60" : "from-white/60";
-  const marqueeFadeRight = isDark || isMetal ? "from-black/60" : "from-white/60";
-
-  const marqueeDiv1 = isMetal ? "bg-red-500/30" : isDark ? "bg-white/30" : "bg-black/30";
-  const marqueeDiv2 = isMetal ? "bg-red-500/60" : isDark ? "bg-white/60" : "bg-black/60";
-
-  const terminalBgClass = isDark || isMetal ? "bg-white/10" : "bg-white/40";
-  const terminalHoverClass = isMetal
-    ? "hover:bg-red-500 hover:text-black"
-    : isDark
-      ? "hover:bg-white hover:text-black"
-      : "hover:bg-black hover:text-white";
-
-  const logoInvertClass = isDark || isMetal ? "invert brightness-0" : "";
+  const { isDark, isMetal, headerBgClass, textColorClass, textMutedClass, mobileNavActiveClass, mobileNavInactiveClass, consoleSlideClass, mobileMenuIconGroupClass, marqueeFadeLeft, marqueeFadeRight, marqueeDiv1, marqueeDiv2, terminalBgClass, terminalHoverClass, logoInvertClass } = getNavbarStyles(theme);
 
   useEffect(() => {
     const updateTime = () => {

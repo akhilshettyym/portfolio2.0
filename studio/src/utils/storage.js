@@ -15,6 +15,12 @@ export const TIER_EVENT = "tier-change";
 
 export const SITE_THEME = "site-theme";
 
+export const ACH_DATA = "ach-data";
+export const EDU_DATA = "edu-data";
+export const EXP_DATA = "exp-data";
+export const TRAIL_DATA = "trail-data";
+export const WORK_DATA = "work-data";
+
 export const PERF_TIERS = {
   HIGH: "tier_1",
   LOW: "tier_2",

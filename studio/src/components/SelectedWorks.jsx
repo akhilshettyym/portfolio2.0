@@ -9,6 +9,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { PROJECTS, CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
+import { getWorkFloatStyles, getWorkMobile, getWorkStyles } from "@/utils/themeSwatch";
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(value, max));
@@ -48,25 +49,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, 
   const skipImage = isCompactDevice || isLargeDevice;
   const hasContent = Boolean(project.image && project.description);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const modalBg = isDark ? "bg-[#111111] text-white" : isMetal ? "bg-[#110000] text-red-500" : "bg-white text-black";
-  const overlayBg = isDark || isMetal ? "bg-black/60" : "bg-black/40";
-  const borderClass = isDark ? "border-white/10" : isMetal ? "border-red-500/20" : "border-black/10";
-  const textMuted = isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50";
-  const textBody = isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80";
-  const tagClass = isDark
-    ? "border-white/20 bg-white/5"
-    : isMetal
-      ? "border-red-500/20 bg-red-500/10"
-      : "border-black/20 bg-black/5";
-  const closeBtn = isDark
-    ? "bg-white/10 active:bg-white/20"
-    : isMetal
-      ? "bg-red-500/10 active:bg-red-500/20 text-red-500"
-      : "bg-black/5 active:bg-black/10";
-  const ctaBtn = isMetal ? "bg-red-600 text-white" : "bg-[#f97316] text-black";
+  const { modalBg, overlayBg, borderClass, textMuted, textBody, tagClass, closeBtn, ctaBtn } = getWorkMobile(theme);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -197,32 +180,7 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
 
   const hasContent = Boolean(project.image && project.description);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const cardBgClass = isDark
-    ? "bg-black border-white/10 text-white"
-    : isMetal
-      ? "bg-[#050000] border-red-500/30 text-red-500"
-      : "bg-white border-black/10 text-black";
-  const gradientOverlay =
-    isDark || isMetal
-      ? "bg-linear-to-b from-black/10 via-black/30 to-black/90"
-      : "bg-linear-to-b from-white/10 via-white/50 to-white/95";
-
-  const accentGlow = isDark ? "rgba(255,255,255,0.18)" : isMetal ? "rgba(239,68,68,0.25)" : "rgba(0,0,0,0.1)";
-  const patternOverlay =
-    isDark || isMetal
-      ? "bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_30%)]"
-      : "bg-[radial-gradient(circle_at_top_left,rgba(0,0,0,0.08),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(0,0,0,0.04),transparent_30%)]";
-
-  const textBody = isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80";
-  const tagClass = isDark
-    ? "border-white/20"
-    : isMetal
-      ? "border-red-500/30 bg-red-500/10"
-      : "border-black/20 bg-black/5";
-  const btnClass = isMetal ? "border-red-600 bg-red-600 text-white" : "border-white bg-[#f97316] text-black";
+  const { cardBgClass, gradientOverlay, accentGlow, patternOverlay, textBody, tagClass, btnClass } = getWorkFloatStyles(theme);
 
   return (
     <>
@@ -332,17 +290,7 @@ export default function SelectedWorks() {
   const [buttonAnchor, setButtonAnchor] = useState({ x: 0, y: 0 });
   const clearTimerRef = useRef(null);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const sectionBg = isDark ? "bg-black text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black";
-  const headerText = isDark ? "text-white/90" : isMetal ? "text-red-500/90" : "text-black/90";
-  const borderColor = isDark ? "border-white/20" : isMetal ? "border-red-500/30" : "border-black";
-
-  const defaultBg = isDark ? "#000000" : isMetal ? "#050000" : "#ffffff";
-  const defaultText = isDark ? "#ffffff" : isMetal ? "#ef4444" : "#000000";
-  const activeBg = isDark ? "#ffffff" : isMetal ? "#ef4444" : "#000000";
-  const activeText = isDark ? "#000000" : isMetal ? "#050000" : "#ffffff";
+  const { isDark, isMetal, sectionBg, headerText, borderColor, defaultBg, defaultText, activeBg, activeText } = getWorkStyles(theme);
 
   const cancelClear = () => {
     if (clearTimerRef.current) {
@@ -464,7 +412,8 @@ export default function SelectedWorks() {
                     <p className="mt-2 text-sm opacity-70"> {project.tagline} </p>
                   </div>
 
-                  <div className="flex items-center justify-between md:justify-end h-full">
+                  {!isMobile && (
+                    <div className="flex items-center justify-between md:justify-end h-full">
                     {" "}
                     <div className="relative w-28 h-15 md:w-46 md:h-18 overflow-hidden rounded border border-current/20 bg-neutral-500/5 aspect-video shrink-0">
                       {" "}
@@ -480,6 +429,7 @@ export default function SelectedWorks() {
                       )}{" "}
                     </div>
                   </div>
+                  )}
 
                   <div className="hidden md:block md:col-span-2" />
 

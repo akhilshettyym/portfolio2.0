@@ -11,6 +11,7 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
+import { getLoaderStyles } from "@/utils/themeSwatch";
 
 export default function Loader({ onFinish }) {
   const { theme } = useTheme();
@@ -33,14 +34,7 @@ export default function Loader({ onFinish }) {
 
   const lastTimeRef = useRef(0);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const bgColorClass = isDark || isMetal ? "bg-black" : "bg-white";
-  const textColorClass = isMetal ? "text-red-500" : isDark ? "text-white" : "text-black";
-  const textFadedClass = isMetal ? "text-red-500/40" : isDark ? "text-white/40" : "text-black/40";
-  const progressBgClass = isMetal ? "bg-red-500/20" : isDark ? "bg-white/20" : "bg-black/10";
-  const progressFillClass = isMetal ? "bg-red-500" : isDark ? "bg-white" : "bg-black";
+  const { bgColorClass, textColorClass, textFadedClass, progressBgClass, progressFillClass } = getLoaderStyles(theme);
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;

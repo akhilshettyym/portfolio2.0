@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { getEmergencyStyles } from "@/utils/themeSwatch";
 
 export default function EmergencyCTA() {
   const router = useRouter();
@@ -14,19 +15,7 @@ export default function EmergencyCTA() {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-  const isDarkOrMetal = isDark || isMetal;
-
-  const styles = {
-    bg: isDarkOrMetal ? "bg-black" : "bg-white",
-    text: isMetal
-      ? "text-red-500 group-hover:text-red-400 decoration-red-500"
-      : isDark
-        ? "text-white group-hover:text-gray-500 decoration-white"
-        : "text-black group-hover:text-gray-500 decoration-black",
-    image: isDarkOrMetal ? "invert mix-blend-screen" : "mix-blend-multiply",
-  };
+  const styles = getEmergencyStyles(theme);
 
   const handleRedirection = () => {
     router.push("/work");

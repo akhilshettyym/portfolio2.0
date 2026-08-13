@@ -11,6 +11,7 @@ import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion";
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { getGraphQlStyles } from "@/utils/themeSwatch";
 
 const emptySubscribe = () => () => {};
 
@@ -49,33 +50,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
 
   const mounted = useIsMounted();
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const styles = {
-    container: isDark ? "bg-[#0a0a0a] text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black",
-    card: isDark
-      ? "bg-[#111] border-white/10"
-      : isMetal
-        ? "bg-[#110000] border-red-500/20"
-        : "bg-white border-gray-200",
-    textPrimary: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-    textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80",
-    textMuted: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50",
-    textFaded: isDark ? "text-gray-500" : isMetal ? "text-red-900" : "text-gray-500",
-    spinnerBase: "border-2 rounded-full h-4 w-4 animate-spin",
-    spinnerColor: isDark
-      ? "border-white/20 border-t-white"
-      : isMetal
-        ? "border-red-500/20 border-t-red-500"
-        : "border-gray-300 border-t-black",
-  };
-
-  const themeColors = isDark
-    ? ["#1f1f1f", "#444444", "#666666", "#999999", "#eeeeee"]
-    : isMetal
-      ? ["#1a0505", "#4d0a0a", "#991b1b", "#dc2626", "#f87171"]
-      : ["#ebedf0", "#cccccc", "#999999", "#555555", "#111111"];
+  const { isDark, isMetal, styles, themeColors } = getGraphQlStyles(theme);
 
   const range = useMemo(() => {
     if (!mounted) return { from: "", to: "" };

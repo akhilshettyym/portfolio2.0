@@ -8,20 +8,11 @@ import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
+import { getCreateInputStyles, getCreateSomeStyles } from "@/utils/themeSwatch";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const labelClass = isDark ? "text-white/60" : isMetal ? "text-red-500/60" : "text-neutral-500";
-  const inputClass = `mt-2 w-full border px-5 py-4 outline-none transition-colors rounded-none text-sm ${
-    isDark
-      ? "border-white/20 bg-[#111] text-white focus:border-white"
-      : isMetal
-        ? "border-red-500/20 bg-[#110000] text-red-500 focus:border-red-500"
-        : "border-neutral-300 bg-white text-black focus:border-black"
-  }`;
+  const { labelClass, inputClass } = getCreateInputStyles(theme);
 
   return (
     <div>
@@ -51,47 +42,7 @@ export default function CreateSomething() {
 
   const { isMobile } = useDeviceType();
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const styles = {
-    section: isDark ? "bg-[#0a0a0a] text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black",
-    textMuted: isDark ? "text-white/40" : isMetal ? "text-red-500/40" : "text-neutral-400",
-    textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-neutral-700",
-    dividerSoft: isDark ? "border-white/10" : isMetal ? "border-red-500/10" : "border-neutral-100",
-    dividerHeavy: isDark ? "border-white" : isMetal ? "border-red-500" : "border-black",
-
-    btnActive: isDark
-      ? "bg-white border-white text-black"
-      : isMetal
-        ? "bg-red-500 border-red-500 text-black"
-        : "bg-black border-black text-white",
-
-    btnInactive: isDark
-      ? "bg-transparent border-white/20 text-white hover:border-white"
-      : isMetal
-        ? "bg-transparent border-red-500/25 text-red-500 hover:border-red-500"
-        : "bg-white border-neutral-200 text-black hover:border-black",
-
-    selectContainer: isDark
-      ? "border-white/20 focus-within:border-white bg-[#111]"
-      : isMetal
-        ? "border-red-500/20 focus-within:border-red-500 bg-[#110000]"
-        : "border-neutral-300 focus-within:border-black bg-white",
-
-    selectOption: isDark ? "bg-[#111] text-white" : isMetal ? "bg-[#110000] text-red-500" : "bg-white text-black",
-    selectText: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-
-    textarea: isDark
-      ? "border-white/20 bg-[#111] text-white focus:border-white"
-      : isMetal
-        ? "border-red-500/20 bg-[#110000] text-red-500 focus:border-red-500"
-        : "border-neutral-300 bg-white text-black focus:border-black",
-
-    successText: isDark || isMetal ? "text-emerald-400" : "text-emerald-700",
-    errorText: isDark || isMetal ? "text-red-400 font-bold" : "text-red-700 font-bold",
-    labelClass: isDark ? "text-white/60" : isMetal ? "text-red-500/60" : "text-neutral-500",
-  };
+  const styles = getCreateSomeStyles(theme);
 
   const [formData, setFormData] = useState({
     name: "",

@@ -4,13 +4,12 @@ import { useTheme } from "@/context/ThemeContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { setLocationMode } from "@/utils/weather-scene";
 import CustomButton from "@/components/basic/CustomButton";
+import { getLocationStyles } from "@/utils/themeSwatch";
 
 export default function LocationModal({ open, onComplete }) {
   const { theme } = useTheme();
-
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
+  const styles = getLocationStyles(theme);
+  
   const handleAccurate = () => {
     setLocationMode("accurate");
     onComplete();
@@ -19,25 +18,6 @@ export default function LocationModal({ open, onComplete }) {
   const handleFast = () => {
     setLocationMode("fast");
     onComplete();
-  };
-
-  const styles = {
-    modalBox: isDark
-      ? "bg-[#0a0a0a] border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.5)]"
-      : isMetal
-        ? "bg-black border-red-500/20 shadow-[0_25px_80px_rgba(0,0,0,0.8)]"
-        : "bg-white border-neutral-200 shadow-[0_25px_80px_rgba(0,0,0,0.08)]",
-
-    title: isDark ? "text-white" : isMetal ? "text-red-500" : "text-gray-900",
-    description: isDark ? "text-white/60" : isMetal ? "text-red-500/70" : "text-gray-600",
-
-    optionCard: isDark
-      ? "border-white/10 bg-white/[0.02]"
-      : isMetal
-        ? "border-red-500/20 bg-red-950/10"
-        : "border-zinc-200 bg-zinc-50/50",
-
-    optionText: isDark ? "text-white/40" : isMetal ? "text-red-500/50" : "text-gray-500",
   };
 
   return (

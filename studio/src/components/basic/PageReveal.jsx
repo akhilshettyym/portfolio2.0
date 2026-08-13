@@ -1,12 +1,12 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
+import { getPageRevealStyles } from "@/utils/themeSwatch";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function PageReveal({ active, children }) {
   const { theme } = useTheme();
-
-  const bgColor = theme === "metal" ? "bg-red-500" : "bg-black";
+  const { bgColor } = getPageRevealStyles(theme);
 
   return (
     <>

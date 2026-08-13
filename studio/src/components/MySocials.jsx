@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
+import { THEME_STYLES } from "@/utils/themeSwatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 import React, { useRef, useState, useCallback, useEffect, useMemo } from "react";
@@ -13,45 +14,6 @@ const trailImages = [
   "/bubbles/bubbles.salesforce.svg",
   "/bubbles/bubbles.vscode.svg",
 ];
-
-const THEME_STYLES = {
-  light: {
-    bg: "bg-white",
-    textSub: "text-black/50",
-    textMain: "text-black",
-    textMuted: "text-black/40",
-    textHighlight: "text-black/80",
-    globeLines: "border-black/80",
-    globeEquator: "border-black/80",
-    divider: "via-black/15",
-    glow: "bg-black/[0.1]",
-    trailCard: "shadow-black/10 bg-white/50 border-black/5",
-  },
-  dark: {
-    bg: "bg-black",
-    textSub: "text-white/50",
-    textMain: "text-white",
-    textMuted: "text-white/40",
-    textHighlight: "text-white/80",
-    globeLines: "border-white/80",
-    globeEquator: "border-white/80",
-    divider: "via-white/15",
-    glow: "bg-white/[0.1]",
-    trailCard: "shadow-white/10 bg-black/50 border-white/10",
-  },
-  metal: {
-    bg: "bg-black",
-    textSub: "text-red-500/70",
-    textMain: "text-red-500",
-    textMuted: "text-red-500/50",
-    textHighlight: "text-red-500",
-    globeLines: "border-red-500/80",
-    globeEquator: "border-red-500/80",
-    divider: "via-red-500/20",
-    glow: "bg-red-500/[0.1]",
-    trailCard: "shadow-red-500/20 bg-black/80 border-red-500/20",
-  },
-};
 
 const WireframeGlobe = ({ size = 500, styles }) => {
   const R = size / 2;

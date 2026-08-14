@@ -727,3 +727,94 @@ export const GREETINGS = [
   "नमस्ते", // Hindi
   "ನಮಸ್ಕಾರ", // Kannada
 ];
+
+/* MyExperience.jsx */
+export const DUMMY_CARDS = [
+  {
+    id: 1,
+    title: "Junior Graphic Designer Intern",
+    company: "Karanji Infotech Pvt. Ltd.",
+    timeline: "6th Nov - 5th Dec 2023",
+    type: "Experience",
+    description: "Designed high-impact marketing visuals, social graphics, and promotional brochures collaboratively.",
+    tags: ["adobe animate", "blender"],
+    tilt: -2.5,
+  },
+  {
+    id: 2,
+    title: "Information Technology Intern",
+    company: "Global Industrial Pvt. Ltd.",
+    timeline: "3rd Feb - 16th Jun 2025",
+    type: "Experience",
+    description: "Mastered core web technologies and modern frameworks to build responsive user interfaces.",
+    tags: ["html", "css", "js", "react", "git"],
+    tilt: 3,
+  },
+  {
+    id: 3,
+    title: "Information Technology Trainee",
+    company: "Global Industrial Pvt. Ltd.",
+    timeline: "17th Jun - Present",
+    type: "Experience",
+    description: "Optimized performance while expanding into backend arch., SSR, and API integration.",
+    tags: ["next", "node", "express", "mongodb", "jest"],
+    tilt: -1.5,
+  },
+];
+
+export const EDUCATION_CARDS = [
+  {
+    id: 1,
+    title: "Secondary Schooling (10th)",
+    college: "Canara High School, Mangaluru",
+    major: "General",
+    score: "87.84%",
+    timeline: "2018 - 2019",
+    variant: "standard",
+  },
+  {
+    id: 2,
+    title: "Pre-University",
+    college: "Boscoss Pre-University College, Mangaluru",
+    major: "Physics, Chemistry, Math, Biology (PCMB)",
+    score: "95.17%",
+    timeline: "2019 - 2021",
+    variant: "standard",
+  },
+  {
+    id: 3,
+    title: "Bachelor of Engineering",
+    college: "St. Joseph Engineering College, Mangaluru",
+    major: "Computer Science and Engineering",
+    score: "8.76 CGPA",
+    timeline: "2021 - 2025",
+    variant: "standard",
+  },
+  {
+    id: 4,
+    title: "IUCEE Annual Student Expo 2025",
+    college: "VNRVJIET, Hyderabad",
+    major: "Cloud-Based Smart Baby Monitoring System",
+    score: "Rep. SJEC at ICTIEE 2025",
+    timeline: "7th-8th Jan, 2025",
+    variant: "inverted",
+  },
+  {
+    id: 5,
+    title: "TEDX SJEC",
+    college: "St. Joseph Engineering College, Mangaluru",
+    major: "Stage and Venue Committee Head",
+    score: "Design and Build",
+    timeline: "14th Dec, 2024",
+    variant: "inverted",
+  },
+];
+
+export const DEFAULT_TRAIL_DATA = {
+  rankImg: "/trailhead/double-star-ranger.svg",
+  rankTitle: "Double Star Ranger",
+  points: "1,31,675",
+  superbadges: "14",
+  badges: "257",
+  trails: "24",
+};

@@ -1,8 +1,6 @@
-// const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://portfolio-backend-cjvf.onrender.com";
-
 import { ACH_DATA, EDU_DATA, EXP_DATA, TRAIL_DATA, WORK_DATA } from "@/utils/storage";
 
-const baseUrl = "http://localhost:8000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://portfolio-backend-cjvf.onrender.com";
 
 const KEYS = {
   achievements: ACH_DATA,
@@ -12,10 +10,11 @@ const KEYS = {
   works: WORK_DATA,
 };
 
-let inFlightFetchPromise = null;
+let portfolioInFlightPromise = null;
+const isServer = typeof window === "undefined";
 
 const getFromStorage = (key) => {
-  if (typeof window === "undefined") return null;
+  if (isServer) return null;
   try {
     const item = sessionStorage.getItem(key);
     return item ? JSON.parse(item) : null;
@@ -26,7 +25,7 @@ const getFromStorage = (key) => {
 };
 
 const setToStorage = (key, value) => {
-  if (typeof window === "undefined" || value === undefined) return;
+  if (isServer || value === undefined) return;
   try {
     sessionStorage.setItem(key, JSON.stringify(value));
   } catch (err) {
@@ -34,43 +33,60 @@ const setToStorage = (key, value) => {
   }
 };
 
+export const clearPortfolioCache = () => {
+  if (isServer) return;
+  Object.values(KEYS).forEach((key) => {
+    try {
+      sessionStorage.removeItem(key);
+    } catch (err) {
+      console.error(`Error removing ${key} from sessionStorage:`, err);
+    }
+  });
+};
+
+const fetchEndpoint = async (endpoint) => {
+  try {
+    const res = await fetch(`${BASE_URL}${endpoint}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: {
+        revalidate: 86400,
+        tags: ["portfolio"],
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch ${endpoint}: ${res.status} ${res.statusText}`);
+    }
+
+    const json = await res.json();
+    return json?.data;
+  } catch (error) {
+    console.error(`Error fetching ${endpoint}:`, error);
+    return null;
+  }
+};
+
 export const getPortfolioData = async () => {
-  if (inFlightFetchPromise) {
-    return await inFlightFetchPromise;
+  if (portfolioInFlightPromise) {
+    return await portfolioInFlightPromise;
   }
 
-  inFlightFetchPromise = (async () => {
+  portfolioInFlightPromise = (async () => {
     try {
-      const res = await fetch(`${baseUrl}/api/user/portfolio-content`, {
-        next: {
-          revalidate: 86400,
-          tags: ["portfolio"],
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(`Failed to fetch portfolio content: ${res.statusText}`);
+      const data = await fetchEndpoint("/api/user/portfolio-content");
+      if (data) {
+        setToStorage(KEYS.achievements, data.achievements || []);
+        setToStorage(KEYS.educations, data.educations || []);
       }
-
-      const json = await res.json();
-      const data = json?.data || {};
-
-      setToStorage(KEYS.achievements, data.achievements || []);
-      setToStorage(KEYS.educations, data.educations || []);
-      setToStorage(KEYS.experiences, data.experiences || []);
-      setToStorage(KEYS.trailhead, data.trailhead || {});
-      setToStorage(KEYS.works, data.works || []);
-
-      return data;
-    } catch (error) {
-      console.error("Error in getPortfolioData:", error);
-      return null;
+      return data || {};
     } finally {
-      inFlightFetchPromise = null;
+      portfolioInFlightPromise = null;
     }
   })();
 
-  return await inFlightFetchPromise;
+  return await portfolioInFlightPromise;
 };
 
 export async function getAchievements() {
@@ -93,22 +109,28 @@ export async function getExperiences() {
   const cached = getFromStorage(KEYS.experiences);
   if (cached) return cached;
 
-  const data = await getPortfolioData();
-  return data?.experiences || [];
+  const data = await fetchEndpoint("/api/user/experiences");
+  const result = Array.isArray(data) ? data : [];
+  setToStorage(KEYS.experiences, result);
+  return result;
 }
 
 export async function getTrailhead() {
   const cached = getFromStorage(KEYS.trailhead);
   if (cached) return cached;
 
-  const data = await getPortfolioData();
-  return data?.trailhead || {};
+  const data = await fetchEndpoint("/api/user/trailhead");
+  const result = data || {};
+  setToStorage(KEYS.trailhead, result);
+  return result;
 }
 
 export async function getWorks() {
   const cached = getFromStorage(KEYS.works);
   if (cached) return cached;
 
-  const data = await getPortfolioData();
-  return data?.works || [];
+  const data = await fetchEndpoint("/api/user/works");
+  const result = Array.isArray(data) ? data : [];
+  setToStorage(KEYS.works, result);
+  return result;
 }

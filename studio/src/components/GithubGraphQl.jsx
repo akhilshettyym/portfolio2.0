@@ -287,79 +287,79 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
   const renderMobile = () => {
     return (
       <div className="mb-5 grid grid-cols-3 gap-4 uppercase">
-        <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
-          <AnimatePresence>
-            {aiNotif && (
-              <motion.div
-                key={aiNotif.id}
-                initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                animate={{ opacity: 1, y: -12, scale: 1 }}
-                exit={{ opacity: 0, y: -24, scale: 1.5 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-                className={`absolute top-3 right-12 text-[10px] font-semibold ${styles.textPrimary}`}>
-                +{aiNotif.value}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <motion.p
-            onHoverStart={() => triggerGlitch("100M+", setAiDisplay)}
-            className={`cursor-default text-[15px] font-black tracking-tight ${styles.textSecondary}`}>
-            {aiDisplay}
-          </motion.p>
-
+        <div className="flex flex-col items-center justify-center py-5 text-center">
+          <div className="relative inline-flex items-center justify-center">
+            <AnimatePresence>
+              {aiNotif && (
+                <motion.div
+                  key={aiNotif.id}
+                  initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                  animate={{ opacity: 1, y: -12, scale: 1 }}
+                  exit={{ opacity: 0, y: -24, scale: 1.5 }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                  className={`absolute top-0 -right-7 text-[10px] font-semibold ${styles.textPrimary}`}>
+                  +{aiNotif.value}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <motion.p
+              onHoverStart={() => triggerGlitch("100M+", setAiDisplay)}
+              className={`cursor-default text-[15px] font-black tracking-tight ${styles.textSecondary}`}>
+              {aiDisplay}
+            </motion.p>
+          </div>
           <p className={`flex items-center mt-1 text-[10px] font-bold tracking-tight ${styles.textMuted}`}>
             AI tokens used
           </p>
         </div>
 
-        <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
-          <AnimatePresence>
-            {coffeeNotif && (
-              <motion.div
-                key={coffeeNotif.id}
-                initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                animate={{ opacity: 1, y: -12, scale: 1 }}
-                exit={{ opacity: 0, y: -24, scale: 1.5 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-                className={`absolute top-3 right-12 text-[10px] font-semibold ${styles.textFaded}`}>
-                +{coffeeNotif.value}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <motion.p
-            onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)}
-            className={`cursor-default text-[15px] font-black tracking-tight ${styles.textSecondary}`}>
-            {coffeeDisplay}
-          </motion.p>
-
+        <div className="flex flex-col items-center justify-center py-5 text-center">
+          <div className="relative inline-flex items-center justify-center">
+            <AnimatePresence>
+              {coffeeNotif && (
+                <motion.div
+                  key={coffeeNotif.id}
+                  initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                  animate={{ opacity: 1, y: -12, scale: 1 }}
+                  exit={{ opacity: 0, y: -24, scale: 1.5 }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                  className={`absolute top-0 -right-7 text-[10px] font-semibold ${styles.textFaded}`}>
+                  +{coffeeNotif.value}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <motion.p
+              onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)}
+              className={`cursor-default text-[15px] font-black tracking-tight ${styles.textSecondary}`}>
+              {coffeeDisplay}
+            </motion.p>
+          </div>
           <p className={`flex items-center mt-1 text-[10px] font-bold tracking-tight ${styles.textMuted}`}>
             Coffees drank
           </p>
         </div>
 
-        <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
-          <AnimatePresence>
-            {commitNotif && (
-              <motion.div
-                key={commitNotif.id}
-                initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                animate={{ opacity: 1, y: -12, scale: 1 }}
-                exit={{ opacity: 0, y: -24, scale: 1.5 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-                className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textFaded}`}>
-                +{commitNotif.value}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <motion.p
-            onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)}
-            className={`cursor-default text-[15px] font-black tracking-tight ${styles.textPrimary}`}>
-            {displayedCommitCount}
-          </motion.p>
-
+        <div className="flex flex-col items-center justify-center py-5 text-center">
+          <div className="relative inline-flex items-center justify-center">
+            <AnimatePresence>
+              {commitNotif && (
+                <motion.div
+                  key={commitNotif.id}
+                  initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                  animate={{ opacity: 1, y: -12, scale: 1 }}
+                  exit={{ opacity: 0, y: -24, scale: 1.5 }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                  className={`absolute top-0 -right-7 text-[11px] font-semibold ${styles.textFaded}`}>
+                  +{commitNotif.value}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <motion.p
+              onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)}
+              className={`cursor-default text-[15px] font-black tracking-tight ${styles.textPrimary}`}>
+              {displayedCommitCount}
+            </motion.p>
+          </div>
           <p className={`flex items-center mt-1 text-[10px] font-bold tracking-wider ${styles.textMuted}`}>
             Code Commits
           </p>
@@ -379,27 +379,27 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
         renderMobile()
       ) : (
         <div className="mb-5 grid grid-cols-1 sm:grid-cols-3 gap-4 uppercase">
-          <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
-            <AnimatePresence>
-              {aiNotif && (
-                <motion.div
-                  key={aiNotif.id}
-                  initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                  animate={{ opacity: 1, y: -12, scale: 1 }}
-                  exit={{ opacity: 0, y: -24, scale: 1.5 }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textPrimary}`}>
-                  +{aiNotif.value}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <motion.p
-              onHoverStart={() => triggerGlitch("100M+", setAiDisplay)}
-              className={`cursor-default text-[26px] font-black tracking-tight ${styles.textSecondary}`}>
-              {aiDisplay}
-            </motion.p>
-
+          <div className="flex flex-col items-center justify-center px-5 py-5 text-center">
+            <div className="relative inline-flex items-center justify-center">
+              <AnimatePresence>
+                {aiNotif && (
+                  <motion.div
+                    key={aiNotif.id}
+                    initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                    animate={{ opacity: 1, y: -12, scale: 1 }}
+                    exit={{ opacity: 0, y: -24, scale: 1.5 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className={`absolute top-0 -right-9 text-[11px] font-semibold ${styles.textPrimary}`}>
+                    +{aiNotif.value}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <motion.p
+                onHoverStart={() => triggerGlitch("100M+", setAiDisplay)}
+                className={`cursor-default text-[26px] font-black tracking-tight ${styles.textSecondary}`}>
+                {aiDisplay}
+              </motion.p>
+            </div>
             <p className={`flex items-center mt-2 text-xs font-bold tracking-wider ${styles.textMuted}`}>
               <span className="mr-1.5">
                 <GiRaiseZombie size={18} />
@@ -408,27 +408,27 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
             </p>
           </div>
 
-          <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
-            <AnimatePresence>
-              {coffeeNotif && (
-                <motion.div
-                  key={coffeeNotif.id}
-                  initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                  animate={{ opacity: 1, y: -12, scale: 1 }}
-                  exit={{ opacity: 0, y: -24, scale: 1.5 }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textFaded}`}>
-                  +{coffeeNotif.value}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <motion.p
-              onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)}
-              className={`cursor-default text-[26px] font-black tracking-tight ${styles.textSecondary}`}>
-              {coffeeDisplay}
-            </motion.p>
-
+          <div className="flex flex-col items-center justify-center px-5 py-5 text-center">
+            <div className="relative inline-flex items-center justify-center">
+              <AnimatePresence>
+                {coffeeNotif && (
+                  <motion.div
+                    key={coffeeNotif.id}
+                    initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                    animate={{ opacity: 1, y: -12, scale: 1 }}
+                    exit={{ opacity: 0, y: -24, scale: 1.5 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className={`absolute top-0 -right-9 text-[11px] font-semibold ${styles.textFaded}`}>
+                    +{coffeeNotif.value}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <motion.p
+                onHoverStart={() => triggerGlitch("2.9k+", setCoffeeDisplay)}
+                className={`cursor-default text-[26px] font-black tracking-tight ${styles.textSecondary}`}>
+                {coffeeDisplay}
+              </motion.p>
+            </div>
             <p className={`flex items-center mt-2 text-xs font-bold tracking-wider ${styles.textFaded}`}>
               <span className={`mr-1.5 ${isDark ? "text-white/60" : isMetal ? "text-red-700" : "text-gray-600"}`}>
                 <DiCoffeescript size={18} />
@@ -437,27 +437,27 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
             </p>
           </div>
 
-          <div className="relative flex flex-col items-center justify-center px-5 py-5 text-center">
-            <AnimatePresence>
-              {commitNotif && (
-                <motion.div
-                  key={commitNotif.id}
-                  initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                  animate={{ opacity: 1, y: -12, scale: 1 }}
-                  exit={{ opacity: 0, y: -24, scale: 1.5 }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  className={`absolute top-3 right-12 text-[11px] font-semibold ${styles.textFaded}`}>
-                  +{commitNotif.value}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <motion.p
-              onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)}
-              className={`cursor-default text-[26px] font-black tracking-tight ${styles.textPrimary}`}>
-              {displayedCommitCount}
-            </motion.p>
-
+          <div className="flex flex-col items-center justify-center px-5 py-5 text-center">
+            <div className="relative inline-flex items-center justify-center">
+              <AnimatePresence>
+                {commitNotif && (
+                  <motion.div
+                    key={commitNotif.id}
+                    initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                    animate={{ opacity: 1, y: -12, scale: 1 }}
+                    exit={{ opacity: 0, y: -24, scale: 1.5 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className={`absolute top-0 -right-9 text-[11px] font-semibold ${styles.textFaded}`}>
+                    +{commitNotif.value}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <motion.p
+                onHoverStart={() => triggerGlitch(total.toString(), setCommitDisplay)}
+                className={`cursor-default text-[26px] font-black tracking-tight ${styles.textPrimary}`}>
+                {displayedCommitCount}
+              </motion.p>
+            </div>
             <p className={`flex items-center mt-2 text-xs font-bold tracking-wider ${styles.textMuted}`}>
               <span className="mr-1.5">
                 <FaGitAlt size={18} />

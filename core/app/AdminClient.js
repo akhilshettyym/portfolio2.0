@@ -1,8 +1,9 @@
 "use client";
 
-import { apiFetch } from "../utils/api";
-import { showToast } from "@/utils/toast";
+import Link from "next/link";
 import { useState } from "react";
+import { apiFetch } from "@/utils/api";
+import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { usePathname, useRouter } from "next/navigation";
@@ -14,7 +15,6 @@ export default function AdminClient({ children }) {
 
   const [loggingOut, setLoggingOut] = useState(false);
 
-  // Reset loggingOut state directly during render if we have successfully arrived at the login page
   if (isLoginPage && loggingOut) {
     setLoggingOut(false);
   }
@@ -43,15 +43,33 @@ export default function AdminClient({ children }) {
       )}
 
       {!isLoginPage && (
-        <nav className="w-full border-b border-black py-5 px-6 flex justify-between items-center bg-white">
+        <nav className="w-full border-b border-black py-4 px-6 flex flex-wrap justify-between items-center gap-4 bg-white">
           <span className="font-mono font-extrabold tracking-normal uppercase text-md">AKHIL SHETTY // ADMIN</span>
 
-          <button
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className="border-2 border-black px-4 py-2 text-sm uppercase font-mono tracking-normal hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-50">
-            {loggingOut ? "Exiting..." : "Logout"}
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/dashboard"
+              className={`border border-black px-4 py-2 text-xs font-mono uppercase transition-colors duration-150 ${
+                pathname === "/dashboard" ? "bg-black text-white" : "bg-white text-black hover:bg-gray-100"
+              }`}>
+              Inquiries
+            </Link>
+
+            <Link
+              href="/content"
+              className={`border border-black px-4 py-2 text-xs font-mono uppercase transition-colors duration-150 ${
+                pathname === "/content" ? "bg-black text-white" : "bg-white text-black hover:bg-gray-100"
+              }`}>
+              Content
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="border-2 border-black px-4 py-2 text-xs uppercase font-mono tracking-normal hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-50">
+              {loggingOut ? "Exiting..." : "Logout"}
+            </button>
+          </div>
         </nav>
       )}
 

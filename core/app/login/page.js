@@ -1,7 +1,7 @@
 "use client";
 
+import { apiFetch } from "@/utils/api";
 import { showToast } from "@/utils/toast";
-import { apiFetch } from "../../utils/api";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 

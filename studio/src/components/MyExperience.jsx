@@ -7,6 +7,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { getEducations, getExperiences } from "@/lib/payload/contentapi";
 import { getMyExperienceStyles, getMarqueeCardStyle } from "@/utils/themeSwatch";
 
+const TILTS = [-2.5, -1.5, 2];
+
 export default function MyExperience() {
   const { theme } = useTheme();
   const targetRef = useRef(null);
@@ -73,7 +75,7 @@ export default function MyExperience() {
         />
 
         <div
-          className={`w-full max-w-7xl h-[75vh] md:h-[70vh] border-2 p-3 md:p-4 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
+          className={`w-full max-w-7xl h-[75vh] md:h-[65vh] border-2 p-3 md:p-4 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
           <div
             ref={containerRef}
             className={`w-full flex-1 min-h-75 border flex items-center relative rounded-lg overflow-hidden transition-colors duration-500 ${styles.innerBox}`}>
@@ -82,10 +84,13 @@ export default function MyExperience() {
                 ref={trackRef}
                 className="flex gap-6 sm:gap-8 items-center pl-[15vw] md:pl-[35vw] pr-[15vw] md:pr-[20vw] py-4 md:py-8 h-full">
                 {expData.map((card, index) => {
+                  const cardTilt = card.tilt || TILTS[index % TILTS.length];
+
                   return (
-                    <React.Fragment key={card.id || index}>
+                    <React.Fragment key={card.id || card._id || index}>
                       <motion.div
-                        style={{ rotate: card.tilt || 0 }}
+                        initial={{ rotate: cardTilt }}
+                        animate={{ rotate: cardTilt }}
                         whileHover={{ scale: 1.04, rotate: 0, zIndex: 30 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                         className={`w-[75vw] sm:w-80 md:w-90 lg:w-100 h-64 sm:h-56 md:h-70 border-2 flex flex-col justify-between shrink-0 p-4 relative rounded-lg transition-colors duration-300 group cursor-pointer z-10 ${styles.card}`}>
@@ -102,9 +107,9 @@ export default function MyExperience() {
 
                         <div className="my-auto">
                           <div
-                            className={`flex items-baseline justify-between w-full text-[10px] tracking-wider uppercase leading-relaxed ${styles.textMuted}`}>
+                            className={`flex items-baseline justify-between w-full text-[12px] tracking-wider uppercase leading-relaxed ${styles.textMuted}`}>
                             <p className="font-medium">{card.company}</p>
-                            <span className="text-[8px] tracking-normal normal-case opacity-80">{card.timeline}</span>
+                            <span className="text-[10px] tracking-normal normal-case opacity-80">{card.timeline}</span>
                           </div>
                         </div>
 
@@ -145,7 +150,7 @@ export default function MyExperience() {
             className={`w-full h-20 md:h-28 border flex items-center shrink-0 rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
             <div className="animate-marquee-smooth flex gap-3 md:gap-4 px-2 items-center whitespace-nowrap">
               {marqueeItems.map((item, index) => {
-                const uniqueKey = `${item.id || index}-${index}`;
+                const uniqueKey = `${item.id || item._id || index}-${index}`;
                 const cardStyle = getMarqueeCardStyle(item.variant, isDark, isMetal);
 
                 return (

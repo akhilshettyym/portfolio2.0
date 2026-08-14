@@ -11,6 +11,7 @@ import { useDeviceType } from "@/hooks/useDeviceType";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/themeSwatch";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 
 function splitLetters(text) {
@@ -44,11 +45,7 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
 
 const MarqueeLine = ({ text, large }) => {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const textColor = isDark ? "text-white/90" : isMetal ? "text-red-500" : "text-black/90";
-  const dotColor = isDark ? "bg-white/90" : isMetal ? "bg-red-500" : "bg-black/90";
+  const { textColor, dotColor } = getFooterMarqueeStyles(theme);
 
   const marqueeAnimation = large ? { x: [0, -2400] } : { x: [-2400, 0] };
 
@@ -74,11 +71,7 @@ const MarqueeLine = ({ text, large }) => {
 
 const MarqueeLineLow = ({ text, large, isMobile }) => {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const textColor = isDark ? "text-white/90" : isMetal ? "text-red-500" : "text-black/90";
-  const dotColor = isDark ? "bg-white/90" : isMetal ? "bg-red-500" : "bg-black/90";
+  const { textColor, dotColor } = getFooterMarqueeStyles(theme);
 
   return (
     <div className="relative overflow-hidden py-2">
@@ -108,55 +101,7 @@ const Footer = () => {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-  const isDarkOrMetal = isDark || isMetal;
-
-  const styles = {
-    section: isDarkOrMetal ? "bg-black text-white" : "bg-white text-black",
-    footerContainer: isDark ? "bg-[#0a0a0a]" : isMetal ? "bg-[#050000]" : "bg-white",
-    textAccent: isDark ? "text-indigo-400" : isMetal ? "text-red-500" : "text-indigo-900",
-
-    cardOuter: isDark ? "bg-white/10" : isMetal ? "bg-red-500/10" : "bg-gray-200",
-    cardInner1: isDark ? "bg-white/10" : isMetal ? "bg-red-500/10" : "bg-gray-300",
-    cardInner2: isDark ? "bg-black/40" : isMetal ? "bg-black/40" : "bg-gray-200",
-    panelBg: isDark ? "bg-[#141414]" : isMetal ? "bg-[#140000]" : "bg-white",
-    panelHeader: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-slate-50",
-    wrapperBg: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-gray-300",
-    footerBottom: isDark ? "bg-[#0a0a0a]" : isMetal ? "bg-[#050000]" : "bg-white",
-
-    border: isDark ? "border-white/10" : isMetal ? "border-red-500/20" : "border-slate-200",
-    borderLight: isDark ? "border-white/5" : isMetal ? "border-red-500/10" : "border-slate-50",
-
-    textPrimary: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-    textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80",
-    textMuted: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-slate-500",
-
-    socialCard: isDark
-      ? "bg-neutral-900 hover:bg-neutral-800"
-      : isMetal
-        ? "bg-[#1a0000] hover:bg-[#2a0000]"
-        : "bg-white",
-    iconBoxBase: "flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-colors duration-300",
-    iconBox: isDark
-      ? "bg-white/10 group-hover:text-indigo-400 text-slate-300"
-      : isMetal
-        ? "bg-red-500/10 group-hover:text-red-400 text-red-500/80"
-        : "bg-slate-100 group-hover:text-indigo-600 text-slate-600",
-    buttonBg: isDark
-      ? "text-white/50 hover:text-white"
-      : isMetal
-        ? "text-red-500/50 hover:text-red-500"
-        : "text-black/50 hover:text-black",
-
-    gridGlow: isDark ? "bg-white/20" : isMetal ? "bg-red-500/30" : "bg-white",
-    imageBlend: isDarkOrMetal ? "invert mix-blend-screen opacity-90" : "mix-blend-multiply opacity-80",
-
-    gridLines: isDark ? "rgba(255,255,255,0.08)" : isMetal ? "rgba(239,68,68,0.15)" : "rgba(0,0,0,0.05)",
-    curtain: isDark ? "rgba(255,255,255,0.05)" : isMetal ? "rgba(239,68,68,0.08)" : "rgba(0,0,0,0.05)",
-    topOverlay: isDark ? "rgba(255,255,255,0.04)" : isMetal ? "rgba(239,68,68,0.08)" : "rgba(0,0,0,0.04)",
-    topBorder: isDark ? "bg-white/10" : isMetal ? "bg-red-500/20" : "bg-black/10",
-  };
+  const styles = getFooterStyles(theme);
 
   useEffect(() => {
     const handle = window.setTimeout(() => setIsHydrated(true), 0);
@@ -179,7 +124,11 @@ const Footer = () => {
     ],
   );
 
-  const shadowToApply = prefersReducedMotion ? undefined : isDarkOrMetal ? "0 -10px 40px rgba(0,0,0,0.5)" : shellShadow;
+  const shadowToApply = prefersReducedMotion
+    ? undefined
+    : styles?.isDarkOrMetal
+      ? "0 -10px 40px rgba(0,0,0,0.5)"
+      : shellShadow;
 
   const sectionPadding = useSpring(useTransform(scrollYProgress, [0, 0.28, 0.42, 0.56, 1], [50, 50, 30, 0, 0]), {
     stiffness: 72,
@@ -774,7 +723,7 @@ const Footer = () => {
               </div>
 
               <h2
-                className={`absolute left-1/2 bottom-[-0.28em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(2.9rem,12vw,12rem)] font-extrabold uppercase leading-none tracking-[-0.06em] origin-center scale-x-[1.1] sm:scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
+                className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(2.9rem,12vw,12rem)] font-extrabold uppercase leading-none tracking-[-0.06em] origin-center scale-x-[1.1] sm:scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
                 AKHIL SHETTY
               </h2>
             </div>

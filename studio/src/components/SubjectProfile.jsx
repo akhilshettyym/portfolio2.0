@@ -9,6 +9,7 @@ import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
+import { getProfileMarqueeStyles, getProfileStyles } from "@/utils/themeSwatch";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
 
 const ScrollMarquee = ({
@@ -36,9 +37,7 @@ const ScrollMarquee = ({
   const speed = Math.max(0.5, baseSpeed);
   const duration = 25 / speed;
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-  const textColorClass = isDark ? "text-white" : isMetal ? "text-red-500" : "text-slate-900";
+  const { textColorClass } = getProfileMarqueeStyles(theme);
 
   return (
     <div
@@ -70,10 +69,7 @@ const ScrollMarquee = ({
 };
 
 const MarqueeContent = ({ text, variant, showIcon, theme }) => {
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-  const textColorClass = isDark ? "text-white" : isMetal ? "text-red-500" : "text-slate-900";
-  const iconColorClass = isDark ? "text-white/80" : isMetal ? "text-red-500/80" : "text-black/80";
+  const { textColorClass, iconColorClass } = getProfileMarqueeStyles(theme);
 
   return (
     <div className="flex items-center gap-10 shrink-0">
@@ -109,82 +105,7 @@ export default function SubjectProfile() {
     return () => clearInterval(interval);
   }, [isSectionVisible]);
 
-  const getStyles = (currentTheme) => {
-    const dark = currentTheme === "dark";
-    const metal = currentTheme === "metal";
-    return {
-      section: dark
-        ? "bg-black text-white selection:bg-white selection:text-black"
-        : metal
-          ? "bg-black text-red-500 selection:bg-red-500 selection:text-black"
-          : "bg-white text-slate-900 selection:bg-slate-900 selection:text-white",
-      h1Main: dark ? "text-white" : metal ? "text-red-500" : "text-black",
-      h1Sub: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-black/90",
-      h2Sub: dark ? "text-white/95" : metal ? "text-red-500/95" : "text-black/95",
-      pSub: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
-      subProfileText: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-black/50",
-      coordsGroup: dark ? "text-white/35" : metal ? "text-red-500/35" : "text-black/35",
-      coordDatePre: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
-      coordDate: dark ? "text-white/70" : metal ? "text-red-500/70" : "text-black/70",
-      lineStatic: dark ? "bg-white/10" : metal ? "bg-red-500/20" : "bg-black/6",
-      lineAnim: dark ? "bg-white/60" : metal ? "bg-red-500/60" : "bg-black/40",
-      lineStaticThin: dark ? "bg-white/10" : metal ? "bg-red-500/10" : "bg-black/8",
-      gridLines: dark ? "rgba(255, 255, 255, 0.1)" : metal ? "rgba(239, 68, 68, 0.1)" : "rgba(148, 163, 184, 0.1)",
-      cardBg: dark ? "bg-black border-white/20" : metal ? "bg-black border-red-500/30" : "bg-white border-slate-200/80",
-      textBody: dark ? "text-white/70" : metal ? "text-red-500/70" : "text-slate-600",
-      textHighlight: dark ? "text-white" : metal ? "text-red-500" : "text-slate-900",
-      textHighlightBg: dark ? "bg-white text-black" : metal ? "bg-red-500 text-black" : "bg-slate-100 text-slate-950",
-      underline: dark ? "decoration-white/50" : metal ? "decoration-red-500/50" : "decoration-slate-300",
-      nodeStatus: dark
-        ? "border-white/20 bg-black"
-        : metal
-          ? "border-red-500/20 bg-black"
-          : "border-slate-100 bg-slate-950",
-      nodeStatusText: dark
-        ? "text-white/70 border-white/20 bg-black/60"
-        : metal
-          ? "text-red-500 border-red-500/20 bg-black/60"
-          : "text-slate-300 border-white/10 bg-black/60",
-      mainCard: dark ? "bg-black border-white" : metal ? "bg-black border-red-500" : "bg-white border-slate-900",
-      borderCorner: dark ? "border-white" : metal ? "border-red-500" : "border-slate-900",
-      workflowBox: dark
-        ? "bg-white/5 border-white"
-        : metal
-          ? "bg-red-950/20 border-red-500"
-          : "bg-slate-50/80 border-slate-900",
-      workflowLabel: dark ? "text-white/60" : metal ? "text-red-500/60" : "text-slate-500",
-      workflowText: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-slate-700",
-      workflowArrow: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-black/60",
-      hoverCard: dark
-        ? "bg-white/5 border-white/20 hover:border-white"
-        : metal
-          ? "bg-red-950/10 border-red-500/20 hover:border-red-500"
-          : "bg-slate-50/40 border-slate-200 hover:border-slate-400",
-      hoverCardText: dark
-        ? "text-white/60 group-hover:text-white"
-        : metal
-          ? "text-red-500/60 group-hover:text-red-500"
-          : "text-slate-600 group-hover:text-slate-900",
-      imgCardContainer: dark
-        ? "border-white/20 bg-black"
-        : metal
-          ? "border-red-500/30 bg-black"
-          : "border-slate-200 bg-slate-50",
-      imgPlaceholder: dark ? "bg-white/10" : metal ? "bg-red-500/10" : "bg-slate-200",
-      sysPanel: dark
-        ? "bg-black/90 border-white/20 text-white"
-        : metal
-          ? "bg-black/90 border-red-500/30 text-red-500"
-          : "bg-slate-900/90 border-slate-700/50 text-white",
-      sysDot: metal ? "bg-red-500" : "bg-emerald-400",
-      sysHeader: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-slate-200",
-      sysText: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-slate-400",
-      marqueeBorder: dark ? "border-white/20" : metal ? "border-red-500/30" : "border-slate-200/80",
-      textH3: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-slate-800",
-    };
-  };
-
-  const styles = getStyles(theme);
+  const styles = getProfileStyles(theme);
 
   return (
     <div

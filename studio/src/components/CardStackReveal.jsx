@@ -1,61 +1,27 @@
 "use client";
 
-import { DEFAULT_CARDS } from "@/utils/basic";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useState, useRef, memo } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { getCardStackStyles } from "@/utils/themeSwatch";
 import FloatingCard from "@/components/basic/FloatingCard";
+import { getAchievements } from "@/lib/payload/contentapi";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import React, { useState, useRef, memo, useEffect } from "react";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 
-function CardStackReveal({ cards = DEFAULT_CARDS }) {
+function CardStackReveal() {
   const sectionRef = useRef(null);
+  const [data, setData] = useState([]);
   const [hoveredCard, setHoveredCard] = useState(-1);
 
   const { theme } = useTheme();
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const styles = {
-    section: isDark || isMetal ? "bg-black" : "bg-white",
-    bgGradient: isMetal
-      ? "bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.1),transparent_55%)]"
-      : isDark
-        ? "bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_55%)]"
-        : "bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)]",
-    title: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50",
-    desc: isDark ? "text-white/40" : isMetal ? "text-red-500/40" : "text-black/35",
-
-    cardBg: isDark
-      ? "bg-[#0a0a0a] border-white/10 shadow-[0_4px_20px_rgba(255,255,255,0.03)] hover:shadow-[0_8px_30px_rgba(255,255,255,0.08)]"
-      : isMetal
-        ? "bg-[#0a0a0a] border-red-500/30 shadow-[0_4px_20px_rgba(239,68,68,0.05)] hover:shadow-[0_8px_30px_rgba(239,68,68,0.15)]"
-        : "bg-white border-neutral-200 shadow-md hover:shadow-xl",
-    badge: isDark
-      ? "border-white/20 bg-white/5 text-white/55"
-      : isMetal
-        ? "border-red-500/30 bg-red-500/10 text-red-500/70"
-        : "border-black/10 bg-neutral-50 text-black/55",
-    cardTitle: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-    cardCaption: isDark ? "text-white/45" : isMetal ? "text-red-500/45" : "text-black/45",
-    cardDesc: isDark ? "text-white/70" : isMetal ? "text-red-200/70" : "text-black/70",
-
-    button: isDark
-      ? "border-white/20 bg-white text-black hover:bg-white/90 shadow-[0_12px_30px_rgba(255,255,255,0.15)]"
-      : isMetal
-        ? "border-red-500/20 bg-red-500 text-black hover:bg-red-600 shadow-[0_12px_30px_rgba(239,68,68,0.15)]"
-        : "border-black/10 bg-black text-white hover:bg-black/90 shadow-[0_12px_30px_rgba(0,0,0,0.18)]",
-
-    footerBorder: isDark ? "border-white/10" : isMetal ? "border-red-500/20" : "border-neutral-100",
-    footerLabel: isDark ? "text-white/45" : isMetal ? "text-red-500/45" : "text-black/45",
-    footerYear: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-  };
+  const styles = getCardStackStyles(theme);
 
   const renderStackedCards = isMobile || isTier2;
-  const renderedCards = renderStackedCards ? cards.slice(0, Math.min(cards.length, 4)) : cards;
+  const renderedCards = renderStackedCards ? data.slice(0, Math.min(data.length, 4)) : data;
 
   const { scrollYProgress } = useScroll({
     target: !renderStackedCards ? sectionRef : undefined,
@@ -72,6 +38,15 @@ function CardStackReveal({ cards = DEFAULT_CARDS }) {
   const backgroundFilter = useMotionTemplate`blur(${backgroundBlur}px)`;
 
   const displayProgress = progress;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const achievementsData = await getAchievements();
+      setData(achievementsData);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <section

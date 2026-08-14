@@ -2,51 +2,29 @@
 
 import Image from "next/image";
 import "@/styles/track_trail.css";
-import React, { memo } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { DEFAULT_TRAIL_DATA } from "@/utils/basic";
+import { getTrailStyles } from "@/utils/themeSwatch";
+import { getTrailhead } from "@/lib/payload/contentapi";
+import React, { memo, useState, useEffect } from "react";
 
 const BASE_BANNERS = ["/trailhead/champion.svg", "/trailhead/innovator.svg"];
 
 const DEFAULT_BANNERS = Array(4).fill(BASE_BANNERS).flat();
 
-const TrackTrail = memo(({ data = DEFAULT_TRAIL_DATA, banners = DEFAULT_BANNERS }) => {
+const TrackTrail = memo(({ banners = DEFAULT_BANNERS }) => {
   const { theme } = useTheme();
+  const styles = getTrailStyles(theme);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
+  const [data, setData] = useState({});
 
-  const styles = {
-    wrapper: isDark ? "bg-[#0a0a0a]" : isMetal ? "bg-black" : "bg-white",
+  useEffect(() => {
+    const fetchData = async () => {
+      const trailData = await getTrailhead();
+      setData(trailData);
+    };
 
-    container: isDark
-      ? "bg-[#0a0a0a] border-white/10 hover:border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.9)]"
-      : isMetal
-        ? "bg-black border-red-500/20 hover:border-red-500/40 shadow-[0_8px_30px_rgba(0,0,0,0.9)]"
-        : "bg-white border-neutral-200/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]",
-
-    rankBox: isDark
-      ? "bg-[#0a0a0a] border-white/10"
-      : isMetal
-        ? "bg-black border-red-500/20"
-        : "bg-linear-to-b from-white to-neutral-50/50 border-neutral-100",
-
-    rankGlow: isDark ? "bg-neutral-800/20" : isMetal ? "bg-red-950/30" : "bg-blue-400/10",
-    rankTitle: isDark ? "text-white" : isMetal ? "text-red-500" : "text-neutral-800",
-
-    divider: isDark ? "bg-white/10" : isMetal ? "bg-red-500/20" : "bg-neutral-100",
-
-    statValue: isDark ? "text-white" : isMetal ? "text-red-500" : "text-neutral-900",
-    statLabel: isDark ? "text-white/40" : isMetal ? "text-red-500/50" : "text-neutral-400",
-
-    marqueeBox: isDark
-      ? "bg-[#0a0a0a] border-white/10"
-      : isMetal
-        ? "bg-black border-red-500/20"
-        : "bg-neutral-50/40 border-neutral-100",
-
-    imageFilter: isDark || isMetal ? "drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]" : "drop-shadow-sm",
-  };
+    fetchData();
+  }, []);
 
   return (
     <div className={`w-full py-12 px-4 md:px-8 lg:px-12 transition-colors duration-500 ${styles.wrapper}`}>
@@ -60,8 +38,8 @@ const TrackTrail = memo(({ data = DEFAULT_TRAIL_DATA, banners = DEFAULT_BANNERS 
 
           <Image
             className={`object-contain mb-3 transition-all duration-500 ease-out relative z-10 ${styles.imageFilter}`}
-            src={data.rankImg}
-            alt={data.rankTitle}
+            src={"/trailhead/double-star-ranger.svg"}
+            alt={"double-star-ranger"}
             width={60}
             height={60}
             priority

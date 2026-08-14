@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { LIMP_BANNER } from "@/utils/storage";
 import { useTheme } from "@/context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { getLimpModalStyles } from "@/utils/themeSwatch";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
@@ -12,8 +13,7 @@ export default function LimpModal() {
   const { isTier2 } = usePerformanceTier();
   const [isOpen, setIsOpen] = useState(false);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
+  const styles = getLimpModalStyles(theme);
 
   useEffect(() => {
     const hasShown = localStorage.getItem(LIMP_BANNER);
@@ -29,20 +29,6 @@ export default function LimpModal() {
   const handleDismiss = () => {
     setIsOpen(false);
     localStorage.setItem(LIMP_BANNER, "true");
-  };
-
-  const styles = {
-    modalBox: isDark
-      ? "bg-[#0a0a0a] border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.5)]"
-      : isMetal
-        ? "bg-black border-red-500/20 shadow-[0_25px_80px_rgba(0,0,0,0.8)]"
-        : "bg-white border-neutral-200 shadow-[0_25px_80px_rgba(0,0,0,0.08)]",
-
-    title: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-    description: isDark ? "text-white/60" : isMetal ? "text-red-500/70" : "text-gray-500",
-
-    line1: isMetal ? "via-red-500" : "via-cyan-500",
-    line2: isMetal ? "via-red-800" : "via-purple-500",
   };
 
   return (

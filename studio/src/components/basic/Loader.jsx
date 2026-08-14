@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { GREETINGS } from "@/utils/basic";
 import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
+import { getLoaderStyles } from "@/utils/themeSwatch";
 import LocationModal from "@/components/basic/LocationModal";
 import { hasLocationPreference } from "@/utils/weather-scene";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
@@ -33,14 +34,7 @@ export default function Loader({ onFinish }) {
 
   const lastTimeRef = useRef(0);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const bgColorClass = isDark || isMetal ? "bg-black" : "bg-white";
-  const textColorClass = isMetal ? "text-red-500" : isDark ? "text-white" : "text-black";
-  const textFadedClass = isMetal ? "text-red-500/40" : isDark ? "text-white/40" : "text-black/40";
-  const progressBgClass = isMetal ? "bg-red-500/20" : isDark ? "bg-white/20" : "bg-black/10";
-  const progressFillClass = isMetal ? "bg-red-500" : isDark ? "bg-white" : "bg-black";
+  const { bgColorClass, textColorClass, textFadedClass, progressBgClass, progressFillClass } = getLoaderStyles(theme);
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;

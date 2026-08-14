@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
+import { getButtonStyles } from "@/utils/themeSwatch";
 import { AnimatePresence, motion } from "framer-motion";
 
 const ArrowIcon = () => {
@@ -17,36 +18,7 @@ export default function CustomButton({ title, onClick, width = 180, height = 56,
   const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const styles = {
-    containerBorder: isDark
-      ? "border-white/20 bg-[#0a0a0a]"
-      : isMetal
-        ? "border-red-600/40 bg-[#050000]"
-        : "border-zinc-300 bg-white",
-
-    baseMain: isDark ? "bg-white text-black" : isMetal ? "bg-red-600 text-black font-black" : "bg-zinc-900 text-white",
-
-    baseSide: isDark
-      ? "bg-neutral-200 text-black border-black/10"
-      : isMetal
-        ? "bg-red-700 text-black border-black/20"
-        : "bg-zinc-800 text-white border-white/10",
-
-    hoverMain: isDark
-      ? "bg-[#1c1c1c] text-white"
-      : isMetal
-        ? "bg-[#110000] text-red-500 font-black"
-        : "bg-white text-black",
-
-    hoverSide: isDark
-      ? "bg-[#111] text-white border-white/10"
-      : isMetal
-        ? "bg-[#050000] text-red-500 border-red-500/20"
-        : "bg-black text-white border-black/10",
-  };
+  const styles = getButtonStyles(theme);
 
   return (
     <button

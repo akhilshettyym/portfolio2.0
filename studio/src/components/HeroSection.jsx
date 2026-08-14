@@ -62,7 +62,6 @@ const HeroSection = () => {
 
   useEffect(() => {
     if (!ready || tier !== "tier_2") {
-      setShowModal(false);
       return;
     }
 
@@ -70,7 +69,10 @@ const HeroSection = () => {
       setShowModal(true);
     }, 5000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setShowModal(false);
+    };
   }, [ready, tier]);
 
   useEffect(() => {

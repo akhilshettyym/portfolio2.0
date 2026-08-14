@@ -2,39 +2,15 @@
 
 import "@/styles/dev_ticker.css";
 import { useTheme } from "@/context/ThemeContext";
+import { getDevTickerStyles } from "@/utils/themeSwatch";
 import { DEV_TICKERS, DEV_TICKERS_TIER } from "@/utils/basic";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 export default function DevTicker() {
   const { theme } = useTheme();
   const { isTier2 } = usePerformanceTier();
+  const styles = getDevTickerStyles(theme);
   const stream = [...DEV_TICKERS, ...DEV_TICKERS];
-
-  const getStyles = (currentTheme) => {
-    const dark = currentTheme === "dark";
-    const metal = currentTheme === "metal";
-    return {
-      section: dark
-        ? "border-y border-white/10 bg-black text-white selection:bg-white selection:text-black"
-        : metal
-          ? "border-y border-red-500/20 bg-black text-red-500 selection:bg-red-500 selection:text-black"
-          : "border-y border-black/8 bg-white text-slate-900 selection:bg-slate-900 selection:text-white",
-      fadeLeft: dark
-        ? "bg-linear-to-r from-black via-black/95 to-transparent"
-        : metal
-          ? "bg-linear-to-r from-black via-black/95 to-transparent"
-          : "bg-linear-to-r from-white via-white/95 to-transparent",
-      fadeRight: dark
-        ? "bg-linear-to-l from-black via-black/95 to-transparent"
-        : metal
-          ? "bg-linear-to-l from-black via-black/95 to-transparent"
-          : "bg-linear-to-l from-white via-white/95 to-transparent",
-      text: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
-      separator: dark ? "text-white/15" : metal ? "text-red-500/20" : "text-black/15",
-    };
-  };
-
-  const styles = getStyles(theme);
 
   return (
     <section id="devticker">

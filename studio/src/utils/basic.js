@@ -135,45 +135,6 @@ export const WEATHER_CODES = {
 
 export const CACHE_TTL_MS = 15 * 60 * 1000;
 
-export const DEFAULT_CARDS = [
-  {
-    title: "Impact Highlights",
-    caption: "Milestones That Made a Difference",
-    description:
-      "A curated showcase of measurable outcomes, reflecting consistent execution, ownership, and deep impact across key initiatives.",
-    year: "2021-2025",
-    href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/01_ImpactHighlights",
-    cta: "View highlights",
-  },
-  {
-    title: "Technical Certifications",
-    caption: "Continuous Learning, Verified Skills",
-    description:
-      "Formal industry credentials validating technical knowledge, practical expertise, and full readiness to leverage modern tools.",
-    year: "2024-2025",
-    href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/02_TechnicalCertifications",
-    cta: "See certificates",
-  },
-  {
-    title: "Co-Curricular Recognition",
-    caption: "Leadership Beyond Academics",
-    description:
-      "Honored recognition earned through leadership, teamwork, and active participation in activities that build true collaboration.",
-    year: "2022-2025",
-    href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/03_Co-CurricularRecognition",
-    cta: "Explore recog.",
-  },
-  {
-    title: "Academic Records",
-    caption: "A Foundation of Excellence",
-    description:
-      "A rigorous academic journey driven by absolute consistency, disciplined execution, and a focused commitment to future growth.",
-    year: "2019-2026",
-    href: "https://github.com/akhilshettyym/My-Professional-Journey/tree/main/04_AcademicRecords",
-    cta: "Open record",
-  },
-];
-
 export const RADII = [
   1, 0.6, 0.8, 0.4, 0.9, 0.7, 0.9, 0.3, 0.2, 0.5, 0.6, 0.4, 0.5, 0.6, 0.7, 0.3, 0.4, 0.8, 0.7, 0.5, 0.4, 0.6, 0.35,
   0.38, 0.9, 0.3, 0.6, 0.4, 0.2, 0.35, 0.5, 0.15, 0.2, 0.25, 0.4, 0.8, 0.76, 0.8, 1, 0.8, 0.7, 0.8, 0.3, 0.5, 0.6, 0.55,
@@ -545,44 +506,6 @@ export const SOCIALS = [
     icon: FaFileAlt,
     label: "Resume",
     href: "#",
-  },
-];
-
-/* SelectedWorks */
-export const PROJECTS = [
-  {
-    id: 1,
-    title: "Staffle",
-    tagline: "Employee Management System",
-    when: "2026",
-    type: "Management",
-    image: "/globeImage.svg",
-    url: "https://example.com",
-    stack: ["MongoDb", "Express", "React", "Node"],
-    description:
-      "Staffle is a full-stack Employee & Organization Management System built using the MERN stack. It supports multi-organization workflows with Super Admin, Admin, and Employee role-based control, task lifecycle management, and centralized organization governance.",
-  },
-  {
-    id: 2,
-    title: "Parampara",
-    tagline: "New project in progress",
-    when: "2026",
-    type: "Experimental",
-    image: "",
-    url: "",
-    stack: [],
-    description: "",
-  },
-  {
-    id: 3,
-    title: "Selected Work",
-    tagline: "New project in progress",
-    when: "2026",
-    type: "Experimental",
-    image: "",
-    url: "",
-    stack: [],
-    description: "",
   },
 ];
 

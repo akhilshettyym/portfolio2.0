@@ -3,14 +3,15 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import "@/styles/bubble_scene.css";
-import { memo, useEffect, useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { memo, useEffect, useRef, useState } from "react";
+import { getBubbleSceneStyles } from "@/utils/themeSwatch";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 
 export const TECH_STACK = [
   "React & Next.js",
@@ -38,22 +39,7 @@ function BubbleScene() {
 
   const [techIndex, setTechIndex] = useState(0);
 
-  const isDark = theme === "dark" || theme === "metal";
-  const isMetal = theme === "metal";
-
-  const styles = {
-    section: isDark ? "bg-black" : "bg-white",
-    text: theme === "dark" ? "text-white" : theme === "metal" ? "text-red-500" : "text-neutral-800",
-    accent: isMetal ? "text-red-400" : isDark ? "text-blue-400" : "text-blue-600",
-    orbitBorder: isDark ? "border-white/10" : "border-black/10",
-    fadeGradient: isDark ? "from-black via-black/90 to-transparent" : "from-white via-white/90 to-transparent",
-    box: isDark
-      ? "bg-white/[0.04] border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-      : "bg-black/[0.03] border-black/10 shadow-xl",
-  };
-
-  const gridLineColor = isDark ? "rgba(255, 255, 255, 0.06)" : "rgba(0, 0, 0, 0.045)";
-  const gridBackground = `linear-gradient(${gridLineColor} 1px, transparent 1px), linear-gradient(90deg, ${gridLineColor} 1px, transparent 1px)`;
+  const { isDark, isMetal, styles, gridBackground } = getBubbleSceneStyles(theme);
 
   useEffect(() => {
     if (fogRef.current) {

@@ -1,7 +1,7 @@
 "use client";
 
+import { apiFetch } from "@/utils/api";
 import { showToast } from "@/utils/toast";
-import { apiFetch } from "../../utils/api";
 import { useEffect, useState } from "react";
 import { LuWorkflow } from "react-icons/lu";
 

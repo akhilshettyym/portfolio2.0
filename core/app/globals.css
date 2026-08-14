@@ -6,7 +6,6 @@ body {
   font-family: sans-serif;
 }
 
-/* Custom crisp selections */
 ::selection {
   background-color: #000000;
   color: #ffffff;

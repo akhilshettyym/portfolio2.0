@@ -1,32 +1,6 @@
 import { getCardState } from "@/utils/functions";
 import { motion, useMotionTemplate, useTransform } from "framer-motion";
-
-const getThemeTransforms = (theme) => {
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  if (isDark) {
-    return {
-      bg: ["rgba(10,10,10,0.42)", "rgba(10,10,10,0.98)"],
-      border: ["rgba(255,255,255,0.05)", "rgba(255,255,255,0.15)"],
-      shadow: ["0 30px 80px rgba(0,0,0,0.5)", "0 40px 120px rgba(255,255,255,0.08)"],
-    };
-  }
-
-  if (isMetal) {
-    return {
-      bg: ["rgba(10,10,10,0.42)", "rgba(10,10,10,0.98)"],
-      border: ["rgba(239,68,68,0.15)", "rgba(239,68,68,0.30)"],
-      shadow: ["0 30px 80px rgba(0,0,0,0.5)", "0 40px 120px rgba(239,68,68,0.15)"],
-    };
-  }
-
-  return {
-    bg: ["rgba(255,255,255,0.42)", "rgba(255,255,255,0.98)"],
-    border: ["rgba(255,255,255,0.70)", "rgba(0,0,0,0.08)"],
-    shadow: ["0 30px 80px rgba(0,0,0,0.08)", "0 40px 120px rgba(0,0,0,0.14)"],
-  };
-};
+import { getFloatingCardStyles, getThemeTransforms } from "@/utils/themeSwatch";
 
 export default function FloatingCard({ card, index, progress, hoveredCard, setHoveredCard, theme = "light" }) {
   const stateX = useTransform(progress, (v) => getCardState(v, index).x);
@@ -47,25 +21,7 @@ export default function FloatingCard({ card, index, progress, hoveredCard, setHo
   const isHovered = hoveredCard === index;
   const hasHoveredCard = hoveredCard !== -1;
 
-  const isDark = theme === "dark";
-  const isMetal = theme === "metal";
-
-  const styles = {
-    badge: isDark
-      ? "border-white/20 bg-black/40 text-white/55"
-      : isMetal
-        ? "border-red-500/30 bg-black/40 text-red-500/70"
-        : "border-black/10 bg-white/70 text-black/55",
-    title: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
-    caption: isDark ? "text-white/45" : isMetal ? "text-red-500/45" : "text-black/45",
-    desc: isDark ? "text-white/70" : isMetal ? "text-red-200/70" : "text-black/68",
-    divider: isDark ? "bg-white/10" : isMetal ? "bg-red-500/20" : "bg-black/10",
-    button: isDark
-      ? "border-white/20 bg-white text-black hover:bg-white/90 shadow-[0_12px_30px_rgba(255,255,255,0.15)]"
-      : isMetal
-        ? "border-red-500/20 bg-red-500 text-black hover:bg-red-600 shadow-[0_12px_30px_rgba(239,68,68,0.15)]"
-        : "border-black/10 bg-black text-white hover:bg-black/90 shadow-[0_12px_30px_rgba(0,0,0,0.18)]",
-  };
+  const styles = getFloatingCardStyles(theme);
 
   return (
     <motion.div
@@ -125,7 +81,6 @@ export default function FloatingCard({ card, index, progress, hoveredCard, setHo
                 <span> {card.year} </span>
               </div>
 
-              {/* Divider Line */}
               <div className={`h-px w-full transition-colors duration-300 ${styles.divider}`} />
 
               <div className="mt-5 flex items-center justify-between gap-3">

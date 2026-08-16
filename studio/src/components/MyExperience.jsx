@@ -7,7 +7,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { getEducations, getExperiences } from "@/lib/payload/contentapi";
 import { getMyExperienceStyles, getMarqueeCardStyle } from "@/utils/themeSwatch";
 
-const TILTS = [-2.5, -1.5, 2];
+const TILTS = [-2.5, 2, -3];
 
 export default function MyExperience() {
   const { theme } = useTheme();

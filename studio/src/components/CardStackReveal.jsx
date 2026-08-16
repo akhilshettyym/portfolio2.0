@@ -8,6 +8,7 @@ import { getAchievements } from "@/lib/payload/contentapi";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useState, useRef, memo, useEffect } from "react";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
+import { FADEUP } from "@/utils/basic";
 
 function CardStackReveal() {
   const sectionRef = useRef(null);

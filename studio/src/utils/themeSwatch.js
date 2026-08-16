@@ -8,6 +8,7 @@ export const getBubbleSceneStyles = (theme) => {
     accent: isMetal ? "text-red-400" : "text-gray-500",
     orbitBorder: isDark ? "border-white/10" : "border-black/10",
     fadeGradient: isDark ? "from-black via-black/90 to-transparent" : "from-white via-white/90 to-transparent",
+    subProfileText: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50",
     box: isDark
       ? "bg-white/[0.04] border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
       : "bg-black/[0.03] border-black/10 shadow-xl",

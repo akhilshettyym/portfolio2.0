@@ -196,11 +196,11 @@ export default function SubjectProfile() {
             <ScrollMarquee theme={theme} texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />
             <div className="mt-4">
               <p className={`text-lg leading-relaxed font-light text-justify ${styles.textBody}`}>
-                I am a multidisciplinary creator
+                I am a multidisciplinary creator{" "}
                 <span
                   className={`font-semibold underline decoration-2 underline-offset-4 ${styles.textHighlight} ${styles.underline}`}>
                   engineering high-impact digital experiences
-                </span>
+                </span>{" "}
                 at the intersection of robust code and beautiful design. My methodology is inherently systematic,
                 architectural, and scalable.
               </p>

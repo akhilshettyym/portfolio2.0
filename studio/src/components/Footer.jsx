@@ -498,7 +498,7 @@ const Footer = () => {
               <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:h-[70vh] min-h-fit">
                 <div className="w-full lg:w-[60%] flex flex-col gap-4">
                   <div
-                    className={`flex flex-col items-center justify-center p-4 rounded-md min-h-37.5 lg:flex-1 transition-colors duration-500 ${styles.panelHeader} ${styles.textAccent}`}>
+                    className={`flex flex-col items-center justify-center p-4 rounded-md min-h-37 lg:flex-1 transition-colors duration-500 ${styles.panelHeader} ${styles.textAccent}`}>
                     <div className="overflow-hidden w-full text-center">
                       {isTier2 ? (
                         <>
@@ -530,12 +530,12 @@ const Footer = () => {
                       <div className="flex flex-col sm:flex-row gap-4 w-full">
                         <div
                           className={`flex-1 rounded-md p-4 text-sm sm:text-base transition-colors duration-500 ${styles.cardInner1} ${styles.textSecondary}`}>
-                          This section is built to feel alive
+                          Engineered enduring digital systems over temporary digital legacies.
                         </div>
 
                         <div
-                          className={`flex-1 rounded-md relative transition-colors duration-500 ${styles.cardInner2} ${isMobile ? "min-h-15" : "p-4 min-h-20"}`}>
-                          <div className="absolute top-2 sm:top-4 sm:right-5 z-10">
+                          className={`flex-1 rounded-md relative transition-colors duration-500 ${styles.cardInner2} ${isMobile ? "min-h-15" : "min-h-20"}`}>
+                          <div className="z-10">
                             <Image
                               src="/footer/animated_zigzag.gif"
                               alt="Animated zigzag pattern"
@@ -551,9 +551,9 @@ const Footer = () => {
                       <div className="w-full rounded-md mt-2">
                         <p
                           className={`text-balance text-xs sm:text-[15px] text-justify leading-relaxed transition-colors duration-500 ${styles.textSecondary}`}>
-                          This section is built to feel alive: the footer peeks into the viewport, then smoothly expands
-                          to fill the screen with a clean white background, subtle grain, repeated typography, and an
-                          award-inspired content layout that feels both playful and intentional.
+                          I synthesize complex brand visions into enduring digital systems, engineering high-end
+                          corporate identities, scalable design frameworks, and premium digital products that bridge the
+                          gap between aesthetic rigor and technical performance.
                         </p>
                       </div>
                     </div>
@@ -572,7 +572,7 @@ const Footer = () => {
                         height={35}
                         loading="lazy"
                         unoptimized
-                        className={`w-full h-auto max-h-16 object-contain transition-all duration-500 ${styles.imageBlend}`}
+                        className={`w-full h-auto max-h-20 object-contain transition-all duration-500 ${styles.imageBlend}`}
                       />
                     </div>
 
@@ -597,7 +597,7 @@ const Footer = () => {
                               href={social.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`group relative block overflow-hidden px-3 py-1.5 border rounded-md transition-all duration-300 hover:-translate-y-1 ${styles.socialCard} ${styles.borderLight}`}>
+                              className={`group relative block overflow-hidden px-3 py-1 border rounded-md transition-all duration-300 hover:-translate-y-1 ${styles.socialCard} ${styles.borderLight}`}>
                               <div className="relative flex items-center gap-3">
                                 <div className={`${styles.iconBoxBase} ${styles.iconBox}`}>
                                   <Icon className="text-sm" />
@@ -617,8 +617,8 @@ const Footer = () => {
                       <CustomButton
                         title="Let's Get In Contact"
                         onClick={handleNavigation}
-                        width={isMobile ? "100%" : "250"}
-                        height="45"
+                        width={isMobile ? "100%" : "260"}
+                        height="40"
                       />
                     </div>
                   </div>
@@ -626,7 +626,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 py-5 mt-auto">
+            <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 mt-auto">
               <div
                 className={`mb-5 flex flex-col md:flex-row w-full gap-3 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
                 <div
@@ -662,7 +662,8 @@ const Footer = () => {
                       className={`text-xs sm:text-sm leading-relaxed text-pretty transition-colors duration-500 ${styles.textSecondary}`}>
                       Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
                       often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
-                      coffee, curiosity, and a dash of skepticism.
+                      coffee, curiosity, and a dash of skepticism. Measure meticulously, but optimize only when proven
+                      necessary. Document the &apos;why,&apos; because the &apos;what&apos; will inevitably change.
                     </p>
                   </div>
 

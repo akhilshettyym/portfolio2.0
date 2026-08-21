@@ -75,7 +75,7 @@ export default function MyExperience() {
         />
 
         <div
-          className={`w-full max-w-7xl h-[75vh] md:h-[65vh] border-2 p-3 md:p-4 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
+          className={`w-full max-w-7xl h-[80vh] md:h-[60vh] border-2 p-3 md:p-4 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
           <div
             ref={containerRef}
             className={`w-full flex-1 min-h-75 border flex items-center relative rounded-lg overflow-hidden transition-colors duration-500 ${styles.innerBox}`}>
@@ -93,7 +93,7 @@ export default function MyExperience() {
                         animate={{ rotate: cardTilt }}
                         whileHover={{ scale: 1.04, rotate: 0, zIndex: 30 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={`w-[75vw] sm:w-80 md:w-90 lg:w-100 h-64 sm:h-56 md:h-70 border-2 flex flex-col justify-between shrink-0 p-4 relative rounded-lg transition-colors duration-300 group cursor-pointer z-10 ${styles.card}`}>
+                        className={`w-[75vw] sm:w-80 md:w-90 lg:w-100 h-60 sm:h-56 md:h-60 border-2 flex flex-col justify-between shrink-0 p-4 relative rounded-lg transition-colors duration-300 group cursor-pointer z-10 ${styles.card}`}>
                         <div className="flex justify-between items-center w-full">
                           <span
                             className={`text-[8px] font-mono uppercase tracking-widest px-2 py-1 rounded border ${styles.badge}`}>

@@ -14,16 +14,13 @@ import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 
 export const TECH_STACK = [
-  "React & Next.js",
-  "Three.js & WebGL",
-  "TypeScript",
-  "docker",
-  "Figma",
-  "Git & Github",
-  "Tailwind CSS",
-  "MongoDb",
-  "Node.js & Express.js",
-  "GSAP & Framer Motion",
+  "reactjs & nextjs",
+  "threejs & webgl",
+  "expressjs & nodejs",
+  "github & git",
+  "docker & CI/CD",
+  "mongodb & redux",
+  "salesforce & sql",
 ];
 
 function BubbleScene() {

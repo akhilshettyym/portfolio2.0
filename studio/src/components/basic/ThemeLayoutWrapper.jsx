@@ -29,9 +29,12 @@ export default function ThemeLayoutWrapper({ children }) {
     previousThemeRef.current = theme;
     setThemeTransitionActive(true);
 
-    const timeout = window.setTimeout(() => {
-      setThemeTransitionActive(false);
-    }, shouldReduceMotion ? 180 : 620);
+    const timeout = window.setTimeout(
+      () => {
+        setThemeTransitionActive(false);
+      },
+      shouldReduceMotion ? 180 : 620,
+    );
 
     return () => window.clearTimeout(timeout);
   }, [shouldReduceMotion, theme]);

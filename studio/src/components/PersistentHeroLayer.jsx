@@ -22,9 +22,7 @@ function PersistentHeroControls({ visible }) {
     const syncCloudState = () => {
       setTimeout(() => {
         try {
-          setPaused(
-            window.localStorage.getItem(CLOUD_CONTROL) === "true"
-          );
+          setPaused(window.localStorage.getItem(CLOUD_CONTROL) === "true");
         } catch {
           setPaused(false);
         }
@@ -50,11 +48,7 @@ function PersistentHeroControls({ visible }) {
 
   return (
     <div className="fixed right-0 top-60 z-45 pointer-events-auto">
-      <LiquidGlass
-        width="50px"
-        height="180px"
-        className="relative z-60 p-0 pointer-events-auto"
-      >
+      <LiquidGlass width="50px" height="180px" className="relative z-60 p-0 pointer-events-auto">
         <button
           type="button"
           onClick={toggleClouds}
@@ -70,20 +64,13 @@ function PersistentHeroControls({ visible }) {
             -translate-x-1/2
             cursor-pointer
             pointer-events-auto
-          "
-        >
+          ">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative z-10 flex h-10 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
               {paused ? (
-                <HiMiniPlay
-                  size={14}
-                  className="translate-x-[0.5px] text-black/50"
-                />
+                <HiMiniPlay size={14} className="translate-x-[0.5px] text-black/50" />
               ) : (
-                <HiMiniPause
-                  size={14}
-                  className="text-black/50"
-                />
+                <HiMiniPause size={14} className="text-black/50" />
               )}
             </div>
           </div>
@@ -108,14 +95,10 @@ function PersistentHeroControls({ visible }) {
             -translate-x-1/2
             cursor-pointer
             pointer-events-auto
-          "
-        >
+          ">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
-              <SiRevealdotjs
-                size={15}
-                className="translate-x-[0.5px] text-black/50"
-              />
+              <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
             </div>
           </div>
 
@@ -149,8 +132,7 @@ export default function PersistentHeroLayer() {
           duration: 0.7,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="fixed inset-0 z-0 pointer-events-none"
-      >
+        className="fixed inset-0 z-0 pointer-events-none">
         <HeroSection active={isInfoRoute} />
       </motion.div>
 

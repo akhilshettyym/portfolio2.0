@@ -105,7 +105,9 @@ export default function MyExperience() {
             className={`w-full flex-1 border relative rounded-lg transition-colors duration-500 ${styles.innerBox} ${
               useStackedLayout ? "min-h-0 overflow-visible p-3" : "min-h-75 overflow-hidden"
             }`}>
-            <motion.div style={useStackedLayout ? undefined : { x }} className={useStackedLayout ? "w-full" : "w-max h-full flex items-center"}>
+            <motion.div
+              style={useStackedLayout ? undefined : { x }}
+              className={useStackedLayout ? "w-full" : "w-max h-full flex items-center"}>
               <div
                 ref={trackRef}
                 className={
@@ -119,8 +121,12 @@ export default function MyExperience() {
                   return (
                     <React.Fragment key={card.id || card._id || index}>
                       <motion.div
-                        initial={shouldReduceMotion ? false : { opacity: 0, y: 28, rotate: useStackedLayout ? 0 : cardTilt }}
-                        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, rotate: useStackedLayout ? 0 : cardTilt }}
+                        initial={
+                          shouldReduceMotion ? false : { opacity: 0, y: 28, rotate: useStackedLayout ? 0 : cardTilt }
+                        }
+                        whileInView={
+                          shouldReduceMotion ? undefined : { opacity: 1, y: 0, rotate: useStackedLayout ? 0 : cardTilt }
+                        }
                         whileHover={useStackedLayout ? undefined : { scale: 1.035, rotate: 0, zIndex: 30 }}
                         viewport={{ once: true, amount: 0.25 }}
                         transition={{ type: "spring", stiffness: 260, damping: 24, delay: Math.min(index * 0.05, 0.2) }}
@@ -168,7 +174,8 @@ export default function MyExperience() {
                       </motion.div>
 
                       {index < expData.length - 1 && (
-                        <div className={`${useStackedLayout ? "hidden" : "flex"} w-6 md:w-10 h-60 md:h-80 flex-col justify-center gap-2 shrink-0 pointer-events-none opacity-40`}>
+                        <div
+                          className={`${useStackedLayout ? "hidden" : "flex"} w-6 md:w-10 h-60 md:h-80 flex-col justify-center gap-2 shrink-0 pointer-events-none opacity-40`}>
                           <div className={`w-full h-1 ${styles.line}`} />
                         </div>
                       )}

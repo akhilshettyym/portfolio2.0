@@ -476,10 +476,7 @@ const Footer = () => {
                             large={true}
                             text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."
                           />
-                          <MarqueeLineLow
-                            isMobile={isMobile}
-                            text="DRIVEN DESIGNER & DEVELOPER."
-                          />
+                          <MarqueeLineLow isMobile={isMobile} text="DRIVEN DESIGNER & DEVELOPER." />
                         </>
                       ) : (
                         <>

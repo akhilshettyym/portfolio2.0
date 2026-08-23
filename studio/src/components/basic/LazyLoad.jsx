@@ -6,29 +6,28 @@ import { motion, useReducedMotion } from "framer-motion";
 export default function LazyLoad({
   children,
   threshold = 0.1,
-  rootMargin = "100px",
+  rootMargin = "0px",
+  preloadMargin = "700px 0px",
   once = true,
   placeholder = null,
   className = "",
   style = {},
 }) {
   const containerRef = useRef(null);
-  const observerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  const [shouldPreload, setShouldPreload] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const element = containerRef.current;
+    if (!element) return;
 
-    const observer = new IntersectionObserver(
+    const visibilityObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          setHasBeenVisible(true);
-
           if (once) {
-            observer.unobserve(entry.target);
+            visibilityObserver.unobserve(entry.target);
           }
         } else if (!once) {
           setIsVisible(false);
@@ -37,26 +36,36 @@ export default function LazyLoad({
       { threshold, rootMargin },
     );
 
-    observerRef.current = observer;
-    observer.observe(containerRef.current);
+    const preloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldPreload(true);
+          if (once) {
+            preloadObserver.unobserve(entry.target);
+          }
+        } else if (!once) {
+          setShouldPreload(false);
+        }
+      },
+      { threshold: 0, rootMargin: preloadMargin },
+    );
+
+    visibilityObserver.observe(element);
+    preloadObserver.observe(element);
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
+      visibilityObserver.disconnect();
+      preloadObserver.disconnect();
     };
-  }, [threshold, rootMargin, once]);
-
-  const shouldRender = once ? hasBeenVisible : isVisible;
+  }, [threshold, rootMargin, preloadMargin, once]);
 
   return (
     <div ref={containerRef} className={className} style={style}>
-      {shouldRender ? (
+      {shouldPreload ? (
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 30, filter: "blur(10px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true, amount: 0.1 }}
+          animate={isVisible || shouldReduceMotion ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
+          viewport={{ once: true, amount: 0.1, margin: rootMargin }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{ width: "100%", height: "100%" }}>
           {children}

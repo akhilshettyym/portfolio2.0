@@ -255,9 +255,9 @@ export const getMyExperienceStyles = (isDark, isMetal) => {
   if (isMetal) {
     return {
       section: "bg-[#050000] text-red-500",
-      outerBox: "border-red-900/60 bg-[#110000]/80 shadow-[0_0_50px_rgba(239,68,68,0.15)] backdrop-blur-md",
+      outerBox: "border-red-900/60 bg-[#110000] shadow-[0_16px_48px_rgba(0,0,0,0.28)]",
       innerBox: "border-red-950 bg-[#180000]",
-      card: "border-red-700 bg-[#220000] text-red-400 hover:border-red-500 shadow-[6px_6px_0px_0px_rgba(239,68,68,0.8)] hover:shadow-[10px_10px_0px_0px_rgba(239,68,68,1)]",
+      card: "border-red-700 bg-[#220000] text-red-400 hover:border-red-500 shadow-[4px_4px_0px_0px_rgba(239,68,68,0.65)] hover:shadow-[6px_6px_0px_0px_rgba(239,68,68,0.85)]",
       badge: "border-red-800 bg-red-950 text-red-400",
       cardTitle: "text-red-400 border-red-900",
       cardId: "text-red-950",
@@ -270,9 +270,9 @@ export const getMyExperienceStyles = (isDark, isMetal) => {
   if (isDark) {
     return {
       section: "bg-[#080808] text-white",
-      outerBox: "border-neutral-800 bg-[#111111]/80 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-md",
+      outerBox: "border-neutral-800 bg-[#111111] shadow-[0_16px_48px_rgba(0,0,0,0.36)]",
       innerBox: "border-neutral-800 bg-[#141414]",
-      card: "border-neutral-700 bg-[#1c1c1c] text-white hover:border-white shadow-[6px_6px_0px_0px_rgba(255,255,255,0.9)] hover:shadow-[10px_10px_0px_0px_rgba(255,255,255,1)]",
+      card: "border-neutral-700 bg-[#1c1c1c] text-white hover:border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.72)] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.9)]",
       badge: "border-neutral-700 bg-neutral-800 text-neutral-300",
       cardTitle: "text-white border-neutral-700",
       cardId: "text-neutral-700",
@@ -283,10 +283,10 @@ export const getMyExperienceStyles = (isDark, isMetal) => {
   }
 
   return {
-    section: "bg-neutral-50 text-black",
-    outerBox: "border-neutral-300 bg-white shadow-2xl",
+    section: "bg-white text-black",
+    outerBox: "border-neutral-300 bg-white shadow-[0_16px_48px_rgba(15,23,42,0.10)]",
     innerBox: "border-neutral-200 bg-neutral-100/60",
-    card: "border-black bg-white text-black hover:border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]",
+    card: "border-black bg-white text-black hover:border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.88)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]",
     badge: "border-neutral-300 bg-neutral-200 text-neutral-800",
     cardTitle: "text-black border-neutral-300",
     cardId: "text-neutral-300",

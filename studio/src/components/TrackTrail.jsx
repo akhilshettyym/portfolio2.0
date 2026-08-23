@@ -38,8 +38,8 @@ const TrackTrail = memo(({ banners = DEFAULT_BANNERS }) => {
 
           <Image
             className={`object-contain mb-3 transition-all duration-500 ease-out relative z-10 ${styles.imageFilter}`}
-            src={"/trailhead/double-star-ranger.svg"}
-            alt={"double-star-ranger"}
+            src={"/trailhead/triple_star_ranger.svg"}
+            alt={"triple_star_ranger"}
             width={60}
             height={60}
             priority

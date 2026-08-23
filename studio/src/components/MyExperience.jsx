@@ -2,8 +2,9 @@
 
 import "@/styles/my_experience.css";
 import { useTheme } from "@/context/ThemeContext";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { getEducations, getExperiences } from "@/lib/payload/contentapi";
 import { getMyExperienceStyles, getMarqueeCardStyle } from "@/utils/themeSwatch";
 
@@ -19,8 +20,11 @@ export default function MyExperience() {
   const [eduData, setEduData] = useState([]);
   const [scrollRange, setScrollRange] = useState(0);
 
+  const { isMobile, isCompactDevice } = useDeviceType();
+  const shouldReduceMotion = useReducedMotion();
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
+  const useStackedLayout = isMobile || shouldReduceMotion;
 
   const styles = getMyExperienceStyles(isDark, isMetal);
 
@@ -42,9 +46,11 @@ export default function MyExperience() {
 
   useEffect(() => {
     const calculateRange = () => {
-      if (trackRef.current && containerRef.current) {
+      if (!useStackedLayout && trackRef.current && containerRef.current) {
         const totalDistance = trackRef.current.scrollWidth - containerRef.current.clientWidth;
         setScrollRange(Math.max(0, totalDistance));
+      } else {
+        setScrollRange(0);
       }
     };
 
@@ -55,45 +61,72 @@ export default function MyExperience() {
     if (trackRef.current) resizeObserver.observe(trackRef.current);
 
     return () => resizeObserver.disconnect();
-  }, [expData]);
+  }, [expData, useStackedLayout]);
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 0.75, 1], [0, -scrollRange, -scrollRange]);
+  const x = useSpring(useTransform(scrollYProgress, [0, 0.75, 1], [0, -scrollRange, -scrollRange]), {
+    stiffness: 48,
+    damping: 28,
+    mass: 0.9,
+  });
 
   const marqueeItems = eduData.length > 0 ? [...eduData, ...eduData, ...eduData, ...eduData] : [];
+  const sectionHeight = useStackedLayout ? "h-auto" : isCompactDevice ? "h-[260vh]" : "h-[300vh]";
+  const shellHeight = useStackedLayout ? "min-h-screen py-12" : "h-dvh";
+  const panelHeight = useStackedLayout ? "min-h-0" : isCompactDevice ? "h-[68vh]" : "h-[72vh]";
 
   return (
-    <div ref={targetRef} className={`relative h-[300vh] transition-colors duration-500 ${styles.section}`}>
-      <div className="sticky top-0 flex h-dvh items-center justify-center px-3 sm:px-6 md:px-10 overflow-hidden">
-        <div
-          className={`absolute inset-0 pointer-events-none opacity-20 blur-3xl transition-all duration-700 ${
-            isDark ? "bg-cyan-900/30" : isMetal ? "bg-red-600/30" : "bg-neutral-400/20"
-          }`}
-        />
+    <div ref={targetRef} className={`relative ${sectionHeight} transition-colors duration-500 ${styles.section}`}>
+      <div
+        className={`${useStackedLayout ? "relative" : "sticky top-0"} flex ${shellHeight} items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-10`}>
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 28 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.18 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          className={`w-full max-w-7xl ${panelHeight} border-2 p-3 sm:p-4 lg:p-5 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
+          <div className="flex flex-col gap-1 px-1 pb-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className={`text-[10px] font-bold uppercase tracking-[0.24em] ${styles.textMuted}`}>Timeline</p>
+              <h2 className={`text-2xl font-black uppercase tracking-tight sm:text-3xl ${styles.cardTitle}`}>
+                Experience
+              </h2>
+            </div>
+            <p className={`max-w-md text-xs font-medium leading-relaxed sm:text-right ${styles.textMuted}`}>
+              Work, education, and systems thinking mapped into one responsive motion track.
+            </p>
+          </div>
 
-        <div
-          className={`w-full max-w-7xl h-[80vh] md:h-[60vh] border-2 p-3 md:p-4 flex flex-col gap-3 md:gap-4 relative rounded-xl transition-all duration-500 z-10 ${styles.outerBox}`}>
           <div
             ref={containerRef}
-            className={`w-full flex-1 min-h-75 border flex items-center relative rounded-lg overflow-hidden transition-colors duration-500 ${styles.innerBox}`}>
-            <motion.div style={{ x }} className="w-max h-full flex items-center">
+            className={`w-full flex-1 border relative rounded-lg transition-colors duration-500 ${styles.innerBox} ${
+              useStackedLayout ? "min-h-0 overflow-visible p-3" : "min-h-75 overflow-hidden"
+            }`}>
+            <motion.div style={useStackedLayout ? undefined : { x }} className={useStackedLayout ? "w-full" : "w-max h-full flex items-center"}>
               <div
                 ref={trackRef}
-                className="flex gap-6 sm:gap-8 items-center pl-[15vw] md:pl-[35vw] pr-[15vw] md:pr-[20vw] py-4 md:py-8 h-full">
+                className={
+                  useStackedLayout
+                    ? "grid w-full grid-cols-1 gap-5 sm:grid-cols-2"
+                    : "flex h-full items-center gap-6 py-6 pl-[28vw] pr-[18vw] md:gap-8 lg:pl-[35vw] lg:pr-[20vw]"
+                }>
                 {expData.map((card, index) => {
                   const cardTilt = card.tilt || TILTS[index % TILTS.length];
 
                   return (
                     <React.Fragment key={card.id || card._id || index}>
                       <motion.div
-                        initial={{ rotate: cardTilt }}
-                        animate={{ rotate: cardTilt }}
-                        whileHover={{ scale: 1.04, rotate: 0, zIndex: 30 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={`w-[75vw] sm:w-80 md:w-90 lg:w-100 h-60 sm:h-56 md:h-60 border-2 flex flex-col justify-between shrink-0 p-4 relative rounded-lg transition-colors duration-300 group cursor-pointer z-10 ${styles.card}`}>
+                        initial={shouldReduceMotion ? false : { opacity: 0, y: 28, rotate: useStackedLayout ? 0 : cardTilt }}
+                        whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, rotate: useStackedLayout ? 0 : cardTilt }}
+                        whileHover={useStackedLayout ? undefined : { scale: 1.035, rotate: 0, zIndex: 30 }}
+                        viewport={{ once: true, amount: 0.25 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 24, delay: Math.min(index * 0.05, 0.2) }}
+                        className={`min-h-70 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
+                          useStackedLayout ? "w-full" : "h-64 w-[78vw] shrink-0 sm:w-90 lg:w-100"
+                        } ${styles.card}`}>
                         <div className="flex justify-between items-center w-full">
                           <span
                             className={`text-[8px] font-mono uppercase tracking-widest px-2 py-1 rounded border ${styles.badge}`}>
@@ -107,7 +140,7 @@ export default function MyExperience() {
 
                         <div className="my-auto">
                           <div
-                            className={`flex items-baseline justify-between w-full text-[12px] tracking-wider uppercase leading-relaxed ${styles.textMuted}`}>
+                            className={`flex flex-col gap-1 text-[12px] tracking-wider uppercase leading-relaxed sm:flex-row sm:items-baseline sm:justify-between ${styles.textMuted}`}>
                             <p className="font-medium">{card.company}</p>
                             <span className="text-[10px] tracking-normal normal-case opacity-80">{card.timeline}</span>
                           </div>
@@ -119,7 +152,7 @@ export default function MyExperience() {
                             {card.title}
                           </h3>
                           <p
-                            className={`mt-2 text-xs leading-relaxed line-clamp-3 md:line-clamp-none ${styles.textMuted}`}>
+                            className={`mt-2 text-xs leading-relaxed ${useStackedLayout ? "" : "line-clamp-4"} ${styles.textMuted}`}>
                             {card.description}
                           </p>
                         </div>
@@ -135,7 +168,7 @@ export default function MyExperience() {
                       </motion.div>
 
                       {index < expData.length - 1 && (
-                        <div className="w-6 md:w-10 h-60 md:h-80 flex flex-col justify-center gap-2 shrink-0 pointer-events-none opacity-40">
+                        <div className={`${useStackedLayout ? "hidden" : "flex"} w-6 md:w-10 h-60 md:h-80 flex-col justify-center gap-2 shrink-0 pointer-events-none opacity-40`}>
                           <div className={`w-full h-1 ${styles.line}`} />
                         </div>
                       )}
@@ -147,7 +180,7 @@ export default function MyExperience() {
           </div>
 
           <div
-            className={`w-full h-20 md:h-28 border flex items-center shrink-0 rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
+            className={`w-full h-20 md:h-24 lg:h-28 border flex items-center shrink-0 rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
             <div className="animate-marquee-smooth flex gap-3 md:gap-4 px-2 items-center whitespace-nowrap">
               {marqueeItems.map((item, index) => {
                 const uniqueKey = `${item.id || item._id || index}-${index}`;
@@ -193,7 +226,7 @@ export default function MyExperience() {
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

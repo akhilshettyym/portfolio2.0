@@ -1,41 +1,33 @@
 import DevTicker from "@/components/DevTicker";
-import LazyLoad from "@/components/basic/LazyLoad";
-import HeroSection from "@/components/HeroSection";
 import SubjectProfile from "@/components/SubjectProfile";
-import MySocialsTiered from "@/components/TieredComponents/MySocialsTiered";
+import SocialsHorizontalReveal from "@/components/SocialsHorizontalReveal";
 import BubbleSceneTiered from "@/components/TieredComponents/BubbleSceneTiered";
 import CardStackRevealTiered from "@/components/TieredComponents/CardStackRevealTiered";
 
 export default function InfoLayout() {
   return (
-    <article className="relative z-10 bg-white">
-      <section id="hero">
-        <HeroSection />
-      </section>
+    <article className="relative z-10">
+      <section id="hero" className="min-h-screen pointer-events-none" />
 
-      <section id="about">
-        <SubjectProfile />
-      </section>
+      <div className="relative z-10 bg-white">
+        <section id="about">
+          <SubjectProfile />
+        </section>
 
-      <DevTicker />
+        <DevTicker />
 
-      <section id="skills">
-        <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
+        <section id="skills">
           <BubbleSceneTiered />
-        </LazyLoad>
-      </section>
+        </section>
 
-      <section id="achievements">
-        <LazyLoad threshold={0} rootMargin="200px 0px" once={true}>
+        <section id="achievements">
           <CardStackRevealTiered />
-        </LazyLoad>
-      </section>
+        </section>
 
-      <section id="socials">
-        <LazyLoad threshold={0.1} rootMargin="200px 0px" once={true}>
-          <MySocialsTiered />
-        </LazyLoad>
-      </section>
+        <section id="socials">
+          <SocialsHorizontalReveal />
+        </section>
+      </div>
     </article>
   );
 }

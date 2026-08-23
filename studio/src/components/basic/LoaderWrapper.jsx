@@ -18,6 +18,8 @@ export default function LoaderWrapper({ children }) {
   const [shouldMountChildren, setShouldMountChildren] = useState(false);
 
   const revealTimerRef = useRef(null);
+  const restartTimerRef = useRef(null);
+  const introCompletedRef = useRef(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -52,10 +54,16 @@ export default function LoaderWrapper({ children }) {
   }, [loading, hasSeenIntro]);
 
   useEffect(() => {
-    return () => window.clearTimeout(revealTimerRef.current);
+    return () => {
+      window.clearTimeout(revealTimerRef.current);
+      window.clearTimeout(restartTimerRef.current);
+    };
   }, []);
 
   const handleIntroComplete = () => {
+    if (introCompletedRef.current) return;
+
+    introCompletedRef.current = true;
     window.localStorage.setItem(INTRO_SEEN, "true");
     setHasSeenIntro(true);
     setShowIntro(false);
@@ -66,11 +74,13 @@ export default function LoaderWrapper({ children }) {
   };
 
   const triggerIntroRestart = () => {
+    introCompletedRef.current = false;
     window.localStorage.removeItem(INTRO_SEEN);
     setRevealActive(false);
     setNavReady(false);
 
-    setTimeout(() => {
+    window.clearTimeout(restartTimerRef.current);
+    restartTimerRef.current = window.setTimeout(() => {
       setShouldMountChildren(false);
       setHasSeenIntro(false);
     }, 500);

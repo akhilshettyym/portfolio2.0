@@ -3,7 +3,7 @@
 import "@/styles/cinematic_intro.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   clamp,
   useBodyLock,
@@ -27,6 +27,23 @@ import {
   TOTAL_SCENES,
   DARK_START_SCENE,
 } from "@/utils/basic";
+
+const INTRO_TIMING = {
+  openingLineMs: 3600,
+  textHoldMs: 1600,
+  nameStageMs: 2300,
+  timelineReadyMs: 450,
+  buildingStageMs: 4200,
+  questionIntervalMs: 2600,
+  treeIntroMs: 1200,
+  codeStageMs: 4600,
+  aiClaimMs: 2800,
+  businessQuestionMs: 3800,
+  vulnerabilityMs: 2200,
+  philosophyMs: 3200,
+  rewindStepMs: 125,
+  finalHoldMs: 2800,
+};
 
 export default function CinematicIntro({ onComplete }) {
   const [scene, setScene] = useState(0);
@@ -189,16 +206,25 @@ export default function CinematicIntro({ onComplete }) {
   const isFirstDarkScene = scene === DARK_START_SCENE && !darkCurtainDone;
 
   const nextScene = () => {
+    if (completedRef.current) return;
     if (!readyRef.current) return;
     resetSceneState();
     setScene((s) => Math.min(s + 1, TOTAL_SCENES - 1));
   };
 
   const prevScene = () => {
+    if (completedRef.current) return;
     if (!readyRef.current) return;
     resetSceneState();
     setScene((s) => Math.max(s - 1, 0));
   };
+
+  const completeIntro = useCallback(() => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    setReady(false);
+    onComplete?.();
+  }, [onComplete]);
 
   useEffect(() => {
     if (scene !== 3 || carouselProgress < 1) return;
@@ -246,9 +272,9 @@ export default function CinematicIntro({ onComplete }) {
     const intervals = [];
 
     if (scene === 0) {
-      timers.push(setTimeout(() => setIntroStep(1), 2800));
-      timers.push(setTimeout(() => setIntroStep(2), 5600));
-      timers.push(setTimeout(() => setReady(true), 8400));
+      timers.push(setTimeout(() => setIntroStep(1), INTRO_TIMING.openingLineMs));
+      timers.push(setTimeout(() => setIntroStep(2), INTRO_TIMING.openingLineMs * 2));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.openingLineMs * 3));
     }
 
     if (scene === 1) {
@@ -259,16 +285,16 @@ export default function CinematicIntro({ onComplete }) {
         setWhoChars(i);
         if (i >= text.length) {
           clearInterval(id);
-          timers.push(setTimeout(() => setReady(true), 900));
+          timers.push(setTimeout(() => setReady(true), INTRO_TIMING.textHoldMs));
         }
-      }, 90);
+      }, 110);
       intervals.push(id);
     }
 
     if (scene === 2) {
-      timers.push(setTimeout(() => setNameStage(1), 1800));
-      timers.push(setTimeout(() => setNameStage(2), 3600));
-      timers.push(setTimeout(() => setReady(true), 5200));
+      timers.push(setTimeout(() => setNameStage(1), INTRO_TIMING.nameStageMs));
+      timers.push(setTimeout(() => setNameStage(2), INTRO_TIMING.nameStageMs * 2));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.nameStageMs * 2 + INTRO_TIMING.textHoldMs));
     }
 
     if (scene === 3) {
@@ -276,21 +302,21 @@ export default function CinematicIntro({ onComplete }) {
         setTimeout(() => {
           setTimelineReveal(true);
           setReady(true);
-        }, 250),
+        }, INTRO_TIMING.timelineReadyMs),
       );
     }
 
     if (scene === 4) {
-      timers.push(setTimeout(() => setBuildingStage(1), 3000));
-      timers.push(setTimeout(() => setBuildingStage(2), 7000));
-      timers.push(setTimeout(() => setReady(true), 9500));
+      timers.push(setTimeout(() => setBuildingStage(1), INTRO_TIMING.buildingStageMs));
+      timers.push(setTimeout(() => setBuildingStage(2), INTRO_TIMING.buildingStageMs * 2));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.buildingStageMs * 2 + INTRO_TIMING.textHoldMs));
     }
 
     if (scene === 5) {
       intervals.push(
         setInterval(() => {
           setQuestionIndex((i) => Math.min(i + 1, PROBLEMQUESTIONS.length - 1));
-        }, 2000),
+        }, INTRO_TIMING.questionIntervalMs),
       );
 
       timers.push(
@@ -298,30 +324,30 @@ export default function CinematicIntro({ onComplete }) {
           () => {
             setReady(true);
           },
-          PROBLEMQUESTIONS.length * 1300 + 1200,
+          PROBLEMQUESTIONS.length * INTRO_TIMING.questionIntervalMs + INTRO_TIMING.textHoldMs,
         ),
       );
     }
 
     if (scene === 6) {
-      timers.push(setTimeout(() => setTreeStage(1), 800));
-      timers.push(setTimeout(() => setTreeStage(2), 2100));
-      timers.push(setTimeout(() => setReady(true), 3900));
+      timers.push(setTimeout(() => setTreeStage(1), INTRO_TIMING.treeIntroMs));
+      timers.push(setTimeout(() => setTreeStage(2), INTRO_TIMING.treeIntroMs * 2));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.treeIntroMs * 2 + INTRO_TIMING.textHoldMs));
       intervals.push(setInterval(() => setTreePulse((v) => v + 1), 140));
     }
 
     if (scene === 7) {
-      timers.push(setTimeout(() => setCodeStage(1), 600));
-      timers.push(setTimeout(() => setCodeStage(2), 4200));
-      timers.push(setTimeout(() => setReady(true), 7500));
+      timers.push(setTimeout(() => setCodeStage(1), 900));
+      timers.push(setTimeout(() => setCodeStage(2), INTRO_TIMING.codeStageMs));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.codeStageMs + INTRO_TIMING.textHoldMs * 2));
       timers.push(setTimeout(() => setDarkCurtainDone(true), 950));
     }
 
     if (scene === 8) {
-      timers.push(setTimeout(() => setAiStage(1), 1800));
-      timers.push(setTimeout(() => setAiStage(2), 4200));
-      timers.push(setTimeout(() => setAiStage(3), 6600));
-      timers.push(setTimeout(() => setReady(true), 9000));
+      timers.push(setTimeout(() => setAiStage(1), INTRO_TIMING.aiClaimMs));
+      timers.push(setTimeout(() => setAiStage(2), INTRO_TIMING.aiClaimMs * 2));
+      timers.push(setTimeout(() => setAiStage(3), INTRO_TIMING.aiClaimMs * 3));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.aiClaimMs * 3 + INTRO_TIMING.textHoldMs));
     }
 
     if (scene === 9) {
@@ -334,7 +360,7 @@ export default function CinematicIntro({ onComplete }) {
       timers.push(
         setTimeout(() => {
           setButStage(2);
-        }, 2500),
+        }, INTRO_TIMING.aiClaimMs),
       );
 
       const id = setInterval(() => {
@@ -346,11 +372,16 @@ export default function CinematicIntro({ onComplete }) {
 
           return i + 1;
         });
-      }, 3200);
+      }, INTRO_TIMING.businessQuestionMs);
 
       intervals.push(id);
 
-      timers.push(setTimeout(() => setReady(true), 2500 + BUSINESSQUESTIONS.length * 3200));
+      timers.push(
+        setTimeout(
+          () => setReady(true),
+          INTRO_TIMING.aiClaimMs + BUSINESSQUESTIONS.length * INTRO_TIMING.businessQuestionMs,
+        ),
+      );
     }
 
     if (scene === 10) {
@@ -363,7 +394,7 @@ export default function CinematicIntro({ onComplete }) {
 
           return v + 1;
         });
-      }, 1800);
+      }, INTRO_TIMING.vulnerabilityMs);
 
       intervals.push(id);
 
@@ -372,15 +403,15 @@ export default function CinematicIntro({ onComplete }) {
           () => {
             setReady(true);
           },
-          VULNERABILITIES.length * 1800 + 1500,
+          VULNERABILITIES.length * INTRO_TIMING.vulnerabilityMs + INTRO_TIMING.textHoldMs,
         ),
       );
     }
 
     if (scene === 11) {
-      timers.push(setTimeout(() => setDangerStage(1), 1800));
-      timers.push(setTimeout(() => setDangerStage(2), 2800));
-      timers.push(setTimeout(() => setReady(true), 4300));
+      timers.push(setTimeout(() => setDangerStage(1), INTRO_TIMING.textHoldMs));
+      timers.push(setTimeout(() => setDangerStage(2), INTRO_TIMING.textHoldMs + 1500));
+      timers.push(setTimeout(() => setReady(true), INTRO_TIMING.textHoldMs + 3200));
     }
 
     if (scene === 12) {
@@ -388,19 +419,19 @@ export default function CinematicIntro({ onComplete }) {
         timers.push(
           setTimeout(() => {
             setPhilosophyStage(index);
-          }, index * 2500),
+          }, index * INTRO_TIMING.philosophyMs),
         );
       });
 
       timers.push(
         setTimeout(() => {
           setReady(true);
-        }, PHILOSOPHY.length * 2500),
+        }, PHILOSOPHY.length * INTRO_TIMING.philosophyMs),
       );
     }
 
     if (scene === 13) {
-      const step = 110;
+      const step = INTRO_TIMING.rewindStepMs;
 
       reversedRewind.forEach((_, i) => {
         timers.push(
@@ -421,7 +452,7 @@ export default function CinematicIntro({ onComplete }) {
       timers.push(
         setTimeout(() => {
           setFinalStage(2);
-        }, rewindEnd + 2150),
+        }, rewindEnd + INTRO_TIMING.finalHoldMs),
       );
     }
 
@@ -1084,11 +1115,7 @@ export default function CinematicIntro({ onComplete }) {
   };
 
   const handleSkipToLastScene = () => {
-    resetSceneState();
-
-    setTimeout(() => {
-      setScene(13);
-    }, 80);
+    completeIntro();
   };
 
   useEffect(() => {
@@ -1096,14 +1123,12 @@ export default function CinematicIntro({ onComplete }) {
     if (finalStage !== 2) return;
     if (completedRef.current) return;
 
-    completedRef.current = true;
-
     const timeout = setTimeout(() => {
-      onComplete?.();
-    }, 2500);
+      completeIntro();
+    }, INTRO_TIMING.finalHoldMs);
 
     return () => clearTimeout(timeout);
-  }, [scene, finalStage, onComplete]);
+  }, [scene, finalStage, completeIntro]);
 
   return (
     <div

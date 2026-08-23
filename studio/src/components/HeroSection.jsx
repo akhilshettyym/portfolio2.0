@@ -18,7 +18,7 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
 import { LoadingContext } from "@/components/basic/LoaderWrapper";
-import { getQualityPreset } from "@/lib/performance/applyQualityTier";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
@@ -27,7 +27,7 @@ function isSameScene(a, b) {
   return a.background === b.background && a.clouds === b.clouds;
 }
 
-const HeroSection = () => {
+const HeroSection = ({ active = true }) => {
   const { theme } = useTheme();
   const isDarkOrMetal = theme === "dark" || theme === "metal";
 
@@ -43,18 +43,24 @@ const HeroSection = () => {
 
   const { triggerIntroRestart } = useContext(LoadingContext);
   const { tier, ready, isTier2 } = usePerformanceTier();
-  const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(containerRef, tier);
+  const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(
+    containerRef,
+    tier === "tier_2" ? "tier_1" : tier,
+  );
 
   const quality = getQualityPreset(tier);
-  const maxCloudPlanes = quality.cloudPlanes ? Math.floor(quality.cloudPlanes * 1.5) : 1500;
+  const maxCloudPlanes = quality.cloudPlanes ? Math.min(quality.cloudPlanes, tier === "tier_1" ? 1800 : 700) : 700;
 
   const pausedRef = useRef(false);
   const sceneAssetsRef = useRef(null);
   const visibilityRef = useRef({ canvasVisible, frameSkipInterval });
 
   useEffect(() => {
-    visibilityRef.current = { canvasVisible, frameSkipInterval };
-  }, [canvasVisible, frameSkipInterval]);
+    visibilityRef.current = {
+      canvasVisible: active && canvasVisible,
+      frameSkipInterval: active ? frameSkipInterval : Infinity,
+    };
+  }, [active, canvasVisible, frameSkipInterval]);
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -165,13 +171,13 @@ const HeroSection = () => {
     const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const fluidMouse = new THREE.Vector2();
 
-    const dpr = Math.min(window.devicePixelRatio, 2);
+    const dpr = getRendererPixelRatio(tier, tier === "tier_1" ? 1.2 : 1);
     let width = Math.floor(window.innerWidth * dpr);
     let height = Math.floor(window.innerHeight * dpr);
 
     const rtOptions = {
       format: THREE.RGBAFormat,
-      type: THREE.FloatType,
+      type: THREE.HalfFloatType,
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       depthBuffer: false,
@@ -237,7 +243,7 @@ const HeroSection = () => {
     };
 
     const onMouseMove = (e) => {
-      if (!pausedRef.current && isAnimating && !isTier2) {
+      if (!pausedRef.current && isAnimating) {
         mouseX = (e.clientX - windowHalfX) * 0.25;
         mouseY = (e.clientY - windowHalfY) * 0.15;
       }
@@ -321,8 +327,8 @@ const HeroSection = () => {
 
       if (!visibility.canvasVisible) {
         resumeTimeoutId = window.setTimeout(() => {
-          animationId = requestAnimationFrame(animate);
-        }, 180);
+          animate();
+        }, 500);
         return;
       }
 
@@ -343,26 +349,21 @@ const HeroSection = () => {
       }
       frameCount++;
 
-      if (!isTier2) {
-        const delta = Math.min(timer.update(), 0.033);
-        const frameSpeed = delta * 60;
-        const targetSpeed = pausedRef.current ? 0 : 0.8;
-        speedRef.current += (targetSpeed - speedRef.current) * 0.025;
-        tunnelPositionRef.current += speedRef.current * frameSpeed;
+      const delta = Math.min(timer.update(), 0.033);
+      const frameSpeed = delta * 60;
+      const targetSpeed = pausedRef.current ? 0 : 0.8;
+      speedRef.current += (targetSpeed - speedRef.current) * 0.025;
+      tunnelPositionRef.current += speedRef.current * frameSpeed;
 
-        if (camera) {
-          const mouseFactor = pausedRef.current ? 0 : 1;
-          camera.position.x += (mouseX * mouseFactor - camera.position.x) * 0.01;
-          camera.position.y += (-mouseY * mouseFactor - camera.position.y) * 0.01;
-          camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
-        }
-      } else if (camera) {
-        camera.position.z = 8000;
+      if (camera) {
+        const mouseFactor = pausedRef.current ? 0 : 1;
+        camera.position.x += (mouseX * mouseFactor - camera.position.x) * 0.01;
+        camera.position.y += (-mouseY * mouseFactor - camera.position.y) * 0.01;
+        camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
       }
 
       renderFullScene();
 
-      if (isTier2) return;
       animationId = requestAnimationFrame(animate);
     };
 
@@ -438,7 +439,10 @@ const HeroSection = () => {
         const textureLoader = new THREE.TextureLoader();
         texture = await textureLoader.loadAsync(`/clouds/${sceneAssets.clouds}.svg`);
 
-        if (isDisposed) return;
+        if (isDisposed) {
+          texture.dispose();
+          return;
+        }
 
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.generateMipmaps = false;
@@ -482,6 +486,7 @@ const HeroSection = () => {
 
         const mergedGeo = BufferGeometryUtils.mergeGeometries(geometries);
         geometries.forEach((g) => g.dispose());
+        if (!mergedGeo) throw new Error("Cloud geometry merge failed");
 
         mesh = new THREE.Mesh(mergedGeo, material);
         mesh.renderOrder = 2;
@@ -532,13 +537,20 @@ const HeroSection = () => {
       if (animationId) cancelAnimationFrame(animationId);
       if (resumeTimeoutId) window.clearTimeout(resumeTimeoutId);
 
+      const disposedGeometries = new Set();
       if (mesh) {
         scene.remove(mesh);
-        mesh.geometry?.dispose();
+        if (mesh.geometry && !disposedGeometries.has(mesh.geometry)) {
+          mesh.geometry.dispose();
+          disposedGeometries.add(mesh.geometry);
+        }
       }
       if (mesh2) {
         scene.remove(mesh2);
-        mesh2.geometry?.dispose();
+        if (mesh2.geometry && !disposedGeometries.has(mesh2.geometry)) {
+          mesh2.geometry.dispose();
+          disposedGeometries.add(mesh2.geometry);
+        }
       }
       material?.dispose();
       texture?.dispose();
@@ -551,29 +563,34 @@ const HeroSection = () => {
       rtB?.dispose();
 
       if (renderer) {
+        renderer.setAnimationLoop(null);
         renderer.dispose();
+        renderer.forceContextLoss?.();
         if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
       }
     };
   }, [quality.antialias, maxCloudPlanes, sceneAssets, tier, isTier2]);
 
   const handleCloudControl = () => {
-    if (isTier2) return;
     setPaused((prev) => {
       const nextState = !prev;
       localStorage.setItem(CLOUD_CONTROL, nextState);
+      window.dispatchEvent(new CustomEvent("hero-cloud-state"));
       return nextState;
     });
   };
 
-  useEffect(() => {
-    if (isTier2) {
-      pausedRef.current = true;
-      window.requestAnimationFrame(() => setPaused(true));
-    }
-  }, [isTier2]);
-
   const handleRestartIntroScene = () => triggerIntroRestart();
+
+  useEffect(() => {
+    window.addEventListener("hero-toggle-clouds", handleCloudControl);
+    window.addEventListener("hero-restart-intro", handleRestartIntroScene);
+
+    return () => {
+      window.removeEventListener("hero-toggle-clouds", handleCloudControl);
+      window.removeEventListener("hero-restart-intro", handleRestartIntroScene);
+    };
+  });
 
   return (
     <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
@@ -592,7 +609,7 @@ const HeroSection = () => {
           }}
         />
 
-        <div className="absolute top-60 right-0 z-9999">
+        <div className="hidden">
           <LiquidGlass width="50px" height="180px" className="p-0">
             <button
               type="button"

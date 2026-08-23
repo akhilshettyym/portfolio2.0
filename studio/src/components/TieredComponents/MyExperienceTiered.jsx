@@ -5,26 +5,28 @@ import dynamic from "next/dynamic";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
+const LoadingFallback = () => <div style={{ width: "100%", minHeight: "600px", background: "transparent" }} />;
+
 const MyExperience = dynamic(() => import("../MyExperience"), {
-  loading: () => <div style={{ width: "100%", height: "600px", background: "#ffffff" }} />,
+  loading: LoadingFallback,
   ssr: false,
 });
 
 export default function MyExperienceTiered(props) {
   const { isTier2, ready } = usePerformanceTier();
-  const { ref, shouldRender } = useLazyLoad();
+  const { ref, shouldPreload } = useLazyLoad({ preloadMargin: "900px 0px", rootMargin: "0px", threshold: 0 });
 
   if (!ready) {
-    return <div ref={ref} style={{ width: "100%", height: "600px", background: "#ffffff" }} />;
+    return <div ref={ref} style={{ width: "100%", minHeight: "600px", background: "transparent" }} />;
   }
 
-  if (isTier2 && !shouldRender) {
-    return <div ref={ref} style={{ width: "100%", height: "600px", background: "#ffffff" }} />;
+  if (!shouldPreload) {
+    return <div ref={ref} style={{ width: "100%", minHeight: "600px", background: "transparent" }} />;
   }
 
   return (
     <div ref={ref}>
-      <Suspense fallback={<div style={{ width: "100%", height: "600px", background: "#ffffff" }} />}>
+      <Suspense fallback={<LoadingFallback />}>
         <MyExperience {...props} isTieredWrapper={isTier2} />
       </Suspense>
     </div>

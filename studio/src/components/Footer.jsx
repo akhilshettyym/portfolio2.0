@@ -93,7 +93,6 @@ const MarqueeLineLow = ({ text, large, isMobile }) => {
 const Footer = () => {
   const router = useRouter();
   const sectionRef = useRef(null);
-  const [shouldSnap, setShouldSnap] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
@@ -113,22 +112,8 @@ const Footer = () => {
     offset: ["start end", "end start"],
   });
 
-  const shellShadow = useTransform(
-    scrollYProgress,
-    [0, 0.16, 0.42, 1],
-    [
-      "0 10px 32px rgba(0,0,0,0.08)",
-      "0 18px 48px rgba(0,0,0,0.12)",
-      "0 28px 70px rgba(0,0,0,0.16)",
-      "0 36px 90px rgba(0,0,0,0.20)",
-    ],
-  );
-
-  const shadowToApply = prefersReducedMotion
-    ? undefined
-    : styles?.isDarkOrMetal
-      ? "0 -10px 40px rgba(0,0,0,0.5)"
-      : shellShadow;
+  const shellShadow = useTransform(scrollYProgress, [0, 0.42, 1], ["none", "none", "none"]);
+  const shadowToApply = prefersReducedMotion ? undefined : shellShadow;
 
   const sectionPadding = useSpring(useTransform(scrollYProgress, [0, 0.28, 0.42, 0.56, 1], [50, 50, 30, 0, 0]), {
     stiffness: 72,
@@ -145,24 +130,6 @@ const Footer = () => {
   const curtainOpacity = useTransform(scrollYProgress, [0, 0.12, 0.3, 0.56, 1], [1, 0.96, 0.84, 0.42, 0]);
   const gridOpacity = useTransform(scrollYProgress, [0, 0.18, 0.5, 1], [0.18, 0.14, 0.08, 0]);
   const glowOpacity = useTransform(scrollYProgress, [0, 0.12, 0.34, 0.7, 1], [0.32, 0.22, 0.12, 0.04, 0]);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const ratio = entry.intersectionRatio;
-        setShouldSnap(ratio > 0.38);
-      },
-      { threshold: 0.4 },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [prefersReducedMotion]);
 
   const animatedCard = prefersReducedMotion
     ? {}
@@ -260,8 +227,8 @@ const Footer = () => {
                                   width={200}
                                   height={80}
                                   unoptimized
-                                  className={`h-20 w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                                  style={{ width: "auto", height: "auto" }}
+                                  className={`w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
+                                  style={{ width: "auto", height: 80 }}
                                 />
                               </div>
                             </div>
@@ -395,6 +362,7 @@ const Footer = () => {
                         priority
                         unoptimized
                         className={`h-5 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
+                        style={{ width: "auto" }}
                       />
                     </div>
 
@@ -423,6 +391,7 @@ const Footer = () => {
                     priority
                     unoptimized
                     className={`h-[0.95em] w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
+                    style={{ width: "auto" }}
                   />
                 </button>
               </div>
@@ -505,11 +474,11 @@ const Footer = () => {
                           <MarqueeLineLow
                             isMobile={isMobile}
                             large={true}
-                            text={isMobile ? "CREATIVELY" : "A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."}
+                            text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN."
                           />
                           <MarqueeLineLow
                             isMobile={isMobile}
-                            text={isMobile ? "DRIVEN DESIGNER" : "DRIVEN DESIGNER & DEVELOPER."}
+                            text="DRIVEN DESIGNER & DEVELOPER."
                           />
                         </>
                       ) : (
@@ -542,7 +511,8 @@ const Footer = () => {
                               width={200}
                               height={80}
                               unoptimized
-                              className={`h-14 sm:h-20 w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
+                              className={`w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
+                              style={{ width: "auto", height: isMobile ? 56 : 80 }}
                             />
                           </div>
                         </div>
@@ -651,6 +621,7 @@ const Footer = () => {
                       priority
                       unoptimized
                       className={`max-h-12 w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
+                      style={{ width: "auto" }}
                     />
                   </div>
                 </div>
@@ -683,6 +654,7 @@ const Footer = () => {
                         priority
                         unoptimized
                         className={`h-4 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
+                        style={{ width: "auto" }}
                       />
                     </div>
 
@@ -711,6 +683,7 @@ const Footer = () => {
                     priority
                     unoptimized
                     className={`h-[0.95em] w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
+                    style={{ width: "auto" }}
                   />
                 </button>
               </div>

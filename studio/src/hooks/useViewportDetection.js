@@ -81,11 +81,60 @@ export function useViewportTracker(elementCount = 5) {
 }
 
 export function useLazyLoad(options = {}) {
-  const { ref, isVisible } = useViewportDetection({ once: true, ...options });
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldPreload, setShouldPreload] = useState(false);
+  const ref = useRef(null);
+  const once = options.once ?? true;
+  const root = options.root ?? null;
+  const rootMargin = options.rootMargin ?? "0px";
+  const preloadMargin = options.preloadMargin ?? "700px 0px";
+  const threshold = options.threshold ?? 0;
+  const preloadThreshold = options.preloadThreshold ?? 0;
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (once) observer.unobserve(entry.target);
+        } else if (!once) {
+          setIsVisible(false);
+        }
+      },
+      { root, rootMargin, threshold },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [once, root, rootMargin, threshold]);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldPreload(true);
+          if (once) observer.unobserve(entry.target);
+        } else if (!once) {
+          setShouldPreload(false);
+        }
+      },
+      { root, rootMargin: preloadMargin, threshold: preloadThreshold },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [once, preloadMargin, preloadThreshold, root]);
 
   return {
     ref,
     shouldRender: isVisible,
+    shouldPreload,
     isVisible,
   };
 }

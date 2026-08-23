@@ -24,7 +24,7 @@ export default function EmergencyCTA() {
 
   const renderMobile = () => {
     return (
-      <div className="relative z-10">
+      <div className="relative z-40">
         <div
           className={`relative flex flex-row items-center overflow-hidden w-full px-10 transition-colors duration-500 ${styles.bg}`}>
           <div className="flex-1 rounded-lg text-sm px-4 overflow-hidden min-w-0 flex items-center">
@@ -56,7 +56,7 @@ export default function EmergencyCTA() {
 
   const renderDesktop = () => {
     return (
-      <div className="relative z-10">
+      <div className="relative z-40">
         <div
           className={`flex flex-row items-center overflow-hidden w-full px-10 transition-colors duration-500 ${styles.bg}`}>
           <div className="flex-1 rounded-lg text-sm px-4 flex items-center justify-start min-w-0">

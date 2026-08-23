@@ -63,7 +63,7 @@ const WireframeGlobe = ({ size = 500, styles }) => {
   );
 };
 
-export default function MySocials() {
+export default function MySocials({ horizontalReveal = false }) {
   const [trail, setTrail] = useState([]);
   const lastPosition = useRef({ x: 0, y: 0 });
   const imageIndex = useRef(0);
@@ -143,13 +143,22 @@ export default function MySocials() {
     mouseY.set(0);
   }, [mouseX, mouseY]);
 
+  const revealMotion = horizontalReveal
+    ? {
+        initial: false,
+        animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+      }
+    : {
+        initial: { opacity: 0, y: 40, filter: "blur(8px)" },
+        whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+        viewport: { once: true, amount: 0.2 },
+      };
+
   return (
     <motion.section
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.2 }}
+      {...revealMotion}
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative min-h-[80vh] overflow-hidden px-5 py-18 md:min-h-screen md:px-10 flex flex-col justify-center transition-colors duration-500 ${activeTheme.bg}`}
       style={{ perspective: "1500px" }}>

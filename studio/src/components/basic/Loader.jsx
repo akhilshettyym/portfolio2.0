@@ -182,22 +182,35 @@ export default function Loader({ onFinish }) {
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
+      controls?.dispose();
+      scene.remove(points);
       geometry.dispose();
       material.dispose();
+      renderer.setAnimationLoop(null);
       renderer.dispose();
-      container?.removeChild(renderer.domElement);
+      renderer.forceContextLoss?.();
+      if (container?.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
     };
   }, [mounted, isMobile, quality.antialias, quality.particleMultiplier, tier, theme]);
 
   useEffect(() => {
     if (!done) return;
 
-    gsap.to(containerRef.current, {
+    const container = containerRef.current;
+    if (!container) return;
+
+    gsap.to(container, {
       scale: isMobile ? 2 : 3,
       opacity: 0,
       duration: 1.2,
       ease: "power4.inOut",
     });
+
+    return () => {
+      gsap.killTweensOf(container);
+    };
   }, [done, isMobile]);
 
   const handleLocationSelected = () => {
@@ -244,7 +257,7 @@ export default function Loader({ onFinish }) {
             return (
               <span
                 key={`${greeting}-${idx}`}
-                className={`absolute text-[22px] font-bold tracking-tight transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] ${textColorClass}`}
+                className={`loader-greeting absolute text-[22px] font-bold tracking-tight transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] ${textColorClass}`}
                 style={{
                   opacity: offset === 0 ? 1 : 0,
                   transform: `translateY(${offset * 32}px)`,

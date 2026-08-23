@@ -5,16 +5,20 @@ import { Suspense, useEffect, useState } from "react";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
+const LoadingFallback = () => <div style={{ width: "100%", minHeight: "420px", background: "transparent" }} />;
+
 const DynamicGithubGraphQl = dynamic(() => import("@/components/GithubGraphQl"), {
-  loading: () => (
-    <div style={{ width: "100%", height: "300px", background: "#ffffff" }} className="w-full animate-pulse" />
-  ),
+  loading: LoadingFallback,
   ssr: false,
 });
 
 export default function GithubGraphQlTiered(props) {
   const { isTier2, ready } = usePerformanceTier();
-  const { ref, shouldRender } = useLazyLoad({ rootMargin: "300px 0px", threshold: 0.05 });
+  const { ref, shouldRender, shouldPreload } = useLazyLoad({
+    preloadMargin: "900px 0px",
+    rootMargin: "0px",
+    threshold: 0.05,
+  });
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -26,16 +30,16 @@ export default function GithubGraphQlTiered(props) {
   }, []);
 
   if (!mounted || !ready) {
-    return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "#ffffff" }} />;
+    return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "transparent" }} />;
   }
 
-  if (isTier2 && !shouldRender) {
-    return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "#ffffff" }} />;
+  if (!shouldPreload) {
+    return <div ref={ref} style={{ width: "100%", minHeight: "420px", background: "transparent" }} />;
   }
 
   return (
-    <div ref={ref} style={{ width: "100%", background: "#ffffff", position: "relative" }}>
-      <Suspense fallback={<div style={{ width: "100%", height: "300px", background: "#ffffff" }} />}>
+    <div ref={ref} style={{ width: "100%", background: "transparent", position: "relative" }}>
+      <Suspense fallback={<LoadingFallback />}>
         <DynamicGithubGraphQl {...props} isTieredWrapper={isTier2} forceTriggerAnimation={shouldRender} />
       </Suspense>
     </div>

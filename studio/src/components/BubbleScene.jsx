@@ -9,8 +9,8 @@ import { memo, useEffect, useRef, useState } from "react";
 import { getBubbleSceneStyles } from "@/utils/themeSwatch";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { RADII, POSITIONS, TEXTURE_PATHS, FADEUP } from "@/utils/basic";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
+import { RADII, POSITIONS, TEXTURE_PATHS, FADEUP } from "@/utils/basic";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 
 export const TECH_STACK = [

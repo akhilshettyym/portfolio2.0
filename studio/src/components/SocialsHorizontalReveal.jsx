@@ -1,11 +1,11 @@
 "use client";
 
-import MySocialsTiered from "@/components/TieredComponents/MySocialsTiered";
+import { useRef } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import MySocialsTiered from "@/components/TieredComponents/MySocialsTiered";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef } from "react";
 
 export default function SocialsCinematicReveal() {
   const sectionRef = useRef(null);

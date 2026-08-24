@@ -4,20 +4,23 @@ import "@/styles/my_experience.css";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
-import { getEducations, getExperiences } from "@/lib/payload/contentapi";
 import { getMyExperienceStyles, getMarqueeCardStyle } from "@/utils/themeSwatch";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { getEducations, getExperiences, seedPortfolioCache } from "@/lib/payload/contentapi";
 
 const TILTS = [-2.5, 2, -3];
 
-export default function MyExperience() {
+export default function MyExperience({ initialExperiences, initialEducations }) {
   const { theme } = useTheme();
   const targetRef = useRef(null);
   const containerRef = useRef(null);
   const trackRef = useRef(null);
 
-  const [expData, setExpData] = useState([]);
-  const [eduData, setEduData] = useState([]);
+  const hasInitialExperiences = Array.isArray(initialExperiences);
+  const hasInitialEducations = Array.isArray(initialEducations);
+
+  const [expData, setExpData] = useState(() => (Array.isArray(initialExperiences) ? initialExperiences : []));
+  const [eduData, setEduData] = useState(() => (Array.isArray(initialEducations) ? initialEducations : []));
   const [scrollRange, setScrollRange] = useState(0);
 
   const { isMobile, isCompactDevice } = useDeviceType();
@@ -29,20 +32,37 @@ export default function MyExperience() {
   const styles = getMyExperienceStyles(isDark, isMetal);
 
   useEffect(() => {
+    seedPortfolioCache({
+      experiences: initialExperiences,
+      educations: initialEducations,
+    });
+
+    if (hasInitialExperiences && hasInitialEducations) return undefined;
+
+    let isMounted = true;
+
     const fetchData = async () => {
       try {
-        const experienceData = await getExperiences();
-        const educationData = await getEducations();
+        const [experienceData, educationData] = await Promise.all([
+          hasInitialExperiences ? initialExperiences : getExperiences(),
+          hasInitialEducations ? initialEducations : getEducations(),
+        ]);
 
-        setExpData(Array.isArray(experienceData) ? experienceData : experienceData?.docs || []);
-        setEduData(Array.isArray(educationData) ? educationData : educationData?.docs || []);
+        if (isMounted) {
+          setExpData(Array.isArray(experienceData) ? experienceData : experienceData?.docs || []);
+          setEduData(Array.isArray(educationData) ? educationData : educationData?.docs || []);
+        }
       } catch (err) {
         console.error("Failed to fetch experience/education data:", err);
       }
     };
 
     fetchData();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasInitialEducations, hasInitialExperiences, initialEducations, initialExperiences]);
 
   useEffect(() => {
     const calculateRange = () => {

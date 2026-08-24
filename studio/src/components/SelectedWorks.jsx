@@ -4,10 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
-import { getWorks } from "@/lib/payload/contentapi";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
+import { getWorks, seedPortfolioCache } from "@/lib/payload/contentapi";
 import { getWorkFloatStyles, getWorkMobile, getWorkStyles } from "@/utils/themeSwatch";
 import { CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
@@ -278,15 +278,16 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
   );
 }
 
-export default function SelectedWorks() {
+export default function SelectedWorks({ initialProjects }) {
   const { theme } = useTheme();
   const { isMobile, isCompactDevice, isLargeDevice } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
   const renderPopupModal = isMobile || isTier2;
 
-  const [projects, setProjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const hasInitialProjects = Array.isArray(initialProjects);
+  const [projects, setProjects] = useState(() => (hasInitialProjects ? initialProjects : []));
+  const [isLoading, setIsLoading] = useState(() => !hasInitialProjects);
 
   const [activeProject, setActiveProject] = useState(null);
   const [mobileModalProject, setMobileModalProject] = useState(null);
@@ -358,6 +359,11 @@ export default function SelectedWorks() {
   }, []);
 
   useEffect(() => {
+    if (hasInitialProjects) {
+      seedPortfolioCache({ works: initialProjects });
+      return undefined;
+    }
+
     let isMounted = true;
 
     const fetchData = async () => {
@@ -381,7 +387,7 @@ export default function SelectedWorks() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [hasInitialProjects, initialProjects]);
 
   return (
     <div className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>

@@ -183,6 +183,12 @@ export const getFooterStyles = (theme) => {
     border: isDark ? "border-white/10" : isMetal ? "border-red-500/20" : "border-slate-200",
     borderLight: isDark ? "border-white/5" : isMetal ? "border-red-500/10" : "border-slate-50",
 
+    dividerLine: isDark
+      ? "bg-indigo-500/40 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+      : isMetal
+        ? "bg-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+        : "bg-slate-300 shadow-[0_0_6px_rgba(0,0,0,0.08)]",
+
     textPrimary: isDark ? "text-white" : isMetal ? "text-red-500" : "text-black",
     textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-black/80",
     textMuted: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-slate-500",
@@ -797,4 +803,48 @@ export const getPageRevealStyles = (theme) => {
   const bgColor = theme === "metal" ? "bg-red-500" : "bg-black";
 
   return { bgColor };
+};
+
+// ---
+
+export const themeStyles = {
+  light: {
+    bg: "bg-white",
+    textPrimary: "text-black",
+    textSecondary: "text-gray-800",
+    textMuted: "text-gray-600",
+    textSubtle: "text-gray-400",
+    borderHeavy: "border-black",
+    borderSoft: "border-gray-200",
+    borderCard: "border-gray-200",
+    cardBg: "bg-transparent",
+    codeText: "text-black",
+    btn: "border-black text-black hover:bg-black hover:text-white",
+  },
+  dark: {
+    bg: "bg-black",
+    textPrimary: "text-white",
+    textSecondary: "text-gray-200",
+    textMuted: "text-gray-400",
+    textSubtle: "text-gray-500",
+    borderHeavy: "border-white",
+    borderSoft: "border-neutral-800",
+    borderCard: "border-neutral-800",
+    cardBg: "bg-neutral-900/40",
+    codeText: "text-white",
+    btn: "border-white text-white hover:bg-white hover:text-black",
+  },
+  metal: {
+    bg: "bg-black",
+    textPrimary: "text-red-500",
+    textSecondary: "text-red-400",
+    textMuted: "text-red-400/70",
+    textSubtle: "text-red-500/50",
+    borderHeavy: "border-red-600",
+    borderSoft: "border-red-950",
+    borderCard: "border-red-900/40",
+    cardBg: "bg-red-950/10",
+    codeText: "text-red-500",
+    btn: "border-red-500 text-red-500 hover:bg-red-500 hover:text-black",
+  },
 };

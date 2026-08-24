@@ -5,22 +5,22 @@ import SelectedWorks from "@/components/SelectedWorks";
 import MyExperienceTiered from "@/components/TieredComponents/MyExperienceTiered";
 import GithubGraphQlTiered from "@/components/TieredComponents/GithubGraphQlTiered";
 
-export default function WorkLayout() {
+export default function WorkLayout({ content = {} }) {
   return (
     <article className="relative z-10 bg-white">
       <section id="projects">
-        <SelectedWorks />
+        <SelectedWorks initialProjects={content.works} />
       </section>
 
       <section id="experience">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <MyExperienceTiered />
+          <MyExperienceTiered initialExperiences={content.experiences} initialEducations={content.educations} />
         </LazyLoad>
       </section>
 
       <section id="salesforce">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <TrackTrail />
+          <TrackTrail initialTrailhead={content.trailhead} />
         </LazyLoad>
       </section>
 

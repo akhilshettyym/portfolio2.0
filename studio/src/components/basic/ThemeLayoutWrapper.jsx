@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function ThemeLayoutWrapper({ children }) {
   const { theme } = useTheme();

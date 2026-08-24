@@ -4,7 +4,7 @@ import SocialsHorizontalReveal from "@/components/SocialsHorizontalReveal";
 import BubbleSceneTiered from "@/components/TieredComponents/BubbleSceneTiered";
 import CardStackRevealTiered from "@/components/TieredComponents/CardStackRevealTiered";
 
-export default function InfoLayout() {
+export default function InfoLayout({ content = {} }) {
   return (
     <article className="relative z-10">
       <section id="hero" className="min-h-screen pointer-events-none" />
@@ -21,7 +21,7 @@ export default function InfoLayout() {
         </section>
 
         <section id="achievements">
-          <CardStackRevealTiered />
+          <CardStackRevealTiered initialAchievements={content.achievements} />
         </section>
 
         <section id="socials">

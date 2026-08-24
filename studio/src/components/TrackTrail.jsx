@@ -4,27 +4,44 @@ import Image from "next/image";
 import "@/styles/track_trail.css";
 import { useTheme } from "@/context/ThemeContext";
 import { getTrailStyles } from "@/utils/themeSwatch";
-import { getTrailhead } from "@/lib/payload/contentapi";
 import React, { memo, useState, useEffect } from "react";
+import { getTrailhead, seedPortfolioCache } from "@/lib/payload/contentapi";
 
 const BASE_BANNERS = ["/trailhead/champion.svg", "/trailhead/innovator.svg"];
 
 const DEFAULT_BANNERS = Array(4).fill(BASE_BANNERS).flat();
 
-const TrackTrail = memo(({ banners = DEFAULT_BANNERS }) => {
+const TrackTrail = memo(({ banners = DEFAULT_BANNERS, initialTrailhead }) => {
   const { theme } = useTheme();
   const styles = getTrailStyles(theme);
 
-  const [data, setData] = useState({});
+  const hasInitialTrailhead = initialTrailhead !== undefined && initialTrailhead !== null;
+  const [data, setData] = useState(() =>
+    initialTrailhead && typeof initialTrailhead === "object" ? initialTrailhead : {},
+  );
 
   useEffect(() => {
+    if (initialTrailhead && typeof initialTrailhead === "object") {
+      seedPortfolioCache({ trailhead: initialTrailhead });
+    }
+
+    if (hasInitialTrailhead) return undefined;
+
+    let isMounted = true;
+
     const fetchData = async () => {
       const trailData = await getTrailhead();
-      setData(trailData);
+      if (isMounted) {
+        setData(trailData);
+      }
     };
 
     fetchData();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasInitialTrailhead, initialTrailhead]);
 
   return (
     <div className={`w-full py-12 px-4 md:px-8 lg:px-12 transition-colors duration-500 ${styles.wrapper}`}>

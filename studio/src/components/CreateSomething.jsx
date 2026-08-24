@@ -169,7 +169,7 @@ export default function CreateSomething() {
 
   return (
     <section className={`w-full transition-colors duration-500 ${styles.section} ${isMobile ? "" : "p-10"}`}>
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-8xl px-6">
         <div className="gap-12">
           <div className="w-full">
             <div className={isMobile ? "mb-5" : "mb-10"}>

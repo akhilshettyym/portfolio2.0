@@ -4,15 +4,15 @@ import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { getCardStackStyles } from "@/utils/themeSwatch";
 import FloatingCard from "@/components/basic/FloatingCard";
-import { getAchievements } from "@/lib/payload/contentapi";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useState, useRef, memo, useEffect } from "react";
+import { getAchievements, seedPortfolioCache } from "@/lib/payload/contentapi";
 import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
-import { FADEUP } from "@/utils/basic";
 
-function CardStackReveal() {
+function CardStackReveal({ initialAchievements }) {
   const sectionRef = useRef(null);
-  const [data, setData] = useState([]);
+  const hasInitialAchievements = Array.isArray(initialAchievements);
+  const [data, setData] = useState(() => (Array.isArray(initialAchievements) ? initialAchievements : []));
   const [hoveredCard, setHoveredCard] = useState(-1);
 
   const { theme } = useTheme();
@@ -41,13 +41,27 @@ function CardStackReveal() {
   const displayProgress = progress;
 
   useEffect(() => {
+    if (Array.isArray(initialAchievements)) {
+      seedPortfolioCache({ achievements: initialAchievements });
+    }
+
+    if (hasInitialAchievements) return undefined;
+
+    let isMounted = true;
+
     const fetchData = async () => {
       const achievementsData = await getAchievements();
-      setData(achievementsData);
+      if (isMounted) {
+        setData(achievementsData);
+      }
     };
 
     fetchData();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasInitialAchievements, initialAchievements]);
 
   return (
     <section

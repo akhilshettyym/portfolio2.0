@@ -1,4 +1,5 @@
 import WorkLayout from "@/components/layouts/WorkLayout";
+import { getWorkPageContent } from "@/lib/payload/contentapi.server";
 
 export const metadata = {
   title: "Work",
@@ -6,6 +7,9 @@ export const metadata = {
   alternates: { canonical: "/work" },
 };
 
-const page = () => <WorkLayout />;
+const page = async () => {
+  const content = await getWorkPageContent();
+  return <WorkLayout content={content} />;
+};
 
 export default page;

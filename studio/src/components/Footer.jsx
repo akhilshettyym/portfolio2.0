@@ -5,6 +5,7 @@ import Image from "next/image";
 import { SOCIALS } from "@/utils/basic";
 import { goToTop } from "@/utils/functions";
 import { useRouter } from "next/navigation";
+import { HiArrowSmUp } from "react-icons/hi";
 import { FaRegCopyright } from "react-icons/fa6";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
@@ -22,7 +23,7 @@ function AnimatedWord({ text, className = "", delay = 0 }) {
   const chars = useMemo(() => splitLetters(text), [text]);
 
   return (
-    <span className={className} aria-label={text}>
+    <span className={`block w-full ${className}`} aria-label={text}>
       {chars.map((char, index) => (
         <motion.span
           key={`${char}-${index}`}
@@ -50,7 +51,7 @@ const MarqueeLine = ({ text, large }) => {
   const marqueeAnimation = large ? { x: [0, -2400] } : { x: [-2400, 0] };
 
   return (
-    <div className="relative overflow-hidden py-2">
+    <div className="relative overflow-hidden">
       <motion.div
         className="flex w-max items-center gap-6 whitespace-nowrap"
         transition={{ duration: 46, ease: "linear", repeat: Infinity }}
@@ -179,7 +180,7 @@ const Footer = () => {
 
         <motion.div
           style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shadowToApply }}
-          className={`relative mx-auto min-h-svh w-full overflow-hidden z-10 transition-colors duration-500 ${styles.footerContainer}`}>
+          className={`relative mx-auto w-full overflow-hidden z-10 transition-colors duration-500 ${styles.footerContainer}`}>
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-10"
@@ -196,7 +197,7 @@ const Footer = () => {
           />
 
           <div className="relative z-40">
-            <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 py-5">
+            <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 py-2">
               <div className="mb-5 flex h-[55vh] w-full flex-col gap-4 md:flex-row">
                 <div className="w-full md:w-[60%]">
                   <div className="flex h-full w-full flex-col gap-4">
@@ -215,12 +216,12 @@ const Footer = () => {
                           <div className="flex flex-row gap-4 h-full w-full">
                             <div
                               className={`flex-1 rounded-md p-4 transition-colors duration-500 ${styles.cardInner1} ${styles.textSecondary}`}>
-                              This section is built to feel alive
+                              Engineered enduring digital systems over temporary digital legacies.
                             </div>
 
                             <div
                               className={`flex-1 rounded-md p-4 transition-colors duration-500 ${styles.cardInner2}`}>
-                              <div className="absolute top-4 right-5 z-10 mt-1">
+                              <div className="absolute top-4 right-5 z-10 mt-2">
                                 <Image
                                   src="/footer/animated_zigzag.gif"
                                   alt="Animated zigzag pattern"
@@ -238,10 +239,10 @@ const Footer = () => {
                         <div className="flex-1 rounded-md">
                           <motion.p
                             {...animatedCard}
-                            className={`text-balance text-[15px] transition-colors duration-500 ${styles.textSecondary}`}>
+                            className={`w-full text-[15px] transition-colors duration-500 ${styles.textSecondary}`}>
                             <AnimatedWord
                               delay={0.06}
-                              text="This section is built to feel alive: the footer peeks into the viewport, then smoothly expands to fill the screen with a clean white background, subtle grain, repeated typography, and an award-inspired content layout that feels both playful and intentional."
+                              text="I synthesize complex brand visions into enduring digital systems, engineering high-end corporate identities, scalable design frameworks, and premium digital products that bridge the gap between aesthetic rigor and technical performance, while creating cohesive brand ecosystems built for clarity, longevity, and meaningful user impact."
                             />
                           </motion.p>
                         </div>
@@ -310,9 +311,9 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4 py-5">
+            <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4">
               <div
-                className={`mb-5 flex h-[20vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
+                className={`mb-5 flex h-[17vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
                 <div
                   className={`flex h-full w-[20%] flex-col rounded-md border p-4 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
                   <p
@@ -342,7 +343,8 @@ const Footer = () => {
                     <p className={`text-sm leading-relaxed transition-colors duration-500 ${styles.textSecondary}`}>
                       Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
                       often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
-                      coffee, curiosity, and a dash of skepticism.
+                      coffee, curiosity, and a dash of skepticism. Measure meticulously, but optimize only when proven
+                      necessary. Document the &apos;why,&apos; because the &apos;what&apos; will inevitably change.
                     </p>
                   </div>
 
@@ -366,49 +368,55 @@ const Footer = () => {
                       />
                     </div>
 
-                    <span
-                      className={`flex items-center gap-1 text-[10px] sm:text-xs shrink-0 transition-colors duration-500 ${styles.textMuted}`}>
-                      <FaRegCopyright className="shrink-0" />
-                      <span>2026 Akhil Shetty M.</span>
-                    </span>
+                    <button
+                      onClick={handleNavigation}
+                      className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 cursor-pointer ${styles.buttonBg}`}>
+                      Am probably not sleeping, Hit me up ↗
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div
-              className={`relative h-35 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
-              <div className="absolute top-5 right-5 z-10">
-                <button
-                  onClick={goToTop}
-                  className={`flex items-center gap-1.5 text-sm font-bold hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
-                  <span className="uppercase"> Back To Top </span>
-                  <Image
-                    src="/footer/barcode_name.svg"
-                    alt="barcode name"
-                    width={30}
-                    height={14}
-                    priority
-                    unoptimized
-                    className={`h-[0.95em] w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
-                    style={{ width: "auto" }}
-                  />
-                </button>
+            <div className="relative w-full">
+              <div
+                className={`relative h-28 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
+                <h2
+                  className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
+                  AKHIL SHETTY{"\u00A0"}
+                </h2>
               </div>
 
-              <div className="absolute top-8 left-15 z-10">
-                <button onClick={handleNavigation}>
+              <div className={`h-0.5 w-full rounded-full transition-colors duration-500 ${styles.dividerLine}`} />
+
+              <div className="flex items-center justify-between px-4 py-2">
+                <div className="flex-1 text-left">
                   <span
-                    className={`uppercase text-xs font-bold cursor-pointer transition-colors duration-300 ${styles.buttonBg}`}>
-                    Am probably not sleeping, Hit me up
+                    className={`flex items-center gap-1 text-[10px] sm:text-xs shrink-0 whitespace-nowrap transition-colors duration-500 ${styles.textMuted}`}>
+                    <span>All rights reserved 2026</span>
+                    <FaRegCopyright className="shrink-0" />
+                    <span>Akhil Shetty M.</span>
                   </span>
-                </button>
-              </div>
+                </div>
 
-              <h2
-                className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
-                AKHIL SHETTY{"\u00A0"}
-              </h2>
+                <div className="flex-1 flex items-center justify-center gap-4">
+                  <Link
+                    href="/privacy"
+                    onClick={goToTop}
+                    className={`text-xs uppercase tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
+                    Privacy Policy
+                  </Link>
+                </div>
+
+                <div className="flex-1 text-right flex justify-end">
+                  <button
+                    onClick={goToTop}
+                    className={`flex items-center gap-1.5 text-xs font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
+                    <span>To Top</span>
+                    <HiArrowSmUp size={15} className="shrink-0" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -446,7 +454,7 @@ const Footer = () => {
 
         <motion.div
           style={prefersReducedMotion ? undefined : { y: revealLift, boxShadow: shadowToApply }}
-          className={`relative mx-auto min-h-svh w-full overflow-hidden rounded-none z-10 flex flex-col justify-between transition-colors duration-500 ${styles.footerContainer}`}>
+          className={`relative mx-auto w-full overflow-hidden rounded-none z-10 flex flex-col justify-between transition-colors duration-500 ${styles.footerContainer}`}>
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-10"
@@ -464,7 +472,7 @@ const Footer = () => {
 
           <div className="relative z-40 w-full grow flex flex-col justify-between">
             <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 pt-10 md:pt-16 lg:pt-20">
-              <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:h-[70vh] min-h-fit">
+              <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:h-[60vh] min-h-fit">
                 <div className="w-full lg:w-[60%] flex flex-col gap-4">
                   <div
                     className={`flex flex-col items-center justify-center p-4 rounded-md min-h-37 lg:flex-1 transition-colors duration-500 ${styles.panelHeader} ${styles.textAccent}`}>
@@ -520,7 +528,8 @@ const Footer = () => {
                           className={`text-balance text-xs sm:text-[15px] text-justify leading-relaxed transition-colors duration-500 ${styles.textSecondary}`}>
                           I synthesize complex brand visions into enduring digital systems, engineering high-end
                           corporate identities, scalable design frameworks, and premium digital products that bridge the
-                          gap between aesthetic rigor and technical performance.
+                          gap between aesthetic rigor and technical performance, while creating cohesive brand
+                          ecosystems built for clarity, longevity, and meaningful user impact.
                         </p>
                       </div>
                     </div>
@@ -528,10 +537,10 @@ const Footer = () => {
                 </div>
 
                 <div
-                  className={`flex w-full flex-col gap-4 p-4 sm:p-6 shadow-sm border rounded-md lg:w-[40%] lg:h-full transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
+                  className={`flex h-full w-full flex-col gap-4 p-6 shadow-sm border rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.border} md:w-[40%]`}>
                   <div
-                    className={`flex flex-row gap-4 w-full min-h-25 lg:h-[35%] rounded-md p-4 transition-colors duration-500 ${styles.panelHeader}`}>
-                    <div className="w-1/2 p-2 flex items-center justify-center">
+                    className={`h-[35%] rounded-md p-4 flex flex-row gap-4 w-full transition-colors duration-500 ${styles.panelHeader}`}>
+                    <div className="w-[50%] p-3">
                       <Image
                         src="/footer/animated_blob_gloop.gif"
                         alt="animated blob gloop"
@@ -539,22 +548,21 @@ const Footer = () => {
                         height={35}
                         loading="lazy"
                         unoptimized
-                        className={`w-full h-auto max-h-20 object-contain transition-all duration-500 ${styles.imageBlend}`}
+                        className={`w-full h-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
                       />
                     </div>
 
                     <div
-                      className={`w-1/2 rounded-md p-3 border flex items-center justify-center font-bold text-sm tracking-wider transition-colors duration-500 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
+                      className={`w-[50%] rounded-md p-3 border transition-colors duration-500 flex items-center justify-center font-bold text-sm tracking-wider ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
                       ABOUT
                     </div>
                   </div>
 
                   <div
-                    className={`relative flex flex-col justify-between overflow-hidden rounded-md border p-4 sm:p-5 lg:h-[65%] gap-6 transition-colors duration-500 ${styles.border}`}>
+                    className={`relative flex h-[65%] flex-col justify-between overflow-hidden rounded-md border p-5 transition-colors duration-500 ${styles.border}`}>
                     <div className="absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl pointer-events-none" />
-
-                    <div className="relative z-10 w-full">
-                      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
+                    <div className="relative z-10 flex flex-col gap-2">
+                      <div className="grid grid-cols-2 gap-3">
                         {SOCIALS.map((social) => {
                           const Icon = social.icon;
 
@@ -564,13 +572,13 @@ const Footer = () => {
                               href={social.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`group relative block overflow-hidden px-3 py-1 border rounded-md transition-all duration-300 hover:-translate-y-1 ${styles.socialCard} ${styles.borderLight}`}>
+                              className={`group relative block overflow-hidden px-4 py-1 rounded-md transition-all duration-300 hover:-translate-y-1 ${styles.socialCard}`}>
                               <div className="relative flex items-center gap-3">
                                 <div className={`${styles.iconBoxBase} ${styles.iconBox}`}>
-                                  <Icon className="text-sm" />
+                                  <Icon className="text-base" />
                                 </div>
                                 <span
-                                  className={`text-[11px] font-bold uppercase tracking-wider truncate transition-colors duration-300 ${styles.textSecondary}`}>
+                                  className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${styles.textSecondary}`}>
                                   {social.label}
                                 </span>
                               </div>
@@ -580,54 +588,44 @@ const Footer = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-center sm:justify-end mt-auto w-full">
-                      <CustomButton
-                        title="Let's Get In Contact"
-                        onClick={handleNavigation}
-                        width={isMobile ? "100%" : "260"}
-                        height="40"
-                      />
+                    <div className="flex justify-end mt-2">
+                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mx-auto flex w-full max-w-[1600px] flex-col justify-between px-4 mt-auto">
+            <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4">
               <div
-                className={`mb-5 flex flex-col md:flex-row w-full gap-3 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
+                className={`mb-5 flex h-[17vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
                 <div
-                  className={`flex h-auto md:h-full w-full md:w-[25%] lg:w-[20%] flex-col justify-between rounded-md border p-4 shadow-sm gap-4 transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
+                  className={`flex h-full w-[20%] flex-col rounded-md border p-4 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
                   <p
-                    className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-500 ${styles.textMuted}`}>
+                    className={`text-xs font-semibold uppercase tracking-normal transition-colors duration-500 ${styles.textMuted}`}>
                     Made in india
                   </p>
 
                   <div
-                    className={`flex items-center justify-between text-[10px] uppercase tracking-wider font-mono transition-colors duration-500 ${styles.textMuted}`}>
+                    className={`mt-auto flex items-center justify-between text-[10px] uppercase tracking-wider transition-colors duration-500 ${styles.textMuted}`}>
                     <span> 2026 </span> <span> v1.0 </span>
                   </div>
 
-                  <div
-                    className={`w-full flex justify-center pt-2 border-t transition-colors duration-500 ${styles.borderLight}`}>
-                    <Image
-                      src="/footer/animated_binary_code.gif"
-                      alt="animated binary code"
-                      width={300}
-                      height={100}
-                      priority
-                      unoptimized
-                      className={`max-h-12 w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                      style={{ width: "auto" }}
-                    />
-                  </div>
+                  <Image
+                    src="/footer/animated_binary_code.gif"
+                    alt="animated binary code"
+                    width={300}
+                    height={100}
+                    priority
+                    unoptimized
+                    className={`mt-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
+                  />
                 </div>
 
-                <div className="flex w-full md:w-[75%] lg:w-[80%] flex-col gap-2">
+                <div className="flex w-[80%] flex-col gap-2">
                   <div
-                    className={`group relative flex-1 overflow-hidden border p-2 sm:p-4 rounded-md shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
-                    <p
-                      className={`text-xs sm:text-sm leading-relaxed text-pretty transition-colors duration-500 ${styles.textSecondary}`}>
+                    className={`group relative flex-2 overflow-hidden border p-2 shadow-sm rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
+                    <p className={`text-sm leading-relaxed transition-colors duration-500 ${styles.textSecondary}`}>
                       Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
                       often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
                       coffee, curiosity, and a dash of skepticism. Measure meticulously, but optimize only when proven
@@ -636,13 +634,13 @@ const Footer = () => {
                   </div>
 
                   <div
-                    className={`flex w-full flex-col sm:flex-row items-center justify-between gap-3 overflow-hidden border px-4 py-2 shadow-sm rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.borderLight}`}>
+                    className={`flex w-full items-center justify-between gap-4 overflow-hidden border px-4 py-1/2 shadow-sm whitespace-nowrap rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.borderLight}`}>
                     <span
-                      className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-500 ${styles.textSecondary}`}>
+                      className={`text-xs sm:text-sm font-semibold uppercase tracking-wider shrink transition-colors duration-500 ${styles.textSecondary}`}>
                       Independent Developer
                     </span>
 
-                    <div className="hidden sm:block min-w-0">
+                    <div className="min-w-0 shrink">
                       <Image
                         src="/footer/animated_decorative_dashes.gif"
                         alt="animated decorative dashes"
@@ -650,53 +648,64 @@ const Footer = () => {
                         height={24}
                         priority
                         unoptimized
-                        className={`h-4 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
+                        className={`h-5 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
                         style={{ width: "auto" }}
                       />
                     </div>
 
-                    <span
-                      className={`flex items-center gap-1 text-[11px] sm:text-xs transition-colors duration-500 ${styles.textMuted}`}>
-                      <FaRegCopyright className="shrink-0" />
-                      <span>2026 Akhil Shetty M.</span>
-                    </span>
+                    <button
+                      onClick={handleNavigation}
+                      className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 cursor-pointer ${styles.buttonBg}`}>
+                      Am probably not sleeping, Hit me up ↗
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div
-              className={`relative h-18 sm:h-20 md:h-40 lg:h-35 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
-              <div className="absolute top-2 right-4 sm:top-5 sm:right-5 z-20">
-                <button
-                  onClick={goToTop}
-                  className={`flex items-center gap-1.5 text-xs sm:text-sm font-bold hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
-                  <span className="uppercase"> Back To Top </span>
-                  <Image
-                    src="/footer/barcode_name.svg"
-                    alt="barcode name"
-                    width={30}
-                    height={14}
-                    priority
-                    unoptimized
-                    className={`h-[0.95em] w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
-                    style={{ width: "auto" }}
-                  />
-                </button>
+            <div className="relative w-full">
+              <div
+                className={`relative h-28 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
+                <h2
+                  className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
+                  AKHIL SHETTY{"\u00A0"}
+                </h2>
               </div>
 
-              <div className="absolute top-2 left-4 sm:top-5 sm:left-10 z-20">
-                <button
-                  onClick={handleNavigation}
-                  className={`flex items-center gap-1.5 text-xs sm:text-sm font-bold hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
-                  <span className="uppercase">Am probably not sleeping, Hit me up</span>
-                </button>
-              </div>
+              <div className={`h-0.5 w-full rounded-full transition-colors duration-500 ${styles.dividerLine}`} />
 
-              <h2
-                className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(2.9rem,12vw,12rem)] font-extrabold uppercase leading-none tracking-[-0.06em] origin-center scale-x-[1.1] sm:scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
-                AKHIL SHETTY
-              </h2>
+              <div className="flex items-center justify-between px-4 py-2">
+                <div className="flex-1 text-left">
+                  <span
+                    className={`flex items-center gap-1 text-[10px] sm:text-xs shrink-0 whitespace-nowrap transition-colors duration-500 ${styles.textMuted}`}>
+                    <span>All rights reserved 2026</span>
+                    <FaRegCopyright className="shrink-0" />
+                    <span>Akhil Shetty M.</span>
+                  </span>
+                </div>
+
+                <div className="flex-1 flex items-center justify-center gap-4">
+                  <Link
+                    href="/privacy"
+                    className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
+                    Privacy Policy
+                  </Link>
+                  <Link
+                    href="/imprint"
+                    className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
+                    Imprint
+                  </Link>
+                </div>
+
+                <div className="flex-1 text-right flex justify-end">
+                  <button
+                    onClick={goToTop}
+                    className={`flex items-center gap-1.5 text-xs font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
+                    <span>To Top</span>
+                    <HiArrowSmUp size={15} className="shrink-0" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>

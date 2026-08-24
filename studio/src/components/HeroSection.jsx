@@ -18,9 +18,9 @@ import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
 import { LoadingContext } from "@/components/basic/LoaderWrapper";
-import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 import { startTransition, useEffect, useRef, useState, memo, useContext } from "react";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { getQualityPreset, getRendererPixelRatio } from "@/lib/performance/applyQualityTier";
 
 function isSameScene(a, b) {
   if (!a || !b) return false;

@@ -194,7 +194,7 @@ const Navbar = () => {
         <div className="sm:hidden w-full px-4 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 relative cursor-pointer" onClick={() => window.location.reload()}>
+              <div className="w-12 h-12 relative cursor-pointer" onClick={() => (window.location.href = "/")}>
                 <Logo />
               </div>
 
@@ -238,7 +238,7 @@ const Navbar = () => {
               <div className="opacity-0 animate-[navbar-enter_0.65s_cubic-bezier(0.16,1,0.3,1)_0.1s_forwards]">
                 <div
                   className="w-12 h-12 flex items-center justify-center relative group cursor-pointer"
-                  onClick={() => window.location.reload()}>
+                  onClick={() => (window.location.href = "/")}>
                   <div className="relative w-full h-full overflow-hidden rounded-md">
                     <Logo />
                   </div>

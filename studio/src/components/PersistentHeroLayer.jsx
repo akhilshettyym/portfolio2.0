@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
+import { usePathname } from "next/navigation";
 import { SiRevealdotjs } from "react-icons/si";
-
+import { CLOUD_CONTROL } from "@/utils/storage";
 import HeroSection from "@/components/HeroSection";
 import LiquidGlass from "@/components/basic/LiquidGlass";
 import WeatherIcon from "@/components/basic/WeatherIcon";
-import { CLOUD_CONTROL } from "@/utils/storage";
+import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
+
+const HERO_SECTION_SELECTOR = "#hero";
 
 function dispatchHeroEvent(name) {
   window.dispatchEvent(new CustomEvent(name));
@@ -53,18 +54,7 @@ function PersistentHeroControls({ visible }) {
           type="button"
           onClick={toggleClouds}
           aria-label={paused ? "Run clouds" : "Stall clouds"}
-          className="
-            group
-            absolute
-            left-1/2
-            top-3
-            z-70
-            h-11
-            w-11
-            -translate-x-1/2
-            cursor-pointer
-            pointer-events-auto
-          ">
+          className=" group absolute left-1/2 top-3 z-70 h-11 w-11 -translate-x-1/2 cursor-pointer pointer-events-auto">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative z-10 flex h-10 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
               {paused ? (
@@ -84,18 +74,7 @@ function PersistentHeroControls({ visible }) {
           type="button"
           onClick={() => dispatchHeroEvent("hero-restart-intro")}
           aria-label="Run intro"
-          className="
-            group
-            absolute
-            left-1/2
-            top-14
-            z-70
-            h-12
-            w-12
-            -translate-x-1/2
-            cursor-pointer
-            pointer-events-auto
-          ">
+          className="group absolute left-1/2 top-14 z-70 h-12 w-12 -translate-x-1/2 cursor-pointer pointer-events-auto">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
               <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
@@ -118,6 +97,47 @@ function PersistentHeroControls({ visible }) {
 export default function PersistentHeroLayer() {
   const pathname = usePathname();
   const isInfoRoute = pathname === "/";
+  const [heroControlsVisible, setHeroControlsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isInfoRoute) {
+      return undefined;
+    }
+
+    const heroSection = document.querySelector(HERO_SECTION_SELECTOR);
+
+    if (!heroSection || typeof IntersectionObserver === "undefined") {
+      const syncHeroControls = () => {
+        setHeroControlsVisible(window.scrollY < window.innerHeight);
+      };
+      const frameId = window.requestAnimationFrame(syncHeroControls);
+
+      window.addEventListener("scroll", syncHeroControls, { passive: true });
+      window.addEventListener("resize", syncHeroControls);
+
+      return () => {
+        window.cancelAnimationFrame(frameId);
+        window.removeEventListener("scroll", syncHeroControls);
+        window.removeEventListener("resize", syncHeroControls);
+      };
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHeroControlsVisible(entry.isIntersecting && entry.intersectionRatio > 0);
+      },
+      {
+        root: null,
+        threshold: 0,
+      },
+    );
+
+    observer.observe(heroSection);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isInfoRoute]);
 
   return (
     <>
@@ -136,7 +156,7 @@ export default function PersistentHeroLayer() {
         <HeroSection active={isInfoRoute} />
       </motion.div>
 
-      <PersistentHeroControls visible={isInfoRoute} />
+      <PersistentHeroControls visible={isInfoRoute && heroControlsVisible} />
     </>
   );
 }

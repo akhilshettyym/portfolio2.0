@@ -1,7 +1,7 @@
 "use client";
 
-import GlobalCursor from "@/components/GlobalCursor";
 import { TIER_EVENT, PERF_TIERS } from "@/utils/storage";
+import GlobalCursor from "@/components/core/GlobalCursor";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { calibratePerformance, getSavedTier, savePerformanceTier } from "@/lib/performance/performanceTier";
 

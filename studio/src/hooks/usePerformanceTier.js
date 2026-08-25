@@ -2,7 +2,7 @@
 
 import { TIER_EVENT, PERF_TIERS } from "@/utils/storage";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { PerformanceTierContext } from "@/components/PerformanceBootstrap";
+import { PerformanceTierContext } from "@/components/core/PerformanceBootstrap";
 import { calibratePerformance, getSavedTier, savePerformanceTier } from "@/lib/performance/performanceTier";
 
 export function usePerformanceTier(calibrationDurationMs) {

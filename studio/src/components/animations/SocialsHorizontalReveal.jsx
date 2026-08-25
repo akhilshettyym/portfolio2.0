@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import MySocialsTiered from "@/components/TieredComponents/MySocialsTiered";
+import MySocialsTiered from "@/components/Tiered/MySocialsTiered";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 
 export default function SocialsCinematicReveal() {

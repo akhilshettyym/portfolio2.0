@@ -9,8 +9,8 @@ import { memo, useEffect, useRef, useState } from "react";
 import { getBubbleSceneStyles } from "@/utils/themeSwatch";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
-import { RADII, POSITIONS, TEXTURE_PATHS, FADEUP } from "@/utils/basic";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 
 export const TECH_STACK = [
@@ -398,10 +398,10 @@ function BubbleScene() {
         className={`bubble-content relative z-10 w-full max-w-6xl mx-auto px-4 -mt-8 bg-linear-to-t ${styles.fadeGradient}`}>
         <div className="bubble-content-inner flex flex-col items-center justify-center pt-16 space-y-3 md:space-y-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
-            <h3
-              className={`text-xl md:text-2xl font-bold font-sans transition-colors duration-300 uppercase tracking-tight ${styles.text}`}>
-              What&apos;s my tech stack?
-            </h3>
+            <h2
+              className={`text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tighter md:-tracking-widest transition-colors duration-500 ${styles.title}`}>
+              /tech_stack
+            </h2>
 
             <div className="relative h-8 md:h-10 w-full md:w-64 flex items-center justify-center md:justify-start overflow-hidden">
               <AnimatePresence mode="wait">

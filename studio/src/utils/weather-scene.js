@@ -1,9 +1,237 @@
+// import { CACHE_TTL_MS } from "@/utils/basic";
+// import { SCENE_CACHE, LOCATION_MODE } from "@/utils/storage";
+// import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
+
+// async function fetchWeather(latitude, longitude) {
+//   const response = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`, { cache: "no-store" });
+
+//   if (!response.ok) {
+//     throw new Error("Weather fetch failed");
+//   }
+
+//   const data = await response.json();
+
+//   return {
+//     temperature: data.current?.temperature_2m,
+//     cloudCover: data.current?.cloud_cover,
+//     weatherCode: data.current?.weather_code,
+//     isDay: data.current?.is_day === 1,
+//     windSpeed: data.current?.wind_speed_10m,
+//     sunrise: data.daily?.sunrise?.[0],
+//     sunset: data.daily?.sunset?.[0],
+//   };
+// }
+
+// function getCurrentPosition() {
+//   return new Promise((resolve, reject) => {
+//     navigator.geolocation.getCurrentPosition(resolve, reject, {
+//       enableHighAccuracy: true,
+//       timeout: 10000,
+//       maximumAge: 300000,
+//     });
+//   });
+// }
+
+// async function getLocationFromIP() {
+//   const response = await fetch("/api/location", {
+//     cache: "no-store",
+//   });
+
+//   if (!response.ok) {
+//     throw new Error("IP lookup failed");
+//   }
+
+//   const data = await response.json();
+
+//   return {
+//     latitude: data.latitude,
+//     longitude: data.longitude,
+//   };
+// }
+
+// async function getCoordinates() {
+//   const mode = localStorage.getItem(LOCATION_MODE) || "fast";
+
+//   if (mode === "accurate") {
+//     try {
+//       const position = await getCurrentPosition();
+
+//       return {
+//         latitude: position.coords.latitude,
+//         longitude: position.coords.longitude,
+//       };
+//     } catch (error) {
+//       console.warn("GPS failed. Falling back to IP.", error);
+//       return await getLocationFromIP();
+//     }
+//   }
+
+//   return await getLocationFromIP();
+// }
+
+// function readCachedScene() {
+//   if (typeof window === "undefined") {
+//     return null;
+//   }
+
+//   try {
+//     const raw = localStorage.getItem(SCENE_CACHE);
+
+//     if (!raw) {
+//       return null;
+//     }
+
+//     const parsed = JSON.parse(raw);
+
+//     if (!parsed?.timestamp || !parsed?.data) {
+//       return null;
+//     }
+
+//     const age = Date.now() - parsed.timestamp;
+
+//     if (age > CACHE_TTL_MS) {
+//       return null;
+//     }
+
+//     return parsed.data;
+//   } catch {
+//     return null;
+//   }
+// }
+
+// function writeCachedScene(data) {
+//   if (typeof window === "undefined") {
+//     return;
+//   }
+
+//   try {
+//     localStorage.setItem(
+//       SCENE_CACHE,
+//       JSON.stringify({
+//         timestamp: Date.now(),
+//         data,
+//       }),
+//     );
+//   } catch (error) {
+//     console.error("Failed to cache weather scene", error);
+//   }
+// }
+
+// export function setLocationMode(mode) {
+//   localStorage.setItem(LOCATION_MODE, mode);
+//   localStorage.removeItem(SCENE_CACHE);
+// }
+
+// export function getLocationMode() {
+//   return localStorage.getItem(LOCATION_MODE);
+// }
+
+// export function getWeatherIconData() {
+//   try {
+//     const rawData = localStorage.getItem(SCENE_CACHE);
+
+//     if (!rawData) {
+//       return {
+//         getMoonPhase: "NEW_MOON",
+//         getSceneCondition: "clear",
+//       };
+//     }
+
+//     const parsedData = JSON.parse(rawData);
+//     const innerData = parsedData?.data;
+
+//     return {
+//       getMoonPhase: innerData?.renderMoonPhase || "NEW_MOON",
+//       getSceneCondition: innerData?.sceneCondition || "clear",
+//     };
+//   } catch {
+//     return {
+//       getMoonPhase: "NEW_MOON",
+//       getSceneCondition: "clear",
+//     };
+//   }
+// }
+
+// export async function getWeatherScene({ forceRefresh = false } = {}) {
+//   try {
+//     if (!forceRefresh) {
+//       const cached = readCachedScene();
+
+//       if (cached) {
+//         return cached;
+//       }
+//     }
+
+//     const { latitude, longitude } = await getCoordinates();
+//     const weather = await fetchWeather(latitude, longitude);
+//     const mode = localStorage.getItem(LOCATION_MODE) || "fast";
+//     const scene = resolveScene(weather);
+//     const sceneCondition = scene.condition;
+//     const renderMoonPhase = getMoonVariant();
+//     const moonPhase = scene.timeBand === "night" ? getMoonVariant() : null;
+
+//     const result = {
+//       success: true,
+//       scene: scene.timeBand,
+//       backgroundKey: scene.backgroundKey,
+//       cloudKey: scene.cloudKey,
+//       moonPhase,
+//       sceneCondition,
+//       renderMoonPhase,
+
+//       ...(mode === "accurate" && {
+//         weather,
+//       }),
+//     };
+
+//     writeCachedScene(result);
+//     return result;
+//   } catch (error) {
+//     console.error("Weather Scene Error:", error);
+//     const cached = readCachedScene();
+
+//     if (cached) {
+//       return cached;
+//     }
+
+//     return {
+//       success: false,
+//       scene: "morning",
+//       backgroundKey: "morning_clear",
+//       cloudKey: "morning_clear",
+//       sceneCondition: "CLEAR",
+//       renderMoonPhase: "MOON",
+//       moonPhase: null,
+//       weather: null,
+//     };
+//   }
+// }
+
+// export function hasLocationPreference() {
+//   return !!localStorage.getItem(LOCATION_MODE);
+// }
+
 import { CACHE_TTL_MS } from "@/utils/basic";
 import { SCENE_CACHE, LOCATION_MODE } from "@/utils/storage";
 import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
 
+const VALID_LOCATION_MODES = ["accurate", "fast", "denied"];
+
+const DEFAULT_SCENE = {
+  success: true,
+  scene: "morning",
+  backgroundKey: "morning_clear",
+  cloudKey: "morning_clear",
+  sceneCondition: "CLEAR",
+  renderMoonPhase: "MOON",
+  moonPhase: null,
+  weather: null,
+};
+
 async function fetchWeather(latitude, longitude) {
-  const response = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`, { cache: "no-store" });
+  const response = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`, {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     throw new Error("Weather fetch failed");
@@ -51,6 +279,16 @@ async function getLocationFromIP() {
 
 async function getCoordinates() {
   const mode = localStorage.getItem(LOCATION_MODE) || "fast";
+
+  /*
+   * Denied means:
+   * - do not request browser location
+   * - do not perform IP lookup
+   * - use the application's default scene instead
+   */
+  if (mode === "denied") {
+    return null;
+  }
 
   if (mode === "accurate") {
     try {
@@ -118,22 +356,63 @@ function writeCachedScene(data) {
 }
 
 export function setLocationMode(mode) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (!VALID_LOCATION_MODES.includes(mode)) {
+    console.warn(`Invalid location mode: ${mode}`);
+    return;
+  }
+
   localStorage.setItem(LOCATION_MODE, mode);
+
+  /*
+   * Always clear the previous weather scene when the user
+   * changes their location preference.
+   *
+   * This is especially important for "denied", because we do
+   * not want an old location-based scene to remain active.
+   */
   localStorage.removeItem(SCENE_CACHE);
 }
 
 export function getLocationMode() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   return localStorage.getItem(LOCATION_MODE);
 }
 
 export function getWeatherIconData() {
+  if (typeof window === "undefined") {
+    return {
+      getMoonPhase: DEFAULT_SCENE.renderMoonPhase,
+      getSceneCondition: DEFAULT_SCENE.sceneCondition,
+    };
+  }
+
   try {
+    const mode = getLocationMode();
+
+    /*
+     * When location access is denied, always return the
+     * default icon/scene state.
+     */
+    if (mode === "denied") {
+      return {
+        getMoonPhase: DEFAULT_SCENE.renderMoonPhase,
+        getSceneCondition: DEFAULT_SCENE.sceneCondition,
+      };
+    }
+
     const rawData = localStorage.getItem(SCENE_CACHE);
 
     if (!rawData) {
       return {
-        getMoonPhase: "NEW_MOON",
-        getSceneCondition: "clear",
+        getMoonPhase: DEFAULT_SCENE.renderMoonPhase,
+        getSceneCondition: DEFAULT_SCENE.sceneCondition,
       };
     }
 
@@ -141,19 +420,38 @@ export function getWeatherIconData() {
     const innerData = parsedData?.data;
 
     return {
-      getMoonPhase: innerData?.renderMoonPhase || "NEW_MOON",
-      getSceneCondition: innerData?.sceneCondition || "clear",
+      getMoonPhase: innerData?.renderMoonPhase || DEFAULT_SCENE.renderMoonPhase,
+      getSceneCondition: innerData?.sceneCondition || DEFAULT_SCENE.sceneCondition,
     };
   } catch {
     return {
-      getMoonPhase: "NEW_MOON",
-      getSceneCondition: "clear",
+      getMoonPhase: DEFAULT_SCENE.renderMoonPhase,
+      getSceneCondition: DEFAULT_SCENE.sceneCondition,
     };
   }
 }
 
 export async function getWeatherScene({ forceRefresh = false } = {}) {
   try {
+    const mode = getLocationMode();
+
+    /*
+     * DENIED FLOW
+     *
+     * Do this before cache lookup so a previous location-based
+     * cached scene can never override the user's Deny choice.
+     */
+    if (mode === "denied") {
+      localStorage.removeItem(SCENE_CACHE);
+
+      return {
+        ...DEFAULT_SCENE,
+      };
+    }
+
+    /*
+     * NORMAL LOCATION FLOW
+     */
     if (!forceRefresh) {
       const cached = readCachedScene();
 
@@ -162,12 +460,31 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
       }
     }
 
-    const { latitude, longitude } = await getCoordinates();
+    const coordinates = await getCoordinates();
+
+    /*
+     * Safety fallback.
+     * This should only happen if the mode changes unexpectedly
+     * while the request is running.
+     */
+    if (!coordinates) {
+      localStorage.removeItem(SCENE_CACHE);
+
+      return {
+        ...DEFAULT_SCENE,
+      };
+    }
+
+    const { latitude, longitude } = coordinates;
+
     const weather = await fetchWeather(latitude, longitude);
-    const mode = localStorage.getItem(LOCATION_MODE) || "fast";
+
     const scene = resolveScene(weather);
+
     const sceneCondition = scene.condition;
+
     const renderMoonPhase = getMoonVariant();
+
     const moonPhase = scene.timeBand === "night" ? getMoonVariant() : null;
 
     const result = {
@@ -179,15 +496,33 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
       sceneCondition,
       renderMoonPhase,
 
+      /*
+       * Only expose raw weather data when the user selected
+       * accurate location.
+       */
       ...(mode === "accurate" && {
         weather,
       }),
     };
 
     writeCachedScene(result);
+
     return result;
   } catch (error) {
     console.error("Weather Scene Error:", error);
+
+    /*
+     * If the user denied location while a request was in flight,
+     * do not return an old location-based cached result.
+     */
+    if (getLocationMode() === "denied") {
+      localStorage.removeItem(SCENE_CACHE);
+
+      return {
+        ...DEFAULT_SCENE,
+      };
+    }
+
     const cached = readCachedScene();
 
     if (cached) {
@@ -195,18 +530,18 @@ export async function getWeatherScene({ forceRefresh = false } = {}) {
     }
 
     return {
+      ...DEFAULT_SCENE,
       success: false,
-      scene: "morning",
-      backgroundKey: "morning_clear",
-      cloudKey: "morning_clear",
-      sceneCondition: "CLEAR",
-      renderMoonPhase: "MOON",
-      moonPhase: null,
-      weather: null,
     };
   }
 }
 
 export function hasLocationPreference() {
-  return !!localStorage.getItem(LOCATION_MODE);
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const mode = localStorage.getItem(LOCATION_MODE);
+
+  return VALID_LOCATION_MODES.includes(mode);
 }

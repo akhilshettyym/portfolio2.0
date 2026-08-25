@@ -201,8 +201,8 @@ export default function MySocials({ horizontalReveal = false }) {
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}>
           <h2
-            className={`mt-4 text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black uppercase leading-[0.5] tracking-tighter md:tracking-[-0.09em] transition-colors duration-500 ${activeTheme.textMain}`}>
-            Socials
+            className={`mt-4 text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black uppercase leading-[0.5] tracking-wide md:tracking-[-0.12em] transition-colors duration-500 ${activeTheme.textMain}`}>
+            /Socials
           </h2>
           <h1
             className={`mt-8 text-xl font-light tracking-wide uppercase md:text-3xl transition-colors duration-500 ${activeTheme.textMuted}`}>

@@ -143,7 +143,10 @@ export default function SubjectProfile() {
       <motion.div {...FADEUP} className="relative z-20 pt-3 pb-3">
         <div className="mx-auto max-w-8xl">
           <div className="relative flex items-center justify-between gap-6">
-            <span className={`text-[12px] uppercase tracking-normal ${styles.subProfileText}`}>/ Subject Profile</span>
+            <span
+              className={`text-[15px] font-black uppercase tracking-tighter md:-tracking-widest ${styles.subProfileText}`}>
+              /Subject_Profile
+            </span>
             <div
               className={`hidden items-center gap-5 font-mono text-[10px] uppercase tracking-normal md:flex ${styles.coordsGroup}`}>
               <span>12.8761 N</span>

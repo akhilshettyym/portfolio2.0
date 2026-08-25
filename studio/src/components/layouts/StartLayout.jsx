@@ -1,4 +1,4 @@
-import CreateSomething from "@/components/CreateSomething";
+import CreateSomething from "@/components/sections/CreateSomething";
 
 export default function StartLayout() {
   return (

@@ -2,23 +2,52 @@
   width: max-content;
   animation: devTickerMove 42s linear infinite;
   will-change: transform;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+}
+
+.dev-ticker-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  width: 84px;
+  pointer-events: none;
+}
+
+.dev-ticker-fade-left {
+  left: 0;
+}
+
+.dev-ticker-fade-right {
+  right: 0;
 }
 
 @keyframes devTickerMove {
   from {
-    transform: translateX(0);
+    transform: translate3d(-50%, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .dev-ticker-fade {
+    width: 120px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dev-ticker-fade {
+    width: 150px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dev-marquee {
     animation: none;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }

@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SiRevealdotjs } from "react-icons/si";
 import { CLOUD_CONTROL } from "@/utils/storage";
-import HeroSection from "@/components/HeroSection";
-import LiquidGlass from "@/components/basic/LiquidGlass";
+import HeroSection from "@/components/sections/HeroSection";
+import LiquidGlass from "@/components/animations/LiquidGlass";
 import WeatherIcon from "@/components/basic/WeatherIcon";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
 

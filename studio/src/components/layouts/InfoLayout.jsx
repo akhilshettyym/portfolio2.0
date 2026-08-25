@@ -1,8 +1,8 @@
-import DevTicker from "@/components/DevTicker";
-import SubjectProfile from "@/components/SubjectProfile";
-import SocialsHorizontalReveal from "@/components/SocialsHorizontalReveal";
-import BubbleSceneTiered from "@/components/TieredComponents/BubbleSceneTiered";
-import CardStackRevealTiered from "@/components/TieredComponents/CardStackRevealTiered";
+import DevTicker from "@/components/sections/DevTicker";
+import SubjectProfile from "@/components/sections/SubjectProfile";
+import BubbleSceneTiered from "@/components/Tiered/BubbleSceneTiered";
+import CardStackRevealTiered from "@/components/Tiered/CardStackRevealTiered";
+import SocialsHorizontalReveal from "@/components/animations/SocialsHorizontalReveal";
 
 export default function InfoLayout({ content = {} }) {
   return (

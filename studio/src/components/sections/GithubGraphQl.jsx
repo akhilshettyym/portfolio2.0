@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { MONTHS } from "@/utils/basic";
 import { FaGitAlt } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa6";
 import { CACHE_BASE } from "@/utils/storage";
 import { GiRaiseZombie } from "react-icons/gi";
 import { DiCoffeescript } from "react-icons/di";
@@ -374,7 +376,7 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
       initial={{ opacity: 0, y: 35, filter: "blur(8px)" }}
       animate={hasEnteredViewport ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{ duration: isTier2 ? 0.2 : 0.75, ease: [0.22, 1, 0.36, 1] }}
-      className={`w-full p-6 md:p-8 transition-colors duration-500 ${styles.container}`}>
+      className={`w-full p-6 md:px-20 pb-15 transition-colors duration-500 ${styles.container}`}>
       {isMobile ? (
         renderMobile()
       ) : (
@@ -574,20 +576,34 @@ const GithubGraphQl = ({ username = "akhilshettyym", forceTriggerAnimation }) =>
             </div>
 
             <div
-              className={`mt-6 flex items-center justify-center text-[11px] font-bold uppercase tracking-wider ${styles.textFaded}`}>
+              className={`mt-6 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider ${styles.textFaded}`}>
               <div className="flex items-center gap-2">
-                <span> Less </span>
+                <span>Less</span>
+
                 <div className="flex gap-1">
                   {themeColors.map((color) => (
                     <div
                       key={color}
-                      className={`h-3 w-3 rounded-xs border ${isDark ? "border-white/5" : isMetal ? "border-red-500/10" : "border-black/5"}`}
+                      className={`h-3 w-3 rounded-xs border ${
+                        isDark ? "border-white/5" : isMetal ? "border-red-500/10" : "border-black/5"
+                      }`}
                       style={{ backgroundColor: color }}
                     />
                   ))}
                 </div>
-                <span> More </span>
+
+                <span>More</span>
               </div>
+
+              <Link
+                href="https://github.com/akhilshettyym"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-1.5 transition-colors duration-300 hover:opacity-100"
+                aria-label="Visit my GitHub profile">
+                <span className="lowercase">akhilshettyym</span>
+                <FaGithub size={15} />
+              </Link>
             </div>
           </>
         )}

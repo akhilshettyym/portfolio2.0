@@ -390,7 +390,7 @@ export default function SelectedWorks({ initialProjects }) {
   }, [hasInitialProjects, initialProjects]);
 
   return (
-    <div className={`relative w-full overflow-hidden transition-colors duration-500 ${sectionBg}`}>
+    <div className={`relative w-full overflow-hidden transition-colors px-10 duration-500 ${sectionBg}`}>
       <div className="mx-auto max-w-[1600px] px-10 py-10">
         <div className="mb-5">
           <div className="relative px-10 py-2 text-xs tracking-widest">
@@ -399,7 +399,7 @@ export default function SelectedWorks({ initialProjects }) {
 
           <div className="overflow-hidden">
             <h1
-              className={`inline-block origin-left text-[clamp(2.5em,5vw,4rem)] md:text-[clamp(4.5rem,9vw,5rem)] font-black leading-[0.7] tracking-[-0.09em] will-change-transform ${isMetal ? "text-red-500" : isDark ? "text-white" : "text-black"}`}
+              className={`inline-block origin-left text-[clamp(2.3em,4.5vw,4rem)] md:text-[clamp(4rem,8vw,4.5rem)] font-black leading-[0.7] tracking-[-0.09em] will-change-transform ${isMetal ? "text-red-500" : isDark ? "text-white" : "text-black"}`}
               style={{
                 fontFeatureSettings: '"ss01" on, "ss02" on',
                 transform: "scaleX(1.5)",

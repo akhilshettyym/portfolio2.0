@@ -7,7 +7,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const LoadingFallback = () => <div style={{ width: "100%", minHeight: "600px", background: "transparent" }} />;
 
-const MyExperience = dynamic(() => import("../MyExperience"), {
+const MyExperience = dynamic(() => import("../sections/MyExperience"), {
   loading: LoadingFallback,
   ssr: false,
 });

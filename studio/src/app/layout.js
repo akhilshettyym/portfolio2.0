@@ -1,17 +1,17 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
-import NavbarWrapper from "@/components/NavbarWrapper";
 import { LenisProvider } from "@/context/LenisContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
-import RouteTransition from "@/components/basic/RouteTransition";
-import LoaderWrapper from "@/components/basic/LoaderWrapper";
-import PersistentHeroLayer from "@/components/PersistentHeroLayer";
-import PerformanceBootstrap from "@/components/PerformanceBootstrap";
-import ThemeLayoutWrapper from "@/components/basic/ThemeLayoutWrapper";
+import NavbarLayout from "@/components/layouts/NavbarLayout";
+import FooterLayout from "@/components/layouts/FooterLayout";
+import LoaderWrapper from "@/components/wrappers/LoaderWrapper";
+import NavbarWrapper from "@/components/wrappers/NavbarWrapper";
+import RouteTransition from "@/components/animations/RouteTransition";
+import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
+import ThemeLayoutWrapper from "@/components/wrappers/ThemeLayoutWrapper";
+import PersistentHeroLayer from "@/components/wrappers/PersistentHeroLayer";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -24,6 +24,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata = {
   metadataBase: new URL("https://akhilshettym.com"),
   title: {
@@ -32,17 +42,37 @@ export const metadata = {
   },
   description:
     "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
-  keywords: ["Akhil Shetty", "Full Stack Developer", "Next.js Developer", "React Developer", "Portfolio"],
-  authors: [{ name: "Akhil Shetty" }],
+  keywords: [
+    "Akhil Shetty",
+    "Full Stack Developer",
+    "Next.js Developer",
+    "React Developer",
+    "Creative Developer",
+    "Portfolio",
+  ],
+  authors: [{ name: "Akhil Shetty", url: "https://akhilshettym.com" }],
   creator: "Akhil Shetty",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     title: "Akhil Shetty | Full Stack Developer",
     description:
       "Performance-minded portfolio, selected work, experience, and ways to start a project with Akhil Shetty.",
-    type: "website",
-    locale: "en_US",
+    url: "/",
     siteName: "Akhil Shetty",
-    images: [{ url: "/my-image.png", width: 1200, height: 630, alt: "Akhil Shetty" }],
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/my-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Akhil Shetty - Full Stack Developer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -53,6 +83,18 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -65,7 +107,7 @@ export default function RootLayout({ children }) {
             <ThemeProvider>
               <LoaderWrapper>
                 <NavbarWrapper>
-                  <Navbar />
+                  <NavbarLayout />
                 </NavbarWrapper>
 
                 <ThemeLayoutWrapper>
@@ -77,7 +119,7 @@ export default function RootLayout({ children }) {
                 </ThemeLayoutWrapper>
 
                 <EmergencyCTA />
-                <Footer />
+                <FooterLayout />
               </LoaderWrapper>
             </ThemeProvider>
           </LenisProvider>

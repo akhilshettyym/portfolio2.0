@@ -1,4 +1,4 @@
-import PrivacyPolicy from "../PrivacyPolicy";
+import PrivacyPolicy from "../sections/PrivacyPolicy";
 
 export default function PrivacyLayout() {
   return (

@@ -84,10 +84,10 @@ function CardStackReveal({ initialAchievements }) {
           <motion.div
             className="flex flex-col items-center gap-3 text-center w-full"
             style={{ filter: renderStackedCards ? "none" : backgroundFilter }}>
-            <div
-              className={`text-3xl font-black uppercase tracking-wider transition-colors duration-500 ${styles.title}`}>
-              Achievements
-            </div>
+            <h2
+              className={`text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter md:-tracking-widest transition-colors duration-500 ${styles.title}`}>
+              /Achievements
+            </h2>
             <p className={`max-w-xl px-6 text-sm leading-6 font-medium transition-colors duration-500 ${styles.desc}`}>
               A visual story of growth, recognition, and consistent progress.
             </p>

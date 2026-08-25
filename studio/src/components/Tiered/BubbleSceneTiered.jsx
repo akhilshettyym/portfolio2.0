@@ -6,7 +6,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const LoadingFallback = () => <div style={{ width: "100%", minHeight: "400px", background: "transparent" }} />;
 
-const BubbleScene = dynamic(() => import("@/components/BubbleScene"), {
+const BubbleScene = dynamic(() => import("@/components/sections/BubbleScene"), {
   loading: LoadingFallback,
   ssr: false,
 });

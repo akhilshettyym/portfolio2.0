@@ -33,7 +33,7 @@ export const getCardStackStyles = (theme) => {
       : isDark
         ? "bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_55%)]"
         : "bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.04),transparent_55%)]",
-    title: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black/50",
+    title: isDark ? "text-white/50" : isMetal ? "text-red-500/50" : "text-black",
     desc: isDark ? "text-white/40" : isMetal ? "text-red-500/40" : "text-black/35",
 
     cardBg: isDark
@@ -131,22 +131,16 @@ export const getDevTickerStyles = (theme) => {
   const metal = theme === "metal";
 
   return {
+    page: dark || metal ? "bg-black" : "bg-white",
+
     section: dark
       ? "border-y border-white/10 bg-black text-white selection:bg-white selection:text-black"
       : metal
         ? "border-y border-red-500/20 bg-black text-red-500 selection:bg-red-500 selection:text-black"
         : "border-y border-black/8 bg-white text-slate-900 selection:bg-slate-900 selection:text-white",
-    fadeLeft: dark
-      ? "bg-linear-to-r from-black via-black/95 to-transparent"
-      : metal
-        ? "bg-linear-to-r from-black via-black/95 to-transparent"
-        : "bg-linear-to-r from-white via-white/95 to-transparent",
-    fadeRight: dark
-      ? "bg-linear-to-l from-black via-black/95 to-transparent"
-      : metal
-        ? "bg-linear-to-l from-black via-black/95 to-transparent"
-        : "bg-linear-to-l from-white via-white/95 to-transparent",
+
     text: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
+
     separator: dark ? "text-white/15" : metal ? "text-red-500/20" : "text-black/15",
   };
 };
@@ -170,7 +164,7 @@ export const getFooterStyles = (theme) => {
   return {
     section: isDarkOrMetal ? "bg-black text-white" : "bg-white text-black",
     footerContainer: isDark ? "bg-[#0a0a0a]" : isMetal ? "bg-[#050000]" : "bg-white",
-    textAccent: isDark ? "text-indigo-400" : isMetal ? "text-red-500" : "text-indigo-900",
+    textAccent: isDark ? "text-gray-500" : isMetal ? "text-red-500" : "text-gray-500",
 
     cardOuter: isDark ? "bg-white/10" : isMetal ? "bg-red-500/10" : "bg-gray-200",
     cardInner1: isDark ? "bg-white/10" : isMetal ? "bg-red-500/10" : "bg-gray-300",
@@ -184,7 +178,7 @@ export const getFooterStyles = (theme) => {
     borderLight: isDark ? "border-white/5" : isMetal ? "border-red-500/10" : "border-slate-50",
 
     dividerLine: isDark
-      ? "bg-indigo-500/40 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+      ? "bg-gray-500/40 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
       : isMetal
         ? "bg-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
         : "bg-slate-300 shadow-[0_0_6px_rgba(0,0,0,0.08)]",
@@ -200,10 +194,10 @@ export const getFooterStyles = (theme) => {
         : "bg-white",
     iconBoxBase: "flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-colors duration-300",
     iconBox: isDark
-      ? "bg-white/10 group-hover:text-indigo-400 text-slate-300"
+      ? "bg-white/10 group-hover:text-gray-500 text-slate-300"
       : isMetal
         ? "bg-red-500/10 group-hover:text-red-400 text-red-500/80"
-        : "bg-slate-100 group-hover:text-indigo-600 text-slate-600",
+        : "bg-slate-100 group-hover:text-gray-500 text-slate-600",
     buttonBg: isDark
       ? "text-white/50 hover:text-white"
       : isMetal
@@ -530,7 +524,7 @@ export const getProfileStyles = (theme) => {
     h1Sub: dark ? "text-white/90" : metal ? "text-red-500/90" : "text-black/90",
     h2Sub: dark ? "text-white/95" : metal ? "text-red-500/95" : "text-black/95",
     pSub: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
-    subProfileText: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-black/50",
+    subProfileText: dark ? "text-white/50" : metal ? "text-red-500/50" : "text-black",
     coordsGroup: dark ? "text-white/35" : metal ? "text-red-500/35" : "text-black/35",
     coordDatePre: dark ? "text-white/45" : metal ? "text-red-500/45" : "text-black/45",
     coordDate: dark ? "text-white/70" : metal ? "text-red-500/70" : "text-black/70",

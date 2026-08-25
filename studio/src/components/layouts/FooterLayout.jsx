@@ -91,7 +91,7 @@ const MarqueeLineLow = ({ text, large, isMobile }) => {
   );
 };
 
-const Footer = () => {
+const FooterLayout = () => {
   const router = useRouter();
   const sectionRef = useRef(null);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -202,7 +202,7 @@ const Footer = () => {
                 <div className="w-full md:w-[60%]">
                   <div className="flex h-full w-full flex-col gap-4">
                     <div
-                      className={`flex flex-1 items-center justify-center p-4 transition-colors duration-500 ${styles.textAccent}`}>
+                      className={`flex flex-1 items-center justify-center transition-colors duration-500 ${styles.textAccent}`}>
                       <div className="overflow-hidden">
                         <MarqueeLine large={true} text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
                         <MarqueeLine text="A DESIGNER & DEVELOPER. CREATIVELY DRIVEN." />
@@ -382,7 +382,7 @@ const Footer = () => {
               <div
                 className={`relative h-28 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
                 <h2
-                  className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
+                  className={`absolute left-1/2 bottom-[-0.38em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none -tracking-widest origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
                   AKHIL SHETTY{"\u00A0"}
                 </h2>
               </div>
@@ -667,7 +667,7 @@ const Footer = () => {
               <div
                 className={`relative h-28 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
                 <h2
-                  className={`absolute left-1/2 bottom-[-0.36em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none tracking-[-0.08em] origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
+                  className={`absolute left-1/2 bottom-[-0.38em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none -tracking-widest origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
                   AKHIL SHETTY{"\u00A0"}
                 </h2>
               </div>
@@ -689,11 +689,6 @@ const Footer = () => {
                     href="/privacy"
                     className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
                     Privacy Policy
-                  </Link>
-                  <Link
-                    href="/imprint"
-                    className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
-                    Imprint
                   </Link>
                 </div>
 
@@ -730,4 +725,4 @@ const Footer = () => {
   return render();
 };
 
-export default memo(Footer);
+export default memo(FooterLayout);

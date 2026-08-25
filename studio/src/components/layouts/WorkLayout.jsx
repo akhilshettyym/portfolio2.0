@@ -1,9 +1,10 @@
 import React from "react";
-import TrackTrail from "@/components/TrackTrail";
-import LazyLoad from "@/components/basic/LazyLoad";
-import SelectedWorks from "@/components/SelectedWorks";
-import MyExperienceTiered from "@/components/TieredComponents/MyExperienceTiered";
-import GithubGraphQlTiered from "@/components/TieredComponents/GithubGraphQlTiered";
+import LazyLoad from "@/components/core/LazyLoad";
+import DevTicker from "@/components/sections/DevTicker";
+import TrackTrail from "@/components/sections/TrackTrail";
+import SelectedWorks from "@/components/sections/SelectedWorks";
+import MyExperienceTiered from "@/components/Tiered/MyExperienceTiered";
+import GithubGraphQlTiered from "@/components/Tiered/GithubGraphQlTiered";
 
 export default function WorkLayout({ content = {} }) {
   return (
@@ -11,6 +12,8 @@ export default function WorkLayout({ content = {} }) {
       <section id="projects">
         <SelectedWorks initialProjects={content.works} />
       </section>
+
+      <DevTicker />
 
       <section id="experience">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>

@@ -2,13 +2,13 @@
 
 import "@/styles/navbar.css";
 import Link from "next/link";
-import Logo from "@/components/Logo";
-import ConsoleModal from "./ConsoleModal";
+import Logo from "@/components/basic/Logo";
 import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
-import ModeSwitch from "@/components/ModeSwitch";
 import { useTheme } from "@/context/ThemeContext";
+import ConsoleModal from "../modals/ConsoleModal";
 import { getNavbarStyles } from "@/utils/themeSwatch";
+import ModeSwitch from "@/components/basic/ModeSwitch";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
@@ -89,7 +89,7 @@ function GlitchNavItem({ href, label, active, delay = 0, theme }) {
   );
 }
 
-const Navbar = () => {
+const NavbarLayout = () => {
   const { theme } = useTheme();
   const pathname = usePathname();
   const [time, setTime] = useState("");
@@ -342,4 +342,4 @@ const Navbar = () => {
   );
 };
 
-export default memo(Navbar);
+export default memo(NavbarLayout);

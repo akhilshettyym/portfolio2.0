@@ -7,7 +7,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const LoadingFallback = () => <div style={{ width: "100%", minHeight: "420px", background: "transparent" }} />;
 
-const DynamicGithubGraphQl = dynamic(() => import("@/components/GithubGraphQl"), {
+const DynamicGithubGraphQl = dynamic(() => import("@/components/sections/GithubGraphQl"), {
   loading: LoadingFallback,
   ssr: false,
 });

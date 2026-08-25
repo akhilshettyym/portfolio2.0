@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { ShowToast } from "@/components/basic/ShowToast";
-import CreateSomething from "@/components/CreateSomething";
+import CreateSomething from "@/components/sections/CreateSomething";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 jest.mock("axios");

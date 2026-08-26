@@ -11,6 +11,8 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
 import { getProfileMarqueeStyles, getProfileStyles } from "@/utils/themeSwatch";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
+import Subject from "../basic/Subject";
+import FlowState from "../animations/FlowState";
 
 const ScrollMarquee = ({
   texts = ["DEFAULT TEXT"],
@@ -140,6 +142,7 @@ export default function SubjectProfile() {
           </motion.div>
         </div>
       </div>
+
       <motion.div {...FADEUP} className="relative z-20 pt-3 pb-3">
         <div className="mx-auto max-w-8xl">
           <div className="relative flex items-center justify-between gap-6">
@@ -170,6 +173,7 @@ export default function SubjectProfile() {
           </div>
         </div>
       </motion.div>
+
       <div
         className="absolute inset-0 z-0 opacity-15 pointer-events-none"
         style={{
@@ -177,6 +181,7 @@ export default function SubjectProfile() {
           backgroundSize: "48px 48px",
         }}
       />
+
       <motion.div
         variants={fadeInContainer}
         initial="hidden"
@@ -184,9 +189,10 @@ export default function SubjectProfile() {
         viewport={{ once: true, margin: "-100px" }}
         className="max-w-360 mx-auto relative z-10 flex flex-col gap-10">
         <div className="w-full flex flex-col lg:flex-row gap-8">
+          {/* ABOUT ME — 65% */}
           <motion.div
             variants={itemReveal}
-            className={`flex-1 border p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group ${styles.cardBg}`}>
+            className={`flex-1 lg:flex-[0_0_60%] border p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group ${styles.cardBg}`}>
             <ScrollMarquee
               theme={theme}
               texts={["ABOUT ME"]}
@@ -196,7 +202,9 @@ export default function SubjectProfile() {
               direct={true}
               className={`border-b ${styles.marqueeBorder}`}
             />
+
             <ScrollMarquee theme={theme} texts={welcomeTexts} baseSpeed={1.2} variant="small" className="mt-2" />
+
             <div className="mt-4">
               <p className={`text-lg leading-relaxed font-light text-justify ${styles.textBody}`}>
                 I am a multidisciplinary creator{" "}
@@ -205,31 +213,47 @@ export default function SubjectProfile() {
                   engineering high-impact digital experiences
                 </span>{" "}
                 at the intersection of robust code and beautiful design. My methodology is inherently systematic,
-                architectural, and scalable.
+                architectural, and scalable, while intentionally bridging{" "}
+                <span className={`font-medium ${styles.textHighlight}`}>
+                  user psychology with comprehensive engineering strategy
+                </span>
+                .
               </p>
             </div>
           </motion.div>
+
           <motion.div
             variants={itemReveal}
-            className={`flex-1 border p-6 flex flex-col justify-between shadow-sm rounded-2xl ${styles.cardBg}`}>
+            className={`flex-1 lg:flex-[0_0_40%] border p-6 flex flex-col justify-between shadow-sm rounded-2xl ${styles.cardBg}`}>
             <div
               className={`relative w-full h-48 md:h-40 mb-6 border overflow-hidden rounded-2xl group shadow-inner ${styles.nodeStatus}`}>
+              <FlowState
+                className="z-0"
+                density={16}
+                matrixSpeed={0.16}
+                matrixOpacity={0.5}
+                xScale={1.2}
+                yScale={0.4}
+                distortion={0.055}
+                lineIntensity={0.075}
+                lineSpeed={0.45}
+                lineOpacity={0.9}
+              />
+
               <div
-                className={`absolute top-3 left-3 backdrop-blur px-2 py-1 text-[10px] font-mono tracking-wider rounded border uppercase ${styles.nodeStatusText}`}>
+                className={`absolute top-3 left-3 z-10 backdrop-blur px-2 py-1 text-[10px] font-mono tracking-wider rounded border uppercase ${styles.nodeStatusText}`}>
                 live_node_status // active
               </div>
             </div>
+
             <p className={`text-sm md:text-base leading-relaxed font-light text-justify ${styles.textBody}`}>
-              Every project I build intentionally bridges
-              <span className={`font-medium ${styles.textHighlight}`}>
-                user psychology with comprehensive engineering strategy
-              </span>
-              . I build web ecosystems that are visually striking and structurally bulletproof. By leveraging
-              contemporary headless stacks, tailored APIs, and purposeful interactions, I unlock flawless deployment
-              performance.
+              Every project I build intentionally bridges. I build web ecosystems that are visually striking and
+              structurally bulletproof. By leveraging contemporary headless stacks, tailored APIs, and purposeful
+              interactions, I unlock flawless deployment performance.
             </p>
           </motion.div>
         </div>
+
         <motion.div
           variants={itemReveal}
           className={`w-full border p-8 md:p-12 relative shadow-xl rounded-xl ${styles.mainCard}`}>
@@ -306,18 +330,46 @@ export default function SubjectProfile() {
               <div
                 className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`}
               />
-              <div className={`relative w-full h-100 overflow-hidden rounded-lg ${styles.imgPlaceholder}`}>
-                {/* Image element placeholder */}
+              <div className={`relative w-full h-95 overflow-hidden rounded-lg ${styles.imgPlaceholder}`}>
+                <Subject />
               </div>
+
               <div
-                className={`absolute bottom-4 left-4 backdrop-blur-md border p-3 shadow-xl font-mono select-none rounded-lg ${styles.sysPanel} ${isMobile ? "w-60" : "w-70"}`}>
-                <div className="flex items-center justify-between gap-2 mb-1.5">
+                className={`absolute bottom-4 left-1/2 -translate-x-1/2 backdrop-blur-md border p-1 shadow-xl font-mono  select-none rounded-lg ${styles.sysPanel} ${isMobile ? "w-64" : "w-75"}`}>
+                <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-1.5">
                     <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${styles.sysDot}`} />
-                    <p className={`text-[10px] font-bold tracking-wider ${styles.sysHeader}`}>CORE_SYS // ENGR.AV2</p>
+                    <p className={`text-[11px] font-bold tracking-wider ${styles.sysHeader}`}>CORE_SYS // ENGR.AV2</p>
+                  </div>
+
+                  <span className={`text-[8px] tracking-widest opacity-60 ${styles.sysText}`}>ONLINE</span>
+                </div>
+
+                <div className="flex items-center justify-center gap-4 mt-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>STATUS</span>
+                    <span className={`text-[8px] ${styles.sysHeader}`}>STABLE</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>UPTIME</span>
+                    <span className={`text-[8px] ${styles.sysHeader}`}>99.9%</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>LATENCY</span>
+                    <span className={`text-[8px] ${styles.sysHeader}`}>24ms</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>LOAD</span>
+                    <span className={`text-[8px] ${styles.sysHeader}`}>18%</span>
                   </div>
                 </div>
-                <p className={`text-[9px] tracking-wide ${styles.sysText}`}>LATENCY: OPTIMAL // LOC: GLOBAL</p>
+
+                <div className={`mt-2 pt-2 border-t opacity-40 ${styles.sysBorder}`}>
+                  <p className={`text-[7px] tracking-[0.18em] ${styles.sysText}`}>LATENCY: OPTIMAL // SIGNAL: ACTIVE</p>
+                </div>
               </div>
             </div>
           </div>

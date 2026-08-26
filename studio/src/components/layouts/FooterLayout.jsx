@@ -14,6 +14,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/themeSwatch";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
+import FooterImage from "../basic/FooterImage";
 
 function splitLetters(text) {
   return Array.from(text);
@@ -268,8 +269,20 @@ const FooterLayout = () => {
                     </div>
 
                     <div
-                      className={`w-[50%] rounded-md p-3 border transition-colors duration-500 flex items-center justify-center font-bold text-sm tracking-wider ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
-                      ABOUT
+                      className={`w-[50%] rounded-md border p-3 transition-colors duration-500 flex items-center gap-4 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
+                      <div className="flex w-[40%] items-center py-2 justify-start">
+                        <FooterImage className="w-full" />
+                      </div>
+
+                      <div className="flex h-full flex-1 items-center justify-center">
+                        <div className="flex flex-col justify-center text-justify">
+                          <span className="text-[7px] leading-normal opacity-40">
+                            Usually somewhere between coffee, code & curiosity. I like making things that feel simple,
+                            sometimes too simple. Probably overthinking the details, always curious about what&apos;s
+                            next. Still figuring it out {":)"} One thing at a time. Never really done experimenting.
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -553,8 +566,20 @@ const FooterLayout = () => {
                     </div>
 
                     <div
-                      className={`w-[50%] rounded-md p-3 border transition-colors duration-500 flex items-center justify-center font-bold text-sm tracking-wider ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
-                      ABOUT
+                      className={`w-[50%] rounded-md border p-3 transition-colors duration-500 flex items-center gap-4 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
+                      <div className="flex w-[40%] items-center py-2 justify-start">
+                        <FooterImage className="w-full" />
+                      </div>
+
+                      <div className="flex h-full flex-1 items-center justify-center">
+                        <div className="flex flex-col justify-center text-justify">
+                          <span className="text-[7px] leading-normal opacity-40">
+                            Usually somewhere between coffee, code & curiosity. I like making things that feel simple,
+                            sometimes too simple. Probably overthinking the details, always curious about what&apos;s
+                            next. Still figuring it out {":)"} One thing at a time. Never really done experimenting.
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 

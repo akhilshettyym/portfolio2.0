@@ -818,3 +818,214 @@ export const DEFAULT_TRAIL_DATA = {
   badges: "257",
   trails: "24",
 };
+
+// Flow State
+
+export const FLOW_STATE = {
+  vertexShader: `
+  attribute vec3 position;
+
+  void main() {
+    gl_Position = vec4(position, 1.0);
+  }
+`,
+
+  fragmentShaderTier1: `
+  precision highp float;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  uniform float density;
+  uniform float matrixSpeed;
+  uniform float matrixOpacity;
+
+  uniform float xScale;
+  uniform float yScale;
+  uniform float distortion;
+  uniform float lineIntensity;
+  uniform float lineSpeed;
+  uniform float lineOpacity;
+
+  float hash(float n) {
+    return fract(
+      sin(n) * 43758.5453123
+    );
+  }
+
+  float hash21(vec2 p) {
+    return fract(
+      sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123
+    );
+  }
+
+  float glyph(vec2 uv, float seed) {
+    vec2 cell = floor(uv);
+    vec2 local = fract(uv);
+
+    float randomValue = hash21(cell + seed);
+    float mode = floor(randomValue * 6.0);
+
+    float value = 0.0;
+
+    if (mode < 1.0) {
+      value = step(0.20, local.y) * step(local.y, 0.34) * step(0.12, local.x) * step(local.x, 0.88);
+    }
+
+    else if (mode < 2.0) {
+      value = step(0.20, local.x) * step(local.x, 0.34) * step(0.10, local.y) * step(local.y, 0.90);
+    }
+
+    else if (mode < 3.0) {
+      float vertical = step(0.18, local.x) * step(local.x, 0.34) * step(0.10, local.y) * step(local.y, 0.90);
+      float horizontal = step(0.10, local.x) * step(local.x, 0.88) * step(0.66, local.y) * step(local.y, 0.84);
+      value = max(vertical, horizontal);
+    }
+
+    else if (mode < 4.0) {
+      float left = step(0.18, local.x) * step(local.x, 0.30);
+      float right = step(0.70, local.x) * step(local.x, 0.82);
+      float horizontal = step(0.20, local.y) * step(local.y, 0.34);
+      value = max(left, max(right, horizontal)
+      );
+    }
+
+    else if (mode < 5.0) {
+      value = step(0.35, local.x) * step(local.x, 0.65) * step(0.35, local.y) * step(local.y, 0.65);
+    }
+
+    else {
+      value = step(0.70, fract(local.x + local.y));
+    }
+
+    return value;
+  }
+
+  float codeColumn(vec2 uv, float column, float seed) {
+    float columnRandom = hash(column + seed);
+
+    float columnSpeed = matrixSpeed * mix( 0.55, 1.35, columnRandom);
+    float stream = uv.y + time * columnSpeed;
+    float characterY = stream * mix( 8.0, 16.0, hash(column + 21.4));
+    float characterIndex = floor(characterY);
+
+    vec2 glyphUV = vec2(fract(uv.x * 1.3), fract(characterY));
+
+    float character = glyph( vec2(glyphUV.x * 3.0, glyphUV.y * 1.4), characterIndex + seed);
+    float visible = step(0.22, hash(characterIndex + column * 17.31 + seed));
+
+    character *= visible;
+
+    float wrapped = fract(stream * 0.11);
+    float head = smoothstep(0.0, 0.18, wrapped);
+    float tail = 1.0 - smoothstep(0.70, 1.0, wrapped);
+
+    float streamFade = head * tail;
+
+    float brightCharacter = step(0.90, hash(characterIndex + column * 9.17));
+
+    return character * streamFade * mix(0.20, 1.0, brightCharacter);
+  }
+
+  vec3 flowingLine(vec2 p) {
+    float d = length(p) * distortion;
+    float rx = p.x * (1.0 + d);
+    float gx = p.x;
+    float bx = p.x * (1.0 - d);
+
+    float waveR = sin((rx + time * lineSpeed) * xScale) * yScale;
+    float waveG = sin((gx + time * lineSpeed) * xScale) * yScale;
+    float waveB = sin((bx + time * lineSpeed) * xScale) * yScale;
+
+    float lineR = lineIntensity / max(abs(p.y + waveR), 0.008);
+    float lineG = lineIntensity / max(abs(p.y + waveG), 0.008);
+    float lineB = lineIntensity / max(abs(p.y + waveB), 0.008);
+
+    return vec3(lineR, lineG, lineB);
+  }
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+    float matrixColumns = density * resolution.x / 100.0;
+    float columnPosition = uv.x * matrixColumns;
+    float column = floor(columnPosition);
+    float localX = fract(columnPosition);
+    float columnSeed = hash(column * 12.731);
+    float columnMask = smoothstep(0.08, 0.20, localX) * (1.0 - smoothstep(0.72, 0.92, localX));
+
+    float matrix = codeColumn(uv, column, columnSeed);
+
+    matrix *= columnMask;
+    float scanline = 0.94 + 0.06 * sin(gl_FragCoord.y * 0.15);
+
+    matrix *= scanline;
+
+    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+
+    vec3 line = flowingLine(p);
+
+    vec3 background = vec3(0.004, 0.006, 0.008);
+    vec3 matrixColor = vec3(0.10, 0.55, 0.38);
+
+    vec3 matrixLayer = matrixColor * matrix * matrixOpacity;
+    vec3 color = background + matrixLayer;
+
+    color += line * lineOpacity;
+
+    gl_FragColor = vec4(color, 1.0);
+  }
+`,
+
+  fragmentShaderTier2: `
+  precision mediump float;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  uniform float density;
+  uniform float matrixSpeed;
+  uniform float matrixOpacity;
+
+  uniform float xScale;
+  uniform float yScale;
+  uniform float lineIntensity;
+  uniform float lineSpeed;
+  uniform float lineOpacity;
+
+  float hash(vec2 p) {
+    return fract(
+      sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123
+    );
+  }
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+    float columns = max(density * 0.55, 4.0);
+    float x = uv.x * columns;
+    float column = floor(x);
+    float localX = fract(x);
+
+    float streamSpeed = matrixSpeed * mix(0.7, 1.1, hash(vec2(column, 4.17)));
+    float stream = uv.y + time * streamSpeed;
+    float cellY = floor(stream * 9.0);
+
+    float character = step(0.58, hash(vec2(column, cellY)));
+
+    float columnMask = smoothstep( 0.15, 0.30, localX) * (1.0 - smoothstep(0.70, 0.85, localX));
+    float streamFade = smoothstep(0.0, 0.15, fract(stream)) * (1.0 - smoothstep(0.78, 1.0, fract(stream)));
+    float matrix = character * columnMask * streamFade * matrixOpacity;
+
+    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+
+    float wave =sin((p.x + time * lineSpeed) * xScale) * yScale;
+
+    float distanceToWave = abs(p.y + wave);
+    float line = lineIntensity / max(distanceToWave, 0.025);
+    line = min(line, 1.0);
+    vec3 background = vec3(0.004, 0.006, 0.008);
+    vec3 matrixColor = vec3(0.10, 0.40, 0.30);
+    vec3 color = background + matrixColor * matrix;
+    color += vec3(line) * lineOpacity;
+    gl_FragColor = vec4(color, 1.0);
+  }`,
+};

@@ -184,11 +184,7 @@
   position: absolute;
   inset: 0;
   height: 10%;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.4) 1%,
-    transparent 50%
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 1%, transparent 50%);
   pointer-events: none;
   z-index: 3;
 }
@@ -198,11 +194,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.5),
-      transparent 4%
-    ),
+    linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent 4%),
     linear-gradient(
       225deg,
       rgba(162, 162, 162, 0.1) 0%,
@@ -277,14 +269,12 @@
 
 .album:hover .album-cover,
 .album.open .album-cover {
-  transform: translateX(var(--cover-translate))
-    rotate(var(--cover-rotate));
+  transform: translateX(var(--cover-translate)) rotate(var(--cover-rotate));
 }
 
 .album:hover .album-vinyl,
 .album.open .album-vinyl {
-  transform: translateX(var(--vinyl-translate))
-    rotate(var(--vinyl-rotate));
+  transform: translateX(var(--vinyl-translate)) rotate(var(--vinyl-rotate));
 }
 
 .album.small {

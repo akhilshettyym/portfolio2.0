@@ -202,16 +202,16 @@ const HeroSection = ({ active = true }) => {
       const text = "AKHIL SHETTY";
 
       const baseFontSize = 100;
-      ctx.font = `900 ${baseFontSize}px "Arial Black", "Impact", system-ui, sans-serif`;
+      ctx.font = `900 ${baseFontSize}px "Helvetica Neue", "Arial", sans-serif`;
 
       if ("letterSpacing" in ctx) {
-        ctx.letterSpacing = "-0.09em";
+        ctx.letterSpacing = "-0.1em";
       }
 
       const textWidth = ctx.measureText(text).width;
 
       const maxPhysicalWidth = 750 * dpr;
-      const targetWidth = Math.min(w * 0.7, maxPhysicalWidth);
+      const targetWidth = Math.min(w * 2, maxPhysicalWidth);
 
       const globalScale = targetWidth / textWidth;
 
@@ -220,7 +220,7 @@ const HeroSection = ({ active = true }) => {
       ctx.scale(globalScale, globalScale);
 
       ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = baseFontSize * 0.02;
+      ctx.lineWidth = baseFontSize * 0.01;
       ctx.lineJoin = "round";
 
       ctx.fillText(text, 0, 0);
@@ -598,16 +598,12 @@ const HeroSection = ({ active = true }) => {
               ? "none"
               : sceneAssets
                 ? `linear-gradient(
-                to bottom,
-                rgba(255,255,255,0.35),
-                rgba(255,255,255,0.05)
+                to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)
               ),
               url("/clouds_background/${sceneAssets.background}.png")`
                 : "none",
           }}
         />
-
-        {/* Rest of Hero content */}
       </div>
     </div>
   );

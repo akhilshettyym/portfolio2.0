@@ -91,8 +91,7 @@ export default function PersistentHeroLayer() {
           duration: 0.7,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="pointer-events-none fixed inset-0 z-0"
-      >
+        className="pointer-events-none fixed inset-0 z-0">
         <HeroSection active={isInfoRoute} />
       </motion.div>
 

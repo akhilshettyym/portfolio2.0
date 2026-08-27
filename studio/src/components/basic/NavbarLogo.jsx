@@ -5,7 +5,7 @@ import "@/styles/navbar.css";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
 
-const Logo = ({ className = "" }) => {
+const NavbarLogo = ({ className = "" }) => {
   const { theme } = useTheme();
 
   const isDark = theme === "dark";
@@ -46,4 +46,4 @@ const Logo = ({ className = "" }) => {
   );
 };
 
-export default Logo;
+export default NavbarLogo;

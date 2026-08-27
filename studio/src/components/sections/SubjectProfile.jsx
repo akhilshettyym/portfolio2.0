@@ -1,18 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import { FADEUP } from "@/utils/basic";
 import { useTheme } from "@/context/ThemeContext";
 import { IoIdCardOutline } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { motion, AnimatePresence } from "framer-motion";
+import FlowState from "@/components/animations/FlowState";
+import SubjectAscii from "@/components/basic/SubjectAscii";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
 import { getProfileMarqueeStyles, getProfileStyles } from "@/utils/themeSwatch";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
-import Subject from "../basic/Subject";
-import FlowState from "../animations/FlowState";
 
 const ScrollMarquee = ({
   texts = ["DEFAULT TEXT"],
@@ -331,7 +330,7 @@ export default function SubjectProfile() {
                 className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`}
               />
               <div className={`relative w-full h-95 overflow-hidden rounded-lg ${styles.imgPlaceholder}`}>
-                <Subject />
+                <SubjectAscii />
               </div>
 
               <div

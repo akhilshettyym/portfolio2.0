@@ -30,18 +30,9 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
   const hasInitialTrailhead =
     initialTrailhead !== undefined && initialTrailhead !== null && typeof initialTrailhead === "object";
 
-  /*
-   * Only fetched data belongs in state.
-   * initialTrailhead is already a prop, so there is no need
-   * to copy it into state and synchronize it with an effect.
-   */
   const [fetchedData, setFetchedData] = useState(EMPTY_TRAILHEAD);
   const [isFetching, setIsFetching] = useState(!hasInitialTrailhead);
 
-  /*
-   * Prefer server/passed data when available, otherwise use
-   * the asynchronously fetched data.
-   */
   const data = hasInitialTrailhead
     ? {
         ...EMPTY_TRAILHEAD,
@@ -125,7 +116,6 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
 
       <div
         className={`mx-auto flex w-full max-w-328 flex-col overflow-hidden rounded-md border transition-all duration-500 group lg:flex-row ${styles.container}`}>
-        {/* Rank */}
         <div
           className={`relative flex min-w-50 shrink-0 flex-col items-center justify-center border-b p-4 transition-colors duration-500 lg:border-b-0 lg:border-r ${styles.rankBox}`}>
           <div
@@ -148,7 +138,6 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
           </h3>
         </div>
 
-        {/* Stats */}
         <div className="flex flex-1 flex-row flex-wrap items-center justify-around gap-4 px-4 py-6 lg:flex-nowrap lg:gap-2 lg:px-10 lg:py-0">
           <StatItem
             value={data.superbadges}
@@ -189,7 +178,6 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
           />
         </div>
 
-        {/* Marquee */}
         <div
           className={`relative flex h-2 w-full shrink-0 items-center overflow-hidden border-t fade-edges transition-colors duration-500 lg:h-auto lg:w-75 lg:border-l lg:border-t-0 ${styles.marqueeBox}`}
           aria-label="Trailhead achievements">
@@ -212,18 +200,9 @@ function Divider({ className = "" }) {
 
 const StatItem = memo(function StatItem({ value, label, valueClass = "", labelClass = "", isTier2 = false }) {
   const normalizedValue = formatValue(value);
-
-  /*
-   * The animation state also remembers which source value
-   * it belongs to. This means a prop change never needs
-   * a synchronization effect.
-   */
   const [animation, setAnimation] = useState(null);
   const animationRef = useRef(null);
 
-  /*
-   * Cleanup only. This effect does not update state.
-   */
   useEffect(() => {
     return () => {
       if (animationRef.current) {
@@ -269,10 +248,6 @@ const StatItem = memo(function StatItem({ value, label, valueClass = "", labelCl
     }, 60);
   }, [isTier2, normalizedValue, value]);
 
-  /*
-   * If the incoming prop changed, the old animation is ignored
-   * automatically because its source no longer matches.
-   */
   const displayText = animation?.source === normalizedValue ? animation.text : normalizedValue;
 
   return (

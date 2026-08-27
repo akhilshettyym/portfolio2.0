@@ -1,3 +1,5 @@
+"use client";
+
 const ASCII_ART = `
 ::::::::::::::::::-::------:---:::::::::::::::::::::::::::::::+##%#%%*++=+=-:::::::::::::::::-::::::
 ::::::::::::::::::::::::-::::-::::::::::::::::::::::::::::::+*+*+=-=**#++-==::::::::::::::::::::::::
@@ -66,19 +68,10 @@ const ASCII_ART = `
 .::-----:------:::.:--.-+:-+=+++-.=++++++::-+++++++:::::::::.::::-++++++::::.:::::..:.::::::::::::::
 `;
 
-export default function FooterImage({ className = "" }) {
+export default function FooterAscii({ className = "" }) {
   return (
     <div className={`flex w-full items-center justify-start ${className}`}>
-      <pre
-        aria-hidden="true"
-        className="
-          m-0
-          w-full
-          whitespace-pre
-          font-mono
-          text-[1.5px]
-          leading-none
-        ">
+      <pre aria-hidden="true" className="m-0 w-full whitespace-pre font-mono text-[1.5px] leading-none">
         {ASCII_ART}
       </pre>
     </div>

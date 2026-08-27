@@ -2,9 +2,9 @@
 
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
+import { FLOW_STATE } from "@/utils/basic";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
-import { FLOW_STATE } from "@/utils/basic";
 
 const vertexShader = FLOW_STATE?.vertexShader;
 const fragmentShaderTier1 = FLOW_STATE?.fragmentShaderTier1;

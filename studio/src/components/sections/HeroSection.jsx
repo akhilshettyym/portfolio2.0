@@ -2,18 +2,11 @@
 
 import * as THREE from "three";
 import "@/styles/hero-section.css";
-import { motion } from "framer-motion";
-import { SiRevealdotjs } from "react-icons/si";
 import { useTheme } from "@/context/ThemeContext";
 import LimpModal from "@/components/modals/LimpModal";
-import GlitchText from "@/components/basic/GlitchText";
 import { getWeatherScene } from "@/utils/weather-scene";
-import WeatherIcon from "@/components/basic/WeatherIcon";
 import { CLOUD_SHADER, HERO_SHADER } from "@/utils/basic";
-import { HiMiniPlay, HiMiniPause } from "react-icons/hi2";
-import WordCarousel from "@/components/basic/WordCarousel";
 import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
-import LiquidGlass from "@/components/animations/LiquidGlass";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useCanvasVisibility } from "@/hooks/useCanvasVisibility";
@@ -593,10 +586,10 @@ const HeroSection = ({ active = true }) => {
   });
 
   return (
-    <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden text-white pb-8 md:pb-12">
+    <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
       {showModal && <LimpModal />}
 
-      <div className="wrapper">
+      <div className="wrapper relative min-h-screen w-full">
         <div
           ref={containerRef}
           className={`canvas-bg absolute inset-0 z-0 ${isDarkOrMetal ? "bg-black" : ""}`}
@@ -604,111 +597,17 @@ const HeroSection = ({ active = true }) => {
             backgroundImage: isDarkOrMetal
               ? "none"
               : sceneAssets
-                ? `linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)), url("/clouds_background/${sceneAssets.background}.png")`
+                ? `linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.35),
+                rgba(255,255,255,0.05)
+              ),
+              url("/clouds_background/${sceneAssets.background}.png")`
                 : "none",
           }}
         />
 
-        <div className="hidden">
-          <LiquidGlass width="50px" height="180px" className="p-0">
-            <button
-              type="button"
-              onClick={handleCloudControl}
-              aria-label={paused ? "Resume animation" : "Pause animation"}
-              disabled={isTier2}
-              className={`group absolute top-3 left-1/2 -translate-x-1/2 h-11 w-11 z-20`}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative z-10 flex h-10 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
-                  {paused ? (
-                    <HiMiniPlay size={14} className="translate-x-[0.5px] text-black/50" />
-                  ) : (
-                    <HiMiniPause size={14} className="text-black/50" />
-                  )}
-                </div>
-              </div>
-              <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[10px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
-                {isTier2 ? "DISABLED" : paused ? "Run Clouds" : "Stall Clouds"}
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleRestartIntroScene}
-              className="group absolute top-14 left-1/2 -translate-x-1/2 h-12 w-12 z-20">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="mr-1/2 relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/10 backdrop-blur-xl transition-all duration-300 group-hover:scale-110 group-hover:border-white/30">
-                  <SiRevealdotjs size={15} className="translate-x-[0.5px] text-black/50" />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-4 whitespace-nowrap rounded-lg bg-transparent border border-white/0 backdrop-blur-xl px-3.5 py-1.5 text-[10px] font-medium text-black/50 opacity-0 translate-x-3 transition-all duration-200 group-hover:translate-x-0 group-hover:border group-hover:border-slate-100 group-hover:opacity-100 shadow-xl uppercase">
-                Run Intro
-              </div>
-            </button>
-
-            {sceneAssets && (
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10">
-                <WeatherIcon />
-              </div>
-            )}
-          </LiquidGlass>
-        </div>
-
-        <div className="hero-text">
-          <span className="line dim uppercase">
-            BUILD SYSTEMS <br />
-          </span>
-          <span className="line dim uppercase">
-            OPTIMIZE SCALE x LATENCY <br />
-          </span>
-          <span className="line strong">
-            <span className="text-md uppercase tracking-tight"> OPS </span> <WordCarousel />
-          </span>
-
-          <button ref={btnRef} type="button" className="btn">
-            <span className="label">
-              <span className="main"> See how we create outcomes </span>
-              <span className="alt"> Explore our work → </span>
-            </span>
-          </button>
-        </div>
-
-        <div className="hero-subtext-wrap">
-          <p className="hero-subtext">
-            Design and code, refined until <br />
-            nothing feels unnecessary.
-          </p>
-          <span className="dot tl" />
-          <span className="dot tr" />
-          <span className="dot bl" />
-          <span className="dot br" />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="absolute bottom-0 left-0 w-full z-50 pointer-events-none text-gray-400">
-          <div className="relative px-10 py-4 text-xs tracking-widest">
-            <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
-              ©001
-            </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto hover:text-gray-200 transition">
-              (DEV)
-            </div>
-            <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-auto">
-              <GlitchText text="SCROLL_MORE__" />
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="scroll-wrap" style={{ top: "110px", right: "40px" }}>
-          <span className="scroll-text"> DISCOVER </span>
-          <div className="scroll-indicator" />
-        </div>
-
-        <div className="corner" style={{ top: "120px", left: "40px" }} />
-        <div className="corner" style={{ bottom: "40px", left: "40px" }} />
-        <div className="corner" style={{ bottom: "40px", right: "40px" }} />
+        {/* Rest of Hero content */}
       </div>
     </div>
   );

@@ -1,0 +1,348 @@
+.album-hero {
+  min-height: 100vh;
+  margin: 0;
+  padding: 4rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d5d5d5;
+  color: #1e1e1e;
+}
+
+.album-hero-inner {
+  width: min(1200px, 90vw);
+}
+
+.album-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-top: 2rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.album-header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.album-header h1,
+.album-author h3 {
+  margin: 0;
+  font-family: Karantina, system-ui, sans-serif;
+}
+
+.album-header h1 {
+  font-size: clamp(6rem, 16vw, 14rem);
+  line-height: 0.8;
+}
+
+.album-header-left img {
+  width: 250px;
+  max-width: 100%;
+}
+
+.album-author {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: right;
+}
+
+.album-author h3 {
+  font-size: clamp(3rem, 5vw, 5rem);
+}
+
+.album-author div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.album-author p {
+  margin: 0;
+}
+
+.album-author div p:nth-child(2) {
+  font-weight: 500;
+}
+
+.album-author img {
+  width: 250px;
+  max-width: 100%;
+}
+
+.album-groups {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.album-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.album-row-small {
+  gap: 1.5rem;
+}
+
+.album {
+  --album-size: 300px;
+  --vinyl-size: 280px;
+  --border-radius: 3px;
+  --cover-translate: -10px;
+  --cover-rotate: -2deg;
+  --vinyl-translate: 50%;
+  --vinyl-rotate: 360deg;
+
+  --album-glow-color: 255, 196, 120;
+  --album-glow-opacity: 0.45;
+  --album-glow-opacity-active: 0.85;
+  --album-glow-blur: 22px;
+  --album-glow-blur-active: 32px;
+  --album-glow-spread: -25%;
+
+  position: relative;
+  width: var(--album-size);
+  height: var(--album-size);
+  cursor: pointer;
+}
+
+.album::before {
+  content: "";
+  position: absolute;
+  inset: var(--album-glow-spread);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--album-glow-color), 0.55) 0%,
+    rgba(var(--album-glow-color), 0.25) 40%,
+    rgba(var(--album-glow-color), 0) 72%
+  );
+  filter: blur(var(--album-glow-blur));
+  opacity: var(--album-glow-opacity);
+  z-index: 0;
+  pointer-events: none;
+  transform: scale(1);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+  animation: album-glow-pulse 3.4s ease-in-out infinite;
+}
+
+.album:hover::before,
+.album.open::before {
+  opacity: var(--album-glow-opacity-active);
+  filter: blur(var(--album-glow-blur-active));
+}
+
+@keyframes album-glow-pulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .album::before {
+    animation: none;
+  }
+}
+
+.album-cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  transition: transform 0.5s ease-in-out;
+}
+
+.album-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.album-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: 10%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.4) 1%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+.album-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.5),
+      transparent 4%
+    ),
+    linear-gradient(
+      225deg,
+      rgba(162, 162, 162, 0.1) 0%,
+      rgba(162, 162, 162, 0.2) 4%,
+      rgba(255, 255, 255, 0.2) 6%,
+      rgba(255, 255, 255, 0.6) 7%,
+      rgba(255, 255, 255, 0.2) 7%,
+      rgba(218, 218, 218, 0.04) 7%,
+      transparent 6%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(14, 14, 14, 0.7),
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.2) 4%,
+      rgba(14, 14, 14, 0.2) 6%,
+      rgba(255, 255, 255, 0.3) 7%,
+      rgba(218, 218, 218, 0.4) 7%,
+      transparent 8%
+    );
+  pointer-events: none;
+  z-index: 3;
+}
+
+.album-vinyl {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  width: var(--vinyl-size);
+  height: var(--vinyl-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 50deg at 50% 50%,
+      transparent 46%,
+      rgba(255, 255, 255, 0.1) 48%,
+      rgba(255, 255, 255, 0.15) 51%,
+      transparent 56%
+    ),
+    conic-gradient(
+      from 225deg at 50% 50%,
+      transparent 46%,
+      rgba(255, 255, 255, 0.1) 48%,
+      rgba(255, 255, 255, 0.15) 51%,
+      transparent 56%
+    ),
+    repeating-radial-gradient(
+      circle,
+      rgba(120, 120, 120, 0.1) 0%,
+      rgba(192, 192, 192, 0.01) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    #000;
+  transform: translateX(0) rotate(270deg);
+  transition: transform 0.5s ease-in-out;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.vinyl-cover {
+  width: calc(var(--vinyl-size) / 2.8);
+  height: calc(var(--vinyl-size) / 2.8);
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 0 5px #000;
+}
+
+.album:hover .album-cover,
+.album.open .album-cover {
+  transform: translateX(var(--cover-translate))
+    rotate(var(--cover-rotate));
+}
+
+.album:hover .album-vinyl,
+.album.open .album-vinyl {
+  transform: translateX(var(--vinyl-translate))
+    rotate(var(--vinyl-rotate));
+}
+
+.album.small {
+  --album-size: 150px;
+  --vinyl-size: 130px;
+  --border-radius: 2px;
+  --cover-translate: -5px;
+  --cover-rotate: -1deg;
+  --vinyl-translate: 50%;
+  --vinyl-rotate: 360deg;
+}
+
+.album.mini {
+  --album-size: 28px;
+  --vinyl-size: 24px;
+  --border-radius: 5px;
+  --cover-translate: -3px;
+  --cover-rotate: -3deg;
+  --vinyl-translate: 45%;
+  --vinyl-rotate: 220deg;
+  --album-glow-blur: 8px;
+  --album-glow-blur-active: 12px;
+  --album-glow-spread: -65%;
+}
+
+.album.mini .album-vinyl {
+  top: 1px;
+}
+
+.album.mini .vinyl-cover {
+  box-shadow: 0 0 0 2px #000;
+}
+
+@media screen and (max-width: 767px) {
+  .album-header {
+    align-items: flex-start;
+  }
+
+  .album-header-left img,
+  .album-author img {
+    display: none;
+  }
+
+  .album-author {
+    width: 100%;
+  }
+
+  .album-row {
+    gap: 1.5rem;
+  }
+
+  .album {
+    --album-size: 240px;
+    --vinyl-size: 220px;
+  }
+
+  .album.small {
+    --album-size: 120px;
+    --vinyl-size: 105px;
+  }
+}

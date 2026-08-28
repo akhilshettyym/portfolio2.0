@@ -114,14 +114,14 @@ export default function SubjectProfile() {
           <motion.div {...FADEUP} className="md:col-span-8">
             <div className="overflow-hidden">
               <h1
-                className={`text-[clamp(3.4em,8vw,4.5rem)] md:text-[clamp(4.5rem,9vw,6rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${styles.h1Main}`}
+                className={`text-[clamp(3.4em,8vw,5rem)] md:text-[clamp(5rem,9vw,7rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${styles.h1Main}`}
                 style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                 FULL STACK
               </h1>
             </div>
             <div className="-mt-3 overflow-hidden">
               <h1
-                className={`text-[clamp(3rem,5vw,3rem)] font-black leading-[0.82] tracking-[-0.12em] will-change-transform ${styles.h1Sub}`}
+                className={`text-[clamp(3rem,5vw,3.5rem)] font-black leading-[0.82] tracking-[-0.12em] will-change-transform ${styles.h1Sub}`}
                 style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
                 DEVELOPER
               </h1>
@@ -188,7 +188,6 @@ export default function SubjectProfile() {
         viewport={{ once: true, margin: "-100px" }}
         className="max-w-360 mx-auto relative z-10 flex flex-col gap-10">
         <div className="w-full flex flex-col lg:flex-row gap-8">
-          {/* ABOUT ME — 65% */}
           <motion.div
             variants={itemReveal}
             className={`flex-1 lg:flex-[0_0_60%] border p-6 flex flex-col justify-center overflow-hidden relative shadow-sm rounded-2xl group ${styles.cardBg}`}>

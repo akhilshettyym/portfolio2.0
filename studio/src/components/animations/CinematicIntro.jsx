@@ -500,7 +500,6 @@ export default function CinematicIntro({ onComplete }) {
                 transition={{ duration: 0.8 }}
                 className="text-[clamp(3rem,10vw,4rem)] font-bold tracking-normal">
                 <span className="inline-block overflow-hidden">
-                  {" "}
                   {word}
                   <span className="ml-3 inline-block h-[1.0em] w-0.75 translate-y-[0.1em] animate-pulse bg-black" />
                 </span>
@@ -523,8 +522,7 @@ export default function CinematicIntro({ onComplete }) {
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[-80%]">
                 <div className="text-[clamp(2.8rem,8vw,3rem)] font-semibold tracking-tight whitespace-nowrap">
                   <CurtainText>
-                    {" "}
-                    My name is <span className="font-bold"> AKHIL </span>{" "}
+                    My name is <span className="font-bold"> AKHIL </span>
                   </CurtainText>
                 </div>
               </motion.div>
@@ -823,8 +821,7 @@ export default function CinematicIntro({ onComplete }) {
                   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                   className="max-w-5xl">
                   <div className="text-[clamp(2.2rem,6vw,3rem)] font-semibold tracking-tight text-black">
-                    {" "}
-                    I specialize in tools.{" "}
+                    I specialize in tools.
                   </div>
 
                   <div className="mt-4 text-[clamp(1.4rem,3.4vw,2rem)] text-black/60"> They work as I say. </div>
@@ -1000,8 +997,7 @@ export default function CinematicIntro({ onComplete }) {
                   transition={{ duration: 0.5 }}
                   className="max-w-5xl">
                   <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white">
-                    {" "}
-                    The most dangerous bugs...{" "}
+                    The most dangerous bugs...
                   </div>
                   <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72"> are the ones nobody sees. </div>
                 </motion.div>
@@ -1014,13 +1010,9 @@ export default function CinematicIntro({ onComplete }) {
                   transition={{ duration: 0.5 }}
                   className="max-w-5xl">
                   <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white">
-                    {" "}
-                    Intelligence generates code.{" "}
+                    Intelligence generates code.
                   </div>
-                  <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72">
-                    {" "}
-                    Experience prevents disasters.{" "}
-                  </div>
+                  <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72">Experience prevents disasters.</div>
                 </motion.div>
               )}
             </AnimatePresence>

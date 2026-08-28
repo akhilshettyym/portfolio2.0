@@ -9,19 +9,9 @@ import { memo, useEffect, useRef, useState } from "react";
 import { getBubbleSceneStyles } from "@/utils/themeSwatch";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { RADII, POSITIONS, TEXTURE_PATHS } from "@/utils/basic";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-
-export const TECH_STACK = [
-  "reactjs & nextjs",
-  "threejs & webgl",
-  "expressjs & nodejs",
-  "github & git",
-  "docker & CI/CD",
-  "mongodb & redux",
-  "salesforce & sql",
-];
+import { RADII, POSITIONS, TEXTURE_PATHS, TECH_STACK } from "@/utils/basic";
 
 function BubbleScene() {
   const { theme } = useTheme();

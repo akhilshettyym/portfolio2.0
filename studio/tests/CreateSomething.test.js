@@ -6,6 +6,10 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 jest.mock("axios");
 
+jest.mock("@/lib/recaptcha", () => ({
+  getRecaptchaToken: jest.fn().mockResolvedValue("test-captcha-token"),
+}));
+
 jest.mock("@/hooks/useDeviceType", () => ({
   useDeviceType: () => ({ isMobile: false }),
 }));
@@ -186,6 +190,7 @@ describe("CreateSomething Component", () => {
           email: "john@test.com",
           message: "Hello, just saying hi!",
           purpose: "say_hi",
+          captchaToken: "test-captcha-token",
         },
         expect.any(Object),
       );

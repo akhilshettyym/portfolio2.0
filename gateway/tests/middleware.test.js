@@ -1,7 +1,7 @@
-import { jest, describe, it, expect, beforeEach, afterEach } from "@jest/globals";
-import { protectAdminRoute } from "../src/middleware/auth.middleware.js";
-import { validateContactInquiry } from "../src/middleware/validation.middleware.js";
 import jwt from "jsonwebtoken";
+import { protectAdminRoute } from "../src/middleware/auth.middleware.js";
+import { jest, describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import { validateContactInquiry } from "../src/middleware/validation.middleware.js";
 
 describe("Middlewares", () => {
   let req, res, next;
@@ -84,7 +84,7 @@ describe("Middlewares", () => {
         name: "Jane Project",
         email: "jane@company.com",
         message: "Looking for an expert application engineer to assist.",
-        purpose: "work", // Requires budget & projectType
+        purpose: "work",
       };
 
       validateContactInquiry(req, res, next);

@@ -534,6 +534,16 @@ export const BUBBLE_TEXT_GROUPS = [
   },
 ];
 
+export const TECH_STACK = [
+  "reactjs & nextjs",
+  "threejs & webgl",
+  "expressjs & nodejs",
+  "github & git",
+  "docker & CI/CD",
+  "mongodb & redux",
+  "salesforce & sql",
+];
+
 /* CreateSomething */
 export const SERVICES = [
   { id: "frontend", label: "Frontend Development" },
@@ -588,63 +598,126 @@ export const HERO_SHADER = {
   `,
 
   simulationFragmentShader: `
-  uniform sampler2D textureA;
-  uniform sampler2D textTexture;
-  uniform vec2 mouse;
-  uniform vec2 resolution;
-  uniform float time;
-  uniform int frame;
-  
-  varying vec2 vUv;
-  const float delta = 1.4;
-  
-  void main() {
-      vec2 uv = vUv;
-      if(frame == 0){
-          gl_FragColor = vec4(0.0);
-          return;
-      }
-  
-      vec4 data = texture2D(textureA, uv);
-      float pressure = data.x;
-      float pVel = data.y;
-  
-      vec2 texelSize = 1.0 / resolution;
-  
-      float p_right = texture2D(textureA, uv + vec2(texelSize.x, 0.0)).x;
-      float p_left  = texture2D(textureA, uv - vec2(texelSize.x, 0.0)).x;
-      float p_up    = texture2D(textureA, uv + vec2(0.0, texelSize.y)).x;
-      float p_down  = texture2D(textureA, uv - vec2(0.0, texelSize.y)).x;
-  
-      if(uv.x <= texelSize.x) p_left = p_right;
-      if(uv.x >= 1.0 - texelSize.x) p_right = p_left;
-      if(uv.y <= texelSize.y) p_down = p_up;
-      if(uv.y >= 1.0 - texelSize.y) p_up = p_down;
-  
-      pVel += delta * (-2.0 * pressure + p_right + p_left) / 4.0;
-      pVel += delta * (-2.0 * pressure + p_up + p_down) / 4.0;
-  
-      pressure += delta * pVel;
-      pVel -= 0.005 * delta * pressure;
-  
-      pVel *= 0.90;
-      pressure *= 0.92;
-  
-      vec2 mouseUV = mouse / resolution;
-  
-      if(mouse.x > 0.0){
-          float radius = 0.08;
-          float dist = distance(uv, mouseUV);
-          if(dist < radius){
-              float isText = texture2D(textTexture, uv).r;
-              float influence = mix(0.1, 4.0, isText);
-              pressure += influence * (1.0 - dist / radius);
-          }
-      }
-  
-      gl_FragColor = vec4(pressure, pVel, (p_right - p_left) * 0.5, (p_up - p_down) * 0.5);
-  }
-  `,
+uniform sampler2D textureA;
+uniform sampler2D textTexture;
+uniform vec2 mouse;
+uniform vec2 resolution;
+uniform float time;
+uniform int frame;
+
+varying vec2 vUv;
+
+const float delta = 1.15;
+
+void main() {
+    vec2 uv = vUv;
+
+    if (frame == 0) {
+        gl_FragColor = vec4(0.0);
+        return;
+    }
+
+    vec4 data = texture2D(textureA, uv);
+
+    float pressure = data.x;
+    float pVel = data.y;
+
+    vec2 texelSize = 1.0 / resolution;
+
+    float p_right = texture2D(
+        textureA,
+        uv + vec2(texelSize.x, 0.0)
+    ).x;
+
+    float p_left = texture2D(
+        textureA,
+        uv - vec2(texelSize.x, 0.0)
+    ).x;
+
+    float p_up = texture2D(
+        textureA,
+        uv + vec2(0.0, texelSize.y)
+    ).x;
+
+    float p_down = texture2D(
+        textureA,
+        uv - vec2(0.0, texelSize.y)
+    ).x;
+
+    if (uv.x <= texelSize.x) p_left = p_right;
+    if (uv.x >= 1.0 - texelSize.x) p_right = p_left;
+    if (uv.y <= texelSize.y) p_down = p_up;
+    if (uv.y >= 1.0 - texelSize.y) p_up = p_down;
+
+    // Fluid pressure propagation
+    pVel += delta *
+        (-2.0 * pressure + p_right + p_left) / 4.0;
+
+    pVel += delta *
+        (-2.0 * pressure + p_up + p_down) / 4.0;
+
+    pressure += delta * pVel;
+
+    // Gentle damping
+    pVel -= 0.0045 * delta * pressure;
+
+    pVel *= 0.94;
+    pressure *= 0.955;
+
+    vec2 mouseUV = mouse / resolution;
+
+    if (mouse.x > 0.0) {
+
+        // Larger, softer interaction area
+        float radius = 0.105;
+
+        float dist = distance(
+            uv,
+            mouseUV
+        );
+
+        if (dist < radius) {
+
+            float isText =
+                texture2D(textTexture, uv).r;
+
+            // Strong interaction on the letters
+            float textInfluence =
+                mix(
+                    0.015,
+                    5.8,
+                    isText
+                );
+
+            // Smooth falloff
+            float falloff =
+                1.0 -
+                smoothstep(
+                    0.0,
+                    radius,
+                    dist
+                );
+
+            pressure +=
+                textInfluence *
+                falloff;
+
+            // Extra velocity gives a more watery kick
+            pVel +=
+                textInfluence *
+                falloff *
+                0.16;
+        }
+    }
+
+    gl_FragColor = vec4(
+        pressure,
+        pVel,
+        (p_right - p_left) * 0.5,
+        (p_up - p_down) * 0.5
+    );
+}
+`,
 
   renderVertexShader: `
   varying vec2 vUv;
@@ -655,18 +728,80 @@ export const HERO_SHADER = {
   `,
 
   renderFragmentShader: `
-  uniform sampler2D textureA;
-  uniform sampler2D textureB;
-  varying vec2 vUv;
-  
-  void main() {
-      vec4 data = texture2D(textureA, vUv);
-      vec2 distortion = data.zw * 0.25; 
-  
-      float textMask = texture2D(textureB, clamp(vUv + distortion, 0.0, 1.0)).r;
-      gl_FragColor = vec4(vec3(1.0), textMask * 0.95);
-  }
-  `,
+uniform sampler2D textureA;
+uniform sampler2D textureB;
+
+varying vec2 vUv;
+
+void main() {
+    vec4 data = texture2D(textureA, vUv);
+
+    float pressure = data.x;
+    float velocity = data.y;
+
+    // Stronger liquid displacement
+    vec2 distortion = data.zw * 0.38;
+
+    // Main text
+    float textMask = texture2D(
+        textureB,
+        clamp(vUv + distortion, 0.0, 1.0)
+    ).r;
+
+    // Additional samples create a subtle glass/refraction edge
+    float edgeMask = texture2D(
+        textureB,
+        clamp(vUv + distortion * 1.8, 0.0, 1.0)
+    ).r;
+
+    float energy =
+        abs(pressure) * 2.0 +
+        abs(velocity) * 0.8 +
+        length(distortion) * 2.5;
+
+    // Nothing visible until the cursor disturbs the fluid
+    float reveal = smoothstep(
+        0.008,
+        0.075,
+        energy
+    );
+
+    // Soft glass-like edge
+    float glassEdge =
+        max(
+            0.0,
+            edgeMask - textMask * 0.65
+        );
+
+    // Bright white / translucent glass
+    vec3 glassColor = vec3(1.0);
+
+    // Slightly brighter where distortion is strongest
+    float glow = smoothstep(
+        0.025,
+        0.22,
+        abs(pressure)
+    );
+
+    glassColor += vec3(glow * 0.12);
+
+    float alpha =
+        textMask *
+        reveal *
+        0.88;
+
+    // Faint refracted edge
+    alpha +=
+        glassEdge *
+        reveal *
+        0.28;
+
+    gl_FragColor = vec4(
+        glassColor,
+        alpha
+    );
+}
+`,
 };
 
 /* SubjectProfile */
@@ -819,8 +954,7 @@ export const DEFAULT_TRAIL_DATA = {
   trails: "24",
 };
 
-// Flow State
-
+/* Flow State */
 export const FLOW_STATE = {
   vertexShader: `
   attribute vec3 position;
@@ -1028,4 +1162,46 @@ export const FLOW_STATE = {
     color += vec3(line) * lineOpacity;
     gl_FragColor = vec4(color, 1.0);
   }`,
+};
+
+/* Scene Controls */
+export const CONTROL_RADIUS = 80;
+
+export const SCENE_CONTROLS = [
+  {
+    id: "clouds",
+    angle: 78,
+    labelPlacement: "bottom",
+    delay: 0.01,
+  },
+  {
+    id: "intro",
+    angle: 120,
+    labelPlacement: "bottom",
+    delay: 0.04,
+  },
+  {
+    id: "weather",
+    angle: 160,
+    labelPlacement: "left",
+    delay: 0.07,
+  },
+  {
+    id: "moon",
+    angle: 198,
+    labelPlacement: "left",
+    delay: 0.1,
+  },
+];
+
+export const CONTROL_TRANSITION = {
+  type: "spring",
+  stiffness: 380,
+  damping: 26,
+  mass: 0.8,
+};
+
+export const REVEAL_TRANSITION = {
+  duration: 0.8,
+  ease: [0.22, 1, 0.36, 1],
 };

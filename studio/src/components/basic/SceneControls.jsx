@@ -1,8 +1,7 @@
 "use client";
 
-import "@/styles/scene-controls.css";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import "@/styles/scene-controls.css";
 import { WiMoonAltFull } from "react-icons/wi";
 import { SiRevealdotjs } from "react-icons/si";
 import { TiWeatherSunny } from "react-icons/ti";
@@ -10,47 +9,8 @@ import { useEffect, useRef, useState } from "react";
 import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
 import { getWeatherIconData } from "@/utils/weather-scene";
-
-const CONTROL_RADIUS = 80;
-
-const CONTROLS = [
-  {
-    id: "clouds",
-    angle: 78,
-    labelPlacement: "bottom",
-    delay: 0.01,
-  },
-  {
-    id: "intro",
-    angle: 120,
-    labelPlacement: "bottom",
-    delay: 0.04,
-  },
-  {
-    id: "weather",
-    angle: 160,
-    labelPlacement: "left",
-    delay: 0.07,
-  },
-  {
-    id: "moon",
-    angle: 198,
-    labelPlacement: "left",
-    delay: 0.1,
-  },
-];
-
-const CONTROL_TRANSITION = {
-  type: "spring",
-  stiffness: 380,
-  damping: 26,
-  mass: 0.8,
-};
-
-const REVEAL_TRANSITION = {
-  duration: 0.8,
-  ease: [0.22, 1, 0.36, 1],
-};
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { CONTROL_RADIUS, SCENE_CONTROLS, CONTROL_TRANSITION, REVEAL_TRANSITION } from "@/utils/basic";
 
 function getControlPosition(angle, radius = CONTROL_RADIUS) {
   const radians = (angle * Math.PI) / 180;
@@ -117,7 +77,7 @@ export default function SceneControls({
     }
   };
 
-  const getControl = (id) => CONTROLS.find((control) => control.id === id);
+  const getControl = (id) => SCENE_CONTROLS.find((control) => control.id === id);
 
   const renderControl = (id, content) => {
     const config = getControl(id);

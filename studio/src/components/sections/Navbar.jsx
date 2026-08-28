@@ -2,12 +2,12 @@
 
 import "@/styles/navbar.css";
 import Link from "next/link";
-import NavbarLogo from "@/components/basic/NavbarLogo";
 import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
 import { useTheme } from "@/context/ThemeContext";
 import ConsoleModal from "../modals/ConsoleModal";
 import { getNavbarStyles } from "@/utils/themeSwatch";
+import NavbarLogo from "@/components/basic/NavbarLogo";
 import ModeSwitch from "@/components/basic/ModeSwitch";
 import { useEffect, useState, useRef, memo } from "react";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";

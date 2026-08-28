@@ -1,7 +1,7 @@
+import jwt from "jsonwebtoken";
+import AdminModel from "../src/models/adminModel.js";
 import { jest, describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { adminLoginController, adminLogoutController } from "../src/controllers/auth.controller.js";
-import AdminModel from "../src/models/adminModel.js";
-import jwt from "jsonwebtoken";
 
 describe("Auth Controllers", () => {
   let req, res;

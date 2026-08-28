@@ -190,6 +190,7 @@ const HeroSection = ({ active = true }) => {
       const canvas = document.createElement("canvas");
       canvas.width = w;
       canvas.height = h;
+
       const ctx = canvas.getContext("2d");
 
       ctx.fillStyle = "#000000";
@@ -201,37 +202,44 @@ const HeroSection = ({ active = true }) => {
 
       const text = "AKHIL SHETTY";
 
-      const baseFontSize = 100;
+      // Bigger title
+      const baseFontSize = 130;
+
       ctx.font = `900 ${baseFontSize}px "Helvetica Neue", "Arial", sans-serif`;
 
+      // Tight, modern spacing
       if ("letterSpacing" in ctx) {
-        ctx.letterSpacing = "-0.1em";
+        ctx.letterSpacing = "-0.12em";
       }
 
       const textWidth = ctx.measureText(text).width;
 
-      const maxPhysicalWidth = 750 * dpr;
-      const targetWidth = Math.min(w * 2, maxPhysicalWidth);
+      // Larger overall width
+      const targetWidth = Math.min(w * 0.72, 820 * dpr);
 
-      const globalScale = targetWidth / textWidth;
+      const widthScale = targetWidth / textWidth;
+      const heightScale = widthScale * 1.02;
+
+      // EXACT center of viewport
+      const horizontalPosition = w * 0.5;
+      const verticalPosition = h * 0.5;
 
       ctx.save();
-      ctx.translate(w / 2, h / 2);
-      ctx.scale(globalScale, globalScale);
 
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = baseFontSize * 0.01;
-      ctx.lineJoin = "round";
+      ctx.translate(horizontalPosition, verticalPosition);
+
+      ctx.scale(widthScale, heightScale);
 
       ctx.fillText(text, 0, 0);
-      ctx.strokeText(text, 0, 0);
 
       ctx.restore();
 
       const tex = new THREE.CanvasTexture(canvas);
+
       tex.minFilter = THREE.LinearFilter;
       tex.magFilter = THREE.LinearFilter;
       tex.needsUpdate = true;
+
       return tex;
     };
 
@@ -586,6 +594,26 @@ const HeroSection = ({ active = true }) => {
   });
 
   return (
+    // <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
+    //   {showModal && <LimpModal />}
+
+    //   <div className="wrapper relative min-h-screen w-full">
+    //     <div
+    //       ref={containerRef}
+    //       className={`canvas-bg absolute inset-0 z-0 ${isDarkOrMetal ? "bg-black" : ""}`}
+    //       style={{
+    //         backgroundImage: isDarkOrMetal
+    //           ? "none"
+    //           : sceneAssets
+    //             ? `linear-gradient(
+    //             to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)
+    //           ),
+    //           url("/clouds_background/${sceneAssets.background}.png")`
+    //             : "none",
+    //       }}
+    //     />
+    //   </div>
+    // </div>
     <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
       {showModal && <LimpModal />}
 
@@ -598,12 +626,24 @@ const HeroSection = ({ active = true }) => {
               ? "none"
               : sceneAssets
                 ? `linear-gradient(
-                to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)
-              ),
-              url("/clouds_background/${sceneAssets.background}.png")`
+                  to bottom,
+                  rgba(255,255,255,0.35),
+                  rgba(255,255,255,0.05)
+                ),
+                url("/clouds_background/${sceneAssets.background}.png")`
                 : "none",
           }}
         />
+      </div>
+
+      <div className="absolute bottom-1 left-0 z-20 w-full">
+        <div className="flex w-full items-start justify-between p-5">
+          <span className="text-sm font-medium tracking-tight text-white/80 md:text-base">Software Engineer</span>
+
+          <span className="text-sm font-medium tracking-tight text-white/80 md:text-base">
+            Design & Code for those who refuse to settle
+          </span>
+        </div>
       </div>
     </div>
   );

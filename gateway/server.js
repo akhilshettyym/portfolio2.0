@@ -1,10 +1,10 @@
 import "dotenv/config";
 import app from "./src/app.js";
+import mongoose from "mongoose";
 import connectDB from "./src/config/db.js";
 import { createAdmin } from "./src/utils/createAdmin.js";
-import mongoose from "mongoose";
 
-const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD"];
+const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD", "RECAPTCHA_SECRET_KEY"];
 const missingVars = requiredEnvVars.filter((v) => !process.env[v]);
 
 if (missingVars.length > 0) {
@@ -67,4 +67,5 @@ process.on("uncaughtException", (error) => {
 
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.exit(1);
 });

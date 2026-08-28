@@ -1,5 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
+import { protectAdminRoute } from "../middleware/auth.middleware.js";
+import { requireRecaptcha } from "../middleware/recaptcha.middleware.js";
 import { createInquiry } from "../controllers/createInquiry.controller.js";
 import { validateContactInquiry } from "../middleware/validation.middleware.js";
 import { getPortfolioContent } from "../controllers/content/portfolio.controller.js";
@@ -11,7 +13,6 @@ import {
   updateExperience,
   deleteExperience,
 } from "../controllers/content/experience.controller.js";
-import { protectAdminRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -27,7 +28,13 @@ const contactInquiryLimiter = rateLimit({
 });
 
 /* POST /api/user/contact-inquiry */
-router.post("/contact-inquiry", contactInquiryLimiter, validateContactInquiry, createInquiry);
+router.post(
+  "/contact-inquiry",
+  contactInquiryLimiter,
+  requireRecaptcha((req) => (req.body?.purpose === "work" ? "build_project" : "say_hi")),
+  validateContactInquiry,
+  createInquiry,
+);
 
 /* GET /api/user/portfolio-content (Education & Achievements) */
 router.get("/portfolio-content", getPortfolioContent);

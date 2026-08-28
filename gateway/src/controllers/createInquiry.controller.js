@@ -54,8 +54,8 @@ export const createInquiry = async (req, res) => {
           str
             ? str
                 .slice(0, 1024)
-                .replace(/@everyone/g, "@everyone")
-                .replace(/@here/g, "@here")
+                .replace(/@everyone/g, "@\u200beveryone")
+                .replace(/@here/g, "@\u200bhere")
                 .replace(/([_`*~|<>:\\])/g, "\\$1")
             : "N/A";
 

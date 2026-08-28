@@ -1,11 +1,10 @@
-import { jest, describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import mongoose from "mongoose";
+import ContactInquiry from "../src/models/userModel.js";
 import { createInquiry } from "../src/controllers/createInquiry.controller.js";
+import { jest, describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { getAllInquiries } from "../src/controllers/getInquiredDetails.controller.js";
 import { deleteInquiryDetails } from "../src/controllers/deleteInquiryDetails.controller.js";
-import ContactInquiry from "../src/models/userModel.js";
-import mongoose from "mongoose";
 
-// Mock global fetch for Discord webhook notification
 global.fetch = jest.fn(() =>
   Promise.resolve({
     ok: true,
@@ -33,7 +32,6 @@ describe("Inquiry Controllers", () => {
     it("should block request (429) if user submitted an inquiry within 5 minutes", async () => {
       req.body = { email: "spam@test.com" };
 
-      // Fixes the findOne().sort() chain error by mocking the returned object shape
       jest.spyOn(ContactInquiry, "findOne").mockReturnValue({
         sort: jest.fn().mockResolvedValue({
           createdAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(), // 2 minutes ago
@@ -60,7 +58,7 @@ describe("Inquiry Controllers", () => {
       };
 
       jest.spyOn(ContactInquiry, "findOne").mockReturnValue({
-        sort: jest.fn().mockResolvedValue(null), // No recent inquiries
+        sort: jest.fn().mockResolvedValue(null),
       });
 
       const saveMock = jest.fn().mockResolvedValue({

@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { getRecaptchaToken } from "@/lib/recaptcha";
 import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
@@ -135,6 +136,8 @@ export default function CreateSomething() {
         }
       }
 
+      payload.captchaToken = await getRecaptchaToken(purpose === "work" ? "build_project" : "say_hi");
+
       const response = await axios.post(`${baseUrl}/api/user/contact-inquiry`, payload, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
@@ -212,8 +215,7 @@ export default function CreateSomething() {
                   className={`mb-6 text-sm font-bold uppercase tracking-widest border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy}`}>
                   <span> About You </span>
                   <span className="text-[10px] font-normal tracking-normal text-red-500 capitalize">
-                    {" "}
-                    * Required Details{" "}
+                    * Required Details
                   </span>
                 </h3>
 

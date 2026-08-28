@@ -165,11 +165,7 @@ export default function FlowState({
     camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     geometry = new THREE.BufferGeometry();
 
-    const positions = new Float32Array([
-      -1, -1, 0, 1, -1, 0, 1, 1, 0,
-
-      -1, -1, 0, 1, 1, 0, -1, 1, 0,
-    ]);
+    const positions = new Float32Array([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0]);
 
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 

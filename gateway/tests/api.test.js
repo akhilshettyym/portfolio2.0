@@ -1,9 +1,25 @@
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
-import request from "supertest";
-import jwt from "jsonwebtoken";
-import app from "../src/app.js";
-import ContactInquiry from "../src/models/userModel.js";
-import AdminModel from "../src/models/adminModel.js";
+import { jest, describe, it, expect, beforeAll, beforeEach } from "@jest/globals";
+
+jest.unstable_mockModule("../src/services/recaptcha.service.js", () => ({
+  verifyRecaptchaToken: jest.fn().mockResolvedValue({ ok: true }),
+  recaptchaErrorResponse: jest.fn((res, reason) =>
+    res.status(400).json({
+      success: false,
+      message: "Unable to verify this submission. Please try again.",
+    }),
+  ),
+  default: jest.fn().mockResolvedValue({ ok: true }),
+}));
+
+let request, jwt, app, ContactInquiry, AdminModel;
+
+beforeAll(async () => {
+  ({ default: request } = await import("supertest"));
+  ({ default: jwt } = await import("jsonwebtoken"));
+  ({ default: app } = await import("../src/app.js"));
+  ({ default: ContactInquiry } = await import("../src/models/userModel.js"));
+  ({ default: AdminModel } = await import("../src/models/adminModel.js"));
+});
 
 describe("Backend API Suite", () => {
   beforeEach(() => {

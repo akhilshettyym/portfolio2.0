@@ -64,7 +64,6 @@ export default function Loader({ onFinish }) {
     let frameId;
 
     lastTimeRef.current = performance.now();
-
     const DURATION_MS = GREETINGS.length * 400;
 
     const animate = (time) => {
@@ -75,7 +74,6 @@ export default function Loader({ onFinish }) {
         progressRef.current += (100 / DURATION_MS) * delta;
 
         const next = Math.min(progressRef.current, 100);
-
         setProgress(next);
 
         const hasPreference = typeof window !== "undefined" && hasLocationPreference();
@@ -115,15 +113,12 @@ export default function Loader({ onFinish }) {
     if (!mounted || !containerRef.current) return;
 
     const container = containerRef.current;
-
     const scene = new THREE.Scene();
-
     const fogColor = theme === "dark" || theme === "metal" ? 0x000000 : 0xffffff;
 
     scene.fog = new THREE.Fog(fogColor, 6, 18);
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-
     camera.position.z = isMobile ? 6 : 5;
 
     const renderer = new THREE.WebGLRenderer({
@@ -133,9 +128,7 @@ export default function Loader({ onFinish }) {
     });
 
     renderer.setPixelRatio(isMobile ? 1 : getRendererPixelRatio(tier));
-
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     container.appendChild(renderer.domElement);
 
     let controls;
@@ -146,9 +139,7 @@ export default function Loader({ onFinish }) {
     }
 
     const geometry = new THREE.BufferGeometry();
-
     const count = Math.round((isMobile ? 850 : 2000) * quality.particleMultiplier);
-
     const positions = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
@@ -174,7 +165,6 @@ export default function Loader({ onFinish }) {
     scene.add(points);
 
     let frameId;
-
     const timer = createThreeTimer();
 
     function animate() {
@@ -184,11 +174,9 @@ export default function Loader({ onFinish }) {
       const speed = delta * 60;
 
       points.rotation.y += (isMobile ? 0.0025 : 0.0035) * speed;
-
       points.rotation.x += (isMobile ? 0.001 : 0.0018) * speed;
 
       controls?.update();
-
       renderer.render(scene, camera);
     }
 
@@ -196,9 +184,7 @@ export default function Loader({ onFinish }) {
 
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
-
       camera.updateProjectionMatrix();
-
       renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
@@ -212,10 +198,8 @@ export default function Loader({ onFinish }) {
       controls?.dispose();
 
       scene.remove(points);
-
       geometry.dispose();
       material.dispose();
-
       renderer.setAnimationLoop(null);
       renderer.dispose();
       renderer.forceContextLoss?.();
@@ -276,12 +260,7 @@ export default function Loader({ onFinish }) {
       <div ref={containerRef} className="absolute inset-0" />
 
       <div className={`absolute top-0 left-0 z-50 h-1.5 w-full ${progressBgClass}`}>
-        <div
-          className={`h-full ${progressFillClass}`}
-          style={{
-            width: `${progress}%`,
-          }}
-        />
+        <div className={`h-full ${progressFillClass}`} style={{ width: `${progress}%` }} />
       </div>
 
       <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -313,9 +292,7 @@ export default function Loader({ onFinish }) {
       <div className="absolute bottom-12 z-10 flex w-full justify-center px-6 text-center pointer-events-none">
         <h1
           className={`text-[clamp(0.5em,2vw,1.5rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${textColorClass}`}
-          style={{
-            fontFeatureSettings: '"ss01" on, "ss02" on',
-          }}>
+          style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
           AKHIL SHETTY M
         </h1>
       </div>

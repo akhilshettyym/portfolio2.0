@@ -24,8 +24,8 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`w-full transition-colors duration-500 ${currentTheme.bg} ${styles.section || ""} ${isMobile ? "" : "p-10"}`}>
-      <div className="mx-auto max-w-8xl px-6">
+      className={`w-full transition-colors duration-500 text-justify ${currentTheme.bg} ${styles.section || ""} ${isMobile ? "" : "p-10 px-6"}`}>
+      <div className="mx-auto max-w-8xl">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -46,7 +46,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className={`text-left text-md md:text-md font-light leading-relaxed border-t pt-4 transition-colors duration-500 ${styles.textSecondary || currentTheme.textSecondary} ${styles.dividerSoft || currentTheme.borderSoft}`}>
+          className={`text-md md:text-md font-light leading-relaxed border-t pt-4 transition-colors duration-500 ${styles.textSecondary || currentTheme.textSecondary} ${styles.dividerSoft || currentTheme.borderSoft}`}>
           This Privacy Policy explains what information this portfolio website collects, why it is collected, how it is
           stored, the services that may process that information, and the choices available to you when using the
           website.

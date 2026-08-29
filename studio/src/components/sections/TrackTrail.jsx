@@ -9,6 +9,7 @@ import { getTrailStyles } from "@/utils/themeSwatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { getTrailhead, seedPortfolioCache } from "@/lib/payload/contentapi";
+import { useDeviceType } from "@/hooks/useDeviceType";
 
 const BASE_BANNERS = ["/trailhead/champion.svg", "/trailhead/innovator.svg"];
 
@@ -24,8 +25,9 @@ const EMPTY_TRAILHEAD = {
 
 const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initialTrailhead }) {
   const { theme } = useTheme();
-  const { isTier2 } = usePerformanceTier();
   const styles = getTrailStyles(theme);
+  const { isMobile } = useDeviceType();
+  const { isTier2 } = usePerformanceTier();
 
   const hasInitialTrailhead =
     initialTrailhead !== undefined && initialTrailhead !== null && typeof initialTrailhead === "object";
@@ -123,14 +125,16 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
             className={`pointer-events-none absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl transition-colors duration-500 ${styles.rankGlow}`}
           />
 
-          <Image
-            src="/trailhead/triple_star_ranger.svg"
-            alt="Triple Star Ranger"
-            width={60}
-            height={60}
-            priority
-            className={`relative z-10 mb-3 object-contain transition-all duration-500 ease-out ${styles.imageFilter}`}
-          />
+          <div className="relative z-10 mb-3 h-15 w-15">
+            <Image
+              src="/trailhead/triple_star_ranger.svg"
+              alt="Triple Star Ranger"
+              fill
+              sizes="60px"
+              priority
+              className={`object-contain transition-all duration-500 ease-out ${styles.imageFilter}`}
+            />
+          </div>
 
           <h3
             className={`relative z-10 text-center text-xs font-black uppercase tracking-normal transition-colors duration-500 ${styles.rankTitle}`}>
@@ -178,15 +182,16 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
           />
         </div>
 
-        <div
-          className={`relative flex h-2 w-full shrink-0 items-center overflow-hidden border-t fade-edges transition-colors duration-500 lg:h-auto lg:w-75 lg:border-l lg:border-t-0 ${styles.marqueeBox}`}
-          aria-label="Trailhead achievements">
-          <div className="animate-sleek-marquee py-3 lg:py-0 motion-reduce:animate-none">
-            <BannerSet banners={banners} setId="set1" filterClass={styles.imageFilter} />
-
-            <BannerSet banners={banners} setId="set2" filterClass={styles.imageFilter} />
+        {!isMobile && (
+          <div
+            className={`relative flex h-2 w-full shrink-0 items-center overflow-hidden border-t fade-edges transition-colors duration-500 lg:h-auto lg:w-75 lg:border-l lg:border-t-0 ${styles.marqueeBox}`}
+            aria-label="Trailhead achievements">
+            <div className="animate-sleek-marquee py-3 lg:py-0 motion-reduce:animate-none">
+              <BannerSet banners={banners} setId="set1" filterClass={styles.imageFilter} />
+              <BannerSet banners={banners} setId="set2" filterClass={styles.imageFilter} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -279,8 +284,8 @@ const BannerSet = memo(function BannerSet({ banners, setId, filterClass = "" }) 
             src={url}
             alt=""
             aria-hidden="true"
-            width={160}
-            height={96}
+            fill
+            sizes="160px"
             className={`cursor-pointer object-contain transition-all duration-300 hover:scale-110 ${filterClass}`}
           />
         </div>

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { getButtonStyles } from "@/utils/themeSwatch";
 import { AnimatePresence, motion } from "framer-motion";
+import { useDeviceType } from "@/hooks/useDeviceType";
 
 const ArrowIcon = () => {
   return (
@@ -14,11 +15,15 @@ const ArrowIcon = () => {
   );
 };
 
+const toCssSize = (value) => (typeof value === "number" ? `${value}px` : value);
+
 export default function CustomButton({ title, onClick, width = 180, height = 56, className = "", disabled = false }) {
   const { theme } = useTheme();
+  const { isMobile } = useDeviceType();
   const [isHovered, setIsHovered] = useState(false);
 
   const styles = getButtonStyles(theme);
+  const labelSizeClass = isMobile ? "text-[10px]" : "text-xs";
 
   return (
     <button
@@ -32,14 +37,14 @@ export default function CustomButton({ title, onClick, width = 180, height = 56,
         whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
         className={`relative cursor-pointer overflow-hidden border transition-colors duration-500 ${styles.containerBorder}`}
         style={{
-          width: `${width}px`,
-          height: `${height}px`,
+          width: toCssSize(width),
+          height: toCssSize(height),
           clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)",
         }}>
         <div className="flex h-full">
           <div
             className={`flex w-3/4 items-center justify-start px-5 transition-colors duration-500 ${styles.baseMain}`}>
-            <span className="text-xs font-medium uppercase tracking-wider"> {title} </span>
+            <span className={`${labelSizeClass} font-medium uppercase tracking-wider`}> {title} </span>
           </div>
 
           <div
@@ -65,7 +70,7 @@ export default function CustomButton({ title, onClick, width = 180, height = 56,
                 clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%)",
               }}>
               <div className={`flex w-3/4 items-center justify-start px-5 ${styles.hoverMain}`}>
-                <span className="text-xs font-medium uppercase tracking-wider"> {title} </span>
+                <span className={`${labelSizeClass} font-medium uppercase tracking-wider`}> {title} </span>
               </div>
               <div className={`flex w-1/4 items-center justify-center border-l ${styles.hoverSide}`}>
                 <motion.div

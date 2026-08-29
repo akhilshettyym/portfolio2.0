@@ -10,6 +10,7 @@ import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
 import { getCreateInputStyles, getCreateSomeStyles } from "@/utils/themeSwatch";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
+import RecaptchaDisclosure from "../core/RecaptchaDisclosure";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
   const { theme } = useTheme();
@@ -175,7 +176,7 @@ export default function CreateSomething() {
       <div className="mx-auto max-w-8xl px-6">
         <div className="gap-12">
           <div className="w-full">
-            <div className={isMobile ? "mb-5" : "mb-10"}>
+            <div className={isMobile ? "mb-5 mt-5" : "mb-10"}>
               <label className={`text-xs uppercase tracking-widest block mb-3 ${styles.textMuted}`}>
                 Select Form Purpose Track
               </label>
@@ -348,23 +349,26 @@ export default function CreateSomething() {
                 />
               </div>
 
-              <div className="mt-10 flex flex-col sm:flex-row justify-end items-center gap-6">
-                {status.message && (
-                  <p
-                    className={`text-xs tracking-wide w-full sm:w-auto text-center sm:text-right ${status.type === "success" ? styles.successText : styles.errorText}`}
-                    aria-live="polite">
-                    {status.message}
-                  </p>
-                )}
-                <div className="w-full sm:w-auto flex justify-end">
-                  <CustomButton
-                    title={loading ? "Processing..." : purpose === "work" ? "Submit Project Request" : "Send Message"}
-                    onClick={handleSubmit}
-                    width={290}
-                    height={50}
-                    disabled={loading}
-                  />
+              <div className="mt-8 flex flex-col sm:flex-row justify-between items-center gap-5">
+                <div className="flex flex-col sm:flex-row items-center gap-5">
+                  {status.message && (
+                    <p
+                      className={`text-xs tracking-wide w-full sm:w-auto text-center sm:text-right ${status.type === "success" ? styles.successText : styles.errorText}`}
+                      aria-live="polite">
+                      {status.message}
+                    </p>
+                  )}
+                  <div className="w-full sm:w-auto flex justify-end">
+                    <CustomButton
+                      title={loading ? "Processing..." : purpose === "work" ? "Submit Project Request" : "Send Message"}
+                      onClick={handleSubmit}
+                      width={290}
+                      height={50}
+                      disabled={loading}
+                    />
+                  </div>
                 </div>
+                <RecaptchaDisclosure styles={styles} />
               </div>
             </form>
           </div>

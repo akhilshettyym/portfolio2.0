@@ -137,3 +137,7 @@ html.lenis body {
     line-height: 1.15;
   }
 }
+
+.grecaptcha-badge {
+  visibility: hidden !important;
+}

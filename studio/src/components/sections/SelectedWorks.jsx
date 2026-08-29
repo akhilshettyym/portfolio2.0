@@ -391,7 +391,7 @@ export default function SelectedWorks({ initialProjects }) {
 
   return (
     <div className={`relative w-full overflow-hidden transition-colors px-10 duration-500 ${sectionBg}`}>
-      <div className="mx-auto max-w-[1600px] px-10 py-10">
+      <div className={`mx-auto max-w-[1600px] py-10 ${isMobile ? "" : "px-10"}`}>
         <div className="mb-5">
           <div className="relative px-10 py-2 text-xs tracking-widest">
             <div className="pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2">©001</div>

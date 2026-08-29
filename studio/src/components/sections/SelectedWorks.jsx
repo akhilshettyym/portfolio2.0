@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import { useTheme } from "@/context/ThemeContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
@@ -44,6 +45,18 @@ function getFallbackPointerPoint() {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   };
+}
+
+function subscribeNoop() {
+  return () => {};
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
 }
 
 function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, theme }) {
@@ -292,6 +305,8 @@ export default function SelectedWorks({ initialProjects }) {
   const [activeProject, setActiveProject] = useState(null);
   const [mobileModalProject, setMobileModalProject] = useState(null);
 
+  const isPortalReady = useSyncExternalStore(subscribeNoop, getClientSnapshot, getServerSnapshot);
+
   const [cardAnchor, setCardAnchor] = useState({ x: 0, y: 0 });
   const [buttonAnchor, setButtonAnchor] = useState({ x: 0, y: 0 });
   const clearTimerRef = useRef(null);
@@ -504,17 +519,21 @@ export default function SelectedWorks({ initialProjects }) {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {renderPopupModal && mobileModalProject !== null && (
-          <MobileProjectModal
-            project={mobileModalProject}
-            onClose={() => setMobileModalProject(null)}
-            isCompactDevice={isCompactDevice}
-            isLargeDevice={isLargeDevice}
-            theme={theme}
-          />
+      {isPortalReady &&
+        createPortal(
+          <AnimatePresence>
+            {renderPopupModal && mobileModalProject !== null && (
+              <MobileProjectModal
+                project={mobileModalProject}
+                onClose={() => setMobileModalProject(null)}
+                isCompactDevice={isCompactDevice}
+                isLargeDevice={isLargeDevice}
+                theme={theme}
+              />
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </div>
   );
 }

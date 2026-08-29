@@ -70,12 +70,15 @@ export default function CinematicIntro({ onComplete }) {
   const [timelineReveal, setTimelineReveal] = useState(false);
   const [darkCurtainDone, setDarkCurtainDone] = useState(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+
   const completedRef = useRef(false);
 
   const rowRefs = useRef({});
   const carouselRef = useRef(0);
   const sceneRef = useRef(scene);
   const readyRef = useRef(ready);
+  const isMobileRef = useRef(false);
 
   const reversedRewind = useMemo(() => [...REWINDLINES].reverse(), []);
   const { isTier2 } = usePerformanceTier();
@@ -83,6 +86,27 @@ export default function CinematicIntro({ onComplete }) {
   const PEEL_EASE = [0.19, 1, 0.22, 1];
   const PEEL_DURATION = 1.6;
   const [revealPhase, setRevealPhase] = useState("covering");
+
+  // Detect mobile
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const update = () => {
+      const mobile = mq.matches;
+      setIsMobile(mobile);
+      isMobileRef.current = mobile;
+    };
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Skip timeline scene on mobile if we land on it
+  useEffect(() => {
+    if (isMobile && scene === 3) {
+      resetSceneState();
+      setScene(4);
+    }
+  }, [isMobile, scene]);
 
   useEffect(() => {
     const peelTimer = setTimeout(() => {
@@ -209,14 +233,22 @@ export default function CinematicIntro({ onComplete }) {
     if (completedRef.current) return;
     if (!readyRef.current) return;
     resetSceneState();
-    setScene((s) => Math.min(s + 1, TOTAL_SCENES - 1));
+    setScene((s) => {
+      let next = Math.min(s + 1, TOTAL_SCENES - 1);
+      if (isMobileRef.current && next === 3) next = 4;
+      return next;
+    });
   };
 
   const prevScene = () => {
     if (completedRef.current) return;
     if (!readyRef.current) return;
     resetSceneState();
-    setScene((s) => Math.max(s - 1, 0));
+    setScene((s) => {
+      let prev = Math.max(s - 1, 0);
+      if (isMobileRef.current && prev === 3) prev = 2;
+      return prev;
+    });
   };
 
   const completeIntro = useCallback(() => {
@@ -231,7 +263,11 @@ export default function CinematicIntro({ onComplete }) {
 
     const id = setTimeout(() => {
       resetSceneState();
-      setScene((s) => Math.min(s + 1, TOTAL_SCENES - 1));
+      setScene((s) => {
+        let next = Math.min(s + 1, TOTAL_SCENES - 1);
+        if (isMobileRef.current && next === 3) next = 4;
+        return next;
+      });
     }, 0);
 
     return () => clearTimeout(id);
@@ -298,6 +334,7 @@ export default function CinematicIntro({ onComplete }) {
     }
 
     if (scene === 3) {
+      // On mobile this scene is skipped, but keep the logic for desktop
       timers.push(
         setTimeout(() => {
           setTimelineReveal(true);
@@ -462,6 +499,9 @@ export default function CinematicIntro({ onComplete }) {
     };
   }, [scene, reversedRewind]);
 
+  // Helper for responsive text sizes
+  const t = (desktop, mobile) => (isMobile ? mobile : desktop);
+
   const renderScene = () => {
     if (scene === 0) {
       const displayed = INTROLINES[introStep] ?? INTROLINES[0];
@@ -477,7 +517,10 @@ export default function CinematicIntro({ onComplete }) {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -18, scale: 1.01 }}
                   transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }}
-                  className="text-[clamp(2.6rem,6vw,3rem)] font-bold tracking-tight">
+                  className={t(
+                    "text-[clamp(2.6rem,6vw,3rem)] font-bold tracking-tight",
+                    "text-[clamp(1.6rem,7vw,2.2rem)] font-bold tracking-tight",
+                  )}>
                   <CurtainText> {displayed} </CurtainText>
                 </motion.div>
               </AnimatePresence>
@@ -498,7 +541,10 @@ export default function CinematicIntro({ onComplete }) {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="text-[clamp(3rem,10vw,4rem)] font-bold tracking-normal">
+                className={t(
+                  "text-[clamp(3rem,10vw,4rem)] font-bold tracking-normal",
+                  "text-[clamp(1.8rem,9vw,2.6rem)] font-bold tracking-normal",
+                )}>
                 <span className="inline-block overflow-hidden">
                   {word}
                   <span className="ml-3 inline-block h-[1.0em] w-0.75 translate-y-[0.1em] animate-pulse bg-black" />
@@ -520,7 +566,11 @@ export default function CinematicIntro({ onComplete }) {
                 animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[-80%]">
-                <div className="text-[clamp(2.8rem,8vw,3rem)] font-semibold tracking-tight whitespace-nowrap">
+                <div
+                  className={t(
+                    "text-[clamp(2.8rem,8vw,3rem)] font-semibold tracking-tight whitespace-nowrap",
+                    "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight whitespace-nowrap",
+                  )}>
                   <CurtainText>
                     My name is <span className="font-bold"> AKHIL </span>
                   </CurtainText>
@@ -534,7 +584,10 @@ export default function CinematicIntro({ onComplete }) {
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute left-1/2 top-1/2 mt-8 -translate-x-1/2 text-[clamp(1.5rem,3.4vw,2rem)] text-black/70 whitespace-nowrap">
+                    className={t(
+                      "absolute left-1/2 top-1/2 mt-8 -translate-x-1/2 text-[clamp(1.5rem,3.4vw,2rem)] text-black/70 whitespace-nowrap",
+                      "absolute left-1/2 top-1/2 mt-6 -translate-x-1/2 text-[clamp(1rem,4vw,1.35rem)] text-black/70 whitespace-nowrap",
+                    )}>
                     <CurtainText delay={0.15}>But that doesn&apos;t tell you much.</CurtainText>
                   </motion.div>
                 )}
@@ -546,6 +599,7 @@ export default function CinematicIntro({ onComplete }) {
     }
 
     if (scene === 3) {
+      // Timeline – skipped on mobile via next/prev + useEffect
       return (
         <SceneShell dark={false}>
           <motion.div
@@ -606,8 +660,8 @@ export default function CinematicIntro({ onComplete }) {
                       <motion.span
                         initial={{ opacity: 0, x: -40 }}
                         animate={{
-                          vopacity: timelineReveal ? 1 : 0,
-                          vx: timelineReveal ? 0 : -40,
+                          opacity: timelineReveal ? 1 : 0,
+                          x: timelineReveal ? 0 : -40,
                         }}
                         transition={{ duration: 0.8, delay: 0.3 + index * 0.15 }}
                         className="mr-4 text-black/25">
@@ -659,11 +713,19 @@ export default function CinematicIntro({ onComplete }) {
                     exit={{ opacity: 0, y: -30, filter: "blur(8px)" }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     className="space-y-4">
-                    <div className="text-[clamp(2.6rem,7vw,3rem)] font-semibold tracking-tight">
+                    <div
+                      className={t(
+                        "text-[clamp(2.6rem,7vw,3rem)] font-semibold tracking-tight",
+                        "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight",
+                      )}>
                       <CurtainText>{BUILDINGLINES[0]}</CurtainText>
                     </div>
 
-                    <div className="text-[clamp(1.5rem,3.4vw,2rem)] text-black/72">
+                    <div
+                      className={t(
+                        "text-[clamp(1.5rem,3.4vw,2rem)] text-black/72",
+                        "text-[clamp(1rem,4vw,1.35rem)] text-black/72",
+                      )}>
                       <CurtainText delay={0.35}>{BUILDINGLINES[1]}</CurtainText>
                     </div>
                   </motion.div>
@@ -675,11 +737,19 @@ export default function CinematicIntro({ onComplete }) {
                     exit={{ opacity: 0, y: -18 }}
                     transition={{ duration: 0.75 }}
                     className="space-y-4">
-                    <div className="text-[clamp(2.4rem,6.5vw,3rem)] font-semibold tracking-tight">
+                    <div
+                      className={t(
+                        "text-[clamp(2.4rem,6.5vw,3rem)] font-semibold tracking-tight",
+                        "text-[clamp(1.45rem,6.5vw,2rem)] font-semibold tracking-tight",
+                      )}>
                       <CurtainText>{BUILDINGLINES[2]}</CurtainText>
                     </div>
 
-                    <div className="text-[clamp(1.5rem,3.4vw,2rem)] text-black/72">
+                    <div
+                      className={t(
+                        "text-[clamp(1.5rem,3.4vw,2rem)] text-black/72",
+                        "text-[clamp(1rem,4vw,1.35rem)] text-black/72",
+                      )}>
                       <CurtainText delay={0.28}>{BUILDINGLINES[3]}</CurtainText>
                     </div>
                   </motion.div>
@@ -710,10 +780,10 @@ export default function CinematicIntro({ onComplete }) {
                   scale: questionIndex === PROBLEMQUESTIONS.length - 1 ? 1.08 : 1,
                   filter: "blur(0px)",
                 }}
-                className={`text-[clamp(2.4rem,6vw,4rem)] font-semibold tracking-tight ${questionIndex === PROBLEMQUESTIONS.length - 1 ? "text-black" : "text-black/85"}`}>
-                <div className="text-[clamp(2.4rem,6vw,3rem)] font-semibold tracking-tight">
-                  {PROBLEMQUESTIONS[questionIndex]}
-                </div>
+                className={`font-semibold tracking-tight ${
+                  questionIndex === PROBLEMQUESTIONS.length - 1 ? "text-black" : "text-black/85"
+                } ${t("text-[clamp(2.4rem,6vw,3rem)]", "text-[clamp(1.4rem,6.5vw,2rem)]")}`}>
+                <div>{PROBLEMQUESTIONS[questionIndex]}</div>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -767,11 +837,21 @@ export default function CinematicIntro({ onComplete }) {
                 animate={{ opacity: treeStage >= 1 ? 1 : 0, y: treeStage >= 1 ? 0 : 18 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="space-y-4">
-                <div className="text-[clamp(2rem,6vw,3rem)] font-semibold tracking-tight">
+                <div
+                  className={t(
+                    "text-[clamp(2rem,6vw,3rem)] font-semibold tracking-tight",
+                    "text-[clamp(1.4rem,6.5vw,2rem)] font-semibold tracking-tight",
+                  )}>
                   Great software isn&apos;t written.
                 </div>
 
-                <div className="text-[clamp(1.7rem,4vw,2rem)] text-black/72">It&apos;s discovered.</div>
+                <div
+                  className={t(
+                    "text-[clamp(1.7rem,4vw,2rem)] text-black/72",
+                    "text-[clamp(1.1rem,4.5vw,1.4rem)] text-black/72",
+                  )}>
+                  It&apos;s discovered.
+                </div>
               </motion.div>
             </div>
           </div>
@@ -820,11 +900,21 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0, y: -40, filter: "blur(10px)" }}
                   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                   className="max-w-5xl">
-                  <div className="text-[clamp(2.2rem,6vw,3rem)] font-semibold tracking-tight text-black">
+                  <div
+                    className={t(
+                      "text-[clamp(2.2rem,6vw,3rem)] font-semibold tracking-tight text-black",
+                      "text-[clamp(1.4rem,6.5vw,2rem)] font-semibold tracking-tight text-black",
+                    )}>
                     I specialize in tools.
                   </div>
 
-                  <div className="mt-4 text-[clamp(1.4rem,3.4vw,2rem)] text-black/60"> They work as I say. </div>
+                  <div
+                    className={t(
+                      "mt-4 text-[clamp(1.4rem,3.4vw,2rem)] text-black/60",
+                      "mt-3 text-[clamp(1rem,4vw,1.3rem)] text-black/60",
+                    )}>
+                    They work as I say.
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -855,7 +945,11 @@ export default function CinematicIntro({ onComplete }) {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.4 }}
                 className="max-w-5xl">
-                <div className="text-[clamp(2.3rem,6vw,3rem)] font-bold tracking-tight text-white">
+                <div
+                  className={t(
+                    "text-[clamp(2.3rem,6vw,3rem)] font-bold tracking-tight text-white",
+                    "text-[clamp(1.4rem,6.5vw,2rem)] font-bold tracking-tight text-white",
+                  )}>
                   {AICLAIMS[aiStage]}
                 </div>
               </motion.div>
@@ -921,7 +1015,13 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0, scale: 1.15, filter: "blur(10px)" }}
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                   className="max-w-5xl">
-                  <div className="text-[clamp(3rem,8vw,4rem)] font-bold tracking-tight text-white"> BUT... </div>
+                  <div
+                    className={t(
+                      "text-[clamp(3rem,8vw,4rem)] font-bold tracking-tight text-white",
+                      "text-[clamp(1.8rem,9vw,2.6rem)] font-bold tracking-tight text-white",
+                    )}>
+                    BUT...
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -931,7 +1031,11 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0, y: -40, scale: 1.03, filter: "blur(10px)" }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   className="max-w-5xl">
-                  <div className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white">
+                  <div
+                    className={t(
+                      "text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(1.3rem,6vw,1.9rem)] font-semibold tracking-tight text-white",
+                    )}>
                     {BUSINESSQUESTIONS[questionIndex]}
                   </div>
                 </motion.div>
@@ -972,7 +1076,11 @@ export default function CinematicIntro({ onComplete }) {
                 exit={{ opacity: 0, y: -40, filter: "blur(12px)" }}
                 transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
                 className="max-w-6xl">
-                <div className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white">
+                <div
+                  className={t(
+                    "text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white",
+                    "text-[clamp(1.3rem,6vw,1.9rem)] font-semibold tracking-tight text-white",
+                  )}>
                   {VULNERABILITIES[vulnTick]}
                 </div>
               </motion.div>
@@ -996,10 +1104,20 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                   className="max-w-5xl">
-                  <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white">
+                  <div
+                    className={t(
+                      "text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight text-white",
+                    )}>
                     The most dangerous bugs...
                   </div>
-                  <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72"> are the ones nobody sees. </div>
+                  <div
+                    className={t(
+                      "mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72",
+                      "mt-3 text-[clamp(1.1rem,4.5vw,1.4rem)] text-white/72",
+                    )}>
+                    are the ones nobody sees.
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -1009,10 +1127,20 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                   className="max-w-5xl">
-                  <div className="text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white">
+                  <div
+                    className={t(
+                      "text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight text-white",
+                    )}>
                     Intelligence generates code.
                   </div>
-                  <div className="mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72">Experience prevents disasters.</div>
+                  <div
+                    className={t(
+                      "mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72",
+                      "mt-3 text-[clamp(1.1rem,4.5vw,1.4rem)] text-white/72",
+                    )}>
+                    Experience prevents disasters.
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1035,7 +1163,10 @@ export default function CinematicIntro({ onComplete }) {
                   animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -50, scale: 1.02, filter: "blur(12px)" }}
                   transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
-                  className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white">
+                  className={t(
+                    "text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white",
+                    "text-[clamp(1.3rem,6vw,1.9rem)] font-semibold tracking-tight text-white",
+                  )}>
                   {PHILOSOPHY[philosophyStage]}
                 </motion.div>
               </AnimatePresence>
@@ -1080,7 +1211,10 @@ export default function CinematicIntro({ onComplete }) {
                   animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -28, scale: 1.02, filter: "blur(10px)" }}
                   transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                  className="max-w-6xl text-[clamp(1.9rem,4.8vw,4.4rem)] font-semibold tracking-tight text-white">
+                  className={t(
+                    "max-w-6xl text-[clamp(1.9rem,4.8vw,4.4rem)] font-semibold tracking-tight text-white",
+                    "max-w-6xl text-[clamp(1.25rem,5.5vw,1.9rem)] font-semibold tracking-tight text-white",
+                  )}>
                   {reversedRewind[rewindIndex]}
                 </motion.div>
               ) : finalStage >= 1 ? (
@@ -1093,7 +1227,10 @@ export default function CinematicIntro({ onComplete }) {
                   <motion.div
                     animate={{ y: [0, -4, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="text-[clamp(3rem,9vw,4rem)] font-bold tracking-normal text-black">
+                    className={t(
+                      "text-[clamp(3rem,9vw,4rem)] font-bold tracking-normal text-black",
+                      "text-[clamp(1.8rem,9vw,2.6rem)] font-bold tracking-normal text-black",
+                    )}>
                     WHO AM I ?
                   </motion.div>
                 </motion.div>

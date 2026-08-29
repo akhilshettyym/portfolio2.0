@@ -240,9 +240,7 @@ const Navbar = () => {
                 <ModeSwitch />
               </div>
 
-              <div
-                className="relative flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center"
-                onClick={() => setConsoleOpen((prev) => !prev)}>
+              <div className="relative flex h-8 w-8 shrink-0 items-center justify-center">
                 <div
                   className={`absolute right-full top-1/2 flex -translate-y-1/2 items-center overflow-hidden transition-all duration-300 ease-out ${
                     consoleOpen ? "mr-2 w-22 opacity-100" : "mr-0 w-0 opacity-0"

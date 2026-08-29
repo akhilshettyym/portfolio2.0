@@ -277,7 +277,7 @@ export default function Loader({ onFinish }) {
             return (
               <span
                 key={`${greeting}-${idx}`}
-                className={`loader-greeting absolute text-[22px] font-bold tracking-tight transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] ${textColorClass}`}
+                className={`loader-greeting absolute ${isMobile ? "text-[16px]" : "text-[22px]"} font-bold tracking-tight transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] ${textColorClass}`}
                 style={{
                   opacity: offset === 0 ? 1 : 0,
                   transform: `translateY(${offset * 32}px)`,
@@ -291,7 +291,9 @@ export default function Loader({ onFinish }) {
 
       <div className="absolute bottom-12 z-10 flex w-full justify-center px-6 text-center pointer-events-none">
         <h1
-          className={`text-[clamp(0.5em,2vw,1.5rem)] font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${textColorClass}`}
+          className={`${
+            isMobile ? "text-2xl" : "text-[clamp(0.5em,2vw,1.5rem)]"
+          } font-black leading-[0.82] tracking-tighter md:tracking-[-0.09em] will-change-transform ${textColorClass}`}
           style={{ fontFeatureSettings: '"ss01" on, "ss02" on' }}>
           AKHIL SHETTY M
         </h1>

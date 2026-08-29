@@ -87,7 +87,6 @@ export default function CinematicIntro({ onComplete }) {
   const PEEL_DURATION = 1.6;
   const [revealPhase, setRevealPhase] = useState("covering");
 
-  // Detect mobile
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     const update = () => {
@@ -99,14 +98,6 @@ export default function CinematicIntro({ onComplete }) {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
-
-  // Skip timeline scene on mobile if we land on it
-  useEffect(() => {
-    if (isMobile && scene === 3) {
-      resetSceneState();
-      setScene(4);
-    }
-  }, [isMobile, scene]);
 
   useEffect(() => {
     const peelTimer = setTimeout(() => {
@@ -165,7 +156,7 @@ export default function CinematicIntro({ onComplete }) {
     readyRef.current = ready;
   }, [ready]);
 
-  const resetSceneState = () => {
+  const resetSceneState = useCallback(() => {
     setReady(false);
 
     setIntroStep(0);
@@ -200,7 +191,7 @@ export default function CinematicIntro({ onComplete }) {
 
     setFinalStage(0);
     setRewindIndex(0);
-  };
+  }, []);
 
   useBodyLock(!(scene === 13 && finalStage >= 2));
 
@@ -271,7 +262,7 @@ export default function CinematicIntro({ onComplete }) {
     }, 0);
 
     return () => clearTimeout(id);
-  }, [scene, carouselProgress]);
+  }, [scene, carouselProgress, resetSceneState]);
 
   useWheelDeck(
     () => {
@@ -334,7 +325,6 @@ export default function CinematicIntro({ onComplete }) {
     }
 
     if (scene === 3) {
-      // On mobile this scene is skipped, but keep the logic for desktop
       timers.push(
         setTimeout(() => {
           setTimelineReveal(true);
@@ -499,7 +489,6 @@ export default function CinematicIntro({ onComplete }) {
     };
   }, [scene, reversedRewind]);
 
-  // Helper for responsive text sizes
   const t = (desktop, mobile) => (isMobile ? mobile : desktop);
 
   const renderScene = () => {
@@ -599,7 +588,6 @@ export default function CinematicIntro({ onComplete }) {
     }
 
     if (scene === 3) {
-      // Timeline – skipped on mobile via next/prev + useEffect
       return (
         <SceneShell dark={false}>
           <motion.div

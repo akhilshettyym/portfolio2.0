@@ -1,11 +1,15 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useDeviceType } from "@/hooks/useDeviceType";
 
 export default function ModeSwitch() {
   const { theme, cycleTheme, mounted } = useTheme();
+  const { isMobile } = useDeviceType();
 
-  if (!mounted) return <div className="w-6 h-6 rounded-full bg-gray-200 animate-pulse" />;
+  const dotSizeClass = isMobile ? "w-4 h-4 mr-2" : "w-6 h-6";
+
+  if (!mounted) return <div className={`rounded-full bg-gray-200 animate-pulse ${dotSizeClass}`} />;
 
   const dotColor = theme === "dark" ? "bg-red-500" : theme === "metal" ? "bg-white" : "bg-black";
   const nextTheme = theme === "dark" ? "metal" : theme === "metal" ? "light" : "dark";
@@ -16,7 +20,7 @@ export default function ModeSwitch() {
     <div className="relative group inline-flex items-center justify-center">
       <button
         onClick={cycleTheme}
-        className={`w-6 h-6 rounded-full transition-all duration-300 ${dotColor} shadow-md focus:outline-none`}
+        className={`rounded-full transition-all duration-300 ${dotColor} ${dotSizeClass} shadow-md focus:outline-none`}
         aria-label={`Switch to ${nextTheme} theme`}
       />
       <span

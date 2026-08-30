@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { SOCIALS } from "@/utils/basic";
 import { goToTop } from "@/utils/functions";
 import { useRouter } from "next/navigation";
@@ -223,15 +222,18 @@ const Footer = () => {
                             <div
                               className={`flex-1 rounded-md p-4 transition-colors duration-500 ${styles.cardInner2}`}>
                               <div className="absolute top-4 right-5 z-10 mt-2">
-                                <Image
-                                  src="/footer/animated_zigzag.gif"
-                                  alt="Animated zigzag pattern"
+                                <video
+                                  autoPlay
+                                  loop
+                                  muted
+                                  playsInline
                                   width={200}
                                   height={80}
-                                  unoptimized
+                                  aria-hidden="true"
                                   className={`w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                                  style={{ width: "auto", height: 80 }}
-                                />
+                                  style={{ width: "auto", height: 80 }}>
+                                  <source src="/footer/animated_zigzag.mp4" type="video/mp4" />
+                                </video>
                               </div>
                             </div>
                           </div>
@@ -257,15 +259,17 @@ const Footer = () => {
                   <div
                     className={`h-[35%] rounded-md p-4 flex flex-row gap-4 w-full transition-colors duration-500 ${styles.panelHeader}`}>
                     <div className="w-[50%] p-3">
-                      <Image
-                        src="/footer/animated_blob_gloop.gif"
-                        alt="animated blob gloop"
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
                         width={380}
                         height={35}
-                        loading="lazy"
-                        unoptimized
-                        className={`w-full h-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                      />
+                        aria-hidden="true"
+                        className={`w-full h-auto object-contain transition-all duration-500 ${styles.imageBlend}`}>
+                        <source src="/footer/animated_blob_gloop.mp4" type="video/mp4" />
+                      </video>
                     </div>
 
                     <div
@@ -339,15 +343,17 @@ const Footer = () => {
                     <span> 2026 </span> <span> v1.0 </span>
                   </div>
 
-                  <Image
-                    src="/footer/animated_binary_code.gif"
-                    alt="animated binary code"
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                     width={300}
                     height={100}
-                    priority
-                    unoptimized
-                    className={`mt-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                  />
+                    aria-hidden="true"
+                    className={`mt-auto object-contain transition-all duration-500 ${styles.imageBlend}`}>
+                    <source src="/footer/animated_binary_code.mp4" type="video/mp4" />
+                  </video>
                 </div>
 
                 <div className="flex w-[80%] flex-col gap-2">
@@ -369,16 +375,17 @@ const Footer = () => {
                     </span>
 
                     <div className="min-w-0 shrink">
-                      <Image
-                        src="/footer/animated_decorative_dashes.gif"
-                        alt="animated decorative dashes"
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
                         width={100}
                         height={24}
-                        priority
-                        unoptimized
-                        className={`h-5 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
-                        style={{ width: "auto" }}
-                      />
+                        aria-hidden="true"
+                        className={`h-5 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}>
+                        <source src="/footer/animated_decorative_dashes.mp4" type="video/mp4" />
+                      </video>
                     </div>
 
                     <button
@@ -523,15 +530,18 @@ const Footer = () => {
                         <div
                           className={`flex-1 rounded-md relative transition-colors duration-500 ${styles.cardInner2} ${isMobile ? "min-h-15" : "min-h-20"}`}>
                           <div className="z-10">
-                            <Image
-                              src="/footer/animated_zigzag.gif"
-                              alt="Animated zigzag pattern"
+                            <video
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
                               width={200}
                               height={80}
-                              unoptimized
+                              aria-hidden="true"
                               className={`w-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                              style={{ width: "auto", height: isMobile ? 56 : 80 }}
-                            />
+                              style={{ width: "auto", height: 80 }}>
+                              <source src="/footer/animated_zigzag.mp4" type="video/mp4" />
+                            </video>
                           </div>
                         </div>
                       </div>
@@ -552,21 +562,23 @@ const Footer = () => {
                 <div
                   className={`flex h-full w-full flex-col gap-4 p-6 shadow-sm border rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.border} md:w-[40%]`}>
                   <div
-                    className={`h-[35%] rounded-md p-4 flex flex-row gap-4 w-full transition-colors duration-500 ${styles.panelHeader}`}>
-                    <div className="w-[50%] p-3">
-                      <Image
-                        src="/footer/animated_blob_gloop.gif"
-                        alt="animated blob gloop"
+                    className={`h-[35%] rounded-md p-4 flex flex-col md:flex-row gap-4 w-full transition-colors duration-500 ${styles.panelHeader}`}>
+                    <div className="w-full md:w-[50%] p-3">
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
                         width={380}
                         height={35}
-                        loading="lazy"
-                        unoptimized
-                        className={`w-full h-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                      />
+                        aria-hidden="true"
+                        className={`w-full h-auto object-contain transition-all duration-500 ${styles.imageBlend}`}>
+                        <source src="/footer/animated_blob_gloop.mp4" type="video/mp4" />
+                      </video>
                     </div>
 
                     <div
-                      className={`w-[50%] rounded-md border p-3 transition-colors duration-500 flex items-center gap-4 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
+                      className={`w-full md:w-[50%] rounded-md border p-3 transition-colors duration-500 flex items-center gap-4 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
                       <div className="flex w-[40%] items-center py-2 justify-start">
                         <FooterAscii className="w-full" />
                       </div>
@@ -584,10 +596,11 @@ const Footer = () => {
                   </div>
 
                   <div
-                    className={`relative flex h-[65%] flex-col justify-between overflow-hidden rounded-md border p-5 transition-colors duration-500 ${styles.border}`}>
-                    <div className="absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl pointer-events-none" />
-                    <div className="relative z-10 flex flex-col gap-2">
-                      <div className="grid grid-cols-2 gap-3">
+                    className={`relative flex h-auto min-h-[65%] flex-col justify-between overflow-hidden rounded-md border p-3 sm:p-5 transition-colors duration-500 ${styles.border}`}>
+                    <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 sm:h-32 sm:w-32 rounded-full blur-3xl" />
+
+                    <div className="relative z-10 flex flex-col gap-2 sm:gap-3">
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
                         {SOCIALS.map((social) => {
                           const Icon = social.icon;
 
@@ -597,13 +610,15 @@ const Footer = () => {
                               href={social.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`group relative block overflow-hidden px-4 py-1 rounded-md transition-all duration-300 hover:-translate-y-1 ${styles.socialCard}`}>
-                              <div className="relative flex items-center gap-3">
-                                <div className={`${styles.iconBoxBase} ${styles.iconBox}`}>
-                                  <Icon className="text-base" />
+                              className={`group relative block overflow-hidden rounded-md px-2 py-2 sm:px-4 sm:py-2 transition-all duration-300 hover:-translate-y-1 ${styles.socialCard}`}>
+                              <div className="relative flex items-center gap-2 sm:gap-3">
+                                <div
+                                  className={`${styles.iconBoxBase} ${styles.iconBox} shrink-0 flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center`}>
+                                  <Icon className="text-xs sm:text-base" />
                                 </div>
+
                                 <span
-                                  className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${styles.textSecondary}`}>
+                                  className={`min-w-0 truncate text-[9px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider transition-colors duration-300 ${styles.textSecondary}`}>
                                   {social.label}
                                 </span>
                               </div>
@@ -613,7 +628,7 @@ const Footer = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-end mt-2">
+                    <div className="mt-3 flex justify-center sm:justify-end">
                       <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
                     </div>
                   </div>
@@ -621,36 +636,40 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4">
+            <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4 sm:px-4">
               <div
-                className={`mb-5 flex h-[17vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
+                className={`mb-5 flex h-auto min-h-[17vh] w-full flex-col gap-2 rounded-md p-2 transition-colors duration-500 md:h-[17vh] md:flex-row ${styles.wrapperBg}`}>
                 <div
-                  className={`flex h-full w-[20%] flex-col rounded-md border p-4 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
+                  className={`flex w-full flex-col rounded-md border p-3 shadow-sm transition-colors duration-500 sm:p-4 md:h-full md:w-[20%] ${styles.panelBg} ${styles.border}`}>
                   <p
-                    className={`text-xs font-semibold uppercase tracking-normal transition-colors duration-500 ${styles.textMuted}`}>
+                    className={`text-[10px] font-semibold uppercase tracking-normal transition-colors duration-500 sm:text-xs ${styles.textMuted}`}>
                     Made in india
                   </p>
 
                   <div
-                    className={`mt-auto flex items-center justify-between text-[10px] uppercase tracking-wider transition-colors duration-500 ${styles.textMuted}`}>
-                    <span> 2026 </span> <span> v1.0 </span>
+                    className={`mt-3 flex items-center justify-between text-[9px] uppercase tracking-wider transition-colors duration-500 sm:mt-auto sm:text-[10px] ${styles.textMuted}`}>
+                    <span>2026</span>
+                    <span>v1.0</span>
                   </div>
 
-                  <Image
-                    src="/footer/animated_binary_code.gif"
-                    alt="animated binary code"
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                     width={300}
                     height={100}
-                    priority
-                    unoptimized
-                    className={`mt-auto object-contain transition-all duration-500 ${styles.imageBlend}`}
-                  />
+                    aria-hidden="true"
+                    className={`mt-2 h-auto max-h-10 w-full object-contain transition-all duration-500 sm:max-h-14 md:mt-auto ${styles.imageBlend}`}>
+                    <source src="/footer/animated_binary_code.mp4" type="video/mp4" />
+                  </video>
                 </div>
 
-                <div className="flex w-[80%] flex-col gap-2">
+                <div className="flex w-full flex-col gap-2 md:w-[80%]">
                   <div
-                    className={`group relative flex-2 overflow-hidden border p-2 shadow-sm rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
-                    <p className={`text-sm leading-relaxed transition-colors duration-500 ${styles.textSecondary}`}>
+                    className={`group relative flex-1 overflow-hidden rounded-md border p-3 shadow-sm transition-colors duration-500 sm:p-2 ${styles.panelBg} ${styles.border}`}>
+                    <p
+                      className={`text-[11px] leading-relaxed transition-colors duration-500 sm:text-xs md:text-sm ${styles.textSecondary}`}>
                       Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
                       often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
                       coffee, curiosity, and a dash of skepticism. Measure meticulously, but optimize only when proven
@@ -659,28 +678,29 @@ const Footer = () => {
                   </div>
 
                   <div
-                    className={`flex w-full items-center justify-between gap-4 overflow-hidden border px-4 py-1/2 shadow-sm whitespace-nowrap rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.borderLight}`}>
+                    className={`flex w-full flex-col items-stretch justify-between gap-2 overflow-hidden rounded-md border px-3 py-2 shadow-sm transition-colors duration-500 sm:flex-row sm:items-center sm:gap-3 sm:px-4 sm:py-1 ${styles.panelBg} ${styles.borderLight}`}>
                     <span
-                      className={`text-xs sm:text-sm font-semibold uppercase tracking-wider shrink transition-colors duration-500 ${styles.textSecondary}`}>
+                      className={`shrink-0 text-[9px] font-semibold uppercase tracking-wider transition-colors duration-500 sm:text-xs md:text-sm ${styles.textSecondary}`}>
                       Independent Developer
                     </span>
 
-                    <div className="min-w-0 shrink">
-                      <Image
-                        src="/footer/animated_decorative_dashes.gif"
-                        alt="animated decorative dashes"
+                    <div className="flex min-w-0 flex-1 justify-center sm:justify-start">
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
                         width={100}
                         height={24}
-                        priority
-                        unoptimized
-                        className={`h-5 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}
-                        style={{ width: "auto" }}
-                      />
+                        aria-hidden="true"
+                        className={`h-4 w-auto max-w-full object-contain opacity-80 transition-all duration-500 sm:h-5 ${styles.imageBlend}`}>
+                        <source src="/footer/animated_decorative_dashes.mp4" type="video/mp4" />
+                      </video>
                     </div>
 
                     <button
                       onClick={handleNavigation}
-                      className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 cursor-pointer ${styles.buttonBg}`}>
+                      className={`shrink-0 self-center text-[9px] tracking-wide transition-opacity duration-300 hover:opacity-70 cursor-pointer sm:self-auto sm:text-xs sm:tracking-wider ${styles.buttonBg}`}>
                       Am probably not sleeping, Hit me up ↗
                     </button>
                   </div>
@@ -690,7 +710,7 @@ const Footer = () => {
 
             <div className="relative w-full">
               <div
-                className={`relative h-28 w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom}`}>
+                className={`relative w-full overflow-hidden transition-colors duration-500 ${styles.footerBottom} ${isMobile ? "h-10" : "h-28"}`}>
                 <h2
                   className={`absolute left-1/2 bottom-[-0.38em] -translate-x-1/2 select-none whitespace-nowrap text-[clamp(1rem,12vw,15rem)] font-extrabold uppercase leading-none -tracking-widest origin-center scale-x-[1.2] transition-colors duration-500 ${styles.textPrimary}`}>
                   AKHIL SHETTY{"\u00A0"}
@@ -699,28 +719,30 @@ const Footer = () => {
 
               <div className={`h-0.5 w-full rounded-full transition-colors duration-500 ${styles.dividerLine}`} />
 
-              <div className="flex items-center justify-between px-4 py-2">
-                <div className="flex-1 text-left">
-                  <span
-                    className={`flex items-center gap-1 text-[10px] sm:text-xs shrink-0 whitespace-nowrap transition-colors duration-500 ${styles.textMuted}`}>
-                    <span>All rights reserved 2026</span>
-                    <FaRegCopyright className="shrink-0" />
-                    <span>Akhil Shetty M.</span>
-                  </span>
-                </div>
+              <div className="flex w-full items-center justify-between px-3 py-2 sm:px-4">
+                {!isMobile && (
+                  <div className="flex flex-1 items-center justify-start">
+                    <span
+                      className={`flex items-center gap-1 whitespace-nowrap text-xs font-normal tracking-wider transition-colors duration-500 ${styles.textMuted}`}>
+                      <span>All rights reserved 2026</span>
+                      <FaRegCopyright className="shrink-0" />
+                      <span>Akhil Shetty M.</span>
+                    </span>
+                  </div>
+                )}
 
-                <div className="flex-1 flex items-center justify-center gap-4">
+                <div className={`flex ${isMobile ? "flex-1 justify-start" : "flex-1 justify-center"} items-center`}>
                   <Link
                     href="/privacy"
-                    className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
+                    className={`text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
                     Privacy Policy
                   </Link>
                 </div>
 
-                <div className="flex-1 text-right flex justify-end">
+                <div className={`flex ${isMobile ? "flex-1 justify-end" : "flex-1 justify-end"} items-center`}>
                   <button
                     onClick={goToTop}
-                    className={`flex items-center gap-1.5 text-xs font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
+                    className={`flex items-center gap-1.5 whitespace-nowrap text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 cursor-pointer ${styles.buttonBg}`}>
                     <span>To Top</span>
                     <HiArrowSmUp size={15} className="shrink-0" />
                   </button>

@@ -265,7 +265,7 @@ export default function SubjectProfile() {
             <div className="lg:col-span-8 flex flex-col justify-between gap-10">
               <div>
                 <h3 className={`text-xl font-light leading-relaxed tracking-tight text-justify ${styles.textH3}`}>
-                  I craft technical design solutions that help forward-thinking brands truly differentiate. With over
+                  I craft technical design solutions that help forward-thinking brands truly differentiate. With over{" "}
                   <span className={`font-semibold px-2 py-0.5 rounded ${styles.textHighlightBg}`}>
                     3-4 years of tech experience
                   </span>
@@ -303,9 +303,9 @@ export default function SubjectProfile() {
                   className={`border p-6 flex flex-col justify-between transition-all duration-300 rounded-xl group ${styles.hoverCard}`}>
                   <p className={`text-xs font-medium transition-colors text-justify ${styles.hoverCardText}`}>
                     I design spaces with structural intention, merging the precise creative layouts of
-                    <span className={`font-semibold ${styles.textHighlight}`}>Figma</span>, code flexibility of modern
+                    <span className={`font-semibold ${styles.textHighlight}`}> Figma</span>, code flexibility of modern
                     frameworks, and advanced scroll magic driven by
-                    <span className={`font-semibold ${styles.textHighlight}`}>GSAP / Framer Motion</span>. These are
+                    <span className={`font-semibold ${styles.textHighlight}`}> GSAP / Framer Motion</span>. These are
                     strategic tools configured to capture complete market attention.
                   </p>
                 </motion.div>

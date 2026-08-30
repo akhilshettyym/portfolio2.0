@@ -5,9 +5,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { setLocationMode } from "@/utils/weather-scene";
 import { getLocationStyles } from "@/utils/themeSwatch";
 import CustomButton from "@/components/basic/CustomButton";
+import { useDeviceType } from "@/hooks/useDeviceType";
 
 export default function LocationModal({ open, onComplete }) {
   const { theme } = useTheme();
+  const { isMobile } = useDeviceType();
   const styles = getLocationStyles(theme);
 
   const handleLocationSelect = (mode) => {
@@ -21,6 +23,7 @@ export default function LocationModal({ open, onComplete }) {
       title: "Accurate Location",
       description:
         "Use your precise device location to create the most location-aware weather scene. Your browser may ask for permission.",
+      shortDescription: "Uses your precise location. Browser may ask permission.",
       button: "Use Accurate",
     },
     {
@@ -28,12 +31,14 @@ export default function LocationModal({ open, onComplete }) {
       title: "Fast Location",
       description:
         "Use an approximate city-level location based on your network. No browser location permission is required.",
+      shortDescription: "Uses your approximate location. No permission needed.",
       button: "Use Fast",
     },
     {
       mode: "denied",
       title: "Default Location",
       description: "Skip location entirely and continue with the portfolio's default clouds, background, and scene.",
+      shortDescription: "Skip location and use the default scene.",
       button: "Continue",
     },
   ];
@@ -42,7 +47,7 @@ export default function LocationModal({ open, onComplete }) {
     <AnimatePresence mode="wait">
       {open && (
         <motion.div
-          className="fixed inset-0 z-9999 flex items-center justify-center px-3 py-4 sm:px-5"
+          className="fixed inset-0 z-9999 flex items-start justify-center overflow-y-auto px-3 py-6 sm:items-center sm:px-5 sm:py-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -51,7 +56,7 @@ export default function LocationModal({ open, onComplete }) {
           aria-modal="true"
           aria-labelledby="location-modal-title">
           <motion.div
-            className="absolute inset-0 bg-black/55 backdrop-blur-lg"
+            className="fixed inset-0 bg-black/55 backdrop-blur-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -63,7 +68,7 @@ export default function LocationModal({ open, onComplete }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.985 }}
             transition={{ type: "spring", stiffness: 280, damping: 26 }}
-            className={`relative w-full max-w-5xl overflow-hidden border transition-colors duration-500 ${styles.modalBox}`}>
+            className={`relative my-auto max-h-[92vh] w-full max-w-5xl overflow-y-auto overscroll-contain border transition-colors duration-500 ${styles.modalBox}`}>
             <motion.div
               initial="hidden"
               animate="visible"
@@ -72,7 +77,7 @@ export default function LocationModal({ open, onComplete }) {
               <div className="mx-auto max-w-2xl text-center">
                 <motion.div
                   variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}
-                  className={`mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] opacity-60 transition-colors duration-500 ${styles.description}`}>
+                  className={`mb-2 text-[10px] font-semibold uppercase tracking-normal opacity-60 transition-colors duration-500 ${styles.description}`}>
                   Weather Scene
                 </motion.div>
 
@@ -86,7 +91,9 @@ export default function LocationModal({ open, onComplete }) {
                 <motion.p
                   variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}
                   className={`mx-auto mt-2 max-w-xl text-xs leading-relaxed transition-colors duration-500 sm:text-sm ${styles.description}`}>
-                  Choose how location is used to create the weather scene.
+                  {isMobile
+                    ? "Choose how location is used."
+                    : "Choose how location is used to create the weather scene."}
                 </motion.p>
               </div>
 
@@ -99,7 +106,7 @@ export default function LocationModal({ open, onComplete }) {
                     whileHover={{ y: -3 }}
                     whileTap={{ scale: 0.99 }}
                     transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                    className={`group flex min-h-42 flex-col justify-between border p-4 transition-all duration-500 sm:min-h-48 sm:p-5 ${styles.optionCard}`}>
+                    className={`group flex flex-col justify-between border p-4 transition-all duration-500 sm:min-h-48 sm:p-5 ${styles.optionCard}`}>
                     <div>
                       <div className="flex items-center justify-between gap-3">
                         <h3
@@ -110,7 +117,7 @@ export default function LocationModal({ open, onComplete }) {
 
                       <p
                         className={`mt-3 text-xs leading-relaxed transition-colors duration-500 sm:text-sm ${styles.optionText}`}>
-                        {option.description}
+                        {isMobile ? option.shortDescription : option.description}
                       </p>
                     </div>
 
@@ -118,8 +125,8 @@ export default function LocationModal({ open, onComplete }) {
                       <CustomButton
                         title={option.button}
                         onClick={() => handleLocationSelect(option.mode)}
-                        width={200}
-                        height={38}
+                        width={isMobile ? 200 : 200}
+                        height={35}
                       />
                     </div>
                   </motion.div>
@@ -130,8 +137,9 @@ export default function LocationModal({ open, onComplete }) {
                 variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
                 className={`mt-5 border-t pt-4 text-center transition-colors duration-500 ${styles.description}`}>
                 <p className="text-xs leading-relaxed tracking-tight opacity-70">
-                  Accurate uses your precise location. Fast uses an approximate location. Default keeps your location
-                  private and uses the built-in scene.
+                  {isMobile
+                    ? "Your location choice stays private."
+                    : "Accurate uses your precise location. Fast uses an approximate location. Default keeps your location private and uses the built-in scene."}
                 </p>
               </motion.div>
             </motion.div>

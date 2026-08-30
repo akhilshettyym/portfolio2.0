@@ -60,16 +60,17 @@ export default function EmergencyCTA() {
         <div
           className={`flex flex-row items-center overflow-hidden w-full px-10 transition-colors duration-500 ${styles.bg}`}>
           <div className="flex-1 rounded-lg text-sm px-4 flex items-center justify-start min-w-0">
-            <Image
-              src="/footer/animated_qr_border.gif"
-              alt="animated qr border"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
               width={200}
               height={56}
-              priority
-              unoptimized
-              style={{ width: "auto" }}
-              className={`w-auto h-auto z-10 object-contain transition-all duration-500 ${styles.image}`}
-            />
+              aria-hidden="true"
+              className={`w-auto h-auto z-10 object-contain transition-all duration-500 ${styles.image}`}>
+              <source src="/footer/animated_qr_border.mp4" type="video/mp4" />
+            </video>
           </div>
 
           <div className="flex-1 rounded-lg text-sm px-4 overflow-hidden min-w-0 flex items-center">
@@ -96,16 +97,17 @@ export default function EmergencyCTA() {
           </div>
 
           <div className="flex-1 rounded-lg text-sm px-4 flex items-center justify-end min-w-0">
-            <Image
-              src="/footer/animated_qr_border.gif"
-              alt="animated qr border"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
               width={200}
               height={56}
-              priority
-              unoptimized
-              style={{ width: "auto" }}
-              className={`w-auto h-auto z-10 object-contain transition-all duration-500 ${styles.image}`}
-            />
+              aria-hidden="true"
+              className={`w-auto h-auto z-10 object-contain transition-all duration-500 ${styles.image}`}>
+              <source src="/footer/animated_qr_border.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
       </div>

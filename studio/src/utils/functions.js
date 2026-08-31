@@ -550,8 +550,8 @@ export const logMail = () => {
             akhilshettym2003@gmail.com ↗{" "}
           </a>
           <p className="leading-relaxed text-justify">
-            Drop me a line or send over your project ideas via email. Don't worry—your message will bypass the security
-            bots and land straight in my main inbox.
+            Drop me a line or send over your project ideas via email. Don&apos;t worry—your message will bypass the
+            security bots and land straight in my main inbox.
           </p>
         </span>
       </div>
@@ -600,7 +600,7 @@ export const logPhilosophy = () => {
               </li>
               <li>
                 <strong className="text-slate-200">Real Impact First:</strong> Focusing heavily on raw technical
-                execution and scalability, because pretty styling doesn't mean much if the app runs slow.
+                execution and scalability, because pretty styling doesn&apos;t mean much if the app runs slow.
               </li>
             </ul>
           </div>
@@ -641,26 +641,21 @@ export const logSalesforce = () => {
 export const logMySocials = () => {
   return (
     <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
-           {" "}
+      {" "}
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
-                <span className="text-emerald-500 font-bold">$my_socials</span>       {" "}
-        <span className="text-emerald-400"> window down to my socials section...</span>       {" "}
+        <span className="text-emerald-500 font-bold">$my_socials</span>
+        <span className="text-emerald-400"> window down to my socials section...</span>
         <span className="text-white">
-                   {" "}
           <p className="leading-relaxed text-justify">
-            Here's my socials just to get an idea. Move your cursor around this section to reveal snapshots of what I've
-            been up to lately. The mouse trail leaves behind a visual history of my favorite projects and moments, so
-            feel free to wander around and explore.
+            Here&apos;s my socials just to get an idea. Move your cursor around this section to reveal snapshots of what
+            I&apos;ve been up to lately. The mouse trail leaves behind a visual history of my favorite projects and
+            moments, so feel free to wander around and explore.
           </p>
-                   {" "}
           <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
             - Shut down this console window and dive into the full experience.
           </p>
-                 {" "}
         </span>
-             {" "}
       </div>
-         {" "}
     </div>
   );
 };
@@ -668,77 +663,59 @@ export const logMySocials = () => {
 export const logSocials = () => {
   return (
     <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
-           {" "}
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
-               {" "}
         <div>
-                      <span className="inline-block w-20 text-emerald-500 font-bold">$mail</span>           {" "}
+          <span className="inline-block w-20 text-emerald-500 font-bold">$mail</span>
           <a href="mailto:akhilshettym2003@gmail.com" className="text-cyan-400 hover:underline">
-            {" "}
-            akhilshettym2003@gmail.com ↗{" "}
+            akhilshettym2003@gmail.com ↗
           </a>
-                 {" "}
         </div>
-                 {" "}
         <div>
-                      <span className="inline-block w-20 text-emerald-500 font-bold">$instagram</span>           {" "}
+          <span className="inline-block w-20 text-emerald-500 font-bold">$instagram</span>
           <a
             href="https://www.instagram.com/akhil_shetty_m"
             target="_blank"
             rel="noreferrer"
             className="text-cyan-500 hover:underline">
             {" "}
-            instagram.com/akhil_shetty_m ↗{" "}
+            instagram.com/akhil_shetty_m ↗
           </a>
-                 {" "}
         </div>
-                 {" "}
         <div>
-                      <span className="inline-block w-20 text-emerald-500 font-bold">$github</span>           {" "}
+          <span className="inline-block w-20 text-emerald-500 font-bold">$github</span>
           <a
             href="https://github.com/akhilshettyym"
             target="_blank"
             rel="noreferrer"
             className="text-cyan-500 hover:underline">
-            {" "}
-            github.com/akhilshettyym ↗{" "}
+            github.com/akhilshettyym ↗
           </a>
-                 {" "}
         </div>
-                 {" "}
         <div>
-                      <span className="inline-block w-20 text-emerald-500 font-bold">$salesforce</span>           {" "}
+          <span className="inline-block w-20 text-emerald-500 font-bold">$salesforce</span>
           <a
             href="https://www.salesforce.com/trailblazer/akhilshettym"
             target="_blank"
             rel="noreferrer"
             className="text-cyan-500 hover:underline">
-            {" "}
-            salesforce.com/akhilshettym ↗{" "}
+            salesforce.com/akhilshettym ↗
           </a>
-                 {" "}
         </div>
-                 {" "}
         <div>
-                      <span className="inline-block w-20 text-emerald-500 font-bold">$linkedin</span>           {" "}
+          <span className="inline-block w-20 text-emerald-500 font-bold">$linkedin</span>
           <a
             href="https://linkedin.com/in/akhilshettym"
             target="_blank"
             rel="noreferrer"
             className="text-cyan-500 hover:underline">
-            {" "}
-            linkedin.com/in/akhilshettym ↗{" "}
+            linkedin.com/in/akhilshettym ↗
           </a>
-                 {" "}
         </div>
-                   {" "}
         <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
           - Since your system is currently running in a performance-optimized tier, the standard social view will be
           replaced with this lightweight version to guarantee a fluid interface.
         </p>
-             {" "}
       </div>
-         {" "}
     </div>
   );
 };

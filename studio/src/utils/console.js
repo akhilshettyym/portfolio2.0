@@ -13,6 +13,7 @@ import {
   logLocation,
   logls,
   logMail,
+  logMySocials,
   logPhilosophy,
   logPingAkhil,
   logProjects,
@@ -29,18 +30,17 @@ const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo", "r
 
 export function normalizeConsoleCommand(value) {
   const command = value.trim().toLowerCase();
-
   if (!command) return "";
   if (command.startsWith("/") || NON_SLASH_COMMANDS.some((item) => command.startsWith(item))) {
     return command;
   }
-
   return `/${command}`;
 }
 
-export function runConsoleCommand(rawCommand, { navigate, close, clear }) {
+export function runConsoleCommand(rawCommand, { navigate, close, clear }, isTier2) {
   const command = normalizeConsoleCommand(rawCommand);
 
+  const navToSocials = () => ({ output: logMySocials(), navigation: ["/", "socials"] });
   const commands = {
     "/hero": () => ({ output: logHero(), navigation: ["/", "hero"] }),
     "/about": () => ({ output: logAbout(), navigation: ["/", "about"] }),
@@ -50,7 +50,6 @@ export function runConsoleCommand(rawCommand, { navigate, close, clear }) {
       navigation: ["/", "achievements"],
     }),
     "/projects": () => ({ output: logProjects(), navigation: ["/work", "projects"] }),
-    "/work": () => ({ output: logProjects(), navigation: ["/work", "projects"] }),
     "/experience": () => ({
       output: logExperience(),
       navigation: ["/work", "experience"],
@@ -63,7 +62,7 @@ export function runConsoleCommand(rawCommand, { navigate, close, clear }) {
     "/linkedin": () => ({ output: logLinkedin() }),
     "/instagram": () => ({ output: logInstagram() }),
     "/salesforce": () => ({ output: logSalesforce() }),
-    "/socials": () => ({ output: logSocials() }),
+    "/socials": () => (isTier2 ? { output: logSocials() } : navToSocials()),
     "/coffee": () => ({ output: logCoffee() }),
     "/secrets": () => ({ output: logSecrets() }),
     "/location": () => ({ output: logLocation() }),

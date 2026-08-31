@@ -294,25 +294,55 @@ export function randomChar() {
 }
 
 // ConsoleModal
+export const logHero = () => (
+  <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+      <span className="text-emerald-500 font-bold">$hero </span>
+      {"\n"}root display terminal view matrix main screen... {"\n"}
+      ------------------------------------------------{"\n"}
+      <span className="text-white">
+        Initializing environment subsystem... Here you can configure animated viewport layouts and manipulate real-time
+        cloud vectors via the scene controller. Re-trigger the cinematic sequence, or fetch current lunar phases and
+        predictive weather metrics.
+      </span>
+      <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+        - Terminate this terminal session to render the interactive app layer.
+      </p>
+    </div>
+  </div>
+);
+
 export const logAbout = () => {
   return (
-    <div className="text-[11px] text-justify leading-relaxed max-w-full">
-      <span className="block text-white font-medium mt-2">About Akhil Shetty</span>
-      <p className="mt-1">
-        A <span className="text-white font-medium">computer science graduate</span> from Mangalore, Karnataka, who
-        turned systemic curiosity into a full-time engineering habit. Having graduated from St. Joseph Engineering
-        College, I am currently based in Mumbai, accelerating products as an{" "}
-        <span className="text-white font-medium">IT Developer</span>.
-      </p>
-
-      <span className="block text-white font-medium mt-3">Core Focus</span>
-      <p className="mt-1">
-        Building high-performance code, fine-tuning infrastructure latency, and mapping pixel-perfect layout
-        architectures across scalable user systems.
-      </p>
-
-      <div className="pt-3 text-slate-500 select-none">
-        $ <span>try entering: cat readme.md</span>
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$about_me</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            {" "}
+            I am a{" "}
+            <span className="font-semibold">
+              multidisciplinary creator engineering high-impact digital experiences
+            </span>{" "}
+            at the intersection of <span className="font-semibold">robust code and beautiful design</span>. My
+            methodology is inherently, while intentionally bridging user psychology with comprehensive engineering
+            strategy.{" "}
+          </p>
+          <p className="mt-1 leading-relaxed text-justify">
+            {" "}
+            I craft <span className="font-semibold">technical design solutions</span> that help forward-thinking brands
+            truly differentiate. With over <span className="font-semibold">3-4 years of tech experience</span>, I
+            specialize in designing beautiful software interfaces and transforming them into high-performing
+            reality—spanning  <span className="font-semibold">frontend architectures</span>, comprehensive{" "}
+            <span className="font-semibold">backend infrastructures</span>,{" "}
+            <span className="font-semibold">headless CMS ecosystems</span>, automated{" "}
+            <span className="font-semibold">CI/CD automation pipelines</span>, and specialized{" "}
+            <span className="font-semibold">Salesforce CRM logic integrations</span>.{" "}
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Exit the terminal to unlock the full visual layout.
+          </p>
+        </span>
       </div>
     </div>
   );
@@ -320,62 +350,25 @@ export const logAbout = () => {
 
 export const logSkills = () => {
   return (
-    <div className="w-full max-w-full rounded-md border border-neutral-800 bg-black/40 p-4 font-mono text-[11px] text-neutral-300">
-      <div className="mb-4 flex items-start justify-between border-b border-neutral-800 pb-2">
-        <div>
-          <p className="text-[11px] text-purple-400">$ cat skills.json</p>
-          <h3 className="text-[11px] text-neutral-100">Expertise & Capabilities</h3>
-        </div>
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">
+          $skils <h3 className="text-neutral-100">Expertise & Capabilities</h3>
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+      <div className="mt-2 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
         {[
-          {
-            name: "Next.js / React",
-            val: "85%",
-            color: "bg-cyan-500",
-            text: "text-cyan-400",
-          },
-          {
-            name: "MERN Stack",
-            val: "80%",
-            color: "bg-emerald-500",
-            text: "text-emerald-400",
-          },
-          {
-            name: "Salesforce CRM",
-            val: "75%",
-            color: "bg-amber-500",
-            text: "text-amber-400",
-          },
-          {
-            name: "Component Architecture",
-            val: "85%",
-            color: "bg-green-500",
-            text: "text-green-400",
-          },
-          {
-            name: "UI & Visual Design",
-            val: "75%",
-            color: "bg-sky-500",
-            text: "text-sky-400",
-          },
-          {
-            name: "Motion Graphics",
-            val: "65%",
-            color: "bg-purple-500",
-            text: "text-purple-400",
-          },
-          { name: "Core Java", val: "60%", color: "bg-red-500", text: "text-red-400" },
-          {
-            name: "Docker & DevOps",
-            val: "40%",
-            color: "bg-blue-500",
-            text: "text-blue-400",
-          },
+          { name: "Frontend Development", val: "90%", color: "bg-cyan-500", text: "text-cyan-400" },
+          { name: "Backend Engineering", val: "80%", color: "bg-emerald-500", text: "text-emerald-400" },
+          { name: "Fullstack Solutions", val: "85%", color: "bg-amber-500", text: "text-amber-400" },
+          { name: "Mobile Applications", val: "75%", color: "bg-green-500", text: "text-green-400" },
+          { name: "CMS Integration", val: "60%", color: "bg-sky-500", text: "text-sky-400" },
+          { name: "Devops & CI/CD", val: "70%", color: "bg-purple-500", text: "text-purple-400" },
+          { name: "Core Java", val: "65%", color: "bg-red-500", text: "text-red-400" },
         ].map((s, idx) => (
           <div key={idx}>
-            <div className="flex justify-between text-neutral-400">
+            <div className="flex justify-between text-white">
               <span>{s.name}</span>
               <span className={s.text}>{s.val}</span>
             </div>
@@ -386,205 +379,366 @@ export const logSkills = () => {
         ))}
       </div>
 
-      <div className="mt-6 border-t border-neutral-800 pt-3">
-        <p className="text-[11px] text-neutral-500 mb-1"> {"// environment stack matrix"} </p>
+      <div className="mt-2 border-t border-neutral-800 pt-3">
         <p className="leading-relaxed text-neutral-400">
           <span className="text-neutral-200 font-semibold">Tools & Tech:</span> Core Java • JavaScript • Next.js • MySQL
           • TypeScript • Node.js • Express • Material UI • React • HTML/CSS • Figma • Git • GitHub • REST APIs
         </p>
+        <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+          - Shut down this console window and dive into the full experience.
+        </p>
       </div>
     </div>
   );
 };
 
-export const logAchievements = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">Navigating window down to achievements section...</div>
-);
+export const logAchievements = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$achievements</span>
+        <span className="text-emerald-400"> window down to achievements section...</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            Built upon a foundation of academic excellence and verified technical certifications, my journey is driven
+            by continuous learning and leadership beyond the classrooms.
+          </p>
+          <p className="leading-relaxed text-justify">
+            These experiences culminate in tangible impact highlights—milestones that showcase my ability to transform
+            skills into meaningful, real-world differences.
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Dismiss this viewport to interface with the graphical matrix.
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
-export const logProjects = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">Syncing workspace environment context to /work...</div>
-);
+export const logProjects = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$projects/works</span>
+        <span className="text-emerald-400"> window down to projects section...</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            A comprehensive index of recent, production-grade architectural executions. These systems bridge technical
+            architecture with scalable solutions.
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Terminate this command console instance to unlock and explore the visual portfolio.Option{" "}
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export const logExperience = () => {
   return (
-    <div className="space-y-3 max-w-full">
-      {[
-        {
-          title: "Global Industrial Pvt. Ltd.",
-          role: "IT Trainee · Developer",
-          date: "Feb 2025 — Present",
-          desc: "Scale global client dashboards and client frameworks utilizing Next.js, React, and Material UI. Optimize performance, layout paint timelines, and modular systems integration.",
-          color: "text-amber-400",
-        },
-        {
-          title: "Karanji Infotech Pvt. Ltd.",
-          role: "Creative Motion Developer",
-          date: "Nov 2024 — Dec 2024",
-          desc: "Crafted 2D structural visuals and dynamic interactive vector systems using Adobe Creative platforms, keeping layout delivery structures crisp.",
-          color: "text-sky-400",
-        },
-        {
-          title: "Adore Earth",
-          role: "Technical Operations Coordinator",
-          date: "Oct 2024 — Nov 2024",
-          desc: "Synchronized internal developer infrastructure pipelines, team alignment parameters, and digital conference matrices.",
-          color: "text-emerald-400",
-        },
-      ].map((exp, idx) => (
-        <div
-          key={idx}
-          className="rounded-md border border-neutral-800 bg-black/30 p-4 text-[11px] font-mono text-neutral-300">
-          <div className="mb-2 flex items-start justify-between border-b border-neutral-800/60 pb-2">
-            <div>
-              <p className={`text-[11px] ${exp.color}`}>$ status --active</p>
-              <h3 className="text-[11px] text-neutral-100 font-bold">
-                {exp.title} <span className="text-neutral-500 font-normal">({exp.role})</span>
-              </h3>
-            </div>
-            <span className="text-[11px] text-neutral-500">{exp.date}</span>
-          </div>
-          <p className="leading-relaxed text-neutral-400">{exp.desc}</p>
-        </div>
-      ))}
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$experience</span>
+        <span className="text-emerald-400"> window down to my experience section...</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            My professional trajectory bridges visual communication with robust technical execution.
+          </p>
+          <p className="leading-relaxed text-justify">
+            I started my career as a graphic design intern, transitioned into an IT engineering internship, and am
+            currently accelerating my growth as a technical IT trainee.
+          </p>
+          <p className="leading-relaxed text-justify">
+            This cross-disciplinary foundation enables me to architect scalable solutions that balance backend system
+            logic with user-centric digital design.
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Exit this active terminal session to initialize the graphical user interface.
+          </p>
+        </span>
+      </div>
     </div>
   );
 };
 
-export const logGithub = () => (
-  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
-    <span className="text-gray-400 block mb-1">GitHub Endpoint</span>
-    <a
-      href="https://github.com/akhilshettyym"
-      target="_blank"
-      rel="noreferrer"
-      className="text-cyan-400 hover:underline">
-      github.com/akhilshettyym ↗
-    </a>
-  </div>
-);
+export const logGithub = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$github</span>
+        <span className="text-emerald-400"> window down to my github contributions section...</span>
+        <span className="text-white">
+          <a
+            href="https://github.com/akhilshettyym"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            github.com/akhilshettyym ↗{" "}
+          </a>
+          <p className="leading-relaxed text-justify">
+            Check out my public development tracks and open-source activities on GitHub. As for my work contributions —
+            those are currently hiding in another dimension.
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Dismiss this terminal viewport to view my github activity
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
-export const logCreate = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">Opening deployment canvas inside path: /start...</div>
-);
+export const logLinkedin = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$linkedin</span>
+        <span className="text-white">
+          <a
+            href="https://linkedin.com/in/akhilshettym"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            linkedin.com/in/akhilshettym ↗{" "}
+          </a>
+          <p className="leading-relaxed text-justify">
+            Scan my professional network layout and career trajectory on LinkedIn. Corporate endorsements and executive
+            handshakes are fully synchronized in this dimension.
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
-export const logHero = () => (
-  <div className="text-[11px] text-emerald-400 font-mono">
-    Returning root display terminal view matrix to main screen...
-  </div>
-);
+export const logInstagram = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$instagram</span>
+        <span className="text-white">
+          <a
+            href="https://www.instagram.com/akhil_shetty_m"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            instagram.com/akhil_shetty_m ↗{" "}
+          </a>
+          <p className="leading-relaxed text-justify">
+            Deconstruct the visual lifestyle layers and creative asset snapshots on Instagram. Behind-the-scenes
+            compiling processes and design aesthetics are rendering live.
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export const logMail = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$mail</span>
+        <span className="text-white">
+          <a href="mailto:akhilshettym2003@gmail.com" className="text-cyan-400 hover:underline">
+            {" "}
+            akhilshettym2003@gmail.com ↗{" "}
+          </a>
+          <p className="leading-relaxed text-justify">
+            Drop me a line or send over your project ideas via email. Don't worry—your message will bypass the security
+            bots and land straight in my main inbox.
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
+export const logCreate = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$connect/create_something</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            Whether you have an exciting project idea, want to collaborate on something cool, or just want to say a
+            quick hi, my inbox is always open.
+          </p>
+          <p className="leading-relaxed text-justify">
+            Feel free to drop a message whenever inspiration strikes. No stiff corporate filters here—your note goes
+            straight to my main screen.
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Close this console window to view the interface.
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export const logPhilosophy = () => {
   return (
-    <div className="w-full text-[11px] bg-black/40 border border-slate-800 rounded-lg p-4 text-slate-400 font-mono leading-relaxed max-w-full">
-      <div className="mb-3 pb-2 border-b border-slate-900">
-        <span className="text-slate-500 font-medium block uppercase tracking-wider mb-1">
-          Product Execution Philosophy
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$my_philosophy</span>
+        <span className="text-white">
+          <p className="text-slate-200 eading-relaxed text-justify">{`"If it does not remove user overhead, it does not belong in production."`}</p>
+          <div className="leading-relaxed text-justify">
+            <ul className="space-y-2">
+              <li>
+                <strong className="text-slate-200">Data Over Guesswork:</strong> Building code based on actual math and
+                analytics, not just hunks of wishful thinking.
+              </li>
+              <li>
+                <strong className="text-slate-200">Smart Blueprinting:</strong> Crafting clean, reusable hooks and
+                components to cut down build times across every device.
+              </li>
+              <li>
+                <strong className="text-slate-200">Real Impact First:</strong> Focusing heavily on raw technical
+                execution and scalability, because pretty styling doesn't mean much if the app runs slow.
+              </li>
+            </ul>
+          </div>
         </span>
-        <p className="text-slate-200 text-[12px] font-medium italic">
-          {"If it does not remove user overhead, it does not belong in production."}
-        </p>
       </div>
-      <ul className="space-y-2">
-        <li>
-          <strong className="text-slate-200 font-medium">Data-Driven Logic:</strong> Shifting guesswork out of codebase
-          structures into absolute analytical verification.
-        </li>
-        <li>
-          <strong className="text-slate-200 font-medium">Scalable Blueprinting:</strong> Constructing modular, reusable
-          component hooks that lower build times across platforms.
-        </li>
-        <li>
-          <strong className="text-slate-200 font-medium">Impact Metrics:</strong> Valuing technical performance
-          conversions and functional scale above decorative styling layouts.
-        </li>
-      </ul>
     </div>
   );
 };
 
-export const logMail = () => (
-  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
-    <span className="text-gray-400 block mb-1">Direct Communication Matrix</span>
-    <a href="mailto:akhilshettym2003@gmail.com" className="text-cyan-400 hover:underline">
-      akhilshettym2003@gmail.com ↗
-    </a>
-  </div>
-);
+export const logSalesforce = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$salesforce_trailhead</span>
+        <span className="text-emerald-400"> window down to my salesforce trailhead section...</span>
+        <span className="text-white">
+          <a
+            href="https://www.salesforce.com/trailblazer/akhilshettym"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            salesforce.com/trailblazer/akhilshettym ↗{" "}
+          </a>
+          <p className="leading-relaxed text-justify">
+            Check out my public learning tracks, earned badges, and rank progression on Trailhead. Keeping my Salesforce
+            skills sharp and verified directly on the platform.Option
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Exit the terminal to unlock the full visual layout.
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
-export const logLinkedin = () => (
-  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
-    <span className="text-gray-400 block mb-1">Professional Identity Link</span>
-    <a
-      href="https://linkedin.com/in/akhilshettym"
-      target="_blank"
-      rel="noreferrer"
-      className="text-cyan-400 hover:underline">
-      linkedin.com/in/akhilshettym ↗
-    </a>
-  </div>
-);
-
-export const logInstagram = () => (
-  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
-    <span className="text-gray-400 block mb-1">Visual Log Feed</span>
-    <a
-      href="https://www.instagram.com/akhil_shetty_m"
-      target="_blank"
-      rel="noreferrer"
-      className="text-cyan-400 hover:underline">
-      instagram.com/akhil_shetty_m ↗
-    </a>
-  </div>
-);
-
-export const logSalesforce = () => (
-  <div className="text-[11px] font-mono p-2 border border-neutral-800 bg-black rounded-md max-w-full">
-    <span className="text-gray-400 block mb-1">Trailblazer Identity Profile</span>
-    <a
-      href="https://www.salesforce.com/trailblazer/akhilshettym"
-      target="_blank"
-      rel="noreferrer"
-      className="text-cyan-400 hover:underline">
-      salesforce.com/trailblazer/akhilshettym ↗
-    </a>
-  </div>
-);
+export const logMySocials = () => {
+  return (
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+           {" "}
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+                <span className="text-emerald-500 font-bold">$my_socials</span>       {" "}
+        <span className="text-emerald-400"> window down to my socials section...</span>       {" "}
+        <span className="text-white">
+                   {" "}
+          <p className="leading-relaxed text-justify">
+            Here's my socials just to get an idea. Move your cursor around this section to reveal snapshots of what I've
+            been up to lately. The mouse trail leaves behind a visual history of my favorite projects and moments, so
+            feel free to wander around and explore.
+          </p>
+                   {" "}
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Shut down this console window and dive into the full experience.
+          </p>
+                 {" "}
+        </span>
+             {" "}
+      </div>
+         {" "}
+    </div>
+  );
+};
 
 export const logSocials = () => {
   return (
-    <div className="space-y-2 max-w-full text-[11px] font-mono">
-      <span className="text-xs font-medium text-slate-400 block mb-1">System Profile Endpoints</span>
-      {[
-        {
-          label: "MAIL",
-          val: "akhilshettym2003@gmail.com",
-          url: "mailto:akhilshettym2003@gmail.com",
-        },
-        {
-          label: "LINKEDIN",
-          val: "linkedin.com/in/akhilshettym",
-          url: "https://linkedin.com/in/akhilshettym",
-        },
-        {
-          label: "GITHUB",
-          val: "github.com/akhilshettyym",
-          url: "https://github.com/akhilshettyym",
-        },
-        {
-          label: "SALESFORCE",
-          val: "trailblazer/akhilshettym",
-          url: "https://www.salesforce.com/trailblazer/akhilshettym",
-        },
-      ].map((soc, i) => (
-        <div
-          key={i}
-          className="flex justify-between items-center bg-black border border-slate-800 p-2 rounded hover:border-slate-400 transition-all">
-          <span className="text-slate-400">{soc.label}:</span>
-          <a href={soc.url} target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">
-            {soc.val}
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+           {" "}
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+               {" "}
+        <div>
+                      <span className="inline-block w-20 text-emerald-500 font-bold">$mail</span>           {" "}
+          <a href="mailto:akhilshettym2003@gmail.com" className="text-cyan-400 hover:underline">
+            {" "}
+            akhilshettym2003@gmail.com ↗{" "}
           </a>
+                 {" "}
         </div>
-      ))}
+                 {" "}
+        <div>
+                      <span className="inline-block w-20 text-emerald-500 font-bold">$instagram</span>           {" "}
+          <a
+            href="https://www.instagram.com/akhil_shetty_m"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            instagram.com/akhil_shetty_m ↗{" "}
+          </a>
+                 {" "}
+        </div>
+                 {" "}
+        <div>
+                      <span className="inline-block w-20 text-emerald-500 font-bold">$github</span>           {" "}
+          <a
+            href="https://github.com/akhilshettyym"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            github.com/akhilshettyym ↗{" "}
+          </a>
+                 {" "}
+        </div>
+                 {" "}
+        <div>
+                      <span className="inline-block w-20 text-emerald-500 font-bold">$salesforce</span>           {" "}
+          <a
+            href="https://www.salesforce.com/trailblazer/akhilshettym"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            salesforce.com/akhilshettym ↗{" "}
+          </a>
+                 {" "}
+        </div>
+                 {" "}
+        <div>
+                      <span className="inline-block w-20 text-emerald-500 font-bold">$linkedin</span>           {" "}
+          <a
+            href="https://linkedin.com/in/akhilshettym"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cyan-500 hover:underline">
+            {" "}
+            linkedin.com/in/akhilshettym ↗{" "}
+          </a>
+                 {" "}
+        </div>
+                   {" "}
+        <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+          - Since your system is currently running in a performance-optimized tier, the standard social view will be
+          replaced with this lightweight version to guarantee a fluid interface.
+        </p>
+             {" "}
+      </div>
+         {" "}
     </div>
   );
 };
@@ -596,10 +750,21 @@ export const logSudoHire = () => {
         [sudo] password for visitor: <span className="text-slate-700">********</span>
       </div>
       <div className="flex flex-wrap items-center gap-x-2 mt-1">
-        <span className="text-emerald-500 font-medium">✓ System Authentication verified.</span>
+        <span className="text-emerald-500 font-medium">✓ System Authentication successful.</span>
       </div>
-      <div className="text-slate-300 mt-3 pt-2 border-t border-slate-900 font-semibold">
-        &gt; Offer profile securely queued for evaluation.
+      <div className="mt-2 border-t border-zinc-900 pt-3 font-mono text-[12px] text-zinc-300">
+        <div className="flex items-center gap-2 text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+          <span>&gt; Deploying contract payload...</span>
+          <span className="font-bold">[████████████████████] 100%</span>
+        </div>
+        <p className="mt-1 font-semibold text-white">✦ Connection established! Transmission complete.</p>
+        <p className="mt-2 text-[11px] text-zinc-500 italic">
+          (Or, you know, skip the matrix and just email{" "}
+          <a href="mailto:akhilshettym2003@gmail.com" className="text-cyan-400 hover:underline">
+            akhilshettym2003@gmail.com
+          </a>
+          )
+        </p>
       </div>
     </div>
   );
@@ -607,14 +772,19 @@ export const logSudoHire = () => {
 
 export const logrmrf = () => {
   return (
-    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
-      <div className="flex flex-col gap-0.5 text-slate-400">
-        <div>Removing local/ambiguity... done</div>
-        <div>Removing local/impostor-syndrome... done</div>
-        <div>Removing project/delivery-risk... done</div>
-        <div className="text-emerald-400 font-bold mt-2 pt-2 border-t border-slate-900">
-          ✦ Workspace stack cleared. Ready to start building together.
-        </div>
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$rm -rf doubts</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            <span className="font-semibold">Removing local/ambiguity... done{"\n"}</span>
+            <span className="font-semibold">Removing local/impostor-syndrome... done{"\n"}</span>
+            <span className="font-semibold">Removing project/delivery-risk... done{"\n"}</span>
+            <span className="font-semibold text-emerald-400">
+              ✦ Workspace stack cleared. Ready to start building together.
+            </span>
+          </p>
+        </span>
       </div>
     </div>
   );
@@ -622,17 +792,23 @@ export const logrmrf = () => {
 
 export const logCoffee = () => {
   return (
-    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px]">
-      <div className="text-slate-500 font-bold whitespace-pre mb-2 text-xs">
-        {"( ( ) )\n........\n| |] \\ /\n`----´"}
-      </div>
-      <div className="space-y-1 text-slate-400">
-        <div className="flex items-center gap-2">
-          <span>Engine Status:</span>
-          <span className="text-emerald-400">[██████████████░░░░░]</span>
-          <span className="text-white">75% Optimized</span>
-        </div>
-        <div>Context: Fully compiled, pushing updates.</div>
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">
+          {"( ( ) )\n........\n| |] \\ /\n`----´"}
+          {"\n"}
+        </span>
+        <span className="text-white">
+          <span>Design fuel level:</span>
+          <span className="text-emerald-400">[████████████████░░░░] 80%{"\n"}</span>
+          <span>
+            Status: <span className="text-emerald-400">Caffeinated and pixel-pushing</span>
+            {"\n"}
+          </span>
+          <span>
+            Daily intake: <span className="text-emerald-400">Yes</span>
+          </span>
+        </span>
       </div>
     </div>
   );
@@ -640,21 +816,22 @@ export const logCoffee = () => {
 
 export const logCatReadme = () => {
   return (
-    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
-      <div className="flex items-center gap-2 border-b border-slate-900 pb-2 mb-3 text-slate-500">
-        <span className="text-emerald-500">#</span> <span>README.md</span>
-      </div>
-      <div className="space-y-2 text-slate-400">
-        <p className="text-slate-200 font-medium">Welcome to the inner shell layer.</p>
-        <p>
-          I believe design isn&apos;t skin-deep decoration; it&apos;s structural optimization. Good code elements
-          disappear cleanly into the user experience framework, helping consumers convert decisions instantly.
-        </p>
-        <p>
-          The web is saturated with concepts that never reach compilation. I focus completely on shipping clean
-          production components.
-        </p>
-        <div className="pt-2 text-slate-300 text-right font-medium italic">— Akhil</div>
+    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$cat readme.md</span>
+        <span className="text-white">
+          <p className="text-slate-200 font-medium">Welcome to the inner shell layer.</p>
+          <p className="leading-relaxed text-justify">
+            <span className="font-semibold">
+              I believe design isn&apos;t skin-deep decoration; it&apos;s structural optimization. Good code elements
+              disappear cleanly into the user experience framework, helping consumers convert decisions instantly.{"\n"}
+            </span>
+            <span className="font-semibold">
+              The web is saturated with concepts that never reach compilation. I focus completely on shipping clean
+              production components.{"\n"}
+            </span>
+          </p>
+        </span>
       </div>
     </div>
   );

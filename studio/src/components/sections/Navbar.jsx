@@ -214,7 +214,7 @@ const Navbar = () => {
     <>
       <div
         className={`fixed top-0 left-0 z-50 w-full border-b backdrop-blur-md transition-colors duration-300 ${headerBgClass} ${textColorClass}`}>
-        <div className="w-full px-3 py-6 sm:hidden">
+        <div className="w-full px-3 py-3 sm:hidden">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <div className="relative h-10 w-10 shrink-0 cursor-pointer" onClick={() => (window.location.href = "/")}>
@@ -361,10 +361,11 @@ const Navbar = () => {
 
                 <div>{time || "—:—:— --"}</div>
 
-                <div key={ip} className={`text-[8px] font-semibold uppercase tracking-[0.25em] ${textMutedClass}`}>
-                  connection
-                  <span className="inline-block w-25 text-right"> {ip}</span>
-                </div>
+                {!isTier2 &&
+                  <div key={ip} className={`text-[8px] font-semibold uppercase tracking-[0.2em] ${textMutedClass}`}>
+                    connection
+                    <span className="inline-block w-25 text-right"> {ip}</span>
+                  </div>}
               </div>
 
               <div

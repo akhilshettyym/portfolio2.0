@@ -16,6 +16,7 @@ import {
   logMySocials,
   logPhilosophy,
   logPingAkhil,
+  logPrivacy,
   logProjects,
   logrmrf,
   logSalesforce,
@@ -26,7 +27,7 @@ import {
   logWhoAmI,
 } from "@/utils/functions";
 
-const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work", "me"];
+const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo hire akhil", "rm -rf akhil", "cat readme.md", "ping akhil", "me"];
 
 export function normalizeConsoleCommand(value) {
   const command = value.trim().toLowerCase();
@@ -50,23 +51,25 @@ export function runConsoleCommand(rawCommand, { navigate, close, clear }, isTier
       navigation: ["/", "achievements"],
     }),
     "/projects": () => ({ output: logProjects(), navigation: ["/work", "projects"] }),
+    "/work": () => ({ output: logProjects(), navigation: ["/work", "projects"] }),
     "/experience": () => ({
       output: logExperience(),
       navigation: ["/work", "experience"],
     }),
     "/github": () => ({ output: logGithub(), navigation: ["/work", "github"] }),
+    "/privacy": () => ({ output: logPrivacy(), navigation: ["/privacy"] }),
     "/connect": () => ({ output: logCreate(), navigation: ["/start"] }),
-    "/create": () => ({ output: logCreate(), navigation: ["/start"] }),
     "/philosophy": () => ({ output: logPhilosophy() }),
     "/mail": () => ({ output: logMail() }),
     "/linkedin": () => ({ output: logLinkedin() }),
     "/instagram": () => ({ output: logInstagram() }),
-    "/salesforce": () => ({ output: logSalesforce() }),
+    "/salesforce": () => ({ output: logSalesforce(), navigation: ["/work", "salesforce"] }),
     "/socials": () => (isTier2 ? { output: logSocials() } : navToSocials()),
     "/coffee": () => ({ output: logCoffee() }),
     "/secrets": () => ({ output: logSecrets() }),
     "/location": () => ({ output: logLocation() }),
     "/help": () => ({ output: logHelp() }),
+    "/hire": () => ({ output: logSudoHire() }),
     "sudo hire akhil": () => ({ output: logSudoHire() }),
     "rm -rf doubts": () => ({ output: logrmrf() }),
     "cat readme.md": () => ({ output: logCatReadme() }),

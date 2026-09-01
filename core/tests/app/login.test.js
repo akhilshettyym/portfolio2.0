@@ -1,7 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import LoginPage from "@/app/login/page"; // <-- Ensure this path matches your folder structure
+import LoginPage from "@/app/login/page";
 import { apiFetch } from "@/utils/api";
-import { showToast } from "@/utils/toast";
 import { useRouter, useSearchParams } from "next/navigation";
 
 jest.mock("@/utils/api");
@@ -30,7 +29,6 @@ describe("LoginPage", () => {
     apiFetch.mockResolvedValueOnce({ token: "fake-jwt-token" });
     const { container } = render(<LoginPage />);
 
-    // Select inputs by type instead of label
     const emailInput = container.querySelector('input[type="email"]');
     const passwordInput = container.querySelector('input[type="password"]');
 

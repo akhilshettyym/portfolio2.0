@@ -170,7 +170,7 @@ export const getFooterStyles = (theme) => {
     cardInner1: isDark ? "bg-white/10" : isMetal ? "bg-red-500/10" : "bg-gray-300",
     cardInner2: isDark ? "bg-black/40" : isMetal ? "bg-black/40" : "bg-gray-200",
     panelBg: isDark ? "bg-[#141414]" : isMetal ? "bg-[#140000]" : "bg-white",
-    panelHeader: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-slate-50",
+    panelHeader: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-white",
     wrapperBg: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-gray-300",
     footerBottom: isDark ? "bg-[#0a0a0a]" : isMetal ? "bg-[#050000]" : "bg-white",
 

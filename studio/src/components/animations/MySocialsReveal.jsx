@@ -7,12 +7,16 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import MySocialsTiered from "@/components/Tiered/MySocialsTiered";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 
-export default function SocialsCinematicReveal() {
+export default function MySocialsReveal() {
   const sectionRef = useRef(null);
   const { theme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
+
+  if (isTier2 || isMobile) {
+    return null;
+  }
 
   const useVerticalFallback = shouldReduceMotion || isMobile || isTier2;
   const sectionBg = theme === "light" ? "bg-white" : "bg-black";

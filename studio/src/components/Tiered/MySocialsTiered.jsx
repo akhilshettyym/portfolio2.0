@@ -28,10 +28,6 @@ export default function MySocialsTiered(props) {
     return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "transparent" }} />;
   }
 
-  if (isTier2 || isMobile) {
-    return null;
-  }
-
   if (!shouldPreload) {
     return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "transparent" }} />;
   }

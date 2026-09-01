@@ -18,6 +18,7 @@ import {
   logPingAkhil,
   logProjects,
   logrmrf,
+  logPrivacy,
   logSalesforce,
   logSecrets,
   logSkills,
@@ -26,7 +27,18 @@ import {
   logWhoAmI,
 } from "@/utils/functions";
 
-const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo", "rm", "cat", "ping", "git", "work", "me"];
+const NON_SLASH_COMMANDS = [
+  "clear",
+  "close",
+  "ls",
+  "whoami",
+  "exit",
+  "sudo hire akhil",
+  "rm -rf akhil",
+  "cat readme.md",
+  "ping akhil",
+  "me",
+];
 
 export function normalizeConsoleCommand(value) {
   const command = value.trim().toLowerCase();
@@ -50,23 +62,25 @@ export function runConsoleCommand(rawCommand, { navigate, close, clear }, isTier
       navigation: ["/", "achievements"],
     }),
     "/projects": () => ({ output: logProjects(), navigation: ["/work", "projects"] }),
+    "/work": () => ({ output: logProjects(), navigation: ["/work", "projects"] }),
     "/experience": () => ({
       output: logExperience(),
       navigation: ["/work", "experience"],
     }),
     "/github": () => ({ output: logGithub(), navigation: ["/work", "github"] }),
     "/connect": () => ({ output: logCreate(), navigation: ["/start"] }),
-    "/create": () => ({ output: logCreate(), navigation: ["/start"] }),
+    "/privacy": () => ({ output: logPrivacy(), navigation: ["/privacy"] }),
     "/philosophy": () => ({ output: logPhilosophy() }),
     "/mail": () => ({ output: logMail() }),
     "/linkedin": () => ({ output: logLinkedin() }),
     "/instagram": () => ({ output: logInstagram() }),
-    "/salesforce": () => ({ output: logSalesforce() }),
     "/socials": () => (isTier2 ? { output: logSocials() } : navToSocials()),
+    "/salesforce": () => ({ output: logSalesforce(), navigation: ["/work", "salesforce"] }),
     "/coffee": () => ({ output: logCoffee() }),
     "/secrets": () => ({ output: logSecrets() }),
     "/location": () => ({ output: logLocation() }),
     "/help": () => ({ output: logHelp() }),
+    "/hire": () => ({ output: logSudoHire() }),
     "sudo hire akhil": () => ({ output: logSudoHire() }),
     "rm -rf doubts": () => ({ output: logrmrf() }),
     "cat readme.md": () => ({ output: logCatReadme() }),

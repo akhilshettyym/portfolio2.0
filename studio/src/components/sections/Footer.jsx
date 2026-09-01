@@ -330,7 +330,7 @@ const Footer = () => {
 
             <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4">
               <div
-                className={`mb-5 flex h-[17vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
+                className={`mb-5 flex h-[18vh] md:h-[20vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
                 <div
                   className={`flex h-full w-[20%] flex-col rounded-md border p-4 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
                   <p
@@ -431,7 +431,7 @@ const Footer = () => {
                 <div className="flex-1 text-right flex justify-end">
                   <button
                     onClick={goToTop}
-                    className={`flex items-center gap-1.5 text-xs font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
+                    className={`flex items-center gap-1.5 text-xs uppercase font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
                     <span>To Top</span>
                     <HiArrowSmUp size={15} className="shrink-0" />
                   </button>
@@ -638,7 +638,7 @@ const Footer = () => {
 
             <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4 sm:px-4">
               <div
-                className={`mb-5 flex h-auto min-h-[17vh] w-full flex-col gap-2 rounded-md p-2 transition-colors duration-500 md:h-[17vh] md:flex-row ${styles.wrapperBg}`}>
+                className={`mb-5 flex h-auto min-h-[23vh] w-full flex-col gap-2 rounded-md p-2 transition-colors duration-500 md:h-[17vh] md:flex-row ${styles.wrapperBg}`}>
                 <div
                   className={`flex w-full flex-col rounded-md border p-3 shadow-sm transition-colors duration-500 sm:p-4 md:h-full md:w-[20%] ${styles.panelBg} ${styles.border}`}>
                   <p
@@ -734,6 +734,7 @@ const Footer = () => {
                 <div className={`flex ${isMobile ? "flex-1 justify-start" : "flex-1 justify-center"} items-center`}>
                   <Link
                     href="/privacy"
+                    onClick={goToTop}
                     className={`text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
                     Privacy Policy
                   </Link>
@@ -742,7 +743,7 @@ const Footer = () => {
                 <div className={`flex ${isMobile ? "flex-1 justify-end" : "flex-1 justify-end"} items-center`}>
                   <button
                     onClick={goToTop}
-                    className={`flex items-center gap-1.5 whitespace-nowrap text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 cursor-pointer ${styles.buttonBg}`}>
+                    className={`flex items-center gap-1.5 whitespace-nowrap text-xs uppercase font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 cursor-pointer ${styles.buttonBg}`}>
                     <span>To Top</span>
                     <HiArrowSmUp size={15} className="shrink-0" />
                   </button>

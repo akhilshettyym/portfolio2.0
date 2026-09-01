@@ -96,12 +96,12 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
   const marqueeItems = eduData.length > 0 ? [...eduData, ...eduData, ...eduData, ...eduData] : [];
   const sectionHeight = useStackedLayout ? "h-auto" : isCompactDevice ? "h-[260vh]" : "h-[300vh]";
   const shellHeight = useStackedLayout ? "min-h-screen py-12" : "h-dvh";
-  const panelHeight = useStackedLayout ? "min-h-0" : isCompactDevice ? "h-[68vh]" : "h-[72h]";
+  const panelHeight = useStackedLayout ? "min-h-0" : isCompactDevice ? "h-[75vh]" : "h-[72vh]";
 
   return (
     <div ref={targetRef} className={`relative ${sectionHeight} transition-colors duration-500 ${styles.section}`}>
       <div
-        className={`${useStackedLayout ? "relative" : "sticky top-0"} flex ${shellHeight} items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-10`}>
+        className={`${useStackedLayout ? "relative" : "sticky top-0"} flex ${shellHeight} items-center justify-center overflow-hidden px-4 pb-5 sm:px-6 lg:px-10`}>
         <div className="w-full max-w-328 flex flex-col gap-2 relative z-10">
           <div className="flex items-center justify-between px-1">
             <h2
@@ -153,8 +153,8 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
                             damping: 24,
                             delay: Math.min(index * 0.05, 0.2),
                           }}
-                          className={`min-h-70 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
-                            useStackedLayout ? "w-full" : "h-64 w-[78vw] shrink-0 sm:w-90 lg:w-100"
+                          className={`max-h-60 max-w-95 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
+                            useStackedLayout ? "w-full" : "h-60 w-[70vw] shrink-0 sm:w-90 lg:w-100"
                           } ${styles.card}`}>
                           <div className="flex justify-between items-center w-full">
                             <span
@@ -214,7 +214,7 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
             </div>
 
             <div
-              className={`w-full h-20 md:h-24 lg:h-28 border flex items-center shrink-0 rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
+              className={`w-full h-20 md:h-22 lg:h-24 border flex items-center shrink-0 rounded-lg overflow-hidden relative transition-colors duration-500 ${styles.marqueeBox}`}>
               <div className="animate-marquee-smooth flex gap-3 md:gap-4 px-2 items-center whitespace-nowrap">
                 {marqueeItems.map((item, index) => {
                   const uniqueKey = `${item.id || item._id || index}-${index}`;
@@ -223,7 +223,7 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
                   return (
                     <div
                       key={uniqueKey}
-                      className={`w-52 md:w-70 h-18.5 md:h-24 border flex flex-col items-center justify-center px-2 md:px-3 py-1 md:py-2 text-center rounded-md shrink-0 transition-all duration-300 ease-in-out cursor-pointer group ${cardStyle}`}>
+                      className={`w-52 md:w-70 h-18.5 md:h-20 border flex flex-col items-center justify-center px-2 md:px-3 py-1 md:py-2 text-center rounded-md shrink-0 transition-all duration-300 ease-in-out cursor-pointer group ${cardStyle}`}>
                       {item.title && (
                         <span className="text-[9px] md:text-[10px] font-bold tracking-wider uppercase truncate w-full">
                           {item.title}

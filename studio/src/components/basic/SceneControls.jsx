@@ -251,7 +251,7 @@ function ControlLabel({ label, labelPlacement }) {
   return (
     <div
       className={`pointer-events-auto absolute z-100 opacity-0 transition-all duration-150 ease-out group-hover:opacity-100 ${placementClass}`}>
-      <span className="inline-flex w-19 items-center justify-center whitespace-nowrap rounded-full border border-white/80 bg-white/85 px-2 py-1 text-[8px] font-bold tracking-normal text-slate-800 uppercase shadow-[0_6px_16px_rgba(0,0,0,0.08)] backdrop-blur-md">
+      <span className="inline-flex w-25 items-center justify-center whitespace-nowrap rounded-full border border-white/80 bg-white/85 px-2 py-1 text-[8px] font-bold tracking-normal text-slate-800 uppercase shadow-[0_6px_16px_rgba(0,0,0,0.08)] backdrop-blur-md">
         {label}
       </span>
     </div>

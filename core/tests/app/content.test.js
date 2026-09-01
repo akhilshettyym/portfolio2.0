@@ -3,7 +3,6 @@ import { render, screen, cleanup, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ContentPage from "../../app/content/page";
 
-// Mock apiFetch module
 jest.mock("../../utils/api", () => ({
   apiFetch: jest.fn((url) => {
     if (url.includes("experiences")) {
@@ -30,11 +29,9 @@ describe("ContentPage", () => {
     render(<ContentPage />);
     const user = userEvent.setup();
 
-    // Open modal
     const createButton = screen.getByRole("button", { name: /\+ Create New Work/i });
     await user.click(createButton);
 
-    // Form inputs now queryable by Label text
     const titleInput = screen.getByLabelText(/^Title$/i);
     expect(titleInput).toBeInTheDocument();
 
@@ -46,11 +43,9 @@ describe("ContentPage", () => {
     render(<ContentPage />);
     const user = userEvent.setup();
 
-    // Click Experience tab
     const experiencesTab = screen.getByLabelText(/experiences/i);
     await user.click(experiencesTab);
 
-    // Wait for state update
     await waitFor(() => {
       expect(screen.getByText("Software Engineer")).toBeInTheDocument();
     });

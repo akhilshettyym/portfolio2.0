@@ -1,11 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { CLOUD_CONTROL } from "@/utils/storage";
 import HeroSection from "@/components/sections/HeroSection";
 import SceneControls from "@/components/basic/SceneControls";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
 const CONTROLS_REVEAL_DELAY = 10000;
 
@@ -16,6 +16,7 @@ function dispatchHeroEvent(name) {
 function PersistentHeroControls({ visible }) {
   const [paused, setPaused] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { isTier2 } = usePerformanceTier();
 
   useEffect(() => {
     const revealTimer = window.setTimeout(() => {
@@ -50,6 +51,7 @@ function PersistentHeroControls({ visible }) {
   }, []);
 
   const handleCloudControl = () => {
+    if (isTier2) return;
     dispatchHeroEvent("hero-toggle-clouds");
   };
 
@@ -64,7 +66,7 @@ function PersistentHeroControls({ visible }) {
   return (
     <SceneControls
       paused={paused}
-      isTier2={false}
+      isTier2={isTier2}
       handleCloudControl={handleCloudControl}
       handleRestartIntroScene={handleRestartIntroScene}
       sceneAssets
@@ -76,24 +78,29 @@ function PersistentHeroControls({ visible }) {
 
 export default function PersistentHeroLayer() {
   const pathname = usePathname();
+  const [hasMounted, setHasMounted] = useState(false);
   const isInfoRoute = pathname === "/";
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setHasMounted(true);
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <>
-      <motion.div
+      <div
         aria-hidden={!isInfoRoute}
-        initial={false}
-        animate={{
-          opacity: isInfoRoute ? 1 : 0,
-          visibility: isInfoRoute ? "visible" : "hidden",
-        }}
-        transition={{
-          duration: 0.7,
-          ease: [0.22, 1, 0.36, 1],
+        style={{
+          opacity: hasMounted && isInfoRoute ? 1 : 0,
+          visibility: hasMounted && isInfoRoute ? "visible" : "hidden",
+          transition: "opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
         className="pointer-events-none fixed inset-0 z-0">
         <HeroSection active={isInfoRoute} />
-      </motion.div>
+      </div>
 
       <PersistentHeroControls visible={isInfoRoute} />
     </>

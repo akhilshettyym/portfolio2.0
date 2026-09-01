@@ -1,10 +1,11 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { FaLightbulb } from "react-icons/fa6";
 import { runConsoleCommand } from "@/utils/console";
 import { usePathname, useRouter } from "next/navigation";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 const HINTS = ["/skills", "/projects", "/experience", "/socials", "whoami", "/secrets", "clear", "/philosophy"];
 
@@ -431,7 +432,7 @@ function ConsoleModal({ isOpen, onClose }) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/20 p-4 backdrop-blur-[1px]"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) handleClose();
@@ -441,7 +442,7 @@ function ConsoleModal({ isOpen, onClose }) {
         aria-modal="true"
         aria-label="Terminal console"
         className={`relative flex max-w-[95vw] max-h-[85vh] flex-col overflow-hidden rounded-xl border border-gray-700/50 bg-[#0c0c0c] shadow-2xl transition-all duration-300 ease-in-out ${getAnimationClasses()} ${
-          isExpanded ? "h-[70vh] w-[80vw]" : "h-100 w-150"
+          isExpanded ? "h-[70vh] w-[60vw]" : "h-100 w-150"
         }`}
         onMouseDown={(event) => event.stopPropagation()}>
         <div className="flex h-8 w-full shrink-0 select-none items-center border-b border-white/5 bg-[#1e1e1e] px-4">
@@ -483,7 +484,7 @@ function ConsoleModal({ isOpen, onClose }) {
         </div>
 
         <div
-          className="min-h-0 flex-1 cursor-text overflow-y-auto overscroll-contain bg-[#0c0c0c] p-5 pr-3 font-mono text-xs leading-relaxed text-green-400 [scrollbar-color:#333_#0c0c0c] scrollbar-thin [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#0c0c0c] [&::-webkit-scrollbar-thumb]:rounded [&::-webkit-scrollbar-thumb]:bg-[#333]"
+          className="min-h-0 flex-1 cursor-text overflow-y-auto overscroll-contain bg-[#0c0c0c] p-5 pr-3 font-mono text-[10px] leading-relaxed text-green-400 [scrollbar-color:#333_#0c0c0c] scrollbar-thin [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#0c0c0c] [&::-webkit-scrollbar-thumb]:rounded [&::-webkit-scrollbar-thumb]:bg-[#333]"
           onClick={handleTerminalClick}>
           {bootPhase !== "complete" && (
             <div className="flex flex-col space-y-1 opacity-90">
@@ -546,8 +547,9 @@ function ConsoleModal({ isOpen, onClose }) {
 
               {!isProcessing && (
                 <div className="group mt-2">
-                  <div className="mb-1 select-none text-[10px] text-gray-500 opacity-60">
-                    💡 Recommended: <span className="text-gray-400">{hint}</span>
+                  <div className="mb-1 flex items-center gap-1 select-none text-[10px] text-gray-500 opacity-60">
+                    <FaLightbulb />
+                    <span>Recommended:</span> <span className="text-gray-400">{hint}</span>
                   </div>
 
                   <form onSubmit={handleCommandSubmit} className="relative flex items-center">

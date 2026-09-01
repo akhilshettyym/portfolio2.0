@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { FaLocationDot } from "react-icons/fa6";
+import { RiTimeZoneLine } from "react-icons/ri";
+import { VscRemoteExplorer } from "react-icons/vsc";
 import { CHARS, CLAMP, EASEOUTEXPO, ERRORBITS, LERP, SAMPLES } from "@/utils/basic";
 
 export const goToTop = () => {
@@ -295,7 +298,7 @@ export function randomChar() {
 
 // ConsoleModal
 export const logHero = () => (
-  <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+  <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
     <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
       <span className="text-emerald-500 font-bold">$hero </span>
       {"\n"}root display terminal view matrix main screen... {"\n"}
@@ -314,7 +317,7 @@ export const logHero = () => (
 
 export const logAbout = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$about_me</span>
         <span className="text-white">
@@ -350,7 +353,7 @@ export const logAbout = () => {
 
 export const logSkills = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">
           $skils <h3 className="text-neutral-100">Expertise & Capabilities</h3>
@@ -394,7 +397,7 @@ export const logSkills = () => {
 
 export const logAchievements = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$achievements</span>
         <span className="text-emerald-400"> window down to achievements section...</span>
@@ -418,7 +421,7 @@ export const logAchievements = () => {
 
 export const logProjects = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$projects/works</span>
         <span className="text-emerald-400"> window down to projects section...</span>
@@ -438,7 +441,7 @@ export const logProjects = () => {
 
 export const logExperience = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$experience</span>
         <span className="text-emerald-400"> window down to my experience section...</span>
@@ -465,7 +468,7 @@ export const logExperience = () => {
 
 export const logGithub = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$github</span>
         <span className="text-emerald-400"> window down to my github contributions section...</span>
@@ -493,7 +496,7 @@ export const logGithub = () => {
 
 export const logLinkedin = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$linkedin</span>
         <span className="text-white">
@@ -517,7 +520,7 @@ export const logLinkedin = () => {
 
 export const logInstagram = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$instagram</span>
         <span className="text-white">
@@ -541,7 +544,7 @@ export const logInstagram = () => {
 
 export const logMail = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$mail</span>
         <span className="text-white">
@@ -560,7 +563,7 @@ export const logMail = () => {
 };
 export const logCreate = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$connect/create_something</span>
         <span className="text-white">
@@ -583,7 +586,7 @@ export const logCreate = () => {
 
 export const logPhilosophy = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$my_philosophy</span>
         <span className="text-white">
@@ -612,7 +615,7 @@ export const logPhilosophy = () => {
 
 export const logSalesforce = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$salesforce_trailhead</span>
         <span className="text-emerald-400"> window down to my salesforce trailhead section...</span>
@@ -640,7 +643,7 @@ export const logSalesforce = () => {
 
 export const logMySocials = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       {" "}
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$my_socials</span>
@@ -662,7 +665,7 @@ export const logMySocials = () => {
 
 export const logSocials = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <div>
           <span className="inline-block w-20 text-emerald-500 font-bold">$mail</span>
@@ -677,7 +680,6 @@ export const logSocials = () => {
             target="_blank"
             rel="noreferrer"
             className="text-cyan-500 hover:underline">
-            {" "}
             instagram.com/akhil_shetty_m ↗
           </a>
         </div>
@@ -749,7 +751,7 @@ export const logSudoHire = () => {
 
 export const logrmrf = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$rm -rf doubts</span>
         <span className="text-white">
@@ -769,7 +771,7 @@ export const logrmrf = () => {
 
 export const logCoffee = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">
           {"( ( ) )\n........\n| |] \\ /\n`----´"}
@@ -793,7 +795,7 @@ export const logCoffee = () => {
 
 export const logCatReadme = () => {
   return (
-    <div className="w-full max-w-2xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$cat readme.md</span>
         <span className="text-white">
@@ -816,26 +818,29 @@ export const logCatReadme = () => {
 
 export const logPingAkhil = () => {
   return (
-    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px] leading-relaxed">
-      <div className="text-slate-500 mb-1">PING akhil.shetty.mumbai (192.168.1.337): 56 data bytes</div>
-      <div className="space-y-0.5 text-slate-400">
-        <div>
-          64 bytes from local.network: icmp_seq=0 ttl=64 time=0.1ms{" "}
-          <span className="text-emerald-400 ml-2">— Network connection fully established</span>
-        </div>
-        <div>
-          64 bytes from local.network: icmp_seq=1 ttl=64 time=0.2ms{" "}
-          <span className="text-emerald-400 ml-2">— System ready for contract modules</span>
-        </div>
-        <div>
-          64 bytes from local.network: icmp_seq=2 ttl=64 time=0.1ms{" "}
-          <span className="text-emerald-400 ml-2">— Engineering response cycles optimized</span>
-        </div>
-      </div>
-      <div className="mt-3 pt-2 border-t border-slate-900 text-slate-500">
-        <div>--- network statistics ---</div>
-        <div className="text-slate-400 mt-0.5">
-          3 packets transmitted, 3 received, <span className="text-emerald-500">0% packet loss</span>
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$ping akhil</span>
+        <span className="text-white">
+          <p className="text-slate-200 font-medium">ping akhil_shetty_m.mumbai (192.168.1.337): 56 data bytes</p>
+          <p className="leading-relaxed text-justify">
+            <span className="font-semibold">64 bytes from local.network: icmp_seq=0 ttl=64 time=0.1ms </span>
+            <span className="text-emerald-400 ml-2">— Network connection fully established</span>
+          </p>
+          <p className="leading-relaxed text-justify">
+            <span className="font-semibold">64 bytes from local.network: icmp_seq=1 ttl=64 time=0.2ms </span>
+            <span className="text-emerald-400 ml-2">— System ready for contract modules</span>
+          </p>
+          <p className="leading-relaxed text-justify">
+            <span className="font-semibold">64 bytes from local.network: icmp_seq=2 ttl=64 time=0.1ms </span>
+            <span className="text-emerald-400 ml-2">— Engineering response cycles optimized</span>
+          </p>
+        </span>
+        <div className="mt-2 border-t border-slate-900 text-slate-500">
+          <div>--- network statistics ---</div>
+          <div className="text-slate-400 mt-0.5">
+            3 packets transmitted, 3 received, <span className="text-emerald-500">0% packet loss</span>
+          </div>
         </div>
       </div>
     </div>
@@ -844,58 +849,96 @@ export const logPingAkhil = () => {
 
 export const logSecrets = () => {
   return (
-    <div className="mt-2 text-[11px] font-mono space-y-2">
-      <div>
-        <span className="font-bold text-white">Privileged Script Directory</span>
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-4 font-mono text-[11px] leading-relaxed text-emerald-400/90 shadow-2xl">
+      <div className="mb-3 flex items-center justify-between border-b border-emerald-500/20 pb-2 text-[10px] text-emerald-500/50 select-none">
+        <span>SYSTEM_DECRYPT // HIDDEN_ENVIRONMENT_VARIABLES</span>
+        <span>TTY3</span>
       </div>
-      <div className="grid grid-cols-[140px_1fr] gap-x-2 text-gray-300">
-        <span className="text-blue-400">sudo hire akhil</span>
-        <span>Simulate recruitment contract execution</span>
-        <span className="text-blue-400">rm -rf doubts</span>
-        <span>Clear project delivery doubt parameters</span>
-        <span className="text-blue-400">/coffee</span>
-        <span>Display system runtime fuel index</span>
-        <span className="text-blue-400">ls</span>
-        <span>Output skill trees as standard terminal listings</span>
-        <span className="text-blue-400">cat readme.md</span>
-        <span>Output core development principles manifest</span>
-        <span className="text-blue-400">ping akhil</span>
-        <span>Verify network accessibility statistics</span>
-        <span className="text-blue-400">whoami</span>
-        <span>Display client environment values</span>
-        <span className="text-blue-400">exit / close</span>
-        <span>Terminate terminal window instances</span>
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <div className="mb-2">
+          <span className="text-emerald-500 font-bold">$cat secrets.db</span>
+          <span className="text-amber-400 ml-2">shhh... you found the cheat sheet....</span>
+        </div>
+
+        <div className="mb-2">
+          <h4 className="text-emerald-300 font-bold mb-2 uppercase tracking-wider text-[10px] border-b border-emerald-500/10 pb-0.5 max-w-max">
+            {"// Hidden Commands"}
+          </h4>
+          <div className="grid grid-cols-[140px_1fr] gap-x-4 gap-y-1 text-zinc-400">
+            <span className="text-zinc-500 font-bold">sudo hire akhil</span>
+            <span>fake contract with progress bar</span>
+
+            <span className="text-zinc-500 font-bold">rm -rf doubts</span>
+            <span>remove all your doubts</span>
+
+            <span className="text-zinc-500 font-bold">/coffee</span>
+            <span>design fuel status</span>
+
+            <span className="text-zinc-500 font-bold">ls</span>
+            <span>skills as Linux files</span>
+
+            <span className="text-zinc-500 font-bold">cat readme.md</span>
+            <span>a hidden personal message</span>
+
+            <span className="text-zinc-500 font-bold">ping akhil</span>
+            <span>am I available? find out</span>
+
+            <span className="text-zinc-500 font-bold">whoami</span>
+            <span>the terminal knows you</span>
+
+            <span className="text-zinc-500 font-bold">exit</span>
+            <span>try to leave. I dare you.</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export const logWhoAmI = () => (
-  <div className="mt-2 text-[11px] font-mono leading-relaxed">
-    Identity: Authenticated Visitor Node.
-    <br />
-    Action Status: Ready to execute operational commands.
-    <br />
-    💡 Hint: Try executing <span className="text-cyan-400">/secrets</span> to view hidden configuration systems.
-  </div>
-);
+export const logWhoAmI = () => {
+  return (
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$whoami</span>
+        <span className="text-white">
+          <p className="text-slate-200 font-medium">You&apos;re the person about to hire a great designer.</p>
+          <p className="leading-relaxed text-justify">
+            <span className="text-slate-500">(Trust the terminal. It knows things.)</span>
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export const logLocation = () => {
   return (
-    <div className="w-full max-w-full bg-black border border-slate-800 rounded-md p-4 font-mono text-[11px]">
-      <div className="space-y-1 text-slate-400">
-        <div>
-          <span className="text-slate-500">Coordinates:</span>{" "}
-          <span className="text-slate-200">📍 Mumbai, Maharashtra, India</span>
-        </div>
-        <div>
-          <span className="text-slate-500">Availability:</span>{" "}
-          <span className="text-slate-300">Remote Operations World-Wide</span>
-        </div>
-        <div>
-          <span className="text-slate-500">Timezone Context:</span>{" "}
-          <span className="text-slate-300">GMT +5:30 (IST)</span>
-        </div>
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$location</span>
+        <span className="text-white">
+          <p className="text-slate-200 font-medium">get coordinates: 64 bits</p>
+          <p className="flex items-center gap-1.5 leading-relaxed">
+            <span className="text-slate-500">Coordinates:</span>
+            <span className="inline-flex items-center gap-1 text-slate-200">
+              <FaLocationDot /> Mumbai, Maharashtra, India
+            </span>
+          </p>
+
+          <p className="flex items-center gap-1.5 leading-relaxed">
+            <span className="text-slate-500">Availability:</span>
+            <span className="inline-flex items-center gap-1 text-slate-200">
+              <VscRemoteExplorer /> Remote Operations World-Wide
+            </span>
+          </p>
+
+          <p className="flex items-center gap-1.5 leading-relaxed">
+            <span className="text-slate-500">Timezone Context:</span>
+            <span className="inline-flex items-center gap-1 text-slate-200">
+              <RiTimeZoneLine /> GMT +5:30 (IST)
+            </span>
+          </p>
+        </span>
       </div>
     </div>
   );
@@ -903,58 +946,135 @@ export const logLocation = () => {
 
 export const logls = () => {
   return (
-    <div className="mt-2 font-mono text-[11px] text-gray-300 whitespace-pre">
-      drwxr-xr-x user staff 128B Jul 19 20:30 design-systems.conf{"\n"}
-      drwxr-xr-x user staff 256B Jul 19 20:30 frontend-architecture.cfg{"\n"}
-      -rwxr-xr-x user staff 4.2K Jul 19 20:30 production-scaling.bin{"\n"}
-      -rw-r--r-- user staff 912B Jul 19 20:30 fullstack-matrix.json{"\n"}
-      -rw-r--r-- user staff 1.4K Jul 19 20:30 accessibility-wcag.a11y
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$ls</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            <span className="text-slate-500">drwxr-xr-x user staff 128B 19 20:30 design-systems.conf{"\n"}</span>
+            <span className="text-slate-500">drwxr-xr-x user staff 256B 23 20:30 frontend-architecture.cfg{"\n"}</span>
+            <span className="text-slate-500">-rwxr-xr-x user staff 4.2K 09 20:30 production-scaling.bin{"\n"}</span>
+            <span className="text-slate-500">-rw-r--r-- user staff 912B 12 20:30 fullstack-matrix.json{"\n"}</span>
+            <span className="text-slate-500">-rw-r--r-- user staff 1.4K 29 20:30 accessibility-wcag.a11y</span>
+          </p>
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export const logPrivacy = () => {
+  return (
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
+      <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <span className="text-emerald-500 font-bold">$/privacy</span>
+        <span className="text-emerald-400"> window down to my privacy policy and cookies section...</span>
+        <span className="text-white">
+          <p className="leading-relaxed text-justify">
+            Full disclosure regarding active data packets, local cookies, and telemetry analytics captured exclusively
+            to optimize system performance and refine user interactions
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Dismiss this terminal viewport to view privacy policy
+          </p>
+        </span>
+      </div>
     </div>
   );
 };
 
 export const logHelp = () => {
   return (
-    <div className="mt-2 text-[11px] font-mono space-y-4">
-      <div>
-        <span className="font-bold text-white">System Command Index</span>
+    <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-4 font-mono text-[11px] leading-relaxed text-emerald-400/90 shadow-2xl">
+      <div className="mb-2 flex items-center justify-between border-b border-emerald-500/20 pb-2 text-[10px] text-emerald-500/50 select-none">
+        <span>SYSTEM_HELP // COMMAND_INTERFACE_INDEX</span>
+        <span>TTY4</span>
       </div>
-      <div>
-        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">Core Paths</span>
-        <div className="grid grid-cols-[140px_1fr] gap-x-2 mt-1 text-gray-300">
-          <span className="text-blue-400">/help</span>
-          <span>Render available shell command trees</span>
-          <span className="text-blue-400">/about</span>
-          <span>Print biographical & focus data metrics</span>
-          <span className="text-blue-400">/skills</span>
-          <span>Output expertise matrices & stack levels</span>
-          <span className="text-blue-400">/experience</span>
-          <span>List historic and modern work timelines</span>
-          <span className="text-blue-400">/projects</span>
-          <span>Route view to case studies & deployments</span>
-          <span className="text-blue-400">/achievements</span>
-          <span>Navigate view parameters down to honors</span>
-          <span className="text-blue-400">/philosophy</span>
-          <span>Render underlying code execution beliefs</span>
-          <span className="text-blue-400">/socials</span>
-          <span>Compile external connection endpoints</span>
-          <span className="text-blue-400">/clear</span>
-          <span>Flush active screen log array buffers</span>
+      <div className="space-y-4 selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
+        <div>
+          <span className="text-emerald-500 font-bold">$/help</span>
+          <span className="text-emerald-500/70 ml-2">system command line interface...</span>
         </div>
-      </div>
-      <div>
-        <span className="font-bold text-slate-400 uppercase tracking-wide text-[10px]">Project Deep Links</span>
-        <div className="grid grid-cols-[140px_1fr] gap-x-2 mt-1 text-gray-300">
-          <span className="text-blue-400">/signals</span>
-          <span>Research Integrity Platform setup</span>
-          <span className="text-blue-400">/anylyze</span>
-          <span>Analytics Data Engine view</span>
-          <span className="text-blue-400">/liveu</span>
-          <span>Signa Component Framework layout</span>
-          <span className="text-blue-400">/tuiasi</span>
-          <span>Academic Ecosystem Design system</span>
-          <span className="text-blue-400">/resnet</span>
-          <span>Hospitality System UI module</span>
+        <div>
+          <h4 className="text-emerald-500/60 tracking-wider text-[10px] border-b border-emerald-500/10 pb-0.5 max-w-max mb-1">
+            {"// navigations"}
+          </h4>
+          <div className="grid grid-cols-[140px_1fr] gap-x-4 gap-y-0.5 text-zinc-400">
+            <span className="text-cyan-400 font-medium">/hero</span>
+            <span>Root display terminal view matrix main screen</span>
+
+            <span className="text-cyan-400 font-medium">/about</span>
+            <span>Print biographical & focus data metrics</span>
+
+            <span className="text-cyan-400 font-medium">/skills</span>
+            <span>Expertise & capabilities</span>
+
+            <span className="text-cyan-400 font-medium">/achievements</span>
+            <span>List historic and modern work timelines</span>
+
+            <span className="text-cyan-400 font-medium">/socials</span>
+            <span>Social profiles & links</span>
+
+            <span className="text-cyan-400 font-medium">/projects</span>
+            <span>Featured projects and deployments</span>
+
+            <span className="text-cyan-400 font-medium">/experience</span>
+            <span>My professional trajectories</span>
+
+            <span className="text-cyan-400 font-medium">/github</span>
+            <span>My github contributions</span>
+
+            <span className="text-cyan-400 font-medium">/salesforce</span>
+            <span>Salesforce skills and learning paths</span>
+
+            <span className="text-cyan-400 font-medium">/philosophy</span>
+            <span>My design philosophy</span>
+
+            <span className="text-cyan-400 font-medium">/privacy</span>
+            <span>Privacy policy & cookies</span>
+
+            <span className="text-cyan-400 font-medium">/connect</span>
+            <span>Get in touch</span>
+
+            <span className="text-cyan-400 font-medium">/hire</span>
+            <span>sudo hire akhil</span>
+
+            <span className="text-cyan-400 font-medium">/clear</span>
+            <span>Clear the terminal</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 className="text-emerald-500/60 uppercase tracking-wider text-[10px] border-b border-emerald-500/10 pb-0.5 max-w-max mb-1.5">
+            {"// Quick Info"}
+          </h4>
+          <div className="grid grid-cols-[140px_1fr] gap-x-4 gap-y-0.5 text-zinc-400">
+            <span className="text-cyan-400 font-medium">/linkedin</span>
+            <span>LinkedIn profile</span>
+
+            <span className="text-cyan-400 font-medium">/instagram</span>
+            <span>Instagram profile</span>
+
+            <span className="text-cyan-400 font-medium">/mail</span>
+            <span>Email address</span>
+
+            <span className="text-cyan-400 font-medium">/location</span>
+            <span>Where I&apos;m based</span>
+          </div>
+        </div>
+
+        <div className="space-y-1 pt-2 border-t border-emerald-500/10 text-[10px] text-zinc-500">
+          <p>
+            <span className="text-emerald-500/50 font-bold">aliases:</span> sudo hire akhil, /work, whoami, /hire, ping
+            akhil, rm -rf doubts, close.
+          </p>
+          <p className="italic">
+            Tip: Use ↑↓ arrows for command history ...and a few others, if you know where to look.
+          </p>
+          <p className="text-amber-500/70 font-semibold mt-1">
+            Type <span className="underline hover:text-amber-400 cursor-pointer">/secrets</span> if you like finding
+            hidden things.
+          </p>
         </div>
       </div>
     </div>

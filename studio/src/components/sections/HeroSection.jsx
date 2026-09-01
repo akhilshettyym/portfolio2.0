@@ -42,7 +42,7 @@ const HeroSection = ({ active = true }) => {
   );
 
   const quality = getQualityPreset(tier);
-  const maxCloudPlanes = quality.cloudPlanes ? Math.min(quality.cloudPlanes, tier === "tier_1" ? 1800 : 700) : 700;
+  const maxCloudPlanes = quality.cloudPlanes ? Math.min(quality.cloudPlanes, tier === "tier_1" ? 1800 : 1250) : 1250;
 
   const pausedRef = useRef(false);
   const sceneAssetsRef = useRef(null);
@@ -196,43 +196,41 @@ const HeroSection = ({ active = true }) => {
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, w, h);
 
-      ctx.fillStyle = "#ffffff";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      if (tier !== "tier_2") {
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
 
-      const text = "AKHIL SHETTY";
+        const text = "AKHIL SHETTY";
 
-      // Bigger title
-      const baseFontSize = 130;
+        const baseFontSize = 130;
 
-      ctx.font = `900 ${baseFontSize}px "Helvetica Neue", "Arial", sans-serif`;
+        ctx.font = `900 ${baseFontSize}px "Helvetica Neue", "Arial", sans-serif`;
 
-      // Tight, modern spacing
-      if ("letterSpacing" in ctx) {
-        ctx.letterSpacing = "-0.12em";
+        if ("letterSpacing" in ctx) {
+          ctx.letterSpacing = "-0.12em";
+        }
+
+        const textWidth = ctx.measureText(text).width;
+
+        const targetWidth = Math.min(w * 0.72, 820 * dpr);
+
+        const widthScale = targetWidth / textWidth;
+        const heightScale = widthScale * 1.02;
+
+        const horizontalPosition = w * 0.5;
+        const verticalPosition = h * 0.5;
+
+        ctx.save();
+
+        ctx.translate(horizontalPosition, verticalPosition);
+
+        ctx.scale(widthScale, heightScale);
+
+        ctx.fillText(text, 0, 0);
+
+        ctx.restore();
       }
-
-      const textWidth = ctx.measureText(text).width;
-
-      // Larger overall width
-      const targetWidth = Math.min(w * 0.72, 820 * dpr);
-
-      const widthScale = targetWidth / textWidth;
-      const heightScale = widthScale * 1.02;
-
-      // EXACT center of viewport
-      const horizontalPosition = w * 0.5;
-      const verticalPosition = h * 0.5;
-
-      ctx.save();
-
-      ctx.translate(horizontalPosition, verticalPosition);
-
-      ctx.scale(widthScale, heightScale);
-
-      ctx.fillText(text, 0, 0);
-
-      ctx.restore();
 
       const tex = new THREE.CanvasTexture(canvas);
 
@@ -594,26 +592,6 @@ const HeroSection = ({ active = true }) => {
   });
 
   return (
-    // <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
-    //   {showModal && <LimpModal />}
-
-    //   <div className="wrapper relative min-h-screen w-full">
-    //     <div
-    //       ref={containerRef}
-    //       className={`canvas-bg absolute inset-0 z-0 ${isDarkOrMetal ? "bg-black" : ""}`}
-    //       style={{
-    //         backgroundImage: isDarkOrMetal
-    //           ? "none"
-    //           : sceneAssets
-    //             ? `linear-gradient(
-    //             to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.05)
-    //           ),
-    //           url("/clouds_background/${sceneAssets.background}.png")`
-    //             : "none",
-    //       }}
-    //     />
-    //   </div>
-    // </div>
     <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
       {showModal && <LimpModal />}
 

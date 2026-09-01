@@ -3,14 +3,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { useDeviceType } from "@/hooks/useDeviceType";
 import { getRecaptchaToken } from "@/lib/recaptcha";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
+import RecaptchaDisclosure from "@/components/core/RecaptchaDisclosure";
 import { getCreateInputStyles, getCreateSomeStyles } from "@/utils/themeSwatch";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
-import RecaptchaDisclosure from "../core/RecaptchaDisclosure";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
   const { theme } = useTheme();
@@ -204,7 +204,7 @@ export default function CreateSomething() {
             </div>
 
             <p
-              className={`text-left text-xl md:text-2xl font-light leading-relaxed border-t pt-6 transition-colors duration-500 ${styles.textSecondary} ${styles.dividerSoft}`}>
+              className={`text-left text-xl font-light leading-relaxed border-t pt-6 transition-colors duration-500 ${styles.textSecondary} ${styles.dividerSoft}`}>
               {purpose === "say_hi"
                 ? "Drop your details below to say hello, ask a general question, or just connect!"
                 : "Let's turn your idea into code. Tell me about your organization and project requirements below."}
@@ -350,6 +350,7 @@ export default function CreateSomething() {
               </div>
 
               <div className="mt-8 flex flex-col sm:flex-row justify-between items-center gap-5">
+                <RecaptchaDisclosure styles={styles} />
                 <div className="flex flex-col sm:flex-row items-center gap-5">
                   {status.message && (
                     <p
@@ -362,13 +363,12 @@ export default function CreateSomething() {
                     <CustomButton
                       title={loading ? "Processing..." : purpose === "work" ? "Submit Project Request" : "Send Message"}
                       onClick={handleSubmit}
-                      width={290}
-                      height={50}
+                      width={300}
+                      height={45}
                       disabled={loading}
                     />
                   </div>
                 </div>
-                <RecaptchaDisclosure styles={styles} />
               </div>
             </form>
           </div>

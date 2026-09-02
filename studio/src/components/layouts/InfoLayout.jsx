@@ -1,6 +1,7 @@
 import DevTicker from "@/components/sections/DevTicker";
 import SubjectProfile from "@/components/sections/SubjectProfile";
 import BubbleSceneTiered from "@/components/Tiered/BubbleSceneTiered";
+import MySocialsReveal from "@/components/animations/MySocialsReveal";
 import CardStackRevealTiered from "@/components/Tiered/CardStackRevealTiered";
 import MySocialsReveal from "@/components/animations/MySocialsReveal";
 

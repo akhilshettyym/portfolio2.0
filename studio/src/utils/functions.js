@@ -824,15 +824,15 @@ export const logPingAkhil = () => {
         <span className="text-white">
           <p className="text-slate-200 font-medium">ping akhil_shetty_m.mumbai (192.168.1.337): 56 data bytes</p>
           <p className="leading-relaxed text-justify">
-            <span className="font-semibold">64 bytes from local.network: icmp_seq=0 ttl=64 time=0.1ms{" "}</span>
+            <span className="font-semibold">64 bytes from local.network: icmp_seq=0 ttl=64 time=0.1ms </span>
             <span className="text-emerald-400 ml-2">— Network connection fully established</span>
           </p>
           <p className="leading-relaxed text-justify">
-            <span className="font-semibold">64 bytes from local.network: icmp_seq=1 ttl=64 time=0.2ms{" "}</span>
+            <span className="font-semibold">64 bytes from local.network: icmp_seq=1 ttl=64 time=0.2ms </span>
             <span className="text-emerald-400 ml-2">— System ready for contract modules</span>
           </p>
           <p className="leading-relaxed text-justify">
-            <span className="font-semibold">64 bytes from local.network: icmp_seq=2 ttl=64 time=0.1ms{" "}</span>
+            <span className="font-semibold">64 bytes from local.network: icmp_seq=2 ttl=64 time=0.1ms </span>
             <span className="text-emerald-400 ml-2">— Engineering response cycles optimized</span>
           </p>
         </span>
@@ -844,7 +844,7 @@ export const logPingAkhil = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export const logSecrets = () => {
@@ -854,7 +854,6 @@ export const logSecrets = () => {
         <span>SYSTEM_DECRYPT // HIDDEN_ENVIRONMENT_VARIABLES</span>
         <span>TTY3</span>
       </div>
-
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <div className="mb-2">
           <span className="text-emerald-500 font-bold">$cat secrets.db</span>
@@ -909,7 +908,7 @@ export const logWhoAmI = () => {
         </span>
       </div>
     </div>
-  )
+  );
 };
 
 export const logLocation = () => {
@@ -942,7 +941,7 @@ export const logLocation = () => {
         </span>
       </div>
     </div>
-  )
+  );
 };
 
 export const logls = () => {
@@ -961,7 +960,7 @@ export const logls = () => {
         </span>
       </div>
     </div>
-  )
+  );
 };
 
 export const logPrivacy = () => {
@@ -969,14 +968,19 @@ export const logPrivacy = () => {
     <div className="w-full max-w-4xl rounded-lg border border-emerald-500/20 bg-zinc-950 p-2 font-normal text-[10px] leading-relaxed text-emerald-500/90 shadow-2xl">
       <div className="whitespace-pre-wrap selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
         <span className="text-emerald-500 font-bold">$/privacy</span>
-        <span className="text-emerald-400">{" "}window down to my privacy policy and cookies section...</span>
+        <span className="text-emerald-400"> window down to my privacy policy and cookies section...</span>
         <span className="text-white">
-          <p className="leading-relaxed text-justify">Full disclosure regarding active data packets, local cookies, and telemetry analytics captured exclusively to optimize system performance and refine user interactions</p>
-          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">- Dismiss this terminal viewport to view privacy policy</p>
+          <p className="leading-relaxed text-justify">
+            Full disclosure regarding active data packets, local cookies, and telemetry analytics captured exclusively
+            to optimize system performance and refine user interactions
+          </p>
+          <p className="text-[8px] text-neutral-500 leading-relaxed text-justify mt-1">
+            - Dismiss this terminal viewport to view privacy policy
+          </p>
         </span>
       </div>
     </div>
-  )
+  );
 };
 
 export const logHelp = () => {
@@ -986,14 +990,11 @@ export const logHelp = () => {
         <span>SYSTEM_HELP // COMMAND_INTERFACE_INDEX</span>
         <span>TTY4</span>
       </div>
-
       <div className="space-y-4 selection:bg-emerald-500 selection:text-zinc-950 drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]">
-        
         <div>
           <span className="text-emerald-500 font-bold">$/help</span>
           <span className="text-emerald-500/70 ml-2">system command line interface...</span>
         </div>
-
         <div>
           <h4 className="text-emerald-500/60 tracking-wider text-[10px] border-b border-emerald-500/10 pb-0.5 max-w-max mb-1">
             {"// navigations"}
@@ -1064,16 +1065,17 @@ export const logHelp = () => {
 
         <div className="space-y-1 pt-2 border-t border-emerald-500/10 text-[10px] text-zinc-500">
           <p>
-            <span className="text-emerald-500/50 font-bold">aliases:</span> sudo hire akhil, /work, whoami, /hire, ping akhil, rm -rf doubts, close.
+            <span className="text-emerald-500/50 font-bold">aliases:</span> sudo hire akhil, /work, whoami, /hire, ping
+            akhil, rm -rf doubts, close.
           </p>
           <p className="italic">
             Tip: Use ↑↓ arrows for command history ...and a few others, if you know where to look.
           </p>
           <p className="text-amber-500/70 font-semibold mt-1">
-            Type <span className="underline hover:text-amber-400 cursor-pointer">/secrets</span> if you like finding hidden things.
+            Type <span className="underline hover:text-amber-400 cursor-pointer">/secrets</span> if you like finding
+            hidden things.
           </p>
         </div>
-
       </div>
     </div>
   );

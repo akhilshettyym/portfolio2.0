@@ -96,7 +96,7 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
   const marqueeItems = eduData.length > 0 ? [...eduData, ...eduData, ...eduData, ...eduData] : [];
   const sectionHeight = useStackedLayout ? "h-auto" : isCompactDevice ? "h-[260vh]" : "h-[300vh]";
   const shellHeight = useStackedLayout ? "min-h-screen py-12" : "h-dvh";
-  const panelHeight = useStackedLayout ? "min-h-0" : isCompactDevice ? "h-[75vh]" : "h-[72h]";
+  const panelHeight = useStackedLayout ? "min-h-0" : isCompactDevice ? "h-[75vh]" : "h-[72vh]";
 
   return (
     <div ref={targetRef} className={`relative ${sectionHeight} transition-colors duration-500 ${styles.section}`}>

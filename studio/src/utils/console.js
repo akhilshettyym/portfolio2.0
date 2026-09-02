@@ -19,6 +19,7 @@ import {
   logPrivacy,
   logProjects,
   logrmrf,
+  logPrivacy,
   logSalesforce,
   logSecrets,
   logSkills,
@@ -27,7 +28,18 @@ import {
   logWhoAmI,
 } from "@/utils/functions";
 
-const NON_SLASH_COMMANDS = ["clear", "close", "ls", "whoami", "exit", "sudo hire akhil", "rm -rf akhil", "cat readme.md", "ping akhil", "me"];
+const NON_SLASH_COMMANDS = [
+  "clear",
+  "close",
+  "ls",
+  "whoami",
+  "exit",
+  "sudo hire akhil",
+  "rm -rf akhil",
+  "cat readme.md",
+  "ping akhil",
+  "me",
+];
 
 export function normalizeConsoleCommand(value) {
   const command = value.trim().toLowerCase();
@@ -59,12 +71,14 @@ export function runConsoleCommand(rawCommand, { navigate, close, clear }, isTier
     "/github": () => ({ output: logGithub(), navigation: ["/work", "github"] }),
     "/privacy": () => ({ output: logPrivacy(), navigation: ["/privacy"] }),
     "/connect": () => ({ output: logCreate(), navigation: ["/start"] }),
+    "/privacy": () => ({ output: logPrivacy(), navigation: ["/privacy"] }),
     "/philosophy": () => ({ output: logPhilosophy() }),
     "/mail": () => ({ output: logMail() }),
     "/linkedin": () => ({ output: logLinkedin() }),
     "/instagram": () => ({ output: logInstagram() }),
     "/salesforce": () => ({ output: logSalesforce(), navigation: ["/work", "salesforce"] }),
     "/socials": () => (isTier2 ? { output: logSocials() } : navToSocials()),
+    "/salesforce": () => ({ output: logSalesforce(), navigation: ["/work", "salesforce"] }),
     "/coffee": () => ({ output: logCoffee() }),
     "/secrets": () => ({ output: logSecrets() }),
     "/location": () => ({ output: logLocation() }),

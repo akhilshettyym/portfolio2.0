@@ -14,13 +14,6 @@ export default function MySocialsReveal() {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  if (isTier2 || isMobile) {
-    return null;
-  }
-
-  const useVerticalFallback = shouldReduceMotion || isMobile || isTier2;
-  const sectionBg = theme === "light" ? "bg-white" : "bg-black";
-
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -36,6 +29,13 @@ export default function MySocialsReveal() {
   const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const y = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["10%", "0%", "0%", "-10%"]);
   const filter = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["blur(16px)", "blur(0px)", "blur(0px)", "blur(16px)"]);
+
+  if (isTier2 || isMobile) {
+    return null;
+  }
+
+  const useVerticalFallback = shouldReduceMotion || isMobile || isTier2;
+  const sectionBg = theme === "light" ? "bg-white" : "bg-black";
 
   if (useVerticalFallback) {
     return <MySocialsTiered />;

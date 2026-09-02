@@ -1,11 +1,11 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { FaLightbulb } from "react-icons/fa6";
 import { runConsoleCommand } from "@/utils/console";
 import { usePathname, useRouter } from "next/navigation";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
-import { FaLightbulb } from "react-icons/fa6";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 const HINTS = ["/skills", "/projects", "/experience", "/socials", "whoami", "/secrets", "clear", "/philosophy"];
 

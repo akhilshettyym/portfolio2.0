@@ -48,9 +48,7 @@ describe("DashboardPage", () => {
   });
 
   it("opens modal and deletes a lead successfully", async () => {
-    apiFetch
-      .mockResolvedValueOnce({ data: mockLeads })
-      .mockResolvedValueOnce({});
+    apiFetch.mockResolvedValueOnce({ data: mockLeads }).mockResolvedValueOnce({});
 
     render(<DashboardPage />);
 

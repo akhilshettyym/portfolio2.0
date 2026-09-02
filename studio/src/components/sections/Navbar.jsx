@@ -361,11 +361,12 @@ const Navbar = () => {
 
                 <div>{time || "—:—:— --"}</div>
 
-                {!isTier2 &&
+                {!isTier2 && (
                   <div key={ip} className={`text-[8px] font-semibold uppercase tracking-[0.2em] ${textMutedClass}`}>
                     connection
                     <span className="inline-block w-25 text-right"> {ip}</span>
-                  </div>}
+                  </div>
+                )}
               </div>
 
               <div

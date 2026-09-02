@@ -50,10 +50,10 @@ function PersistentHeroControls({ visible }) {
    };
  }, []);
 
- const handleCloudControl = () => {
-   if (isTier2) return;
-   dispatchHeroEvent("hero-toggle-clouds");
- };
+  const handleCloudControl = () => {
+    if (isTier2) return;
+    dispatchHeroEvent("hero-toggle-clouds");
+  };
 
  const handleRestartIntroScene = () => {
    dispatchHeroEvent("hero-restart-intro");
@@ -63,17 +63,17 @@ function PersistentHeroControls({ visible }) {
    return null;
  }
 
- return (
-   <SceneControls
-     paused={paused}
-     isTier2={isTier2}
-     handleCloudControl={handleCloudControl}
-     handleRestartIntroScene={handleRestartIntroScene}
-     sceneAssets
-     triggerCover="/album.svg"
-     reveal
-   />
- );
+  return (
+    <SceneControls
+      paused={paused}
+      isTier2={isTier2}
+      handleCloudControl={handleCloudControl}
+      handleRestartIntroScene={handleRestartIntroScene}
+      sceneAssets
+      triggerCover="/album.svg"
+      reveal
+    />
+  );
 }
 
 export default function PersistentHeroLayer() {

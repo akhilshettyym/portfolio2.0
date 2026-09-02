@@ -23,7 +23,7 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
   const [eduData, setEduData] = useState(() => (Array.isArray(initialEducations) ? initialEducations : []));
   const [scrollRange, setScrollRange] = useState(0);
 
-  const { isMobile, isCompactDevice } = useDeviceType();
+  const { isMobile, isTab } = useDeviceType();
   const shouldReduceMotion = useReducedMotion();
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -93,10 +93,10 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
     mass: 0.9,
   });
 
-  const marqueeItems = eduData.length > 0 ? [...eduData, ...eduData, ...eduData, ...eduData] : [];
-  const sectionHeight = useStackedLayout ? "h-auto" : isCompactDevice ? "h-[260vh]" : "h-[300vh]";
+  const sectionHeight = useStackedLayout ? "h-auto" : "h-[380vh]";
   const shellHeight = useStackedLayout ? "min-h-screen py-12" : "h-dvh";
-  const panelHeight = useStackedLayout ? "min-h-0" : isCompactDevice ? "h-[75vh]" : "h-[72vh]";
+  const panelHeight = useStackedLayout ? "min-h-0" : `${isTab ? "h-[800px]" : "h-[480px]"}`;
+  const marqueeItems = eduData.length > 0 ? [...eduData, ...eduData, ...eduData, ...eduData] : [];
 
   return (
     <div ref={targetRef} className={`relative ${sectionHeight} transition-colors duration-500 ${styles.section}`}>
@@ -153,25 +153,28 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
                             damping: 24,
                             delay: Math.min(index * 0.05, 0.2),
                           }}
-                          className={`max-h-60 max-w-95 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
-                            useStackedLayout ? "w-full" : "h-60 w-[70vw] shrink-0 sm:w-90 lg:w-100"
+                          className={`${isTab ? "max-h-120" : "max-h-65"} max-w-95 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
+                            useStackedLayout
+                              ? "w-full"
+                              : `w-[70vw] shrink-0 sm:w-90 lg:w-100 ${isTab ? "h-120" : "h-65"}`
                           } ${styles.card}`}>
                           <div className="flex justify-between items-center w-full">
                             <span
-                              className={`text-[8px] font-mono uppercase tracking-widest px-2 py-1 rounded border ${styles.badge}`}>
+                              className={`${isTab ? "text-[16px]" : "text-[8px]"} font-mono uppercase tracking-widest px-2 py-1 rounded border ${styles.badge}`}>
                               {card.type}
                             </span>
                             <span
-                              className={`text-4xl font-black font-mono transition-colors duration-500 ${styles.cardId}`}>
+                              className={`${isTab ? "text-5xl" : "text-4xl"} font-black font-mono transition-colors duration-500 ${styles.cardId}`}>
                               0{index + 1}
                             </span>
                           </div>
 
                           <div className="my-auto">
                             <div
-                              className={`flex flex-col gap-1 text-[12px] tracking-wider uppercase leading-relaxed sm:flex-row sm:items-baseline sm:justify-between ${styles.textMuted}`}>
-                              <p className="font-medium">{card.company}</p>
-                              <span className="text-[10px] tracking-normal normal-case opacity-80">
+                              className={`${isTab ? "" : "flex flex-col"} gap-1 text-[12px] tracking-wider uppercase leading-relaxed sm:flex-row sm:items-baseline sm:justify-between ${styles.textMuted}`}>
+                              <p className={`font-medium ${isTab ? "text-2xl" : ""}`}>{card.company}</p>
+                              <span
+                                className={`tracking-normal normal-case opacity-80 ${isTab ? "text-xl" : "text-[10px]"}`}>
                                 {card.timeline}
                               </span>
                             </div>
@@ -179,11 +182,11 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
 
                           <div className="my-auto">
                             <h3
-                              className={`text-md font-bold uppercase tracking-normal pb-1 border-b-2 ${styles.cardTitle}`}>
+                              className={`${isTab ? "text-2xl" : "text-md"} font-bold uppercase tracking-normal pb-1 border-b-2 ${styles.cardTitle}`}>
                               {card.title}
                             </h3>
                             <p
-                              className={`mt-2 text-xs leading-relaxed ${useStackedLayout ? "" : "line-clamp-4"} ${styles.textMuted}`}>
+                              className={`${isTab ? "text-md" : "text-xs"} mt-2 leading-relaxed ${useStackedLayout ? "" : "line-clamp-4"} ${styles.textMuted}`}>
                               {card.description}
                             </p>
                           </div>
@@ -192,7 +195,7 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
                             {card.tags?.map((tag, tIdx) => (
                               <span
                                 key={tIdx}
-                                className={`text-[9px] font-semibold px-2 py-0.5 rounded ${styles.badge}`}>
+                                className={`${isTab ? "text-[12px]" : "text-[9px]"} font-semibold px-2 py-0.5 rounded ${styles.badge}`}>
                                 #{tag}
                               </span>
                             ))}

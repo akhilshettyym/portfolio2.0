@@ -25,7 +25,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
       className={`w-full transition-colors duration-500 text-justify ${currentTheme.bg} ${styles.section || ""} ${isMobile ? "" : "p-10 px-6"}`}>
-      <div className="mx-10 max-w-8xl">
+      <div className="max-w-8xl">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

@@ -16,7 +16,7 @@ function CardStackReveal({ initialAchievements }) {
   const [hoveredCard, setHoveredCard] = useState(-1);
 
   const { theme } = useTheme();
-  const { isMobile } = useDeviceType();
+  const { isMobile, isTab } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
   const styles = getCardStackStyles(theme);
@@ -101,7 +101,7 @@ function CardStackReveal({ initialAchievements }) {
           <div
             className={`w-full max-w-7xl mx-auto ${
               renderStackedCards
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center"
+                ? `grid gap-6 justify-items-center ${isTab ? "grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"}`
                 : "relative h-full"
             }`}>
             {renderedCards.map((card, index) =>

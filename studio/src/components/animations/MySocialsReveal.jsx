@@ -9,6 +9,7 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "fr
 
 export default function MySocialsReveal() {
   const sectionRef = useRef(null);
+
   const { theme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const { isMobile } = useDeviceType();
@@ -26,24 +27,30 @@ export default function MySocialsReveal() {
   });
 
   const scale = useTransform(smoothProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 1.4]);
+
   const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
   const y = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["10%", "0%", "0%", "-10%"]);
+
   const filter = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["blur(16px)", "blur(0px)", "blur(0px)", "blur(16px)"]);
 
-  if (isTier2 || isMobile) {
-    return null;
-  }
+  const normalizedTheme = String(theme || "light").toLowerCase();
 
-  const useVerticalFallback = shouldReduceMotion || isMobile || isTier2;
-  const sectionBg = theme === "light" ? "bg-white" : "bg-black";
+  const sectionBg = normalizedTheme === "light" ? "bg-white" : "bg-black";
 
-  if (useVerticalFallback) {
-    return <MySocialsTiered />;
+  const useFallback = shouldReduceMotion || isMobile || isTier2;
+
+  if (useFallback) {
+    return (
+      <section className={`relative w-full transition-colors duration-500 ${sectionBg}`}>
+        <MySocialsTiered />
+      </section>
+    );
   }
 
   return (
-    <section ref={sectionRef} className={`relative h-[300vh] transition-colors duration-500 ${sectionBg}`}>
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center perspective-1000">
+    <section ref={sectionRef} className={`relative w-full h-[300vh] transition-colors duration-500 ${sectionBg}`}>
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden perspective-1000">
         <motion.div
           style={{ scale, opacity, y, filter }}
           className="h-full w-full origin-center will-change-[transform,filter]">

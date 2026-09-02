@@ -34,7 +34,7 @@ const NON_SLASH_COMMANDS = [
   "whoami",
   "exit",
   "sudo hire akhil",
-  "rm -rf akhil",
+  "rm -rf doubts",
   "cat readme.md",
   "ping akhil",
   "me",

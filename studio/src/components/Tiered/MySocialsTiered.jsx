@@ -15,14 +15,29 @@ const DynamicMySocials = dynamic(() => import("@/components/sections/MySocials")
 
 export default function MySocialsTiered(props) {
   const { isMobile } = useDeviceType();
-  const [mounted, setMounted] = useState(false);
   const { isTier2, ready } = usePerformanceTier();
-  const { ref, shouldPreload } = useLazyLoad({ preloadMargin: "900px 0px", rootMargin: "0px", threshold: 0 });
+
+  const [mounted, setMounted] = useState(false);
+
+  const { ref, shouldPreload } = useLazyLoad({
+    preloadMargin: "900px 0px",
+    rootMargin: "0px",
+    threshold: 0,
+  });
 
   useEffect(() => {
-    const handle = window.setTimeout(() => setMounted(true), 0);
-    return () => window.clearTimeout(handle);
+    const handle = window.setTimeout(() => {
+      setMounted(true);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(handle);
+    };
   }, []);
+
+  if (isTier2 || isMobile) {
+    return null;
+  }
 
   if (!mounted || !ready) {
     return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "transparent" }} />;

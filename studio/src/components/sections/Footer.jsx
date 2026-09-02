@@ -735,7 +735,7 @@ const Footer = () => {
                   <Link
                     href="/privacy"
                     onClick={goToTop}
-                    className={`text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
+                    className={`text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
                     Privacy Policy
                   </Link>
                 </div>

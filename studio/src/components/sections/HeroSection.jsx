@@ -26,7 +26,6 @@ const HeroSection = ({ active = true }) => {
 
   const btnRef = useRef(null);
   const sectionRef = useRef(null);
-  const speedRef = useRef(0.8);
   const containerRef = useRef(null);
   const tunnelPositionRef = useRef(0);
 
@@ -36,6 +35,9 @@ const HeroSection = ({ active = true }) => {
 
   const { triggerIntroRestart } = useContext(LoadingContext);
   const { tier, ready, isTier2 } = usePerformanceTier();
+
+  const speedRef = useRef(isTier2 ? 0 : 0.8);
+
   const { isVisible: canvasVisible, frameSkipInterval } = useCanvasVisibility(
     containerRef,
     tier === "tier_2" ? "tier_1" : tier,
@@ -202,7 +204,6 @@ const HeroSection = ({ active = true }) => {
         ctx.textBaseline = "middle";
 
         const text = "AKHIL SHETTY";
-
         const baseFontSize = 130;
 
         ctx.font = `900 ${baseFontSize}px "Helvetica Neue", "Arial", sans-serif`;
@@ -212,9 +213,7 @@ const HeroSection = ({ active = true }) => {
         }
 
         const textWidth = ctx.measureText(text).width;
-
         const targetWidth = Math.min(w * 0.72, 820 * dpr);
-
         const widthScale = targetWidth / textWidth;
         const heightScale = widthScale * 1.02;
 
@@ -222,18 +221,13 @@ const HeroSection = ({ active = true }) => {
         const verticalPosition = h * 0.5;
 
         ctx.save();
-
         ctx.translate(horizontalPosition, verticalPosition);
-
         ctx.scale(widthScale, heightScale);
-
         ctx.fillText(text, 0, 0);
-
         ctx.restore();
       }
 
       const tex = new THREE.CanvasTexture(canvas);
-
       tex.minFilter = THREE.LinearFilter;
       tex.magFilter = THREE.LinearFilter;
       tex.needsUpdate = true;
@@ -242,7 +236,7 @@ const HeroSection = ({ active = true }) => {
     };
 
     const onMouseMove = (e) => {
-      if (!pausedRef.current && isAnimating) {
+      if (!pausedRef.current && !isTier2 && isAnimating) {
         mouseX = (e.clientX - windowHalfX) * 0.25;
         mouseY = (e.clientY - windowHalfY) * 0.15;
       }
@@ -253,6 +247,7 @@ const HeroSection = ({ active = true }) => {
     const onMouseLeave = () => {
       fluidMouse.set(0, 0);
     };
+
     const onTouchMove = (e) => {
       if (e.touches.length > 0) {
         fluidMouse.x = e.touches[0].clientX * dpr;
@@ -350,12 +345,19 @@ const HeroSection = ({ active = true }) => {
 
       const delta = Math.min(timer.update(), 0.033);
       const frameSpeed = delta * 60;
-      const targetSpeed = pausedRef.current ? 0 : 0.8;
+
+      const isCloudsPaused = pausedRef.current || isTier2;
+      const targetSpeed = isCloudsPaused ? 0 : 0.8;
+
       speedRef.current += (targetSpeed - speedRef.current) * 0.025;
+      if (isCloudsPaused && Math.abs(speedRef.current) < 0.001) {
+        speedRef.current = 0;
+      }
+
       tunnelPositionRef.current += speedRef.current * frameSpeed;
 
       if (camera) {
-        const mouseFactor = pausedRef.current ? 0 : 1;
+        const mouseFactor = isCloudsPaused ? 0 : 1;
         camera.position.x += (mouseX * mouseFactor - camera.position.x) * 0.01;
         camera.position.y += (-mouseY * mouseFactor - camera.position.y) * 0.01;
         camera.position.z = -(tunnelPositionRef.current % 8000) + 8000;
@@ -571,6 +573,7 @@ const HeroSection = ({ active = true }) => {
   }, [quality.antialias, maxCloudPlanes, sceneAssets, tier, isTier2]);
 
   const handleCloudControl = () => {
+    if (isTier2) return;
     setPaused((prev) => {
       const nextState = !prev;
       localStorage.setItem(CLOUD_CONTROL, nextState);
@@ -604,23 +607,30 @@ const HeroSection = ({ active = true }) => {
               ? "none"
               : sceneAssets
                 ? `linear-gradient(
-                  to bottom,
-                  rgba(255,255,255,0.35),
-                  rgba(255,255,255,0.05)
-                ),
-                url("/clouds_background/${sceneAssets.background}.png")`
+                 to bottom,
+                 rgba(255,255,255,0.35),
+                 rgba(255,255,255,0.05)
+               ),
+               url("/clouds_background/${sceneAssets.background}.png")`
                 : "none",
           }}
         />
       </div>
 
-      <div className="absolute bottom-1 left-0 z-20 w-full">
+      <div className="absolute top-25 left-0 z-20 w-full">
         <div className="flex w-full items-start justify-between p-5">
-          <span className="text-sm font-medium tracking-tight text-white/80 md:text-base">Software Engineer</span>
+          <p className="max-w-xs text-xs font-medium tracking-tight leading-relaxed text-black/80">
+            Independent creator in Mumbai shaping the future of web experiences. I design interactive spaces that
+            captivate audiences and leave a lasting impression.
+          </p>
+        </div>
+      </div>
 
-          <span className="text-sm font-medium tracking-tight text-white/80 md:text-base">
-            Design & Code for those who refuse to settle
-          </span>
+      <div className="absolute -bottom-2 left-0 z-20 w-full">
+        <div className="flex w-full items-start justify-between p-5">
+          <span className="text-xs font-medium tracking-tight text-black/80">Software Engineer</span>
+
+          <span className="text-xs font-medium tracking-tight text-black/80">Designed by me</span>
         </div>
       </div>
     </div>

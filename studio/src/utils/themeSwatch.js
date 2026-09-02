@@ -86,7 +86,7 @@ export const getCreateSomeStyles = (theme) => {
 
   return {
     section: isDark ? "bg-[#0a0a0a] text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black",
-    textMuted: isDark ? "text-white/40" : isMetal ? "text-red-500/40" : "text-neutral-400",
+    textMuted: isDark ? "text-white" : isMetal ? "text-red-500" : "text-neutral-400",
     textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-neutral-700",
     dividerSoft: isDark ? "border-white/10" : isMetal ? "border-red-500/10" : "border-neutral-100",
     dividerHeavy: isDark ? "border-white" : isMetal ? "border-red-500" : "border-black",

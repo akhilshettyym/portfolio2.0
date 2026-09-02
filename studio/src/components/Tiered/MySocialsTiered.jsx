@@ -24,6 +24,10 @@ export default function MySocialsTiered(props) {
     return () => window.clearTimeout(handle);
   }, []);
 
+  if (isTier2 || isMobile) {
+    return null;
+  }
+
   if (!mounted || !ready) {
     return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "transparent" }} />;
   }

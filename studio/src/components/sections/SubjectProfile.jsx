@@ -91,7 +91,7 @@ const MarqueeContent = ({ text, variant, showIcon, theme }) => {
 
 export default function SubjectProfile() {
   const { theme } = useTheme();
-  const { isMobile } = useDeviceType();
+  const { isMobile, isTab } = useDeviceType();
   const [carouselIndex, setCarouselIndex] = useState(0);
   const { ref: sectionRef, isVisible: isSectionVisible } = useViewportDetection({ threshold: 0.05 });
 
@@ -261,7 +261,7 @@ export default function SubjectProfile() {
           <div
             className={`absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 translate-x-3 -translate-y-3 ${styles.borderCorner}`}
           />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+          <div className={`gap-12 items-stretch ${isTab ? "" : "grid grid-cols-1 lg:grid-cols-12"}`}>
             <div className="lg:col-span-8 flex flex-col justify-between gap-10">
               <div>
                 <h3 className={`text-xl font-light leading-relaxed tracking-tight text-justify ${styles.textH3}`}>
@@ -320,56 +320,60 @@ export default function SubjectProfile() {
                 </motion.div>
               </div>
             </div>
-            <div
-              className={`lg:col-span-4 relative h-full min-h-100 border p-2 group shadow-inner ${styles.imgCardContainer}`}>
+
+            {!isTab &&
               <div
-                className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 rounded-tl -translate-x-0.5 -translate-y-0.5 ${styles.borderCorner}`}
-              />
-              <div
-                className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`}
-              />
-              <div className={`relative w-full h-95 overflow-hidden rounded-lg ${styles.imgPlaceholder}`}>
-                <SubjectAscii />
+                className={`relative w-full min-w-0 lg:col-span-4 p-2 group shadow-inner ${styles.imgCardContainer}`}>
+                <div
+                  className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 rounded-tl -translate-x-0.5 -translate-y-0.5 ${styles.borderCorner}`} />
+                <div
+                  className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`} />
+
+                <div className={`relative w-full ${isMobile ? "min-h-[375px]" : "min-h-[260px]"} h-[clamp(260px,42vw,380px)] overflow-hidden rounded-lg @container  ${styles.imgPlaceholder}`}>
+                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                    <SubjectAscii />
+                  </div>
+                </div>
+
+                <div
+                  className={`absolute bottom-3 left-1/2 -translate-x-1/2 w-[min(90%,300px)] backdrop-blur-md border p-1 shadow-xl font-mono select-none rounded-lg ${styles.sysPanel}`}>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${styles.sysDot}`} />
+                      <p className={`text-[11px] font-bold tracking-wider ${styles.sysHeader}`}>CORE_SYS // ENGR.AV2</p>
+                    </div>
+
+                    <span className={`text-[8px] tracking-widest opacity-60 ${styles.sysText}`}>ONLINE</span>
+                  </div>
+
+                  <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 sm:flex sm:items-center sm:justify-center sm:gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[8px] opacity-50 ${styles.sysText}`}>STATUS</span>
+                      <span className={`text-[8px] ${styles.sysHeader}`}>STABLE</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[8px] opacity-50 ${styles.sysText}`}>UPTIME</span>
+                      <span className={`text-[8px] ${styles.sysHeader}`}>99.9%</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[8px] opacity-50 ${styles.sysText}`}>LATENCY</span>
+                      <span className={`text-[8px] ${styles.sysHeader}`}>24ms</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[8px] opacity-50 ${styles.sysText}`}>LOAD</span>
+                    </div>
+                  </div>
+
+                  <div className={`mt-2 pt-2 border-t opacity-40 ${styles.sysBorder}`}>
+                    <p className={`text-[7px] tracking-[0.18em] ${styles.sysText}`}>LATENCY: OPTIMAL // SIGNAL: ACTIVE</p>
+                  </div>
+                </div>
               </div>
+            }
 
-              <div
-                className={`absolute bottom-4 left-1/2 -translate-x-1/2 backdrop-blur-md border p-1 shadow-xl font-mono  select-none rounded-lg ${styles.sysPanel} ${isMobile ? "w-64" : "w-75"}`}>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${styles.sysDot}`} />
-                    <p className={`text-[11px] font-bold tracking-wider ${styles.sysHeader}`}>CORE_SYS // ENGR.AV2</p>
-                  </div>
-
-                  <span className={`text-[8px] tracking-widest opacity-60 ${styles.sysText}`}>ONLINE</span>
-                </div>
-
-                <div className="flex items-center justify-center gap-4 mt-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>STATUS</span>
-                    <span className={`text-[8px] ${styles.sysHeader}`}>STABLE</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>UPTIME</span>
-                    <span className={`text-[8px] ${styles.sysHeader}`}>99.9%</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>LATENCY</span>
-                    <span className={`text-[8px] ${styles.sysHeader}`}>24ms</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[8px] opacity-50 ${styles.sysText}`}>LOAD</span>
-                    <span className={`text-[8px] ${styles.sysHeader}`}>18%</span>
-                  </div>
-                </div>
-
-                <div className={`mt-2 pt-2 border-t opacity-40 ${styles.sysBorder}`}>
-                  <p className={`text-[7px] tracking-[0.18em] ${styles.sysText}`}>LATENCY: OPTIMAL // SIGNAL: ACTIVE</p>
-                </div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </motion.div>

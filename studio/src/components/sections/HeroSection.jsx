@@ -3,7 +3,7 @@
 import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { useTheme } from "@/context/ThemeContext";
-import LimpModal from "@/components/modals/LimpModal";
+import HeroLayer from "@/components/basic/HeroLayer";
 import { getWeatherScene } from "@/utils/weather-scene";
 import { CLOUD_SHADER, HERO_SHADER } from "@/utils/basic";
 import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
@@ -596,7 +596,6 @@ const HeroSection = ({ active = true }) => {
 
   return (
     <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
-      {showModal && <LimpModal />}
 
       <div className="wrapper relative min-h-screen w-full">
         <div
@@ -617,19 +616,7 @@ const HeroSection = ({ active = true }) => {
         />
       </div>
 
-      {/* <div className="absolute top-25 left-0 z-20 w-full">
-        <div className="flex w-full items-start justify-between p-5">
-          <p className="max-w-xs text-xs font-medium tracking-tight leading-relaxed text-black/80">
-            Independent creator in Mumbai shaping the future of web experiences. I design interactive spaces that
-            captivate audiences and leave a lasting impression.
-          </p>
-        </div>
-      </div> */}
-
-      {/* <div className="absolute -bottom-2 left-0 z-20 w-full">
-        <span className="text-xs font-medium tracking-tight text-black/80">Software Engineer</span>
-        <span className="text-xs font-medium tracking-tight text-black/80">Designed by me</span>
-      </div> */}
+      <HeroLayer theme={theme} />
     </div>
   );
 };

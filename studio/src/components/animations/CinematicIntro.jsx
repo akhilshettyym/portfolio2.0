@@ -507,8 +507,8 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0, y: -18, scale: 1.01 }}
                   transition={{ duration: 0.7, ease: [0.77, 0, 0.175, 1] }}
                   className={t(
-                    "text-[clamp(2.6rem,6vw,3rem)] font-bold tracking-tight",
-                    "text-[clamp(1.6rem,7vw,2.2rem)] font-bold tracking-tight",
+                    "text-[clamp(2rem,5vw,2rem)] font-bold tracking-tight",
+                    "text-[clamp(1.5rem,5vw,2rem)] font-bold tracking-tight",
                   )}>
                   <CurtainText> {displayed} </CurtainText>
                 </motion.div>
@@ -531,8 +531,8 @@ export default function CinematicIntro({ onComplete }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
                 className={t(
-                  "text-[clamp(3rem,10vw,4rem)] font-bold tracking-normal",
-                  "text-[clamp(1.8rem,9vw,2.6rem)] font-bold tracking-normal",
+                  "text-[clamp(2rem,5vw,2rem)] font-bold tracking-normal",
+                  "text-[clamp(1.5rem,6vw,2.5rem)] font-bold tracking-normal",
                 )}>
                 <span className="inline-block overflow-hidden">
                   {word}
@@ -557,8 +557,8 @@ export default function CinematicIntro({ onComplete }) {
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[-80%]">
                 <div
                   className={t(
-                    "text-[clamp(2.8rem,8vw,3rem)] font-semibold tracking-tight whitespace-nowrap",
-                    "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight whitespace-nowrap",
+                    "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight whitespace-nowrap",
+                    "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight whitespace-nowrap",
                   )}>
                   <CurtainText>
                     My name is <span className="font-bold"> AKHIL </span>
@@ -574,8 +574,8 @@ export default function CinematicIntro({ onComplete }) {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                     className={t(
-                      "absolute left-1/2 top-1/2 mt-8 -translate-x-1/2 text-[clamp(1.5rem,3.4vw,2rem)] text-black/70 whitespace-nowrap",
-                      "absolute left-1/2 top-1/2 mt-6 -translate-x-1/2 text-[clamp(1rem,4vw,1.35rem)] text-black/70 whitespace-nowrap",
+                      "absolute left-1/2 top-1/2 mt-6 -translate-x-1/2 text-[clamp(1rem,2vw,1.5rem)] text-black/70 whitespace-nowrap",
+                      "absolute left-1/2 top-1/2 mt-6 -translate-x-1/2 text-[clamp(1rem,4vw,1rem)] text-black/70 whitespace-nowrap",
                     )}>
                     <CurtainText delay={0.15}>But that doesn&apos;t tell you much.</CurtainText>
                   </motion.div>
@@ -703,16 +703,16 @@ export default function CinematicIntro({ onComplete }) {
                     className="space-y-4">
                     <div
                       className={t(
-                        "text-[clamp(2.6rem,7vw,3rem)] font-semibold tracking-tight",
-                        "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight",
+                        "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight",
+                        "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight",
                       )}>
                       <CurtainText>{BUILDINGLINES[0]}</CurtainText>
                     </div>
 
                     <div
                       className={t(
-                        "text-[clamp(1.5rem,3.4vw,2rem)] text-black/72",
-                        "text-[clamp(1rem,4vw,1.35rem)] text-black/72",
+                        "text-[clamp(1rem,2vw,1.5rem)] text-black/72",
+                        "text-[clamp(1.5rem,5vw,2rem)] text-black/72",
                       )}>
                       <CurtainText delay={0.35}>{BUILDINGLINES[1]}</CurtainText>
                     </div>
@@ -727,16 +727,16 @@ export default function CinematicIntro({ onComplete }) {
                     className="space-y-4">
                     <div
                       className={t(
-                        "text-[clamp(2.4rem,6.5vw,3rem)] font-semibold tracking-tight",
-                        "text-[clamp(1.45rem,6.5vw,2rem)] font-semibold tracking-tight",
+                        "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight",
+                        "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight",
                       )}>
                       <CurtainText>{BUILDINGLINES[2]}</CurtainText>
                     </div>
 
                     <div
                       className={t(
-                        "text-[clamp(1.5rem,3.4vw,2rem)] text-black/72",
-                        "text-[clamp(1rem,4vw,1.35rem)] text-black/72",
+                        "text-[clamp(1rem,2vw,1.5rem)] text-black/72",
+                        "text-[clamp(1.5rem,5vw,2rem)] text-black/72",
                       )}>
                       <CurtainText delay={0.28}>{BUILDINGLINES[3]}</CurtainText>
                     </div>
@@ -770,7 +770,7 @@ export default function CinematicIntro({ onComplete }) {
                 }}
                 className={`font-semibold tracking-tight ${
                   questionIndex === PROBLEMQUESTIONS.length - 1 ? "text-black" : "text-black/85"
-                } ${t("text-[clamp(2.4rem,6vw,3rem)]", "text-[clamp(1.4rem,6.5vw,2rem)]")}`}>
+                } ${t("text-[clamp(2rem,5vw,2rem)]", "text-[clamp(1.5rem,5vw,2rem)]")}`}>
                 <div>{PROBLEMQUESTIONS[questionIndex]}</div>
               </motion.div>
             </AnimatePresence>
@@ -827,16 +827,16 @@ export default function CinematicIntro({ onComplete }) {
                 className="space-y-4">
                 <div
                   className={t(
-                    "text-[clamp(2rem,6vw,3rem)] font-semibold tracking-tight",
-                    "text-[clamp(1.4rem,6.5vw,2rem)] font-semibold tracking-tight",
+                    "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight",
+                    "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight",
                   )}>
                   Great software isn&apos;t written.
                 </div>
 
                 <div
                   className={t(
-                    "text-[clamp(1.7rem,4vw,2rem)] text-black/72",
-                    "text-[clamp(1.1rem,4.5vw,1.4rem)] text-black/72",
+                    "text-[clamp(1rem,2vw,1.5rem)] text-black/72",
+                    "text-[clamp(1.5rem,5vw,2rem)] text-black/72",
                   )}>
                   It&apos;s discovered.
                 </div>
@@ -890,16 +890,16 @@ export default function CinematicIntro({ onComplete }) {
                   className="max-w-5xl">
                   <div
                     className={t(
-                      "text-[clamp(2.2rem,6vw,3rem)] font-semibold tracking-tight text-black",
-                      "text-[clamp(1.4rem,6.5vw,2rem)] font-semibold tracking-tight text-black",
+                      "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-black",
+                      "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-black",
                     )}>
                     I specialize in tools.
                   </div>
 
                   <div
                     className={t(
-                      "mt-4 text-[clamp(1.4rem,3.4vw,2rem)] text-black/60",
-                      "mt-3 text-[clamp(1rem,4vw,1.3rem)] text-black/60",
+                      "mt-4 text-[clamp(1rem,2vw,1.5rem)] text-black/60",
+                      "mt-3 text-[clamp(1.5rem,5vw,2rem)] text-black/60",
                     )}>
                     They work as I say.
                   </div>
@@ -935,8 +935,8 @@ export default function CinematicIntro({ onComplete }) {
                 className="max-w-5xl">
                 <div
                   className={t(
-                    "text-[clamp(2.3rem,6vw,3rem)] font-bold tracking-tight text-white",
-                    "text-[clamp(1.4rem,6.5vw,2rem)] font-bold tracking-tight text-white",
+                    "text-[clamp(2rem,5vw,2rem)] font-bold tracking-tight text-white",
+                    "text-[clamp(1.5rem,5vw,2rem)] font-bold tracking-tight text-white",
                   )}>
                   {AICLAIMS[aiStage]}
                 </div>
@@ -982,7 +982,7 @@ export default function CinematicIntro({ onComplete }) {
                   repeat: isTier2 ? 0 : Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute max-w-[18rem] text-left text-[10px] uppercase leading-4 tracking-[0.22em] text-white/70"
+                className="absolute max-w-[18rem] text-left text-[8px] uppercase leading-4 tracking-[0.22em] text-white/70"
                 style={{
                   left: `${item.left}%`,
                   top: `${item.top}%`,
@@ -1021,8 +1021,8 @@ export default function CinematicIntro({ onComplete }) {
                   className="max-w-5xl">
                   <div
                     className={t(
-                      "text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white",
-                      "text-[clamp(1.3rem,6vw,1.9rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-white",
                     )}>
                     {BUSINESSQUESTIONS[questionIndex]}
                   </div>
@@ -1066,8 +1066,8 @@ export default function CinematicIntro({ onComplete }) {
                 className="max-w-6xl">
                 <div
                   className={t(
-                    "text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white",
-                    "text-[clamp(1.3rem,6vw,1.9rem)] font-semibold tracking-tight text-white",
+                    "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-white",
+                    "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-white",
                   )}>
                   {VULNERABILITIES[vulnTick]}
                 </div>
@@ -1094,15 +1094,15 @@ export default function CinematicIntro({ onComplete }) {
                   className="max-w-5xl">
                   <div
                     className={t(
-                      "text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white",
-                      "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-white",
                     )}>
                     The most dangerous bugs...
                   </div>
                   <div
                     className={t(
-                      "mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72",
-                      "mt-3 text-[clamp(1.1rem,4.5vw,1.4rem)] text-white/72",
+                      "mt-4 text-[clamp(1rem,2vw,1.5rem)] text-white/72",
+                      "mt-3 text-[clamp(1.5rem,5vw,2rem)] text-white/72",
                     )}>
                     are the ones nobody sees.
                   </div>
@@ -1117,15 +1117,15 @@ export default function CinematicIntro({ onComplete }) {
                   className="max-w-5xl">
                   <div
                     className={t(
-                      "text-[clamp(2.6rem,6.5vw,3rem)] font-semibold tracking-tight text-white",
-                      "text-[clamp(1.5rem,7vw,2.1rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-white",
+                      "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-white",
                     )}>
                     Intelligence generates code.
                   </div>
                   <div
                     className={t(
-                      "mt-4 text-[clamp(1.7rem,4vw,2rem)] text-white/72",
-                      "mt-3 text-[clamp(1.1rem,4.5vw,1.4rem)] text-white/72",
+                      "mt-4 text-[clamp(1rem,2vw,1.5rem)] text-white/72",
+                      "mt-3 text-[clamp(1.5rem,5vw,2rem)] text-white/72",
                     )}>
                     Experience prevents disasters.
                   </div>
@@ -1152,8 +1152,8 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0, y: -50, scale: 1.02, filter: "blur(12px)" }}
                   transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
                   className={t(
-                    "text-[clamp(2rem,5vw,3rem)] font-semibold tracking-tight text-white",
-                    "text-[clamp(1.3rem,6vw,1.9rem)] font-semibold tracking-tight text-white",
+                    "text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-white",
+                    "text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-white",
                   )}>
                   {PHILOSOPHY[philosophyStage]}
                 </motion.div>
@@ -1200,8 +1200,8 @@ export default function CinematicIntro({ onComplete }) {
                   exit={{ opacity: 0, y: -28, scale: 1.02, filter: "blur(10px)" }}
                   transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                   className={t(
-                    "max-w-6xl text-[clamp(1.9rem,4.8vw,4.4rem)] font-semibold tracking-tight text-white",
-                    "max-w-6xl text-[clamp(1.25rem,5.5vw,1.9rem)] font-semibold tracking-tight text-white",
+                    "max-w-6xl text-[clamp(2rem,5vw,2rem)] font-semibold tracking-tight text-white",
+                    "max-w-6xl text-[clamp(1.5rem,5vw,2rem)] font-semibold tracking-tight text-white",
                   )}>
                   {reversedRewind[rewindIndex]}
                 </motion.div>
@@ -1216,8 +1216,8 @@ export default function CinematicIntro({ onComplete }) {
                     animate={{ y: [0, -4, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     className={t(
-                      "text-[clamp(3rem,9vw,4rem)] font-bold tracking-normal text-black",
-                      "text-[clamp(1.8rem,9vw,2.6rem)] font-bold tracking-normal text-black",
+                      "text-[clamp(2rem,5vw,2rem)] font-bold tracking-normal text-black",
+                      "text-[clamp(1.5rem,8vw,2.5rem)] font-bold tracking-normal text-black",
                     )}>
                     WHO AM I ?
                   </motion.div>
@@ -1295,7 +1295,7 @@ export default function CinematicIntro({ onComplete }) {
       {scene >= 0 && scene !== 13 && (
         <button
           onClick={handleSkipToLastScene}
-          className="fixed bottom-8 right-8 z-50 flex items-center gap-2 rounded-full border border-current/30 bg-white/90 px-5 py-2.5 text-xs uppercase tracking-normal text-black backdrop-blur-md transition-all hover:bg-white hover:border-white/60 active:scale-95 dark:bg-black/90 dark:text-white dark:hover:bg-black">
+          className="fixed bottom-8 right-8 z-50 flex items-center gap-2 rounded-full border border-current/30 bg-white/90 px-5 py-2 text-xs uppercase tracking-normal text-black backdrop-blur-md transition-all hover:bg-white hover:border-white/60 active:scale-95 dark:bg-black/90 dark:text-white dark:hover:bg-black">
           <span> Skip Intro </span>
         </button>
       )}

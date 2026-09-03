@@ -12,6 +12,7 @@ import NavbarWrapper from "@/components/wrappers/NavbarWrapper";
 import PersistentHeroLayer from "@/components/wrappers/HeroWrapper";
 import RouteTransition from "@/components/animations/RouteTransition";
 import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
+import HireWrapper from "@/components/wrappers/HireWrapper";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -112,6 +113,7 @@ export default function RootLayout({ children }) {
 
                 <ThemeWrapper>
                   <ToastContainer />
+                  <HireWrapper />
                   <PersistentHeroLayer />
                   <div className="relative z-30 grow">
                     <RouteTransition>{children}</RouteTransition>

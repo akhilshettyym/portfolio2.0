@@ -15,10 +15,6 @@ export default function MySocialsReveal() {
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
-  if (isTier2 || isMobile) {
-    return null;
-  }
-
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -31,15 +27,12 @@ export default function MySocialsReveal() {
   });
 
   const scale = useTransform(smoothProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 1.4]);
-
   const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const y = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["10%", "0%", "0%", "-10%"]);
-
   const filter = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["blur(16px)", "blur(0px)", "blur(0px)", "blur(16px)"]);
 
   const normalizedTheme = String(theme || "light").toLowerCase();
-
   const sectionBg = normalizedTheme === "light" ? "bg-white" : "bg-black";
 
   const useFallback = shouldReduceMotion || isMobile || isTier2;

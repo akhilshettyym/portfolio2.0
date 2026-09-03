@@ -1,7 +1,7 @@
 import DevTicker from "@/components/sections/DevTicker";
 import SubjectProfile from "@/components/sections/SubjectProfile";
+import SocialsWrapper from "@/components/wrappers/SocialsWrapper";
 import BubbleSceneTiered from "@/components/Tiered/BubbleSceneTiered";
-import MySocialsReveal from "@/components/animations/MySocialsReveal";
 import CardStackRevealTiered from "@/components/Tiered/CardStackRevealTiered";
 
 export default function InfoLayout({ content = {} }) {
@@ -25,7 +25,7 @@ export default function InfoLayout({ content = {} }) {
         </section>
 
         <section id="socials">
-          <MySocialsReveal />
+          <SocialsWrapper />
         </section>
       </div>
     </article>

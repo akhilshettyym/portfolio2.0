@@ -79,7 +79,7 @@ function PersistentHeroControls({ visible }) {
     normalizedTheme === "dark"
       ? "bg-white text-black border-black"
       : normalizedTheme === "metal"
-        ? "bg-red-500 text-white border-black"
+        ? "bg-red-600 text-black border-black"
         : "bg-black text-white border-white";
 
   return (

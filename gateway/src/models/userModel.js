@@ -91,6 +91,8 @@ const contactInquirySchema = new mongoose.Schema(
 
 contactInquirySchema.index({ email: 1, createdAt: -1 });
 
+contactInquirySchema.index({ createdAt: 1 }, { expireAfterSeconds: 7776000 });
+
 const ContactInquiry = mongoose.models.ContactInquiry || mongoose.model("ContactInquiry", contactInquirySchema);
 
 export default ContactInquiry;

@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { Suspense, useEffect, useState } from "react";
-import { useDeviceType } from "@/hooks/useDeviceType";
 import { useLazyLoad } from "@/hooks/useViewportDetection";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
@@ -14,7 +13,6 @@ const DynamicMySocials = dynamic(() => import("@/components/sections/MySocials")
 });
 
 export default function MySocialsTiered(props) {
-  const { isMobile } = useDeviceType();
   const { isTier2, ready } = usePerformanceTier();
 
   const [mounted, setMounted] = useState(false);
@@ -34,10 +32,6 @@ export default function MySocialsTiered(props) {
       window.clearTimeout(handle);
     };
   }, []);
-
-  if (isTier2 || isMobile) {
-    return null;
-  }
 
   if (!mounted || !ready) {
     return <div ref={ref} style={{ width: "100%", minHeight: "500px", background: "transparent" }} />;

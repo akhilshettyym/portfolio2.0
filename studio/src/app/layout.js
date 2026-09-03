@@ -4,6 +4,7 @@ import { LenisProvider } from "@/context/LenisContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
+import HireWrapper from "@/components/wrappers/HireWrapper";
 import NavbarLayout from "@/components/layouts/NavbarLayout";
 import FooterLayout from "@/components/layouts/FooterLayout";
 import ThemeWrapper from "@/components/wrappers/ThemeWrapper";
@@ -112,6 +113,7 @@ export default function RootLayout({ children }) {
 
                 <ThemeWrapper>
                   <ToastContainer />
+                  <HireWrapper />
                   <PersistentHeroLayer />
                   <div className="relative z-30 grow">
                     <RouteTransition>{children}</RouteTransition>

@@ -3,7 +3,7 @@
 import * as THREE from "three";
 import "@/styles/hero-section.css";
 import { useTheme } from "@/context/ThemeContext";
-import LimpModal from "@/components/modals/LimpModal";
+import HeroLayer from "@/components/basic/HeroLayer";
 import { getWeatherScene } from "@/utils/weather-scene";
 import { CLOUD_SHADER, HERO_SHADER } from "@/utils/basic";
 import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
@@ -204,7 +204,6 @@ const HeroSection = ({ active = true }) => {
         ctx.textBaseline = "middle";
 
         const text = "AKHIL SHETTY";
-
         const baseFontSize = 130;
 
         ctx.font = `900 ${baseFontSize}px "Helvetica Neue", "Arial", sans-serif`;
@@ -214,9 +213,7 @@ const HeroSection = ({ active = true }) => {
         }
 
         const textWidth = ctx.measureText(text).width;
-
         const targetWidth = Math.min(w * 0.72, 820 * dpr);
-
         const widthScale = targetWidth / textWidth;
         const heightScale = widthScale * 1.02;
 
@@ -224,18 +221,13 @@ const HeroSection = ({ active = true }) => {
         const verticalPosition = h * 0.5;
 
         ctx.save();
-
         ctx.translate(horizontalPosition, verticalPosition);
-
         ctx.scale(widthScale, heightScale);
-
         ctx.fillText(text, 0, 0);
-
         ctx.restore();
       }
 
       const tex = new THREE.CanvasTexture(canvas);
-
       tex.minFilter = THREE.LinearFilter;
       tex.magFilter = THREE.LinearFilter;
       tex.needsUpdate = true;
@@ -255,6 +247,7 @@ const HeroSection = ({ active = true }) => {
     const onMouseLeave = () => {
       fluidMouse.set(0, 0);
     };
+
     const onTouchMove = (e) => {
       if (e.touches.length > 0) {
         fluidMouse.x = e.touches[0].clientX * dpr;
@@ -603,8 +596,6 @@ const HeroSection = ({ active = true }) => {
 
   return (
     <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
-      {showModal && <LimpModal />}
-
       <div className="wrapper relative min-h-screen w-full">
         <div
           ref={containerRef}
@@ -614,29 +605,17 @@ const HeroSection = ({ active = true }) => {
               ? "none"
               : sceneAssets
                 ? `linear-gradient(
-                  to bottom,
-                  rgba(255,255,255,0.35),
-                  rgba(255,255,255,0.05)
-                ),
-                url("/clouds_background/${sceneAssets.background}.png")`
+                 to bottom,
+                 rgba(255,255,255,0.35),
+                 rgba(255,255,255,0.05)
+               ),
+               url("/clouds_background/${sceneAssets.background}.png")`
                 : "none",
           }}
         />
       </div>
 
-      {/* <div className="absolute top-25 left-0 z-20 w-full">
-        <div className="flex w-full items-start justify-between p-5">
-          <p className="max-w-xs text-xs font-medium tracking-tight leading-relaxed text-black/80">
-            Independent creator in Mumbai shaping the future of web experiences. I design interactive spaces that
-            captivate audiences and leave a lasting impression.
-          </p>
-        </div>
-      </div> */}
-
-      {/* <div className="absolute -bottom-2 left-0 z-20 w-full">
-        <span className="text-xs font-medium tracking-tight text-black/80">Software Engineer</span>
-        <span className="text-xs font-medium tracking-tight text-black/80">Designed by me</span>
-      </div> */}
+      <HeroLayer theme={theme} />
     </div>
   );
 };

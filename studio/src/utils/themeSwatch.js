@@ -896,71 +896,71 @@ export const getControlModalStyles = {
   },
 };
 
-// --- 
+// ---
 
-  export const getNotFoundStyles = {
-    light: {
-      page: "bg-white text-black",
-      muted: "text-black/55",
-      subtle: "text-black/40",
-      icon: "text-black/35",
-      border: "border-black/10",
-      card: "bg-black/[0.025]",
-      button: "bg-black text-white hover:bg-black/80",
-      secondary: "bg-black/5 text-black hover:bg-black/10",
-      accent: "bg-black",
-      glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(0,0,0,0.04),transparent_45%)]",
-    },
+export const getNotFoundStyles = {
+  light: {
+    page: "bg-white text-black",
+    muted: "text-black/55",
+    subtle: "text-black/40",
+    icon: "text-black/35",
+    border: "border-black/10",
+    card: "bg-black/[0.025]",
+    button: "bg-black text-white hover:bg-black/80",
+    secondary: "bg-black/5 text-black hover:bg-black/10",
+    accent: "bg-black",
+    glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(0,0,0,0.04),transparent_45%)]",
+  },
 
-    dark: {
-      page: "bg-black text-white",
-      muted: "text-white/60",
-      subtle: "text-white/40",
-      icon: "text-white/35",
-      border: "border-white/10",
-      card: "bg-white/[0.04]",
-      button: "bg-white text-black hover:bg-white/85",
-      secondary: "bg-white/10 text-white hover:bg-white/15",
-      accent: "bg-white",
-      glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.06),transparent_45%)]",
-    },
+  dark: {
+    page: "bg-black text-white",
+    muted: "text-white/60",
+    subtle: "text-white/40",
+    icon: "text-white/35",
+    border: "border-white/10",
+    card: "bg-white/[0.04]",
+    button: "bg-white text-black hover:bg-white/85",
+    secondary: "bg-white/10 text-white hover:bg-white/15",
+    accent: "bg-white",
+    glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.06),transparent_45%)]",
+  },
 
-    metal: {
-      page: "bg-black text-red-500",
-      muted: "text-red-500/65",
-      subtle: "text-red-500/40",
-      icon: "text-red-500/40",
-      border: "border-red-500/15",
-      card: "bg-red-500/[0.035]",
-      button: "bg-red-500 text-black hover:bg-red-400",
-      secondary: "bg-red-500/10 text-red-500 hover:bg-red-500/15",
-      accent: "bg-red-500",
-      glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(239,68,68,0.08),transparent_45%)]",
-    },
-  };
+  metal: {
+    page: "bg-black text-red-500",
+    muted: "text-red-500/65",
+    subtle: "text-red-500/40",
+    icon: "text-red-500/40",
+    border: "border-red-500/15",
+    card: "bg-red-500/[0.035]",
+    button: "bg-red-500 text-black hover:bg-red-400",
+    secondary: "bg-red-500/10 text-red-500 hover:bg-red-500/15",
+    accent: "bg-red-500",
+    glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(239,68,68,0.08),transparent_45%)]",
+  },
+};
 
 // ---
 
-    export const getHeroLayerStyles = (theme) => {
-    switch (theme) {
-      case "dark":
-        return {
-          text: "text-white",
-          credit: "text-white/80",
-          underline: "bg-white",
-        };
-      case "metal":
-        return {
-          text: "text-red-600",
-          credit: "text-red-500/80",
-          underline: "bg-red-600",
-        };
-      case "light":
-      default:
-        return {
-          text: "text-black",
-          credit: "text-black/80",
-          underline: "bg-black",
-        };
-    }
-  };
+export const getHeroLayerStyles = (theme) => {
+  switch (theme) {
+    case "dark":
+      return {
+        text: "text-white",
+        credit: "text-white/80",
+        underline: "bg-white",
+      };
+    case "metal":
+      return {
+        text: "text-red-600",
+        credit: "text-red-500/80",
+        underline: "bg-red-600",
+      };
+    case "light":
+    default:
+      return {
+        text: "text-black",
+        credit: "text-black/80",
+        underline: "bg-black",
+      };
+  }
+};

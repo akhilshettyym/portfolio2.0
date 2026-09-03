@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 const ENTRANCE_DELAY = 10;
 
 export default function HeroLayer({ theme }) {
-
   const styles = getHeroLayerStyles(theme);
 
   const containerVariants = {

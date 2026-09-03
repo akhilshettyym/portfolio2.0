@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { WiMoonAltFull } from "react-icons/wi";
 import { SiRevealdotjs } from "react-icons/si";
 import { TiWeatherSunny } from "react-icons/ti";
+import { AiOutlineClear } from "react-icons/ai";
 import { useTheme } from "@/context/ThemeContext";
 import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
 import { getWeatherIconData } from "@/utils/weather-scene";
-import { AiOutlineClear } from "react-icons/ai";
 import { ASSET_CACHE, LOCATION_MODE, SCENE_CACHE } from "@/utils/storage";
 
 export default function ControlModal({ open, onClose, paused, isTier2, handleCloudControl, handleRestartIntroScene }) {
@@ -26,10 +26,8 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
 
   const WeatherGlyph = WEATHER_MAP[sceneCondition]?.icon || TiWeatherSunny;
   const MoonGlyph = MOON_MAP[moonPhase]?.icon || WiMoonAltFull;
-
   const weatherLabel = WEATHER_MAP[sceneCondition]?.label || "Weather";
   const moonLabel = MOON_MAP[moonPhase]?.label || "Moon";
-
   const normalizedTheme = String(theme || "light").toLowerCase();
 
   const handleNavigation = () => {
@@ -37,19 +35,23 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
   };
 
   const handleResetScene = () => {
-    localStorage.removeItem(SCENE_CACHE);
-    localStorage.removeItem(ASSET_CACHE);
-    localStorage.removeItem(LOCATION_MODE);
+    try {
+      localStorage.removeItem(SCENE_CACHE);
+      localStorage.removeItem(ASSET_CACHE);
+      localStorage.removeItem(LOCATION_MODE);
 
-    const defaultAssets = {
-      background: "morning_clear",
-      clouds: "morning_clear",
-    };
+      const defaultAssets = {
+        background: "morning_clear",
+        clouds: "morning_clear",
+      };
 
-    localStorage.setItem(LOCATION_MODE, "denied");
-    localStorage.setItem(ASSET_CACHE, JSON.stringify(defaultAssets));
+      localStorage.setItem(LOCATION_MODE, "denied");
+      localStorage.setItem(ASSET_CACHE, JSON.stringify(defaultAssets));
 
-    window.location.reload();
+      window.location.reload();
+    } catch {
+      console.error("data flush failed");
+    }
   };
 
   const themeStyles = {
@@ -67,6 +69,7 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
       footer: "text-black/35",
       key: "border-black/10 bg-black/[0.04] text-black/55",
     },
+
     dark: {
       modal: "bg-black/78 border-white/15 text-white shadow-[0_30px_80px_rgba(0,0,0,0.45)]",
       overlay: "bg-black/25",
@@ -81,6 +84,7 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
       footer: "text-white/30",
       key: "border-white/10 bg-white/[0.05] text-white/55",
     },
+
     metal: {
       modal: "bg-red-950/78 border-red-300/20 text-white shadow-[0_30px_80px_rgba(80,0,0,0.42)]",
       overlay: "bg-black/25",
@@ -99,7 +103,15 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
 
   const styles = themeStyles[normalizedTheme] || themeStyles.light;
 
-  const cloudsValue = isTier2 ? "Disabled" : paused ? "Running" : "Paused";
+  const cloudsValue = isTier2 ? "Disabled" : paused ? "Paused" : "Running";
+
+  const cloudsIcon = isTier2 ? <HiMiniPlay size={17} /> : paused ? <HiMiniPlay size={17} /> : <HiMiniPause size={17} />;
+
+  const cloudsDescription = isTier2
+    ? "Unavailable on this device"
+    : paused
+      ? "Resume the moving cloud layer"
+      : "Pause the moving cloud layer";
 
   useEffect(() => {
     if (!open) {
@@ -128,20 +140,27 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) onClose();
+            if (event.target === event.currentTarget) {
+              onClose();
+            }
           }}
-          className={`pointer-events-auto fixed inset-0 z-[100000] flex items-center justify-center p-4 backdrop-blur-[3px] ${styles.overlay}`}>
+          className={`pointer-events-auto fixed inset-0 z-100000 flex items-center justify-center p-4 backdrop-blur-[3px] ${styles.overlay}`}>
           <motion.div
             initial={{ opacity: 0, y: 14, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 420, damping: 30 }}
+            transition={{
+              type: "spring",
+              stiffness: 420,
+              damping: 30,
+            }}
             onMouseDown={(event) => event.stopPropagation()}
-            className={`w-full max-w-[360px] border backdrop-blur-2xl ${styles.modal}`}>
+            className={`w-full max-w-90 border backdrop-blur-2xl ${styles.modal}`}>
             <div className={`flex items-start justify-between border-b px-4 py-4 ${styles.header}`}>
               <div>
-                <h2 className={`font-semibold text-sm uppercase tracking-tighter ${styles.title}`}>Site Controls</h2>
-                <p className={`max-w-[260px] text-[10px] leading-4 ${styles.description}`}>
+                <h2 className={`text-sm font-semibold uppercase tracking-tighter ${styles.title}`}>Site Controls</h2>
+
+                <p className={`max-w-65 text-[10px] leading-4 ${styles.description}`}>
                   Manage active connections or revoke permissions.
                 </p>
               </div>
@@ -157,11 +176,10 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
 
             <div className="grid grid-cols-2 gap-px bg-current/10">
               <ControlCard
-                icon={
-                  isTier2 ? <HiMiniPlay size={17} /> : paused ? <HiMiniPlay size={17} /> : <HiMiniPause size={17} />
-                }
+                icon={cloudsIcon}
                 value={cloudsValue}
-                description={isTier2 ? "Unavailable on this device" : "Toggle the moving cloud layer"}
+                description={cloudsDescription}
+                actionLabel="CONTROL"
                 disabled={isTier2}
                 onClick={handleCloudControl}
                 styles={styles}
@@ -171,6 +189,7 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
                 icon={<SiRevealdotjs size={16} />}
                 value="Run intro"
                 description="Replay the opening animation"
+                actionLabel="REPLAY"
                 onClick={handleRestartIntroScene}
                 styles={styles}
               />
@@ -179,6 +198,7 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
                 icon={<WeatherGlyph size={17} />}
                 value={weatherLabel}
                 description="Live atmospheric condition"
+                actionLabel="LIVE"
                 styles={styles}
               />
 
@@ -186,14 +206,15 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
                 icon={<MoonGlyph size={18} />}
                 value={moonLabel}
                 description="Current lunar phase"
+                actionLabel="PHASE"
                 styles={styles}
               />
 
               <ControlCard
                 icon={<AiOutlineClear size={16} />}
                 value="Erase data"
-                wipe="wipe"
                 description="Wipe saved data and restore default scene (page reloads)."
+                actionLabel="WIPE"
                 onClick={handleResetScene}
                 styles={styles}
               />
@@ -202,6 +223,7 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
                 icon={<FiShield size={16} />}
                 value="Privacy Policy"
                 description="Discover how I collect, manage, and secure the data you share with me."
+                actionLabel="OPEN"
                 onClick={handleNavigation}
                 styles={styles}
               />
@@ -210,7 +232,9 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
             <div className={`flex items-center justify-end border-t px-4 py-1.5 ${styles.divider}`}>
               <div className={`flex items-center gap-1.5 text-[9px] ${styles.footer}`}>
                 <span>Press</span>
-                <span className={`border px-1.5 py-0.4 text-[8px] font-semibold uppercase ${styles.key}`}>esc</span>
+
+                <span className={`border px-1.5 py-0.5 text-[8px] font-semibold uppercase ${styles.key}`}>esc</span>
+
                 <span>to close</span>
               </div>
             </div>
@@ -221,29 +245,33 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
   );
 }
 
-function ControlCard({ icon, value, description, disabled = false, onClick, styles, wipe = false }) {
+function ControlCard({ icon, value, description, actionLabel, disabled = false, onClick, styles }) {
   return (
     <button
       type="button"
       disabled={disabled}
       onClick={(event) => {
         event.stopPropagation();
-        if (!disabled && onClick) onClick();
+
+        if (!disabled && onClick) {
+          onClick();
+        }
       }}
-      className={`group min-h-[100px] p-4 text-left transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-30 ${styles.card}`}>
+      className={`group min-h-25 p-4 text-left transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-30 ${styles.card}`}>
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
+        <div className="flex min-w-0 items-center gap-2">
           <span
             className={`flex h-8 w-8 shrink-0 items-center justify-center border transition-transform duration-150 group-hover:scale-105 ${styles.cardIcon}`}>
             {icon}
           </span>
+
           <span className={`truncate text-[9px] font-semibold ${styles.cardText}`}>{value}</span>
         </div>
 
-        {onClick && (
+        {actionLabel && (
           <span
             className={`shrink-0 text-[8px] font-medium opacity-0 transition-opacity duration-150 group-hover:opacity-50 ${styles.cardText}`}>
-            {wipe ? "WIPE" : "OPEN"}
+            {actionLabel}
           </span>
         )}
       </div>

@@ -92,8 +92,8 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
     damping: 28,
     mass: 0.9,
   });
-  
-  const sectionHeight = useStackedLayout ? "h-auto" : "h-[350vh]";
+
+  const sectionHeight = useStackedLayout ? "h-auto" : "h-[380vh]";
   const shellHeight = useStackedLayout ? "min-h-screen py-12" : "h-dvh";
   const panelHeight = useStackedLayout ? "min-h-0" : `${isTab ? "h-[800px]" : "h-[480px]"}`;
   const marqueeItems = eduData.length > 0 ? [...eduData, ...eduData, ...eduData, ...eduData] : [];
@@ -153,8 +153,10 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
                             damping: 24,
                             delay: Math.min(index * 0.05, 0.2),
                           }}
-                          className={`${isTab ? "max-h-120" : "max-h-60"} max-w-95 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
-                            useStackedLayout ? "w-full" : `w-[70vw] shrink-0 sm:w-90 lg:w-100 ${isTab ? "h-120" : "h-60"}`
+                          className={`${isTab ? "max-h-120" : "max-h-65"} max-w-95 border-2 flex flex-col justify-between p-4 sm:p-5 relative rounded-lg transition-colors duration-300 group z-10 ${
+                            useStackedLayout
+                              ? "w-full"
+                              : `w-[70vw] shrink-0 sm:w-90 lg:w-100 ${isTab ? "h-120" : "h-65"}`
                           } ${styles.card}`}>
                           <div className="flex justify-between items-center w-full">
                             <span
@@ -171,7 +173,8 @@ export default function MyExperience({ initialExperiences, initialEducations }) 
                             <div
                               className={`${isTab ? "" : "flex flex-col"} gap-1 text-[12px] tracking-wider uppercase leading-relaxed sm:flex-row sm:items-baseline sm:justify-between ${styles.textMuted}`}>
                               <p className={`font-medium ${isTab ? "text-2xl" : ""}`}>{card.company}</p>
-                              <span className={`tracking-normal normal-case opacity-80 ${isTab ? "text-xl" : "text-[10px]"}`}>
+                              <span
+                                className={`tracking-normal normal-case opacity-80 ${isTab ? "text-xl" : "text-[10px]"}`}>
                                 {card.timeline}
                               </span>
                             </div>

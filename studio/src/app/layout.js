@@ -6,12 +6,12 @@ import { Montserrat, Geist_Mono } from "next/font/google";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import NavbarLayout from "@/components/layouts/NavbarLayout";
 import FooterLayout from "@/components/layouts/FooterLayout";
+import ThemeWrapper from "@/components/wrappers/ThemeWrapper";
 import LoaderWrapper from "@/components/wrappers/LoaderWrapper";
 import NavbarWrapper from "@/components/wrappers/NavbarWrapper";
+import PersistentHeroLayer from "@/components/wrappers/HeroWrapper";
 import RouteTransition from "@/components/animations/RouteTransition";
 import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
-import ThemeLayoutWrapper from "@/components/wrappers/ThemeLayoutWrapper";
-import PersistentHeroLayer from "@/components/wrappers/PersistentHeroLayer";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -110,13 +110,13 @@ export default function RootLayout({ children }) {
                   <NavbarLayout />
                 </NavbarWrapper>
 
-                <ThemeLayoutWrapper>
+                <ThemeWrapper>
                   <ToastContainer />
                   <PersistentHeroLayer />
                   <div className="relative z-30 grow">
                     <RouteTransition>{children}</RouteTransition>
                   </div>
-                </ThemeLayoutWrapper>
+                </ThemeWrapper>
 
                 <EmergencyCTA />
                 <FooterLayout />

@@ -59,22 +59,11 @@ const ASCII_ART = `
 `;
 
 export default function SubjectAscii({ className = "" }) {
- return (
-   <pre
-     aria-hidden="true"
-     className={`
-       m-0
-       w-max
-       max-w-none
-       whitespace-pre
-       font-mono
-       leading-none
-       select-none
-       text-[clamp(3px,1.55cqw,7px)]
-       ${className}
-     `}
-   >
-     {ASCII_ART}
-   </pre>
- );
+  return (
+    <pre
+      aria-hidden="true"
+      className={`m-0 w-max max-w-none whitespace-pre font-mono leading-none select-none text-[clamp(3px,1.55cqw,7px)] ${className}`}>
+      {ASCII_ART}
+    </pre>
+  );
 }

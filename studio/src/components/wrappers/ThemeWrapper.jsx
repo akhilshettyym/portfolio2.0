@@ -4,7 +4,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-export default function ThemeLayoutWrapper({ children }) {
+export default function ThemeWrapper({ children }) {
   const { theme } = useTheme();
   const previousThemeRef = useRef(theme);
   const shouldReduceMotion = useReducedMotion();

@@ -282,7 +282,7 @@ const BannerSet = memo(function BannerSet({ banners, setId, filterClass = "" }) 
         <div key={`${setId}-${url}-${index}`} className="relative flex h-16 w-40 shrink-0 items-center justify-center">
           <Image
             src={url}
-            alt=""
+            alt="Triple Star Ranger"
             aria-hidden="true"
             fill
             sizes="160px"

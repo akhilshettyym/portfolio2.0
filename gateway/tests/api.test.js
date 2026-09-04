@@ -33,9 +33,9 @@ describe("Backend API Suite", () => {
     });
   });
 
-  describe("GET /ping", () => {
+  describe("GET /api/ping", () => {
     it("should return 200 OK and say 'pong'", async () => {
-      const res = await request(app).get("/ping");
+      const res = await request(app).get("/api/ping");
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.message).toBe("pong");

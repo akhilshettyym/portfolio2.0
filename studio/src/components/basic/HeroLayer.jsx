@@ -3,31 +3,7 @@ import { motion } from "framer-motion";
 const ENTRANCE_DELAY = 10;
 
 export default function HeroLayer({ theme }) {
-  const getHeroLayerStyles = () => {
-    switch (theme) {
-      case "dark":
-        return {
-          text: "text-white",
-          credit: "text-white/80",
-          underline: "bg-white",
-        };
-      case "metal":
-        return {
-          text: "text-red-600",
-          credit: "text-red-500/80",
-          underline: "bg-red-600",
-        };
-      case "light":
-      default:
-        return {
-          text: "text-black",
-          credit: "text-black/80",
-          underline: "bg-black",
-        };
-    }
-  };
-
-  const styles = getHeroLayerStyles();
+  const styles = getHeroLayerStyles(theme);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -72,7 +48,7 @@ export default function HeroLayer({ theme }) {
             <motion.p
               variants={itemVariants}
               style={{ transform: "scaleY(1.3) scaleX(1.5)" }}
-              className={`inline-block tracking-[-0.1em] origin-left ${styles.text}`}>
+              className={`inline-block -tracking-widest origin-left ${styles.text}`}>
               A perspective, not a syntax.
             </motion.p>
 
@@ -81,7 +57,7 @@ export default function HeroLayer({ theme }) {
             <motion.p
               variants={itemVariants}
               style={{ transform: "scaleY(1.3) scaleX(1.5)" }}
-              className={`inline-block tracking-[-0.1em] origin-left ${styles.text}`}>
+              className={`inline-block -tracking-widest origin-left ${styles.text}`}>
               Where nothing is everything.
             </motion.p>
           </motion.div>
@@ -89,7 +65,7 @@ export default function HeroLayer({ theme }) {
       </div>
 
       <motion.div variants={creditVariants} initial="hidden" animate="visible" className="fixed bottom-3 right-4 z-20">
-        <span className={`text-sm inline-block tracking-[-0.1em] origin-left font-bold ${styles.credit}`}>
+        <span className={`text-sm inline-block -tracking-widest origin-left font-bold ${styles.credit}`}>
           designed by me
         </span>
       </motion.div>

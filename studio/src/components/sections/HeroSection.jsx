@@ -596,7 +596,6 @@ const HeroSection = ({ active = true }) => {
 
   return (
     <div ref={sectionRef} className="relative min-h-screen w-full overflow-hidden pb-8 text-white md:pb-12">
-
       <div className="wrapper relative min-h-screen w-full">
         <div
           ref={containerRef}

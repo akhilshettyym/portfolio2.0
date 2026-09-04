@@ -1,11 +1,11 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
-import { AnimatePresence, motion } from "framer-motion";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { setLocationMode } from "@/utils/weather-scene";
 import { getLocationStyles } from "@/utils/themeSwatch";
+import { AnimatePresence, motion } from "framer-motion";
 import CustomButton from "@/components/basic/CustomButton";
-import { useDeviceType } from "@/hooks/useDeviceType";
 
 export default function LocationModal({ open, onComplete }) {
   const { theme } = useTheme();
@@ -75,7 +75,6 @@ export default function LocationModal({ open, onComplete }) {
               variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.06 } } }}
               className="p-4 sm:p-6 lg:p-7">
               <div className="mx-auto max-w-2xl text-center">
-
                 <motion.h2
                   id="location-modal-title"
                   variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}

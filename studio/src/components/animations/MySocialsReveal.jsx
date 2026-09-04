@@ -28,7 +28,6 @@ export default function MySocialsReveal() {
 
   const scale = useTransform(smoothProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 1.4]);
   const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
   const y = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["10%", "0%", "0%", "-10%"]);
   const filter = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["blur(16px)", "blur(0px)", "blur(0px)", "blur(16px)"]);
 

@@ -321,15 +321,18 @@ export default function SubjectProfile() {
               </div>
             </div>
 
-            {!isTab &&
+            {!isTab && (
               <div
                 className={`relative w-full min-w-0 lg:col-span-4 p-2 group shadow-inner ${styles.imgCardContainer}`}>
                 <div
-                  className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 rounded-tl -translate-x-0.5 -translate-y-0.5 ${styles.borderCorner}`} />
+                  className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 rounded-tl -translate-x-0.5 -translate-y-0.5 ${styles.borderCorner}`}
+                />
                 <div
-                  className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`} />
+                  className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br translate-x-0.5 translate-y-0.5 ${styles.borderCorner}`}
+                />
 
-                <div className={`relative w-full ${isMobile ? "min-h-[375px]" : "min-h-[260px]"} h-[clamp(260px,42vw,380px)] overflow-hidden rounded-lg @container  ${styles.imgPlaceholder}`}>
+                <div
+                  className={`relative w-full ${isMobile ? "min-h-93.75" : "min-h-65"} h-[clamp(260px,42vw,380px)] overflow-hidden rounded-lg @container  ${styles.imgPlaceholder}`}>
                   <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
                     <SubjectAscii />
                   </div>
@@ -368,12 +371,13 @@ export default function SubjectProfile() {
                   </div>
 
                   <div className={`mt-2 pt-2 border-t opacity-40 ${styles.sysBorder}`}>
-                    <p className={`text-[7px] tracking-[0.18em] ${styles.sysText}`}>LATENCY: OPTIMAL // SIGNAL: ACTIVE</p>
+                    <p className={`text-[7px] tracking-[0.18em] ${styles.sysText}`}>
+                      LATENCY: OPTIMAL // SIGNAL: ACTIVE
+                    </p>
                   </div>
                 </div>
               </div>
-            }
-
+            )}
           </div>
         </motion.div>
       </motion.div>

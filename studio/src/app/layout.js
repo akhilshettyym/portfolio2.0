@@ -4,6 +4,7 @@ import { LenisProvider } from "@/context/LenisContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
+import HireWrapper from "@/components/wrappers/HireWrapper";
 import NavbarLayout from "@/components/layouts/NavbarLayout";
 import FooterLayout from "@/components/layouts/FooterLayout";
 import ThemeWrapper from "@/components/wrappers/ThemeWrapper";
@@ -12,7 +13,6 @@ import NavbarWrapper from "@/components/wrappers/NavbarWrapper";
 import PersistentHeroLayer from "@/components/wrappers/HeroWrapper";
 import RouteTransition from "@/components/animations/RouteTransition";
 import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
-import HireWrapper from "@/components/wrappers/HireWrapper";
 
 const montserrat = Montserrat({
   variable: "--font-sans",

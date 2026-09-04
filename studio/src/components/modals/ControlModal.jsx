@@ -4,20 +4,20 @@ import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { FiShield } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import ModeSwitch from "../basic/ModeSwitch";
+import { IoMdNuclear } from "react-icons/io";
 import { WiMoonAltFull } from "react-icons/wi";
 import { SiRevealdotjs } from "react-icons/si";
 import { TiWeatherSunny } from "react-icons/ti";
 import { AiOutlineClear } from "react-icons/ai";
 import { useTheme } from "@/context/ThemeContext";
 import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
+import { GiRabbit, GiTortoise } from "react-icons/gi";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
 import { getWeatherIconData } from "@/utils/weather-scene";
-import { ASSET_CACHE, LOCATION_MODE, SCENE_CACHE } from "@/utils/storage";
-import { IoMdNuclear } from "react-icons/io";
-import { GiRabbit, GiTortoise } from "react-icons/gi";
-import ModeSwitch from "../basic/ModeSwitch";
 import { getControlModalStyles } from "@/utils/themeSwatch";
+import { ASSET_CACHE, LOCATION_MODE, SCENE_CACHE } from "@/utils/storage";
 
 export default function ControlModal({ open, onClose, paused, isTier2, handleCloudControl, handleRestartIntroScene }) {
   const router = useRouter();
@@ -106,7 +106,7 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) onClose();
           }}
-          className={`pointer-events-auto fixed inset-0 z-[100000] flex items-center justify-center p-4 backdrop-blur-[4px] ${styles.overlay}`}>
+          className={`pointer-events-auto fixed inset-0 z-100000 flex items-center justify-center p-4 backdrop-blur-xs ${styles.overlay}`}>
           <motion.div
             initial={{ opacity: 0, y: 14, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -227,7 +227,7 @@ function ControlCard({ icon, value, description, actionLabel, disabled = false, 
         event.stopPropagation();
         onClick();
       }}
-      className={`group flex min-h-[90px] flex-col justify-between border p-3 text-left transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40
+      className={`group flex min-h-22.5 flex-col justify-between border p-3 text-left transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40
       ${isInteractive ? `cursor-pointer ${styles.card}` : `cursor-default ${styles.cardStatic}`}`}>
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2.5">
@@ -252,7 +252,7 @@ function ControlCard({ icon, value, description, actionLabel, disabled = false, 
       </div>
 
       <div className="mt-2">
-        <div className={`text-[10px] leading-[1.5] ${styles.cardText}`}>{description}</div>
+        <div className={`text-[10px] leading-normal ${styles.cardText}`}>{description}</div>
       </div>
     </Component>
   );

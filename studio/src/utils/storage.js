@@ -20,6 +20,8 @@ export const EXP_DATA = "exp-data";
 export const TRAIL_DATA = "trail-data";
 export const WORK_DATA = "work-data";
 
+export const WARM_SERVER= "ping_server";
+
 export const PERF_TIERS = {
   HIGH: "tier_1",
   LOW: "tier_2",

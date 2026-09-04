@@ -255,12 +255,11 @@ const Navbar = () => {
                 <div
                   onClick={() => setConsoleOpen((prev) => !prev)}
                   className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
-                  <svg
-                    viewBox="0 0 100 100"
-                    className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""}`}
-                    preserveAspectRatio="none">
-                    <SiGnometerminal size={100} />
-                  </svg>
+                  <SiGnometerminal
+                    size="100%"
+                    className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""
+                      }`}
+                  />
                 </div>
               </div>
             </div>
@@ -372,14 +371,14 @@ const Navbar = () => {
               <div
                 onClick={() => setConsoleOpen((prev) => !prev)}
                 className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
-                <svg
-                  viewBox="0 0 100 100"
-                  className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""}`}
-                  preserveAspectRatio="none">
-                  <SiGnometerminal size={100} />
-                </svg>
+                <SiGnometerminal
+                  size="100%"
+                  className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""
+                    }`}
+                />
               </div>
             </div>
+            
           </div>
         </div>
       </div>

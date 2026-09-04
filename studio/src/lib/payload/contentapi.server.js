@@ -3,7 +3,7 @@ import { cache } from "react";
 const BASE_URL =
   process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "https://portfolio-backend-cjvf.onrender.com";
 const PORTFOLIO_REVALIDATE_SECONDS = 86400;
-const PORTFOLIO_FETCH_TIMEOUT_MS = 8000;
+const PORTFOLIO_FETCH_TIMEOUT_MS = 20000;
 
 const endpointUrl = (endpoint) => new URL(endpoint, BASE_URL).toString();
 
@@ -30,6 +30,9 @@ const fetchEndpoint = cache(async (endpoint) => {
     const json = await res.json();
     return json?.data ?? null;
   } catch (error) {
+    if (error?.name === "AbortError") {
+      return null;
+    }
     console.error(`Error fetching ${endpoint}:`, error);
     return null;
   } finally {

@@ -32,6 +32,7 @@ const HeroSection = ({ active = true }) => {
   const [paused, setPaused] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [sceneAssets, setSceneAssets] = useState(null);
+  const [isSceneReady, setIsSceneReady] = useState(false);
 
   const { triggerIntroRestart } = useContext(LoadingContext);
   const { tier, ready, isTier2 } = usePerformanceTier();
@@ -138,6 +139,7 @@ const HeroSection = ({ active = true }) => {
   }, []);
 
   useEffect(() => {
+    setIsSceneReady(false);
     if (!sceneAssets) return;
 
     const container = containerRef.current;
@@ -501,6 +503,7 @@ const HeroSection = ({ active = true }) => {
         planeGeo.dispose();
 
         animate();
+        if (!isDisposed) setIsSceneReady(true);
       } catch (error) {
         if (!isDisposed) console.error("Combined WebGL Initialization Failed:", error);
       }
@@ -599,17 +602,19 @@ const HeroSection = ({ active = true }) => {
       <div className="wrapper relative min-h-screen w-full">
         <div
           ref={containerRef}
-          className={`canvas-bg absolute inset-0 z-0 ${isDarkOrMetal ? "bg-black" : ""}`}
+          className={`canvas-bg absolute inset-0 z-0 transition-opacity duration-1000 ease-in-out ${
+            isSceneReady ? "opacity-100" : "opacity-0"
+          } ${isDarkOrMetal ? "bg-black" : ""}`}
           style={{
             backgroundImage: isDarkOrMetal
               ? "none"
               : sceneAssets
                 ? `linear-gradient(
-                 to bottom,
-                 rgba(255,255,255,0.35),
-                 rgba(255,255,255,0.05)
-               ),
-               url("/clouds_background/${sceneAssets.background}.png")`
+                to bottom,
+                rgba(255,255,255,0.35),
+                rgba(255,255,255,0.05)
+              ),
+              url("/clouds_background/${sceneAssets.background}.png")`
                 : "none",
           }}
         />

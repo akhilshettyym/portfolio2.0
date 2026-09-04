@@ -80,6 +80,8 @@ export const getCreateInputStyles = (theme) => {
   return { labelClass, inputClass };
 };
 
+// ---
+
 export const getCreateSomeStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -155,6 +157,8 @@ export const getFooterMarqueeStyles = (theme) => {
 
   return { textColor, dotColor };
 };
+
+// ---
 
 export const getFooterStyles = (theme) => {
   const isDark = theme === "dark";
@@ -296,6 +300,8 @@ export const getMyExperienceStyles = (isDark, isMetal) => {
   };
 };
 
+// ---
+
 export const getMarqueeCardStyle = (variant, isDark, isMetal) => {
   const isInverted = variant === "inverted";
 
@@ -318,7 +324,7 @@ export const getMarqueeCardStyle = (variant, isDark, isMetal) => {
 
 // ---
 
-export const THEME_STYLES = {
+export const getMySocialsStyles = {
   light: {
     bg: "bg-white",
     textSub: "text-black/50",
@@ -444,6 +450,8 @@ export const getWorkStyles = (theme) => {
   return { isDark, isMetal, sectionBg, headerText, borderColor, defaultBg, defaultText, activeBg, activeText };
 };
 
+// ---
+
 export const getWorkFloatStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -474,6 +482,8 @@ export const getWorkFloatStyles = (theme) => {
 
   return { cardBgClass, gradientOverlay, accentGlow, patternOverlay, textBody, tagClass, btnClass };
 };
+
+// ---
 
 export const getWorkMobile = (theme) => {
   const isDark = theme === "dark";
@@ -509,6 +519,8 @@ export const getProfileMarqueeStyles = (theme) => {
 
   return { textColorClass, iconColorClass };
 };
+
+// ---
 
 export const getProfileStyles = (theme) => {
   const dark = theme === "dark";
@@ -707,6 +719,8 @@ export const getThemeTransforms = (theme) => {
   };
 };
 
+// ---
+
 export const getFloatingCardStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -801,7 +815,7 @@ export const getPageRevealStyles = (theme) => {
 
 // ---
 
-export const themeStyles = {
+export const getPrivacyStyles = {
   light: {
     bg: "bg-white",
     textPrimary: "text-black",

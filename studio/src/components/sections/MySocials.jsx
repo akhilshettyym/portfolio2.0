@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
-import { THEME_STYLES } from "@/utils/themeSwatch";
+import { getMySocialsStyles } from "@/utils/themeSwatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 import React, { useRef, useState, useCallback, useEffect, useMemo } from "react";
@@ -70,7 +70,7 @@ export default function MySocials({ horizontalReveal = false }) {
   const timeouts = useRef(new Set());
 
   const { theme } = useTheme();
-  const activeTheme = THEME_STYLES[theme] || THEME_STYLES.light;
+  const activeTheme = getMySocialsStyles[theme] || getMySocialsStyles.light;
 
   const shouldReduceMotion = useReducedMotion();
 

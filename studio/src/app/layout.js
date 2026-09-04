@@ -1,8 +1,12 @@
 import "./globals.css";
+
+import ServerWarmer from "@/lib/ServerWarmer";
 import { ToastContainer } from "react-toastify";
 import { LenisProvider } from "@/context/LenisContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+
 import { Montserrat, Geist_Mono } from "next/font/google";
+
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import HireWrapper from "@/components/wrappers/HireWrapper";
 import NavbarLayout from "@/components/layouts/NavbarLayout";
@@ -37,50 +41,57 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL("https://akhilshettym.com"),
+
   title: {
     default: "Akhil Shetty | Full Stack Developer",
     template: "%s | Akhil Shetty",
   },
+
   description:
     "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
+
   keywords: [
     "Akhil Shetty",
+    "Software Developer",
     "Full Stack Developer",
+    "MERN stack Developer",
     "Next.js Developer",
     "React Developer",
     "Creative Developer",
     "Portfolio",
   ],
-  authors: [{ name: "Akhil Shetty", url: "https://akhilshettym.com" }],
+
+  authors: [
+    { 
+      name: "Akhil Shetty", 
+      url: "https://akhilshettym.com" 
+    }
+  ],
+
   creator: "Akhil Shetty",
+
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
+
   openGraph: {
-    title: "Akhil Shetty | Full Stack Developer",
-    description:
-      "Performance-minded portfolio, selected work, experience, and ways to start a project with Akhil Shetty.",
-    url: "/",
-    siteName: "Akhil Shetty",
-    locale: "en_US",
-    type: "website",
-    images: [
-      {
-        url: "/my-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Akhil Shetty - Full Stack Developer",
-      },
-    ],
-  },
+   title: "Akhil Shetty | Full Stack Developer",
+   description:
+     "Performance-minded portfolio, selected work, experience, and ways to start a project with Akhil Shetty.",
+   url: "/",
+   siteName: "Akhil Shetty",
+   locale: "en_US",
+   type: "website",
+ },
+
   twitter: {
     card: "summary_large_image",
     title: "Akhil Shetty | Full Stack Developer",
     description: "Full stack developer focused on fast, stable, production-grade web experiences.",
-    images: ["/my-image.png"],
   },
+
   robots: {
     index: true,
     follow: true,
@@ -92,10 +103,10 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
+
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    apple: "/apple-touch-icon.png",    
   },
 };
 
@@ -104,6 +115,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
         <PerformanceBootstrap>
+          <ServerWarmer />
           <LenisProvider>
             <ThemeProvider>
               <LoaderWrapper>

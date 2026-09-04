@@ -1,8 +1,10 @@
 import "./globals.css";
+import ServerWarmer from "@/lib/ServerWarmer";
 import { ToastContainer } from "react-toastify";
 import { LenisProvider } from "@/context/LenisContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Montserrat, Geist_Mono } from "next/font/google";
+
 import EmergencyCTA from "@/components/basic/EmergencyCTA";
 import HireWrapper from "@/components/wrappers/HireWrapper";
 import NavbarLayout from "@/components/layouts/NavbarLayout";
@@ -32,7 +34,6 @@ export const viewport = {
   ],
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export const metadata = {
@@ -43,14 +44,6 @@ export const metadata = {
   },
   description:
     "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
-  keywords: [
-    "Akhil Shetty",
-    "Full Stack Developer",
-    "Next.js Developer",
-    "React Developer",
-    "Creative Developer",
-    "Portfolio",
-  ],
   authors: [{ name: "Akhil Shetty", url: "https://akhilshettym.com" }],
   creator: "Akhil Shetty",
   formatDetection: {
@@ -66,20 +59,11 @@ export const metadata = {
     siteName: "Akhil Shetty",
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: "/my-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Akhil Shetty - Full Stack Developer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Akhil Shetty | Full Stack Developer",
     description: "Full stack developer focused on fast, stable, production-grade web experiences.",
-    images: ["/my-image.png"],
   },
   robots: {
     index: true,
@@ -94,16 +78,33 @@ export const metadata = {
   },
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
+};
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Akhil Shetty",
+  url: "https://akhilshettym.com",
+  jobTitle: "Full Stack Developer",
+  sameAs: ["https://github.com/akhilshetty"],
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personSchema),
+          }}
+        />
+
         <PerformanceBootstrap>
+          <ServerWarmer />
+
           <LenisProvider>
             <ThemeProvider>
               <LoaderWrapper>
@@ -115,6 +116,7 @@ export default function RootLayout({ children }) {
                   <ToastContainer />
                   <HireWrapper />
                   <PersistentHeroLayer />
+
                   <div className="relative z-30 grow">
                     <RouteTransition>{children}</RouteTransition>
                   </div>

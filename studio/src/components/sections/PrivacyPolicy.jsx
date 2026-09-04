@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
-import { themeStyles } from "@/utils/themeSwatch";
+import { getPrivacyStyles } from "@/utils/themeSwatch";
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -16,6 +16,7 @@ const sectionVariants = {
 
 const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
   const { theme } = useTheme();
+  const themeStyles = getPrivacyStyles;
 
   const currentTheme = themeStyles[theme] || themeStyles.light;
 

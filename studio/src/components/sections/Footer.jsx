@@ -320,8 +320,8 @@ const Footer = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-end mt-2">
-                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
+                    <div className="w-full sm:w-auto flex justify-end">
+                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width={300} height={40} />
                     </div>
                   </div>
                 </div>
@@ -628,8 +628,8 @@ const Footer = () => {
                       </div>
                     </div>
 
-                    <div className="mt-3 flex justify-center sm:justify-end">
-                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
+                    <div className="w-full sm:w-auto flex justify-end">
+                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width={300} height={40} />
                     </div>
                   </div>
                 </div>

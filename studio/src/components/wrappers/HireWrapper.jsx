@@ -56,7 +56,6 @@ export default function HireWrapper() {
         onClick={handleHireClick}
         aria-label="Hire me"
         className={`flex w-10 flex-col items-center justify-center gap-1 border py-4 text-[10px] font-bold uppercase rounded-3xl tracking-widest transition-transform duration-150 ease-out hover:scale-105 ${hireButtonTheme}`}>
-        <span className="[writing-mode:vertical-rl] rotate-180">ME</span>
         <span className="[writing-mode:vertical-rl] rotate-180">HIRE</span>
       </button>
     </motion.div>

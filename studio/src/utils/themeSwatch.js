@@ -80,13 +80,15 @@ export const getCreateInputStyles = (theme) => {
   return { labelClass, inputClass };
 };
 
+// ---
+
 export const getCreateSomeStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
 
   return {
     section: isDark ? "bg-[#0a0a0a] text-white" : isMetal ? "bg-[#050000] text-red-500" : "bg-white text-black",
-    textMuted: isDark ? "text-white/40" : isMetal ? "text-red-500/40" : "text-neutral-400",
+    textMuted: isDark ? "text-white" : isMetal ? "text-red-500" : "text-neutral-400",
     textSecondary: isDark ? "text-white/80" : isMetal ? "text-red-400" : "text-neutral-700",
     dividerSoft: isDark ? "border-white/10" : isMetal ? "border-red-500/10" : "border-neutral-100",
     dividerHeavy: isDark ? "border-white" : isMetal ? "border-red-500" : "border-black",
@@ -156,6 +158,8 @@ export const getFooterMarqueeStyles = (theme) => {
   return { textColor, dotColor };
 };
 
+// ---
+
 export const getFooterStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -170,7 +174,7 @@ export const getFooterStyles = (theme) => {
     cardInner1: isDark ? "bg-white/10" : isMetal ? "bg-red-500/10" : "bg-gray-300",
     cardInner2: isDark ? "bg-black/40" : isMetal ? "bg-black/40" : "bg-gray-200",
     panelBg: isDark ? "bg-[#141414]" : isMetal ? "bg-[#140000]" : "bg-white",
-    panelHeader: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-slate-50",
+    panelHeader: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-white",
     wrapperBg: isDark ? "bg-white/5" : isMetal ? "bg-red-500/5" : "bg-gray-300",
     footerBottom: isDark ? "bg-[#0a0a0a]" : isMetal ? "bg-[#050000]" : "bg-white",
 
@@ -296,6 +300,8 @@ export const getMyExperienceStyles = (isDark, isMetal) => {
   };
 };
 
+// ---
+
 export const getMarqueeCardStyle = (variant, isDark, isMetal) => {
   const isInverted = variant === "inverted";
 
@@ -318,7 +324,7 @@ export const getMarqueeCardStyle = (variant, isDark, isMetal) => {
 
 // ---
 
-export const THEME_STYLES = {
+export const getMySocialsStyles = {
   light: {
     bg: "bg-white",
     textSub: "text-black/50",
@@ -444,6 +450,8 @@ export const getWorkStyles = (theme) => {
   return { isDark, isMetal, sectionBg, headerText, borderColor, defaultBg, defaultText, activeBg, activeText };
 };
 
+// ---
+
 export const getWorkFloatStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -474,6 +482,8 @@ export const getWorkFloatStyles = (theme) => {
 
   return { cardBgClass, gradientOverlay, accentGlow, patternOverlay, textBody, tagClass, btnClass };
 };
+
+// ---
 
 export const getWorkMobile = (theme) => {
   const isDark = theme === "dark";
@@ -509,6 +519,8 @@ export const getProfileMarqueeStyles = (theme) => {
 
   return { textColorClass, iconColorClass };
 };
+
+// ---
 
 export const getProfileStyles = (theme) => {
   const dark = theme === "dark";
@@ -707,6 +719,8 @@ export const getThemeTransforms = (theme) => {
   };
 };
 
+// ---
+
 export const getFloatingCardStyles = (theme) => {
   const isDark = theme === "dark";
   const isMetal = theme === "metal";
@@ -801,7 +815,7 @@ export const getPageRevealStyles = (theme) => {
 
 // ---
 
-export const themeStyles = {
+export const getPrivacyStyles = {
   light: {
     bg: "bg-white",
     textPrimary: "text-black",
@@ -841,4 +855,126 @@ export const themeStyles = {
     codeText: "text-red-500",
     btn: "border-red-500 text-red-500 hover:bg-red-500 hover:text-black",
   },
+};
+
+// ---
+
+export const getControlModalStyles = {
+  light: {
+    modal: "bg-white/85 border-black/10 text-black shadow-2xl",
+    overlay: "bg-black/20",
+    header: "border-black/10",
+    title: "text-black",
+    description: "text-black/50",
+    close: "border-black/10 text-black/50 hover:bg-black/10 hover:text-black",
+    card: "border-black/10 bg-black/[0.025] hover:bg-black/[0.06]",
+    cardStatic: "border-black/10 bg-black/[0.015]",
+    cardIcon: "border-black/10 bg-white text-black shadow-xs",
+    cardText: "text-black/50",
+    cardValue: "text-black",
+    divider: "border-black/10",
+    footer: "text-black/40",
+    key: "border-black/10 bg-black/5 text-black/60",
+  },
+  dark: {
+    modal: "bg-[#080808]/85 border-white/10 text-white shadow-2xl",
+    overlay: "bg-black/40",
+    header: "border-white/10",
+    title: "text-white",
+    description: "text-white/50",
+    close: "border-white/10 text-white/50 hover:bg-white/15 hover:text-white ",
+    card: "border-white/10 bg-white/[0.03] hover:bg-white/[0.07]",
+    cardStatic: "border-white/10 bg-white/[0.015]",
+    cardIcon: "border-white/10 bg-black text-white shadow-xs ",
+    cardText: "text-white/50",
+    cardValue: "text-white",
+    divider: "border-white/10",
+    footer: "text-white/40",
+    key: "border-white/10 bg-white/10 text-white/60",
+  },
+  metal: {
+    modal: "bg-[#140404]/90 border-red-500/20 text-red-50 shadow-2xl",
+    overlay: "bg-black/50",
+    header: "border-red-500/20",
+    title: "text-red-100",
+    description: "text-red-200/50",
+    close: "border-red-500/20 text-red-200/50 hover:bg-red-500/20 hover:text-red-100 ",
+    card: "border-red-500/20 bg-red-500/5 hover:bg-red-500/15",
+    cardStatic: "border-red-500/20 bg-red-500/[0.02]",
+    cardIcon: "border-red-500/20 bg-red-950 text-red-200 shadow-xs ",
+    cardText: "text-red-200/50",
+    cardValue: "text-red-100",
+    divider: "border-red-500/20",
+    footer: "text-red-200/40",
+    key: "border-red-500/20 bg-red-500/10 text-red-200/60",
+  },
+};
+
+// ---
+
+export const getNotFoundStyles = {
+  light: {
+    page: "bg-white text-black",
+    muted: "text-black/55",
+    subtle: "text-black/40",
+    icon: "text-black/35",
+    border: "border-black/10",
+    card: "bg-black/[0.025]",
+    button: "bg-black text-white hover:bg-black/80",
+    secondary: "bg-black/5 text-black hover:bg-black/10",
+    accent: "bg-black",
+    glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(0,0,0,0.04),transparent_45%)]",
+  },
+
+  dark: {
+    page: "bg-black text-white",
+    muted: "text-white/60",
+    subtle: "text-white/40",
+    icon: "text-white/35",
+    border: "border-white/10",
+    card: "bg-white/[0.04]",
+    button: "bg-white text-black hover:bg-white/85",
+    secondary: "bg-white/10 text-white hover:bg-white/15",
+    accent: "bg-white",
+    glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.06),transparent_45%)]",
+  },
+
+  metal: {
+    page: "bg-black text-red-500",
+    muted: "text-red-500/65",
+    subtle: "text-red-500/40",
+    icon: "text-red-500/40",
+    border: "border-red-500/15",
+    card: "bg-red-500/[0.035]",
+    button: "bg-red-500 text-black hover:bg-red-400",
+    secondary: "bg-red-500/10 text-red-500 hover:bg-red-500/15",
+    accent: "bg-red-500",
+    glow: "bg-[radial-gradient(circle_at_50%_35%,rgba(239,68,68,0.08),transparent_45%)]",
+  },
+};
+
+// ---
+
+export const getHeroLayerStyles = (theme) => {
+  switch (theme) {
+    case "dark":
+      return {
+        text: "text-white",
+        credit: "text-white/80",
+        underline: "bg-white",
+      };
+    case "metal":
+      return {
+        text: "text-red-600",
+        credit: "text-red-500/80",
+        underline: "bg-red-600",
+      };
+    case "light":
+    default:
+      return {
+        text: "text-black",
+        credit: "text-black/80",
+        underline: "bg-black",
+      };
+  }
 };

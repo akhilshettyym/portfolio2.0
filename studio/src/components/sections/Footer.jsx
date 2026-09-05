@@ -320,8 +320,13 @@ const Footer = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-end mt-2">
-                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
+                    <div className="w-full sm:w-auto flex justify-end">
+                      <CustomButton
+                        title={`${isMobile ? "Let's Connect" : "Let's Get In Contact"}`}
+                        onClick={handleNavigation}
+                        width={300}
+                        height={40}
+                      />
                     </div>
                   </div>
                 </div>
@@ -330,17 +335,18 @@ const Footer = () => {
 
             <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4">
               <div
-                className={`mb-5 flex h-[17vh] w-full gap-2 p-2 rounded-md transition-colors duration-500 ${styles.wrapperBg}`}>
+                className={`mb-4 flex h-[12vh] min-h-26.25 md:h-[14vh] md:min-h-30 w-full gap-2 rounded-md p-2 transition-colors duration-500 ${styles.wrapperBg}`}>
                 <div
-                  className={`flex h-full w-[20%] flex-col rounded-md border p-4 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
+                  className={`flex h-full w-[20%] flex-col rounded-md border p-3 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
                   <p
-                    className={`text-xs font-semibold uppercase tracking-normal transition-colors duration-500 ${styles.textMuted}`}>
+                    className={`text-[10px] font-semibold uppercase tracking-normal transition-colors duration-500 ${styles.textMuted}`}>
                     Made in india
                   </p>
 
                   <div
-                    className={`mt-auto flex items-center justify-between text-[10px] uppercase tracking-wider transition-colors duration-500 ${styles.textMuted}`}>
-                    <span> 2026 </span> <span> v1.0 </span>
+                    className={`mt-auto flex items-center justify-between text-[9px] uppercase tracking-wider transition-colors duration-500 ${styles.textMuted}`}>
+                    <span>2026</span>
+                    <span>v1.0</span>
                   </div>
 
                   <video
@@ -351,15 +357,15 @@ const Footer = () => {
                     width={300}
                     height={100}
                     aria-hidden="true"
-                    className={`mt-auto object-contain transition-all duration-500 ${styles.imageBlend}`}>
+                    className={`mt-1 h-auto max-h-10 w-full object-contain transition-all duration-500 ${styles.imageBlend}`}>
                     <source src="/footer/animated_binary_code.mp4" type="video/mp4" />
                   </video>
                 </div>
 
                 <div className="flex w-[80%] flex-col gap-2">
                   <div
-                    className={`group relative flex-2 overflow-hidden border p-2 shadow-sm rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
-                    <p className={`text-sm leading-relaxed transition-colors duration-500 ${styles.textSecondary}`}>
+                    className={`group relative min-h-0 flex-1 overflow-hidden rounded-md border p-2 shadow-sm transition-colors duration-500 ${styles.panelBg} ${styles.border}`}>
+                    <p className={`text-xs leading-snug transition-colors duration-500 ${styles.textSecondary}`}>
                       Think more, design less. Build intentionally. Refactor ruthlessly. Simplify until it breaks. Ship
                       often. Leave the web better than you found it. Build hooks, not walls. For best results, pair with
                       coffee, curiosity, and a dash of skepticism. Measure meticulously, but optimize only when proven
@@ -368,9 +374,9 @@ const Footer = () => {
                   </div>
 
                   <div
-                    className={`flex w-full items-center justify-between gap-4 overflow-hidden border px-4 py-1/2 shadow-sm whitespace-nowrap rounded-md transition-colors duration-500 ${styles.panelBg} ${styles.borderLight}`}>
+                    className={`flex w-full items-center justify-between gap-3 overflow-hidden rounded-md border px-3 py-1 shadow-sm whitespace-nowrap transition-colors duration-500 ${styles.panelBg} ${styles.borderLight}`}>
                     <span
-                      className={`text-xs sm:text-sm font-semibold uppercase tracking-wider shrink transition-colors duration-500 ${styles.textSecondary}`}>
+                      className={`shrink text-[10px] font-semibold uppercase tracking-wider sm:text-xs transition-colors duration-500 ${styles.textSecondary}`}>
                       Independent Developer
                     </span>
 
@@ -383,14 +389,14 @@ const Footer = () => {
                         width={100}
                         height={24}
                         aria-hidden="true"
-                        className={`h-5 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}>
+                        className={`h-4 w-auto object-contain opacity-80 transition-all duration-500 ${styles.imageBlend}`}>
                         <source src="/footer/animated_decorative_dashes.mp4" type="video/mp4" />
                       </video>
                     </div>
 
                     <button
                       onClick={handleNavigation}
-                      className={`text-xs tracking-wider hover:opacity-70 transition-opacity duration-300 cursor-pointer ${styles.buttonBg}`}>
+                      className={`cursor-pointer text-[10px] tracking-wider transition-opacity duration-300 hover:opacity-70 sm:text-xs ${styles.buttonBg}`}>
                       Am probably not sleeping, Hit me up ↗
                     </button>
                   </div>
@@ -431,7 +437,7 @@ const Footer = () => {
                 <div className="flex-1 text-right flex justify-end">
                   <button
                     onClick={goToTop}
-                    className={`flex items-center gap-1.5 text-xs font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
+                    className={`flex items-center gap-1.5 text-xs uppercase font-normal whitespace-nowrap hover:opacity-70 transition-colors duration-300 cursor-pointer ${styles.buttonBg}`}>
                     <span>To Top</span>
                     <HiArrowSmUp size={15} className="shrink-0" />
                   </button>
@@ -628,8 +634,13 @@ const Footer = () => {
                       </div>
                     </div>
 
-                    <div className="mt-3 flex justify-center sm:justify-end">
-                      <CustomButton title="Let's Get In Contact" onClick={handleNavigation} width="250" height="45" />
+                    <div className="w-full sm:w-auto flex justify-end">
+                      <CustomButton
+                        title={`${isMobile ? "Let's Connect" : "Let's Get In Contact"}`}
+                        onClick={handleNavigation}
+                        width={isMobile ? 200 : 300}
+                        height={40}
+                      />
                     </div>
                   </div>
                 </div>
@@ -638,7 +649,7 @@ const Footer = () => {
 
             <div className="mx-auto flex max-w-[1600px] flex-col justify-between px-4 sm:px-4">
               <div
-                className={`mb-5 flex h-auto min-h-[17vh] w-full flex-col gap-2 rounded-md p-2 transition-colors duration-500 md:h-[17vh] md:flex-row ${styles.wrapperBg}`}>
+                className={`mb-5 flex h-auto min-h-[23vh] w-full flex-col gap-2 rounded-md p-2 transition-colors duration-500 md:h-[17vh] md:flex-row ${styles.wrapperBg}`}>
                 <div
                   className={`flex w-full flex-col rounded-md border p-3 shadow-sm transition-colors duration-500 sm:p-4 md:h-full md:w-[20%] ${styles.panelBg} ${styles.border}`}>
                   <p
@@ -734,7 +745,8 @@ const Footer = () => {
                 <div className={`flex ${isMobile ? "flex-1 justify-start" : "flex-1 justify-center"} items-center`}>
                   <Link
                     href="/privacy"
-                    className={`text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
+                    onClick={goToTop}
+                    className={`text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
                     Privacy Policy
                   </Link>
                 </div>
@@ -742,7 +754,7 @@ const Footer = () => {
                 <div className={`flex ${isMobile ? "flex-1 justify-end" : "flex-1 justify-end"} items-center`}>
                   <button
                     onClick={goToTop}
-                    className={`flex items-center gap-1.5 whitespace-nowrap text-xs font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 cursor-pointer ${styles.buttonBg}`}>
+                    className={`flex items-center gap-1.5 whitespace-nowrap text-xs uppercase font-normal tracking-wider transition-opacity duration-300 hover:opacity-70 cursor-pointer ${styles.buttonBg}`}>
                     <span>To Top</span>
                     <HiArrowSmUp size={15} className="shrink-0" />
                   </button>

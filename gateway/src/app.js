@@ -80,7 +80,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 app.use(cookieParser());
 
-app.get("/ping", (req, res) => {
+app.get("/api/ping", (req, res) => {
   res.json({ success: true, message: "pong" });
 });
 

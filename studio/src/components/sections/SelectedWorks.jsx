@@ -4,11 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useTheme } from "@/context/ThemeContext";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
 import { getWorks, seedPortfolioCache } from "@/lib/payload/contentapi";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { getWorkFloatStyles, getWorkMobile, getWorkStyles } from "@/utils/themeSwatch";
 import { CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
@@ -104,7 +104,13 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, 
             <div className="flex flex-col gap-5">
               {project.image && !skipImage && (
                 <div className={`relative aspect-video w-full overflow-hidden rounded-xl border ${borderClass}`}>
-                  <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="object-cover"
+                  />
                 </div>
               )}
 
@@ -228,7 +234,13 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
             {hasContent ? (
               <>
                 <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
-                  <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="object-cover"
+                  />
                 </motion.div>
                 <div className={`absolute inset-0 ${gradientOverlay}`} />
                 <div className={`absolute inset-0 ${patternOverlay}`} />
@@ -419,7 +431,7 @@ export default function SelectedWorks({ initialProjects }) {
                 fontFeatureSettings: '"ss01" on, "ss02" on',
                 transform: "scaleX(1.5)",
               }}>
-              SELECTED /
+              SELECTED/
             </h1>
           </div>
 

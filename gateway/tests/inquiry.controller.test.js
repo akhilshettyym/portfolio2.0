@@ -34,7 +34,7 @@ describe("Inquiry Controllers", () => {
 
       jest.spyOn(ContactInquiry, "findOne").mockReturnValue({
         sort: jest.fn().mockResolvedValue({
-          createdAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(), // 2 minutes ago
+          createdAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
         }),
       });
 

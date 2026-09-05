@@ -5,7 +5,6 @@ export const ASSET_CACHE = "db_assets";
 
 export const INTRO_SEEN = "ui_intro";
 export const LOCATION_MODE = "ui_location";
-export const LIMP_BANNER = "limp_banner";
 
 export const CLOUD_CONTROL = "sys_clouds";
 export const PERF_TIER = "sys_tier";
@@ -14,6 +13,8 @@ export const LEGACY_TIER = "sys_legacy";
 export const TIER_EVENT = "tier-change";
 
 export const SITE_THEME = "site-theme";
+
+export const WARM_SERVER = "ping_server";
 
 export const ACH_DATA = "ach-data";
 export const EDU_DATA = "edu-data";

@@ -1,9 +1,9 @@
 import { cache } from "react";
 
+const PORTFOLIO_FETCH_TIMEOUT_MS = 20000;
+const PORTFOLIO_REVALIDATE_SECONDS = 86400;
 const BASE_URL =
   process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "https://portfolio-backend-cjvf.onrender.com";
-const PORTFOLIO_REVALIDATE_SECONDS = 86400;
-const PORTFOLIO_FETCH_TIMEOUT_MS = 8000;
 
 const endpointUrl = (endpoint) => new URL(endpoint, BASE_URL).toString();
 
@@ -24,12 +24,18 @@ const fetchEndpoint = cache(async (endpoint) => {
     });
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch ${endpoint}: ${res.status} ${res.statusText}`);
+      if (res.status !== 404) {
+        console.warn(`Portfolio endpoint unavailable: ${endpoint} (${res.status})`);
+      }
+      return null;
     }
 
     const json = await res.json();
     return json?.data ?? null;
   } catch (error) {
+    if (error?.name === "AbortError") {
+      return null;
+    }
     console.error(`Error fetching ${endpoint}:`, error);
     return null;
   } finally {

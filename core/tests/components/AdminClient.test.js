@@ -4,7 +4,6 @@ import AdminClient from "@/app/AdminClient";
 
 import { usePathname, useRouter } from "next/navigation";
 import { apiFetch } from "@/utils/api";
-import { showToast } from "@/utils/toast";
 
 jest.mock("@/utils/api");
 jest.mock("@/utils/toast", () => ({

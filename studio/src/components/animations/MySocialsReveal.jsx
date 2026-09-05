@@ -7,15 +7,13 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import MySocialsTiered from "@/components/Tiered/MySocialsTiered";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 
-export default function SocialsCinematicReveal() {
+export default function MySocialsReveal() {
   const sectionRef = useRef(null);
+
   const { theme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
-
-  const useVerticalFallback = shouldReduceMotion || isMobile || isTier2;
-  const sectionBg = theme === "light" ? "bg-white" : "bg-black";
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -33,13 +31,22 @@ export default function SocialsCinematicReveal() {
   const y = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["10%", "0%", "0%", "-10%"]);
   const filter = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ["blur(16px)", "blur(0px)", "blur(0px)", "blur(16px)"]);
 
-  if (useVerticalFallback) {
-    return <MySocialsTiered />;
+  const normalizedTheme = String(theme || "light").toLowerCase();
+  const sectionBg = normalizedTheme === "light" ? "bg-white" : "bg-black";
+
+  const useFallback = shouldReduceMotion || isMobile || isTier2;
+
+  if (useFallback) {
+    return (
+      <section className={`relative w-full transition-colors duration-500 ${sectionBg}`}>
+        <MySocialsTiered />
+      </section>
+    );
   }
 
   return (
-    <section ref={sectionRef} className={`relative h-[300vh] transition-colors duration-500 ${sectionBg}`}>
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center perspective-1000">
+    <section ref={sectionRef} className={`relative w-full h-[300vh] transition-colors duration-500 ${sectionBg}`}>
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden perspective-1000">
         <motion.div
           style={{ scale, opacity, y, filter }}
           className="h-full w-full origin-center will-change-[transform,filter]">

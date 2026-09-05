@@ -255,12 +255,10 @@ const Navbar = () => {
                 <div
                   onClick={() => setConsoleOpen((prev) => !prev)}
                   className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
-                  <svg
-                    viewBox="0 0 100 100"
+                  <SiGnometerminal
+                    size="100%"
                     className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""}`}
-                    preserveAspectRatio="none">
-                    <SiGnometerminal size={100} />
-                  </svg>
+                  />
                 </div>
               </div>
             </div>
@@ -361,21 +359,21 @@ const Navbar = () => {
 
                 <div>{time || "—:—:— --"}</div>
 
-                <div key={ip} className={`text-[8px] font-semibold uppercase tracking-[0.25em] ${textMutedClass}`}>
-                  connection
-                  <span className="inline-block w-25 text-right"> {ip}</span>
-                </div>
+                {!isTier2 && (
+                  <div key={ip} className={`text-[8px] font-semibold uppercase tracking-[0.2em] ${textMutedClass}`}>
+                    connection
+                    <span className="inline-block w-25 text-right"> {ip}</span>
+                  </div>
+                )}
               </div>
 
               <div
                 onClick={() => setConsoleOpen((prev) => !prev)}
                 className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
-                <svg
-                  viewBox="0 0 100 100"
+                <SiGnometerminal
+                  size="100%"
                   className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""}`}
-                  preserveAspectRatio="none">
-                  <SiGnometerminal size={100} />
-                </svg>
+                />
               </div>
             </div>
           </div>

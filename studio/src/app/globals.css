@@ -23,6 +23,7 @@ html {
 }
 
 body {
+  overflow-x: hidden;
   font-family:
     var(--font-sans),
     ui-sans-serif,
@@ -74,6 +75,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -91,6 +93,7 @@ body {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -101,10 +104,6 @@ body {
   animation: scroll-scale 0.8s ease-out forwards;
   animation-timeline: view();
   animation-range: entry 0% cover 30%;
-}
-
-body {
-  overflow-x: hidden;
 }
 
 html.lenis,
@@ -121,6 +120,7 @@ html.lenis body {
     transform: translateY(100px);
     opacity: 0.3;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -135,6 +135,22 @@ html.lenis body {
   .loader-greeting {
     font-size: 18px;
     line-height: 1.15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .parallax-element {
+    transform: none;
+    will-change: auto;
   }
 }
 

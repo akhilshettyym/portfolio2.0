@@ -5,7 +5,7 @@ import { WARM_SERVER } from "@/utils/storage";
 
 const WARMUP_TIMEOUT = 15000;
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const WARMUP_ENDPOINT = SERVER_URL ? `${SERVER_URL.replace(/\/$/, "")}/ping` : null;
+const WARMUP_ENDPOINT = SERVER_URL ? `${SERVER_URL.replace(/\/$/, "")}/api/ping` : null;
 
 export default function ServerWarmer() {
   useEffect(() => {

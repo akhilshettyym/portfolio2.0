@@ -36,7 +36,6 @@ export const viewport = {
   ],
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export const metadata = {
@@ -110,10 +109,26 @@ export const metadata = {
   },
 };
 
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Akhil Shetty",
+  url: "https://akhilshettym.com",
+  jobTitle: "Full Stack Developer",
+  sameAs: ["https://github.com/akhilshetty"],
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
       <body className="bg-white text-black">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personSchema),
+          }}
+        />
+
         <PerformanceBootstrap>
           <ServerWarmer />
           <LenisProvider>
@@ -127,6 +142,7 @@ export default function RootLayout({ children }) {
                   <ToastContainer />
                   <HireWrapper />
                   <PersistentHeroLayer />
+
                   <div className="relative z-30 grow">
                     <RouteTransition>{children}</RouteTransition>
                   </div>

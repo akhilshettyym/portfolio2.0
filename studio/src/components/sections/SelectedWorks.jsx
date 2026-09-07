@@ -104,7 +104,13 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, 
             <div className="flex flex-col gap-5">
               {project.image && !skipImage && (
                 <div className={`relative aspect-video w-full overflow-hidden rounded-xl border ${borderClass}`}>
-                  <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="object-cover"
+                  />
                 </div>
               )}
 
@@ -228,7 +234,13 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
             {hasContent ? (
               <>
                 <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
-                  <Image src={project.image} alt={project.title} fill unoptimized priority className="object-cover" />
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="object-cover"
+                  />
                 </motion.div>
                 <div className={`absolute inset-0 ${gradientOverlay}`} />
                 <div className={`absolute inset-0 ${patternOverlay}`} />

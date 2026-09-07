@@ -408,19 +408,11 @@ function BubbleScene() {
             </div>
           </div>
 
-          <div
-            className={`relative w-full max-w-8xl mx-auto px-5 py-4 md:px-8 md:py-5 rounded-xl backdrop-blur-md border transition-all duration-300 ${styles.box}`}>
-            <div
-              className="absolute inset-0 rounded-xl bg-linear-to-br from-white/10 via-white/5 to-transparent pointer-events-none"
-              aria-hidden="true"
-            />
-
-            <p
-              className={`relative z-10 text-center text-sm md:text-base leading-relaxed md:leading-normal font-sans font-medium transition-colors duration-300 opacity-90 ${styles.text}`}>
-              Architecting fluid user interfaces and high-throughput distributed systems—building resilient cloud
-              infrastructure engineered to maintain strict data consistency under critical enterprise workloads.
-            </p>
-          </div>
+          <p
+            className={`relative z-10 text-center text-sm md:text-base leading-relaxed md:leading-normal font-sans font-medium transition-colors duration-300 opacity-90 ${styles.text}`}>
+            Architecting fluid user interfaces and high-throughput distributed systems—building resilient cloud
+            infrastructure engineered to maintain strict data consistency under critical enterprise workloads.
+          </p>
         </div>
       </motion.div>
     </section>

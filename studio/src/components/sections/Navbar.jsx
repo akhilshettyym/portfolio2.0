@@ -257,8 +257,7 @@ const Navbar = () => {
                   className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
                   <SiGnometerminal
                     size="100%"
-                    className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""
-                      }`}
+                    className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""}`}
                   />
                 </div>
               </div>
@@ -373,8 +372,7 @@ const Navbar = () => {
                 className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
                 <SiGnometerminal
                   size="100%"
-                  className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""
-                    }`}
+                  className={`h-full w-full transition-all duration-300 ${consoleOpen ? "rotate-90 scale-70" : ""}`}
                 />
               </div>
             </div>

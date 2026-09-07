@@ -15,6 +15,9 @@ import NavbarWrapper from "@/components/wrappers/NavbarWrapper";
 import PersistentHeroLayer from "@/components/wrappers/HeroWrapper";
 import RouteTransition from "@/components/animations/RouteTransition";
 import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
+import { GoogleTagManager } from "@next/third-parties/google";
+import CookieBanner from "@/components/core/CookieBanner";
+import { CookieProvider } from "@/context/CookieContext";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -94,6 +97,26 @@ const personSchema = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
+      <head>
+        <script
+          id="google-consent-default"
+          dangerouslySetInnerHTML={{
+            __html: `
+             window.dataLayer = window.dataLayer || [];
+             function gtag(){dataLayer.push(arguments);}
+             
+             gtag('consent', 'default', {
+               'analytics_storage': 'denied',
+               'ad_storage': 'denied',
+               'ad_user_data': 'denied',
+               'ad_personalization': 'denied',
+               'wait_for_update': 500
+             });
+           `,
+          }}
+        />
+      </head>
+
       <body className="bg-white text-black">
         <script
           type="application/ld+json"
@@ -103,32 +126,37 @@ export default function RootLayout({ children }) {
         />
 
         <PerformanceBootstrap>
-          <ServerWarmer />
+          <CookieProvider>
+            <ServerWarmer />
+            <CookieBanner />
 
-          <LenisProvider>
-            <ThemeProvider>
-              <LoaderWrapper>
-                <NavbarWrapper>
-                  <NavbarLayout />
-                </NavbarWrapper>
+            <LenisProvider>
+              <ThemeProvider>
+                <LoaderWrapper>
+                  <NavbarWrapper>
+                    <NavbarLayout />
+                  </NavbarWrapper>
 
-                <ThemeWrapper>
-                  <ToastContainer />
-                  <HireWrapper />
-                  <PersistentHeroLayer />
+                  <ThemeWrapper>
+                    <ToastContainer />
+                    <HireWrapper />
+                    <PersistentHeroLayer />
 
-                  <div className="relative z-30 grow">
-                    <RouteTransition>{children}</RouteTransition>
-                  </div>
-                </ThemeWrapper>
+                    <div className="relative z-30 grow">
+                      <RouteTransition>{children}</RouteTransition>
+                    </div>
+                  </ThemeWrapper>
 
-                <EmergencyCTA />
-                <FooterLayout />
-              </LoaderWrapper>
-            </ThemeProvider>
-          </LenisProvider>
+                  <EmergencyCTA />
+                  <FooterLayout />
+                </LoaderWrapper>
+              </ThemeProvider>
+            </LenisProvider>
+          </CookieProvider>
         </PerformanceBootstrap>
       </body>
+
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
     </html>
   );
 }

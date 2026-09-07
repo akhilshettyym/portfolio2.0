@@ -214,7 +214,7 @@ export function classifyPerformanceTier({ gpu, fps, p95FrameMs, cpuOps }) {
   else if (cpuOps >= 22000) score += 5;
   else score -= 8;
 
-  score += getConnectionScore();
+  score += getConnectionScore();z
 
   return score >= 50 ? PERF_TIERS.HIGH : PERF_TIERS.LOW;
 }

@@ -6,6 +6,7 @@ import { useTheme } from "@/context/ThemeContext";
 import HeroLayer from "@/components/basic/HeroLayer";
 import { getWeatherScene } from "@/utils/weather-scene";
 import { CLOUD_SHADER, HERO_SHADER } from "@/utils/basic";
+import { useCookieConsent } from "@/context/CookieContext";
 import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
@@ -32,6 +33,8 @@ const HeroSection = ({ active = true }) => {
   const [paused, setPaused] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [sceneAssets, setSceneAssets] = useState(null);
+
+  const { showCookieBanner } = useCookieConsent();
 
   const { triggerIntroRestart } = useContext(LoadingContext);
   const { tier, ready, isTier2 } = usePerformanceTier();
@@ -60,6 +63,14 @@ const HeroSection = ({ active = true }) => {
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      showCookieBanner();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [showCookieBanner]);
 
   useEffect(() => {
     if (!ready || tier !== "tier_2") {

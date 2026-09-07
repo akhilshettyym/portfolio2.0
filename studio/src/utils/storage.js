@@ -16,6 +16,8 @@ export const SITE_THEME = "site-theme";
 
 export const WARM_SERVER = "ping_server";
 
+export const COOKIE_CONSENT = "cookie_consent"
+
 export const ACH_DATA = "ach-data";
 export const EDU_DATA = "edu-data";
 export const EXP_DATA = "exp-data";

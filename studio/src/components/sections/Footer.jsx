@@ -14,6 +14,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/themeSwatch";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
+import { FiShield } from "react-icons/fi";
 
 function splitLetters(text) {
   return Array.from(text);
@@ -429,8 +430,8 @@ const Footer = () => {
                   <Link
                     href="/privacy"
                     onClick={goToTop}
-                    className={`text-xs uppercase tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
-                    Privacy Policy
+                    className={`inline-flex items-center gap-1 text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
+                    Privacy Policy <FiShield size={15} />
                   </Link>
                 </div>
 
@@ -746,8 +747,8 @@ const Footer = () => {
                   <Link
                     href="/privacy"
                     onClick={goToTop}
-                    className={`text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
-                    Privacy Policy
+                    className={`inline-flex items-center gap-1 text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
+                    Privacy Policy <FiShield size={15} />
                   </Link>
                 </div>
 

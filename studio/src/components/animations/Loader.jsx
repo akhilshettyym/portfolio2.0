@@ -48,7 +48,7 @@ export default function Loader({ onFinish }) {
     pushToDataLayer("device_type", { device_type: deviceType });
 
     trackingFired.current = true;
-  }, [tier]);
+  }, [tier, isMobile]);
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;

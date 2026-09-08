@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { SOCIALS } from "@/utils/basic";
+import { FiShield } from "react-icons/fi";
 import { goToTop } from "@/utils/functions";
 import { useRouter } from "next/navigation";
 import { HiArrowSmUp } from "react-icons/hi";
@@ -281,9 +282,10 @@ const Footer = () => {
                       <div className="flex h-full flex-1 items-center justify-center">
                         <div className="flex flex-col justify-center text-justify">
                           <span className="text-[7px] leading-normal opacity-40">
-                            Usually somewhere between coffee, code & curiosity. I like making things that feel simple,
-                            sometimes too simple. Probably overthinking the details, always curious about what&apos;s
-                            next. Still figuring it out {":)"} One thing at a time. Never really done experimenting.
+                            Usually somewhere between coffee, code & curiosity.
+                            {/* Probably overthinking the details, always curious about what&apos;s */}
+                            {/* I like making things that feel simple, sometimes too simple.  */}
+                            Still figuring it out {":)"} One thing at a time. Never really done experimenting.
                           </span>
                         </div>
                       </div>
@@ -429,8 +431,8 @@ const Footer = () => {
                   <Link
                     href="/privacy"
                     onClick={goToTop}
-                    className={`text-xs uppercase tracking-wider hover:opacity-70 transition-opacity duration-300 ${styles.textMuted}`}>
-                    Privacy Policy
+                    className={`inline-flex items-center gap-1 text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
+                    Privacy Policy <FiShield size={15} />
                   </Link>
                 </div>
 
@@ -585,16 +587,17 @@ const Footer = () => {
 
                     <div
                       className={`w-full md:w-[50%] rounded-md border p-3 transition-colors duration-500 flex items-center gap-4 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
-                      <div className="flex w-[40%] items-center py-2 justify-start">
+                      <div className="flex w-[50%] items-center py-2 justify-start">
                         <FooterAscii className="w-full" />
                       </div>
 
                       <div className="flex h-full flex-1 items-center justify-center">
                         <div className="flex flex-col justify-center text-justify">
                           <span className="text-[7px] leading-normal opacity-40">
-                            Usually somewhere between coffee, code & curiosity. I like making things that feel simple,
-                            sometimes too simple. Probably overthinking the details, always curious about what&apos;s
-                            next. Still figuring it out {":)"} One thing at a time. Never really done experimenting.
+                            Usually somewhere between coffee, code & curiosity.
+                            {/* Probably overthinking the details, always curious about what&apos;s */}
+                            {/* I like making things that feel simple, sometimes too simple.  */}
+                            Still figuring it out {":)"} One thing at a time. Never really done experimenting.
                           </span>
                         </div>
                       </div>
@@ -746,8 +749,8 @@ const Footer = () => {
                   <Link
                     href="/privacy"
                     onClick={goToTop}
-                    className={`text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
-                    Privacy Policy
+                    className={`inline-flex items-center gap-1 text-xs font-normal tracking-wider uppercase transition-opacity duration-300 hover:opacity-70 ${styles.textMuted}`}>
+                    Privacy Policy <FiShield size={15} />
                   </Link>
                 </div>
 

@@ -332,7 +332,7 @@ export default function SubjectProfile() {
                 />
 
                 <div
-                  className={`relative w-full ${isMobile ? "min-h-93.75" : "min-h-65"} h-[clamp(260px,42vw,380px)] overflow-hidden rounded-lg @container  ${styles.imgPlaceholder}`}>
+                  className={`relative w-full ${isMobile ? "min-h-93.75" : "min-h-65"} h-[clamp(260px,42vw,380px)] overflow-hidden rounded-lg`}>
                   <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
                     <SubjectAscii />
                   </div>

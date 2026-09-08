@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
-
 import { useTheme } from "@/context/ThemeContext";
 import { getMySocialsStyles } from "@/utils/swatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
+import Image from "next/image";
 
 const TRAIL_IMAGE_COUNT = 20;
 
@@ -112,12 +112,14 @@ export default function MySocials({ horizontalReveal = false }) {
   });
 
   useEffect(() => {
+    const currentTimeouts = timeouts.current;
+
     return () => {
-      timeouts.current.forEach((timeoutId) => {
+      currentTimeouts.forEach((timeoutId) => {
         clearTimeout(timeoutId);
       });
 
-      timeouts.current.clear();
+      currentTimeouts.clear();
     };
   }, []);
 
@@ -315,12 +317,13 @@ export default function MySocials({ horizontalReveal = false }) {
                   )`,
                   borderRadius: TRAIL_CONFIG.borderRadius,
                 }}>
-                <img
+                <Image
                   src={item.src}
                   alt=""
                   aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
                   draggable={false}
                   className="block h-auto w-full rounded-xl object-contain select-none"
                 />

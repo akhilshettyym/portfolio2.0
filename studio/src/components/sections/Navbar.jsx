@@ -2,6 +2,7 @@
 
 import "@/styles/navbar.css";
 import Link from "next/link";
+import { pushToDataLayer } from "@/lib/gtm";
 import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
 import { useTheme } from "@/context/ThemeContext";
@@ -204,6 +205,11 @@ const Navbar = () => {
 
   const ip = ipParts.join(".");
 
+  const handleConsoleOpen = () => {
+    setConsoleOpen((prev) => !prev);
+    pushToDataLayer("terminal_triggered", { terminal_triggered: "command" });
+  };
+
   const navItems = [
     { label: "INFO", href: "/" },
     { label: "WORK", href: "/work" },
@@ -253,7 +259,7 @@ const Navbar = () => {
                 </div>
 
                 <div
-                  onClick={() => setConsoleOpen((prev) => !prev)}
+                  onClick={handleConsoleOpen}
                   className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
                   <SiGnometerminal
                     size="100%"
@@ -339,7 +345,7 @@ const Navbar = () => {
 
             <div className="relative ml-auto flex min-w-40 shrink-0 items-center justify-end gap-3 opacity-0 animate-[navbar-enter_0.6s_ease-out_0.4s_forwards]">
               <button
-                onClick={() => setConsoleOpen((prev) => !prev)}
+                onClick={handleConsoleOpen}
                 className={`absolute right-0 top-0 z-50 flex h-full items-center overflow-hidden px-4 text-[11px] transition-all duration-300 ease-out ${
                   consoleOpen ? "w-60 opacity-100" : "pointer-events-none w-0 opacity-0"
                 } ${consoleSlideClass}`}>
@@ -368,7 +374,7 @@ const Navbar = () => {
               </div>
 
               <div
-                onClick={() => setConsoleOpen((prev) => !prev)}
+                onClick={handleConsoleOpen}
                 className={`relative z-40 flex aspect-square w-10 cursor-pointer items-center justify-center overflow-hidden transition-all duration-300 ${terminalBgClass} ${terminalHoverClass}`}>
                 <SiGnometerminal
                   size="100%"

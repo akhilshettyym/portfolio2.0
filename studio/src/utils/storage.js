@@ -14,6 +14,8 @@ export const TIER_EVENT = "tier-change";
 
 export const SITE_THEME = "site-theme";
 
+export const COOKIE_CONSENT = "cookie_consent";
+
 export const WARM_SERVER = "ping_server";
 
 export const ACH_DATA = "ach-data";

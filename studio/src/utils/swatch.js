@@ -978,3 +978,26 @@ export const getHeroLayerStyles = (theme) => {
       };
   }
 };
+
+// ---
+
+export const getScrollProStyles = {
+  light: {
+    primary: "#000000",
+    secondary: "rgba(0,0,0,0.18)",
+    glow: "rgba(0,0,0,0.22)",
+    track: "rgba(0,0,0,0.1)",
+  },
+  dark: {
+    primary: "#ffffff",
+    secondary: "rgba(255,255,255,0.2)",
+    glow: "rgba(255,255,255,0.28)",
+    track: "rgba(255,255,255,0.12)",
+  },
+  metal: {
+    primary: "#ff0000",
+    secondary: "rgba(255,0,0,0.2)",
+    glow: "rgba(255,0,0,0.32)",
+    track: "rgba(255,0,0,0.12)",
+  },
+};

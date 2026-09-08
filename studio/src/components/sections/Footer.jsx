@@ -12,7 +12,7 @@ import FooterAscii from "@/components/basic/FooterAscii";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/themeSwatch";
+import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/swatch";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import { FiShield } from "react-icons/fi";
 
@@ -99,7 +99,8 @@ const Footer = () => {
   const prefersReducedMotion = useReducedMotion();
 
   const { theme } = useTheme();
-  const { isMobile } = useDeviceType();
+  const { isMobile, isCompactDevice } = useDeviceType();
+  console.log(isCompactDevice)
   const { isTier2 } = usePerformanceTier();
 
   const styles = getFooterStyles(theme);
@@ -282,9 +283,10 @@ const Footer = () => {
                       <div className="flex h-full flex-1 items-center justify-center">
                         <div className="flex flex-col justify-center text-justify">
                           <span className="text-[7px] leading-normal opacity-40">
-                            Usually somewhere between coffee, code & curiosity. I like making things that feel simple,
-                            sometimes too simple. Probably overthinking the details, always curious about what&apos;s
-                            next. Still figuring it out {":)"} One thing at a time. Never really done experimenting.
+                            Usually somewhere between coffee, code & curiosity. 
+                            {/* Probably overthinking the details, always curious about what&apos;s */}
+                            {/* I like making things that feel simple, sometimes too simple.  */}
+                            Still figuring it out {":)"} One thing at a time. Never really done experimenting.
                           </span>
                         </div>
                       </div>
@@ -586,16 +588,17 @@ const Footer = () => {
 
                     <div
                       className={`w-full md:w-[50%] rounded-md border p-3 transition-colors duration-500 flex items-center gap-4 ${styles.panelBg} ${styles.border} ${styles.textPrimary}`}>
-                      <div className="flex w-[40%] items-center py-2 justify-start">
+                      <div className="flex w-[50%] items-center py-2 justify-start">
                         <FooterAscii className="w-full" />
                       </div>
 
                       <div className="flex h-full flex-1 items-center justify-center">
                         <div className="flex flex-col justify-center text-justify">
                           <span className="text-[7px] leading-normal opacity-40">
-                            Usually somewhere between coffee, code & curiosity. I like making things that feel simple,
-                            sometimes too simple. Probably overthinking the details, always curious about what&apos;s
-                            next. Still figuring it out {":)"} One thing at a time. Never really done experimenting.
+                            Usually somewhere between coffee, code & curiosity. 
+                            {/* Probably overthinking the details, always curious about what&apos;s */}
+                            {/* I like making things that feel simple, sometimes too simple.  */}
+                            Still figuring it out {":)"} One thing at a time. Never really done experimenting.
                           </span>
                         </div>
                       </div>

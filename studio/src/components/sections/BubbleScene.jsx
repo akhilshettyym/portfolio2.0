@@ -6,7 +6,7 @@ import "@/styles/bubble_scene.css";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { memo, useEffect, useRef, useState } from "react";
-import { getBubbleSceneStyles } from "@/utils/themeSwatch";
+import { getBubbleSceneStyles } from "@/utils/swatch";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";

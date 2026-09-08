@@ -1,5 +1,7 @@
 import { FaFileAlt } from "react-icons/fa";
+import { IoIosMail } from "react-icons/io";
 import { SiLeetcode } from "react-icons/si";
+import { BsPassportFill } from "react-icons/bs";
 import { FaInstagram, FaGithub, FaLinkedin, FaSalesforce } from "react-icons/fa6";
 import {
   TiWeatherCloudy,
@@ -492,10 +494,15 @@ export const SOCIALS = [
     label: "Salesforce",
     href: "https://www.salesforce.com/trailblazer/akhilshettym",
   },
+  // {
+  //   icon: SiLeetcode,
+  //   label: "LeetCode",
+  //   href: "https://leetcode.com/u/akhil_shetty_m",
+  // },
   {
-    icon: SiLeetcode,
-    label: "LeetCode",
-    href: "https://leetcode.com/u/akhil_shetty_m",
+    icon: BsPassportFill,
+    label: "portfolio",
+    href: "https://akhilshettym.vercel.app",
   },
   {
     icon: FaInstagram,
@@ -503,10 +510,15 @@ export const SOCIALS = [
     href: "https://www.instagram.com/akhil_shetty_m",
   },
   {
-    icon: FaFileAlt,
-    label: "Resume",
-    href: "#",
+    icon: IoIosMail,
+    label: "Email",
+    href: "mailto:your.email@example.com",
   },
+  // {
+  //   icon: FaFileAlt,
+  //   label: "Resume",
+  //   href: "#",
+  // },
 ];
 
 export const CARD_WIDTH = 850;

@@ -10,7 +10,7 @@ import { DiCoffeescript } from "react-icons/di";
 import { CACHE_DURATION_MS } from "@/utils/cache";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { getGraphQlStyles } from "@/utils/themeSwatch";
+import { getGraphQlStyles } from "@/utils/swatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { motion, animate, AnimatePresence, useMotionValue } from "framer-motion";
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";

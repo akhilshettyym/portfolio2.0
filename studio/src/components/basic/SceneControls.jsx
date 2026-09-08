@@ -8,7 +8,7 @@ import { TiWeatherSunny } from "react-icons/ti";
 import { useEffect, useRef, useState } from "react";
 import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
-import { getWeatherIconData } from "@/utils/weather-scene";
+import { getWeatherIconData } from "@/utils/stage";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CONTROL_RADIUS, SCENE_CONTROLS, CONTROL_TRANSITION, REVEAL_TRANSITION } from "@/utils/basic";
 

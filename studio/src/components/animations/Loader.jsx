@@ -3,11 +3,12 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import { GREETINGS } from "@/utils/basic";
+import { pushToDataLayer } from "@/lib/gtm";
 import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
-import { getLoaderStyles } from "@/utils/themeSwatch";
+import { getLoaderStyles } from "@/utils/swatch";
 import LocationModal from "@/components/modals/LocationModal";
-import { hasLocationPreference } from "@/utils/weather-scene";
+import { hasLocationPreference } from "@/utils/stage";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -29,12 +30,25 @@ export default function Loader({ onFinish }) {
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const modalTriggeredRef = useRef(false);
   const progressRef = useRef(0);
-  const pausePointRef = useRef(null);
   const lastTimeRef = useRef(0);
+  const pausePointRef = useRef(null);
+  const trackingFired = useRef(false);
+  const modalTriggeredRef = useRef(false);
 
   const { bgColorClass, textColorClass, textFadedClass, progressBgClass, progressFillClass } = getLoaderStyles(theme);
+
+  useEffect(() => {
+    if (!tier) return;
+    if (trackingFired.current) return;
+
+    const deviceType = isMobile ? "mobile" : "desktop";
+
+    pushToDataLayer("performance_tier_evaluated", { perf_tier: tier });
+    pushToDataLayer("device_type", { device_type: deviceType });
+
+    trackingFired.current = true;
+  }, [tier]);
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;

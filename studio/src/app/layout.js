@@ -18,6 +18,7 @@ import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/components/core/CookieBanner";
 import { CookieProvider } from "@/context/CookieContext";
+import ScrollProgress from "@/components/animations/ScrollProgress";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -40,14 +41,14 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL("https://akhilshettym.com"),
+  metadataBase: new URL("https://shetty-portfolio-studio.vercel.app"),
   title: {
     default: "Akhil Shetty | Full Stack Developer",
     template: "%s | Akhil Shetty",
   },
   description:
     "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
-  authors: [{ name: "Akhil Shetty", url: "https://akhilshettym.com" }],
+  authors: [{ name: "Akhil Shetty", url: "https://shetty-portfolio-studio.vercel.app" }],
   creator: "Akhil Shetty",
   formatDetection: {
     email: false,
@@ -62,11 +63,21 @@ export const metadata = {
     siteName: "Akhil Shetty",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Akhil Shetty | Full Stack Developer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Akhil Shetty | Full Stack Developer",
-    description: "Full stack developer focused on fast, stable, production-grade web experiences.",
+    description:
+      "Full stack developer focused on fast, stable, production-grade web experiences.",
+    images: ["/opengraph-image.png"],
   },
   robots: {
     index: true,
@@ -78,18 +89,14 @@ export const metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
+  }
 };
 
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Akhil Shetty",
-  url: "https://akhilshettym.com",
+  url: "https://shetty-portfolio-studio.vercel.app",
   jobTitle: "Full Stack Developer",
   sameAs: ["https://github.com/akhilshetty"],
 };
@@ -132,6 +139,7 @@ export default function RootLayout({ children }) {
 
             <LenisProvider>
               <ThemeProvider>
+                <ScrollProgress />
                 <LoaderWrapper>
                   <NavbarWrapper>
                     <NavbarLayout />

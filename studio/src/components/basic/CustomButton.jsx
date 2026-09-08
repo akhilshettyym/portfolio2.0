@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { getButtonStyles } from "@/utils/themeSwatch";
+import { getButtonStyles } from "@/utils/swatch";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDeviceType } from "@/hooks/useDeviceType";
 

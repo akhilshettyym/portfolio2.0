@@ -1,6 +1,6 @@
 import { getCardState } from "@/utils/functions";
 import { motion, useMotionTemplate, useTransform } from "framer-motion";
-import { getFloatingCardStyles, getThemeTransforms } from "@/utils/themeSwatch";
+import { getFloatingCardStyles, getThemeTransforms } from "@/utils/swatch";
 
 export default function FloatingCard({ card, index, progress, hoveredCard, setHoveredCard, theme = "light" }) {
   const stateX = useTransform(progress, (v) => getCardState(v, index).x);

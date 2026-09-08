@@ -2,10 +2,11 @@
 
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { setLocationMode } from "@/utils/weather-scene";
-import { getLocationStyles } from "@/utils/themeSwatch";
+import { setLocationMode } from "@/utils/stage";
+import { getLocationStyles } from "@/utils/swatch";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomButton from "@/components/basic/CustomButton";
+import { pushToDataLayer } from "@/lib/gtm";
 
 export default function LocationModal({ open, onComplete }) {
   const { theme } = useTheme();
@@ -14,6 +15,7 @@ export default function LocationModal({ open, onComplete }) {
 
   const handleLocationSelect = (mode) => {
     setLocationMode(mode);
+    pushToDataLayer("location_mode_evaluated", { location_mode: mode });
     onComplete?.();
   };
 

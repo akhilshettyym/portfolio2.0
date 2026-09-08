@@ -27,6 +27,7 @@ import {
   TOTAL_SCENES,
   DARK_START_SCENE,
 } from "@/utils/basic";
+import { pushToDataLayer } from "@/lib/gtm";
 
 const INTRO_TIMING = {
   openingLineMs: 3600,
@@ -245,6 +246,7 @@ export default function CinematicIntro({ onComplete }) {
   const completeIntro = useCallback(() => {
     if (completedRef.current) return;
     completedRef.current = true;
+
     setReady(false);
     onComplete?.();
   }, [onComplete]);
@@ -1233,6 +1235,7 @@ export default function CinematicIntro({ onComplete }) {
 
   const handleSkipToLastScene = () => {
     completeIntro();
+    pushToDataLayer("intro_action_skipped", { intro_action_skipped: "skipped" });
   };
 
   useEffect(() => {

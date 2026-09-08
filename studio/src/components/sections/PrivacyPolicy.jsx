@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
-import { getPrivacyStyles } from "@/utils/themeSwatch";
+import { getPrivacyStyles } from "@/utils/swatch";
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 24 },

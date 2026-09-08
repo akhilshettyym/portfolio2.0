@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import React, { useState } from "react";
+import { pushToDataLayer } from "@/lib/gtm";
 import { useTheme } from "@/context/ThemeContext";
 import { getRecaptchaToken } from "@/lib/recaptcha";
 import { useDeviceType } from "@/hooks/useDeviceType";
@@ -9,7 +10,7 @@ import { SERVICES, BUDGET_OPTIONS } from "@/utils/basic";
 import { ShowToast } from "@/components/basic/ShowToast";
 import CustomButton from "@/components/basic/CustomButton";
 import RecaptchaDisclosure from "@/components/core/RecaptchaDisclosure";
-import { getCreateInputStyles, getCreateSomeStyles } from "@/utils/themeSwatch";
+import { getCreateInputStyles, getCreateSomeStyles } from "@/utils/swatch";
 import { FiCheck as CheckIcon, FiChevronDown as ChevronIcon } from "react-icons/fi";
 
 const InputField = ({ label, name, placeholder, value, onChange, type = "text", autoComplete, required = false }) => {
@@ -117,7 +118,7 @@ export default function CreateSomething() {
     setStatus({ type: "", message: "" });
 
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://portfolio-backend-cjvf.onrender.com";
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://shetty-portfolio-gateway.onrender.com";
 
       let payload = {
         name: formData.name.trim(),
@@ -163,6 +164,7 @@ export default function CreateSomething() {
       ShowToast.success(response?.data?.message, { theme });
     } catch (error) {
       console.error("Submission Error Pipeline Logs:", error.response?.data || error);
+      pushToDataLayer("inquiry_failed", { inquiry_failed: "Form Submission Failed" });
       const errorMessage = error.response?.data?.message || error.message || "Validation Error detected.";
       setStatus({ type: "error", message: errorMessage });
       ShowToast.error(errorMessage, { theme });

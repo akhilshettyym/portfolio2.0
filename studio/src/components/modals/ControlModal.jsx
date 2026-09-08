@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { FiShield } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { pushToDataLayer } from "@/lib/gtm";
 import ModeSwitch from "../basic/ModeSwitch";
 import { IoMdNuclear } from "react-icons/io";
 import { WiMoonAltFull } from "react-icons/wi";
@@ -15,8 +16,8 @@ import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
 import { GiRabbit, GiTortoise } from "react-icons/gi";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
-import { getWeatherIconData } from "@/utils/weather-scene";
-import { getControlModalStyles } from "@/utils/themeSwatch";
+import { getWeatherIconData } from "@/utils/stage";
+import { getControlModalStyles } from "@/utils/swatch";
 import { ASSET_CACHE, LOCATION_MODE, SCENE_CACHE } from "@/utils/storage";
 
 export default function ControlModal({ open, onClose, paused, isTier2, handleCloudControl, handleRestartIntroScene }) {
@@ -57,13 +58,18 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
     }
   };
 
-  const handleNuclearWipe = () => {
+  const handlePurgeStorage = () => {
     try {
       localStorage.clear();
       sessionStorage.clear();
-      window.location.reload();
+
+      pushToDataLayer("storage_purged", { storage_purged: "purged" });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 150);
     } catch (error) {
-      console.error("Nuclear wipe failed", error);
+      console.error("Storage purge failed", error);
     }
   };
 
@@ -178,9 +184,9 @@ export default function ControlModal({ open, onClose, paused, isTier2, handleClo
               <ControlCard
                 icon={<IoMdNuclear size={15} />}
                 value="Purge Storage"
-                description="Purge all local and session storage data, followed by a hard reset."
+                description="Purge all local, session storage and analytics data, followed by a hard reset."
                 actionLabel="PURGE"
-                onClick={handleNuclearWipe}
+                onClick={handlePurgeStorage}
                 styles={styles}
               />
               <ControlCard

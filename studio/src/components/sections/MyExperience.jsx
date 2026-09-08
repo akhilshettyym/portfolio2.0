@@ -4,7 +4,7 @@ import "@/styles/my_experience.css";
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import React, { useRef, useState, useEffect } from "react";
-import { getMyExperienceStyles, getMarqueeCardStyle } from "@/utils/themeSwatch";
+import { getMyExperienceStyles, getMarqueeCardStyle } from "@/utils/swatch";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { getEducations, getExperiences, seedPortfolioCache } from "@/lib/payload/contentapi";
 

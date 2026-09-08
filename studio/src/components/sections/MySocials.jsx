@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 
 import { useTheme } from "@/context/ThemeContext";
-import { getMySocialsStyles } from "@/utils/themeSwatch";
+import { getMySocialsStyles } from "@/utils/swatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { getQualityPreset } from "@/lib/performance/applyQualityTier";
 

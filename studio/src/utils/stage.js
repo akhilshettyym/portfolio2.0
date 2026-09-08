@@ -1,6 +1,6 @@
 import { CACHE_TTL_MS } from "@/utils/basic";
 import { SCENE_CACHE, LOCATION_MODE } from "@/utils/storage";
-import { getMoonVariant, resolveScene } from "@/utils/weather-helpers";
+import { getMoonVariant, resolveScene } from "@/utils/wx-fx";
 
 const VALID_LOCATION_MODES = ["accurate", "fast", "denied"];
 

@@ -5,7 +5,7 @@ import Image from "next/image";
 import "@/styles/track_trail.css";
 import { FaSalesforce } from "react-icons/fa6";
 import { useTheme } from "@/context/ThemeContext";
-import { getTrailStyles } from "@/utils/themeSwatch";
+import { getTrailStyles } from "@/utils/swatch";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { getTrailhead, seedPortfolioCache } from "@/lib/payload/contentapi";

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { SiGnometerminal } from "react-icons/si";
 import { useTheme } from "@/context/ThemeContext";
 import ConsoleModal from "../modals/ConsoleModal";
-import { getNavbarStyles } from "@/utils/themeSwatch";
+import { getNavbarStyles } from "@/utils/swatch";
 import NavbarLogo from "@/components/basic/NavbarLogo";
 import ModeSwitch from "@/components/basic/ModeSwitch";
 import { useEffect, useState, useRef, memo } from "react";

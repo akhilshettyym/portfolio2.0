@@ -2,7 +2,7 @@
 
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { getCardStackStyles } from "@/utils/themeSwatch";
+import { getCardStackStyles } from "@/utils/swatch";
 import FloatingCard from "@/components/basic/FloatingCard";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useState, useRef, memo, useEffect } from "react";

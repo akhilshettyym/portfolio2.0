@@ -9,7 +9,7 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { FaArrowUpRightFromSquare, FaXmark } from "react-icons/fa6";
 import { getWorks, seedPortfolioCache } from "@/lib/payload/contentapi";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { getWorkFloatStyles, getWorkMobile, getWorkStyles } from "@/utils/themeSwatch";
+import { getWorkFloatStyles, getWorkMobile, getWorkStyles } from "@/utils/swatch";
 import { CARD_WIDTH, CARD_HEIGHT, CTA_WIDTH, CTA_HEIGHT, EDGE_PADDING } from "@/utils/basic";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 

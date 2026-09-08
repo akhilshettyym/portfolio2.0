@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { getButtonStyles } from "@/utils/swatch";
 import { useTheme } from "@/context/ThemeContext";
-import { getButtonStyles } from "@/utils/themeSwatch";
-import { AnimatePresence, motion } from "framer-motion";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ArrowIcon = () => {
   return (

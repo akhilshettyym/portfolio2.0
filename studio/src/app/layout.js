@@ -16,6 +16,11 @@ import PersistentHeroLayer from "@/components/wrappers/HeroWrapper";
 import RouteTransition from "@/components/animations/RouteTransition";
 import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
 
+import { CookieProvider } from "@/context/CookieContext";
+import CookieBanner from "@/components/core/CookieBanner";
+import { GoogleTagManager } from "@next/third-parties/google";
+import ScrollProgress from "@/components/animations/ScrollProgress";
+
 const montserrat = Montserrat({
   variable: "--font-sans",
   subsets: ["latin"],
@@ -37,14 +42,14 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL("https://akhilshettym.com"),
+  metadataBase: new URL("https://shetty-portfolio-studio.vercel.app"),
   title: {
     default: "Akhil Shetty | Full Stack Developer",
     template: "%s | Akhil Shetty",
   },
   description:
     "Portfolio of Akhil Shetty, a full stack developer focused on performant interfaces, scalable systems, and polished product experiences.",
-  authors: [{ name: "Akhil Shetty", url: "https://akhilshettym.com" }],
+  authors: [{ name: "Akhil Shetty", url: "https://shetty-portfolio-studio.vercel.app" }],
   creator: "Akhil Shetty",
   formatDetection: {
     email: false,
@@ -59,11 +64,20 @@ export const metadata = {
     siteName: "Akhil Shetty",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Akhil Shetty | Full Stack Developer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Akhil Shetty | Full Stack Developer",
     description: "Full stack developer focused on fast, stable, production-grade web experiences.",
+    images: ["/opengraph-image.png"],
   },
   robots: {
     index: true,
@@ -76,17 +90,13 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
 };
 
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Akhil Shetty",
-  url: "https://akhilshettym.com",
+  url: "https://shetty-portfolio-studio.vercel.app",
   jobTitle: "Full Stack Developer",
   sameAs: ["https://github.com/akhilshetty"],
 };
@@ -94,6 +104,26 @@ const personSchema = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${geistMono.variable} antialiased`}>
+      <head>
+        <script
+          id="google-consent-default"
+          dangerouslySetInnerHTML={{
+            __html: `
+             window.dataLayer = window.dataLayer || [];
+             function gtag(){dataLayer.push(arguments);}
+             
+             gtag('consent', 'default', {
+               'analytics_storage': 'denied',
+               'ad_storage': 'denied',
+               'ad_user_data': 'denied',
+               'ad_personalization': 'denied',
+               'wait_for_update': 500
+             });
+           `,
+          }}
+        />
+      </head>
+
       <body className="bg-white text-black">
         <script
           type="application/ld+json"
@@ -103,32 +133,38 @@ export default function RootLayout({ children }) {
         />
 
         <PerformanceBootstrap>
-          <ServerWarmer />
+          <CookieProvider>
+            <ServerWarmer />
+            <CookieBanner />
 
-          <LenisProvider>
-            <ThemeProvider>
-              <LoaderWrapper>
-                <NavbarWrapper>
-                  <NavbarLayout />
-                </NavbarWrapper>
+            <LenisProvider>
+              <ThemeProvider>
+                <ScrollProgress />
+                <LoaderWrapper>
+                  <NavbarWrapper>
+                    <NavbarLayout />
+                  </NavbarWrapper>
 
-                <ThemeWrapper>
-                  <ToastContainer />
-                  <HireWrapper />
-                  <PersistentHeroLayer />
+                  <ThemeWrapper>
+                    <ToastContainer />
+                    <HireWrapper />
+                    <PersistentHeroLayer />
 
-                  <div className="relative z-30 grow">
-                    <RouteTransition>{children}</RouteTransition>
-                  </div>
-                </ThemeWrapper>
+                    <div className="relative z-30 grow">
+                      <RouteTransition>{children}</RouteTransition>
+                    </div>
+                  </ThemeWrapper>
 
-                <EmergencyCTA />
-                <FooterLayout />
-              </LoaderWrapper>
-            </ThemeProvider>
-          </LenisProvider>
+                  <EmergencyCTA />
+                  <FooterLayout />
+                </LoaderWrapper>
+              </ThemeProvider>
+            </LenisProvider>
+          </CookieProvider>
         </PerformanceBootstrap>
       </body>
+
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
     </html>
   );
 }

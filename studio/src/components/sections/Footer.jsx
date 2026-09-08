@@ -12,7 +12,7 @@ import FooterAscii from "@/components/basic/FooterAscii";
 import CustomButton from "@/components/basic/CustomButton";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/themeSwatch";
+import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/swatch";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 
 function splitLetters(text) {

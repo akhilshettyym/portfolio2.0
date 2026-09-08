@@ -1,6 +1,7 @@
 "use client";
 
 import "@/styles/cinematic_intro.css";
+import { pushToDataLayer } from "@/lib/gtm";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -1233,6 +1234,7 @@ export default function CinematicIntro({ onComplete }) {
 
   const handleSkipToLastScene = () => {
     completeIntro();
+    pushToDataLayer("intro_action_skipped", { intro_action_skipped: "skipped" });
   };
 
   useEffect(() => {

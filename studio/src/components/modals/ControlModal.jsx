@@ -15,8 +15,8 @@ import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
 import { GiRabbit, GiTortoise } from "react-icons/gi";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
-import { getWeatherIconData } from "@/utils/weather-scene";
-import { getControlModalStyles } from "@/utils/themeSwatch";
+import { getWeatherIconData } from "@/utils/stage";
+import { getControlModalStyles } from "@/utils/swatch";
 import { ASSET_CACHE, LOCATION_MODE, SCENE_CACHE } from "@/utils/storage";
 
 export default function ControlModal({ open, onClose, paused, isTier2, handleCloudControl, handleRestartIntroScene }) {

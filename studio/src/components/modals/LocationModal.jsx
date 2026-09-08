@@ -2,8 +2,8 @@
 
 import { useTheme } from "@/context/ThemeContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { setLocationMode } from "@/utils/weather-scene";
-import { getLocationStyles } from "@/utils/themeSwatch";
+import { setLocationMode } from "@/utils/stage";
+import { getLocationStyles } from "@/utils/swatch";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomButton from "@/components/basic/CustomButton";
 

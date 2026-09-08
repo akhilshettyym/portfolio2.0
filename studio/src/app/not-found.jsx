@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTheme } from "@/context/ThemeContext";
-import { getNotFoundStyles } from "@/utils/themeSwatch";
+import { getNotFoundStyles } from "@/utils/swatch";
 import { FaArrowLeft, FaRegFolderOpen } from "react-icons/fa6";
 
 export default function NotFound() {

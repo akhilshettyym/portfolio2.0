@@ -2,7 +2,7 @@
 
 import "@/styles/dev_ticker.css";
 import { useTheme } from "@/context/ThemeContext";
-import { getDevTickerStyles } from "@/utils/themeSwatch";
+import { getDevTickerStyles } from "@/utils/swatch";
 import { DEV_TICKERS, DEV_TICKERS_TIER } from "@/utils/basic";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 

@@ -10,7 +10,7 @@ import FlowState from "@/components/animations/FlowState";
 import SubjectAscii from "@/components/basic/SubjectAscii";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useViewportDetection } from "@/hooks/useViewportDetection";
-import { getProfileMarqueeStyles, getProfileStyles } from "@/utils/themeSwatch";
+import { getProfileMarqueeStyles, getProfileStyles } from "@/utils/swatch";
 import { fadeInContainer, itemReveal, carouselData, welcomeTexts } from "@/utils/basic";
 
 const ScrollMarquee = ({

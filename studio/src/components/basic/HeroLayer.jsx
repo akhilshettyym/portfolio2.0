@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { getHeroLayerStyles } from "@/utils/themeSwatch";
+import { getHeroLayerStyles } from "@/utils/swatch";
 
 const ENTRANCE_DELAY = 10;
 

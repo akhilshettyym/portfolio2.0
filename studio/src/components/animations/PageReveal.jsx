@@ -1,8 +1,8 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
 import { getPageRevealStyles } from "@/utils/swatch";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function PageReveal({ active, children }) {
   const { theme } = useTheme();

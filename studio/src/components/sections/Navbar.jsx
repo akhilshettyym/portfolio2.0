@@ -208,7 +208,7 @@ const Navbar = () => {
   const handleConsoleOpen = () => {
     setConsoleOpen((prev) => !prev);
     pushToDataLayer("terminal_triggered", { terminal_triggered: "command" });
-  }
+  };
 
   const navItems = [
     { label: "INFO", href: "/" },

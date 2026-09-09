@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { SOCIALS } from "@/utils/basic";
+import { FiShield } from "react-icons/fi";
 import { goToTop } from "@/utils/functions";
 import { useRouter } from "next/navigation";
 import { HiArrowSmUp } from "react-icons/hi";
@@ -14,7 +15,6 @@ import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { getFooterMarqueeStyles, getFooterStyles } from "@/utils/swatch";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { FiShield } from "react-icons/fi";
 
 function splitLetters(text) {
   return Array.from(text);
@@ -99,8 +99,7 @@ const Footer = () => {
   const prefersReducedMotion = useReducedMotion();
 
   const { theme } = useTheme();
-  const { isMobile, isCompactDevice } = useDeviceType();
-  console.log(isCompactDevice)
+  const { isMobile } = useDeviceType();
   const { isTier2 } = usePerformanceTier();
 
   const styles = getFooterStyles(theme);
@@ -283,7 +282,7 @@ const Footer = () => {
                       <div className="flex h-full flex-1 items-center justify-center">
                         <div className="flex flex-col justify-center text-justify">
                           <span className="text-[7px] leading-normal opacity-40">
-                            Usually somewhere between coffee, code & curiosity. 
+                            Usually somewhere between coffee, code & curiosity.
                             {/* Probably overthinking the details, always curious about what&apos;s */}
                             {/* I like making things that feel simple, sometimes too simple.  */}
                             Still figuring it out {":)"} One thing at a time. Never really done experimenting.
@@ -595,7 +594,7 @@ const Footer = () => {
                       <div className="flex h-full flex-1 items-center justify-center">
                         <div className="flex flex-col justify-center text-justify">
                           <span className="text-[7px] leading-normal opacity-40">
-                            Usually somewhere between coffee, code & curiosity. 
+                            Usually somewhere between coffee, code & curiosity.
                             {/* Probably overthinking the details, always curious about what&apos;s */}
                             {/* I like making things that feel simple, sometimes too simple.  */}
                             Still figuring it out {":)"} One thing at a time. Never really done experimenting.

@@ -1,6 +1,7 @@
 "use client";
 
 import "@/styles/cinematic_intro.css";
+import { pushToDataLayer } from "@/lib/gtm";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";

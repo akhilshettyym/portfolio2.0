@@ -1,14 +1,32 @@
 "use client";
 
 import { COOKIE_CONSENT } from "@/utils/storage";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, useSyncExternalStore } from "react";
 
 const CookieContext = createContext(null);
 
+const subscribe = (callback) => {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+};
+
+const getConsentSnapshot = () => localStorage.getItem(COOKIE_CONSENT);
+const getServerConsentSnapshot = () => null;
+
+const getMountedSnapshot = () => true;
+const getServerMountedSnapshot = () => false;
+const emptySubscribe = () => () => {};
+
 export function CookieProvider({ children }) {
-  const [hasConsent, setHasConsent] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  // Synchronize directly with localStorage without triggering setState in effects
+  const storedConsent = useSyncExternalStore(subscribe, getConsentSnapshot, getServerConsentSnapshot);
+
+  const isMounted = useSyncExternalStore(emptySubscribe, getMountedSnapshot, getServerMountedSnapshot);
+
   const [isCookieBannerReady, setIsCookieBannerReady] = useState(false);
+
+  // Derived state from external store snapshot
+  const hasConsent = storedConsent === "granted" || storedConsent === "denied";
 
   const updateConsentState = useCallback((status) => {
     if (typeof window === "undefined") return;
@@ -34,31 +52,23 @@ export function CookieProvider({ children }) {
     });
   }, []);
 
+  // Effect only interacts with the external system (GTag) - no React setState inside
   useEffect(() => {
-    const storedConsent = localStorage.getItem(COOKIE_CONSENT);
-
     if (storedConsent === "granted" || storedConsent === "denied") {
-      setHasConsent(true);
       updateConsentState(storedConsent);
     }
-
-    setIsInitialized(true);
-  }, [updateConsentState]);
+  }, [storedConsent, updateConsentState]);
 
   const showCookieBanner = useCallback(() => {
-    if (!isInitialized) return;
+    const currentConsent = localStorage.getItem(COOKIE_CONSENT);
 
-    const storedConsent = localStorage.getItem(COOKIE_CONSENT);
-
-    if (storedConsent === "granted" || storedConsent === "denied") {
-      setHasConsent(true);
+    if (currentConsent === "granted" || currentConsent === "denied") {
       setIsCookieBannerReady(false);
       return;
     }
 
-    setHasConsent(false);
     setIsCookieBannerReady(true);
-  }, [isInitialized]);
+  }, []);
 
   const hideCookieBanner = useCallback(() => {
     setIsCookieBannerReady(false);
@@ -66,26 +76,22 @@ export function CookieProvider({ children }) {
 
   const handleAccept = useCallback(() => {
     localStorage.setItem(COOKIE_CONSENT, "granted");
-
+    window.dispatchEvent(new Event("storage"));
     updateConsentState("granted");
-
-    setHasConsent(true);
     setIsCookieBannerReady(false);
   }, [updateConsentState]);
 
   const handleDecline = useCallback(() => {
     localStorage.setItem(COOKIE_CONSENT, "denied");
-
+    window.dispatchEvent(new Event("storage"));
     updateConsentState("denied");
-
-    setHasConsent(true);
     setIsCookieBannerReady(false);
   }, [updateConsentState]);
 
   return (
     <CookieContext.Provider
       value={{
-        isCookieBannerReady: isInitialized && isCookieBannerReady,
+        isCookieBannerReady: isMounted && isCookieBannerReady,
         hasConsent,
         showCookieBanner,
         hideCookieBanner,

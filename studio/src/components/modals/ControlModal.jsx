@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { FiShield } from "react-icons/fi";
-import { useRouter } from "next/navigation";
 import { pushToDataLayer } from "@/lib/gtm";
+import { useRouter } from "next/navigation";
 import ModeSwitch from "../basic/ModeSwitch";
 import { IoMdNuclear } from "react-icons/io";
 import { WiMoonAltFull } from "react-icons/wi";
@@ -12,12 +12,12 @@ import { SiRevealdotjs } from "react-icons/si";
 import { TiWeatherSunny } from "react-icons/ti";
 import { AiOutlineClear } from "react-icons/ai";
 import { useTheme } from "@/context/ThemeContext";
-import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
+import { getWeatherIconData } from "@/utils/stage";
 import { GiRabbit, GiTortoise } from "react-icons/gi";
+import { MOON_MAP, WEATHER_MAP } from "@/utils/basic";
+import { getControlModalStyles } from "@/utils/swatch";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMiniPause, HiMiniPlay } from "react-icons/hi2";
-import { getWeatherIconData } from "@/utils/stage";
-import { getControlModalStyles } from "@/utils/swatch";
 import { ASSET_CACHE, LOCATION_MODE, SCENE_CACHE } from "@/utils/storage";
 
 export default function ControlModal({ open, onClose, paused, isTier2, handleCloudControl, handleRestartIntroScene }) {

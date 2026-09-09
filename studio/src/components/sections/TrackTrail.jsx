@@ -4,12 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import "@/styles/track_trail.css";
 import { FaSalesforce } from "react-icons/fa6";
-import { useTheme } from "@/context/ThemeContext";
 import { getTrailStyles } from "@/utils/swatch";
+import { useTheme } from "@/context/ThemeContext";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { getTrailhead, seedPortfolioCache } from "@/lib/payload/contentapi";
-import { useDeviceType } from "@/hooks/useDeviceType";
 
 const BASE_BANNERS = ["/trailhead/champion.svg", "/trailhead/innovator.svg"];
 

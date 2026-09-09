@@ -15,9 +15,10 @@ import NavbarWrapper from "@/components/wrappers/NavbarWrapper";
 import PersistentHeroLayer from "@/components/wrappers/HeroWrapper";
 import RouteTransition from "@/components/animations/RouteTransition";
 import PerformanceBootstrap from "@/components/core/PerformanceBootstrap";
-import { GoogleTagManager } from "@next/third-parties/google";
-import CookieBanner from "@/components/core/CookieBanner";
+
 import { CookieProvider } from "@/context/CookieContext";
+import CookieBanner from "@/components/core/CookieBanner";
+import { GoogleTagManager } from "@next/third-parties/google";
 import ScrollProgress from "@/components/animations/ScrollProgress";
 
 const montserrat = Montserrat({
@@ -75,8 +76,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Akhil Shetty | Full Stack Developer",
-    description:
-      "Full stack developer focused on fast, stable, production-grade web experiences.",
+    description: "Full stack developer focused on fast, stable, production-grade web experiences.",
     images: ["/opengraph-image.png"],
   },
   robots: {
@@ -89,7 +89,7 @@ export const metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  }
+  },
 };
 
 const personSchema = {

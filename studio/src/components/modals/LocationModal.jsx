@@ -1,12 +1,12 @@
 "use client";
 
-import { useTheme } from "@/context/ThemeContext";
-import { useDeviceType } from "@/hooks/useDeviceType";
+import { pushToDataLayer } from "@/lib/gtm";
 import { setLocationMode } from "@/utils/stage";
+import { useTheme } from "@/context/ThemeContext";
 import { getLocationStyles } from "@/utils/swatch";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomButton from "@/components/basic/CustomButton";
-import { pushToDataLayer } from "@/lib/gtm";
 
 export default function LocationModal({ open, onComplete }) {
   const { theme } = useTheme();

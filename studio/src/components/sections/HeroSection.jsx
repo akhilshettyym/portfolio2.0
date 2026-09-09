@@ -2,9 +2,9 @@
 
 import * as THREE from "three";
 import "@/styles/hero-section.css";
+import { getWeatherScene } from "@/utils/stage";
 import { useTheme } from "@/context/ThemeContext";
 import HeroLayer from "@/components/basic/HeroLayer";
-import { getWeatherScene } from "@/utils/stage";
 import { CLOUD_SHADER, HERO_SHADER } from "@/utils/basic";
 import { useCookieConsent } from "@/context/CookieContext";
 import { CLOUD_CONTROL, ASSET_CACHE } from "@/utils/storage";

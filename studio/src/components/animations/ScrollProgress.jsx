@@ -59,7 +59,7 @@ export default function ScrollProgress() {
 
   return (
     <div
-      className="fixed top-30 right-5 z-[60] flex flex-col items-end gap-2 select-none"
+      className="fixed top-30 right-5 z-60 flex flex-col items-end gap-2 select-none"
       aria-hidden="true"
       style={{
         "--progress-color": currentTheme.primary,
@@ -82,13 +82,13 @@ export default function ScrollProgress() {
           </AnimatePresence>
         </div>
 
-        <div className="relative flex h-15 w-[3px] items-center justify-center">
+        <div className="relative flex h-15 w-0.75 items-center justify-center">
           <div className="absolute inset-0 rounded-full" style={{ background: currentTheme.track }} />
           <div className="absolute inset-0 flex flex-col justify-between py-0.5">
             {[0, 1, 2, 3, 4].map((tick) => (
               <span
                 key={tick}
-                className="absolute right-1/2 h-px w-[5px] translate-x-1/2"
+                className="absolute right-1/2 h-px w-1.25 translate-x-1/2"
                 style={{ background: currentTheme.secondary }}
               />
             ))}

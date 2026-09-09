@@ -4,9 +4,9 @@ import gsap from "gsap";
 import * as THREE from "three";
 import { GREETINGS } from "@/utils/basic";
 import { pushToDataLayer } from "@/lib/gtm";
+import { getLoaderStyles } from "@/utils/swatch";
 import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useRef, useState } from "react";
-import { getLoaderStyles } from "@/utils/swatch";
 import LocationModal from "@/components/modals/LocationModal";
 import { hasLocationPreference } from "@/utils/stage";
 import { createThreeTimer } from "@/lib/performance/threeTimer";
@@ -48,7 +48,7 @@ export default function Loader({ onFinish }) {
     pushToDataLayer("device_type", { device_type: deviceType });
 
     trackingFired.current = true;
-  }, [tier]);
+  }, [tier, isMobile]);
 
   useEffect(() => {
     pausePointRef.current = Math.floor(Math.random() * 30) + 20;

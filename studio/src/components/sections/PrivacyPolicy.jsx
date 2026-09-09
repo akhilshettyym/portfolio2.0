@@ -25,21 +25,25 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`w-full transition-colors duration-500 text-justify ${currentTheme.bg} ${styles.section || ""} ${isMobile ? "" : "p-10 px-6"}`}>
-      <div className="max-w-8xl">
+      className={`w-full transition-colors duration-500 text-justify ${currentTheme.bg} ${styles.section || ""} ${
+        isMobile ? "" : "py-10 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-20"
+      }`}>
+      <div className="w-full max-w-360 mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className={isMobile ? "mb-5" : "mb-5"}>
+          className="mb-5">
           <h1
             className={`text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase leading-none tracking-[-0.15em] transition-colors duration-500 ${currentTheme.textPrimary}`}>
             Privacy Policy
           </h1>
 
           <p
-            className={`text-xs uppercase tracking-normal mt-3 transition-colors duration-500 ${styles.textMuted || currentTheme.textSubtle}`}>
-            Legal & Data Governance • Last updated: August 24, 2026
+            className={`text-xs uppercase tracking-normal mt-3 transition-colors duration-500 ${
+              styles.textMuted || currentTheme.textSubtle
+            }`}>
+            Legal & Data Governance • Last updated: September 9, 2026
           </p>
         </motion.div>
 
@@ -47,7 +51,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className={`text-md md:text-md font-light leading-relaxed border-t pt-4 transition-colors duration-500 ${styles.textSecondary || currentTheme.textSecondary} ${styles.dividerSoft || currentTheme.borderSoft}`}>
+          className={`text-md md:text-md font-light leading-relaxed border-t pt-4 transition-colors duration-500 ${
+            styles.textSecondary || currentTheme.textSecondary
+          } ${styles.dividerSoft || currentTheme.borderSoft}`}>
           This Privacy Policy explains what information this portfolio website collects, why it is collected, how it is
           stored, the services that may process that information, and the choices available to you when using the
           website.
@@ -61,8 +67,11 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>01. Definitions</span>
+
               <span className={`text-[10px] font-normal tracking-normal capitalize ${currentTheme.textSubtle}`}>
                 Key Terms
               </span>
@@ -74,6 +83,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Website Owner
                 </strong>
+
                 <span
                   className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Refers to the individual who operates and maintains this portfolio website (&quot;We&quot;,
@@ -86,10 +96,11 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Browser Storage
                 </strong>
+
                 <span
                   className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Includes localStorage and sessionStorage used by your browser to retain preferences, rendering state,
-                  and temporary application data.
+                  consent preferences, cached data, and temporary application data.
                 </span>
               </li>
 
@@ -98,6 +109,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Personal Data
                 </strong>
+
                 <span
                   className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Information relating to an identified or identifiable individual, including information voluntarily
@@ -110,10 +122,37 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Location Data
                 </strong>
+
                 <span
                   className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Geographic information used only to determine weather and visual scene settings when you choose a
                   location-based experience.
+                </span>
+              </li>
+
+              <li className={`border-b pb-2 transition-colors duration-500 ${currentTheme.borderSoft}`}>
+                <strong
+                  className={`text-sm uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
+                  Analytics & Consent Data
+                </strong>
+
+                <span
+                  className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  Includes analytics events, device or browser category information, and your consent preference when
+                  analytics and related tracking are enabled after you grant consent.
+                </span>
+              </li>
+
+              <li className={`border-b pb-2 transition-colors duration-500 ${currentTheme.borderSoft}`}>
+                <strong
+                  className={`text-sm uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
+                  Security Verification Data
+                </strong>
+
+                <span
+                  className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  Includes information processed by Google reCAPTCHA to assess whether a form submission is likely to be
+                  legitimate or automated.
                 </span>
               </li>
             </ul>
@@ -125,7 +164,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>02. Data Collection & Usage</span>
             </h2>
 
@@ -135,6 +176,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Contact & Project Information
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   When you submit a contact form, the website may collect the information you voluntarily provide in
                   order to respond to your inquiry. A simple &quot;Say Hi&quot; submission may include your name, email
@@ -142,8 +184,11 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   organization, role, requested development service model, project budget, project deadline, and project
                   details.
                 </p>
+
                 <p
-                  className={`text-sm mt-3 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
                   Submitted information is transmitted to our backend services and stored in our database so that the
                   inquiry can be reviewed and responded to.
                 </p>
@@ -154,8 +199,11 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   System Performance & Rendering Tier
                 </h3>
+
                 <p
-                  className={`text-sm mb-3 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  className={`text-sm mb-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
                   When the application initially loads, it evaluates performance characteristics of your device and
                   browser, including rendering performance and frame rate where applicable. These measurements are used
                   to provide a smoother visual experience for devices with different capabilities.
@@ -168,14 +216,15 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       Performance Tiers
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                       The application uses the resulting performance score to classify the device into a local rendering
                       tier. Scores below 50 are categorized as{" "}
-                      <code className={`text-[11px] font-mono ${currentTheme.codeText}`}>tier_2</code> and higher scores
-                      are categorized as{" "}
+                      <code className={`text-[11px] font-mono ${currentTheme.codeText}`}>tier_2</code> and scores of 50
+                      or higher are categorized as{" "}
                       <code className={`text-[11px] font-mono ${currentTheme.codeText}`}>tier_1</code>. This
-                      classification is used to select an appropriate rendering quality and is stored locally in your
-                      browser.
+                      classification is used to select an appropriate rendering quality and visual feature set and is
+                      stored locally in your browser.
                     </p>
                   </div>
 
@@ -185,9 +234,11 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       Local Performance Data
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
-                      Performance measurements and the resulting rendering tier are intended for local performance
-                      decisions and are not submitted to our backend database as personal profile information.
+                      Performance measurements and the resulting rendering tier are intended for local performance and
+                      presentation decisions and are not intentionally submitted to our backend database as personal
+                      profile information.
                     </p>
                   </div>
                 </div>
@@ -198,8 +249,11 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Location & Weather Data
                 </h3>
+
                 <p
-                  className={`text-sm mb-3 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  className={`text-sm mb-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
                   After the initial performance check, you may be asked how you want location-based weather information
                   to be handled. You can choose Accurate Location, Fast Location, or Deny.
                 </p>
@@ -211,6 +265,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       Accurate Location
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                       If you grant browser location permission, the website may receive your latitude and longitude.
                       These coordinates are used to request weather information and determine the visual environment
@@ -224,6 +279,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       Fast Location
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                       If you choose Fast Location, the website may use{" "}
                       <code className={`text-[11px] font-mono ${currentTheme.codeText}`}>ipapi.co</code> to estimate
@@ -238,6 +294,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       Deny
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                       If you deny both location options, no location-based scene is selected and the website uses its
                       default visual environment instead.
@@ -246,7 +303,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                 </div>
 
                 <p
-                  className={`text-sm mt-4 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  className={`text-sm mt-4 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
                   Weather information is obtained from Open-Meteo using the selected location information. Location data
                   is used for this visual/weather functionality and is not intentionally stored in our backend database
                   as a contact profile.
@@ -258,10 +317,13 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Browser Storage & Preferences
                 </h3>
+
                 <p
-                  className={`text-sm mb-4 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  className={`text-sm mb-4 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
                   The website uses browser storage to preserve local preferences, improve performance, reduce repeated
-                  network requests, and maintain the state of certain visual features.
+                  network requests, retain consent state, and maintain the state of certain visual features.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -271,11 +333,12 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       localStorage
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                       Depending on the features you use, localStorage may contain the selected rendering tier, selected
                       location preference, weather/scene background information, cloud configuration, site theme, intro
-                      completion state, performance-related banner state, and cached GitHub GraphQL data used by the
-                      Work section.
+                      completion state, analytics/cookie consent state, performance-related banner state, and cached
+                      GitHub GraphQL data used by the Work section.
                     </p>
                   </div>
 
@@ -285,6 +348,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                       className={`text-sm font-bold uppercase tracking-wider block mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                       sessionStorage
                     </span>
+
                     <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                       sessionStorage may temporarily cache portfolio data retrieved from our backend or related APIs,
                       including achievements, education, trail data, work data, experience data, and project-related
@@ -300,14 +364,18 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Portfolio & External API Data
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   The portfolio periodically requests application content such as achievements, education, trail data,
                   work data, experience data, project data, and related portfolio information from backend or external
                   services. This information is used to render the website and is cached in browser storage where
                   applicable to reduce repeated requests.
                 </p>
+
                 <p
-                  className={`text-sm mt-3 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
                   The Work section may also request information from the GitHub GraphQL API. Certain returned
                   GitHub-related data may be cached in localStorage to improve page performance.
                 </p>
@@ -318,11 +386,13 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Interface & Visual Preferences
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   The website may store local interface state, including whether the introductory scene has already
                   completed, whether a performance-related notice has already been shown, your selected visual theme,
-                  and your selected weather/scene preference. These values are stored in your browser to avoid
-                  repeatedly showing or recalculating the same interface state.
+                  your selected weather/scene preference, rendering tier, cloud configuration, and analytics consent
+                  preference. These values are stored in your browser to avoid repeatedly showing or recalculating the
+                  same interface state.
                 </p>
               </div>
 
@@ -331,16 +401,126 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Analytics & Tag Management
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
-                  The website may use Google Analytics and Google Tag Manager to understand website usage, such as page
-                  interactions, traffic patterns, device or browser information, and general performance metrics. Where
-                  consent controls are provided, analytics and non-essential tracking technologies will be handled
-                  according to your selected privacy preferences.
+                  The website may use Google Analytics 4 (GA4) and Google Tag Manager (GTM) to understand website usage,
+                  interaction patterns, traffic patterns, device or browser information, and general website
+                  performance.
                 </p>
+
                 <p
-                  className={`text-sm mt-3 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
-                  Analytics and tag-management services may process information according to their own privacy policies
-                  and terms. These services are separate from the portfolio&apos;s own backend database.
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
+                  Non-essential analytics and tracking are intended to remain blocked until you grant tracking consent
+                  through the website&apos;s cookie consent controls. Your consent choice may be stored locally in your
+                  browser so that the website can remember your preference.
+                </p>
+
+                <p
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
+                  When analytics consent is granted, the website may send event information to GA4 through GTM. The
+                  current implementation may record events associated with performance, location selection, intro-scene
+                  interaction, storage actions, terminal interaction, form errors, and device category.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                  {[
+                    {
+                      name: "performance_tier_evaluated",
+                      description: "Records the locally calculated rendering tier, such as tier_1 or tier_2.",
+                    },
+                    {
+                      name: "location_mode_evaluated",
+                      description:
+                        "Records the selected location mode, such as Accurate Location, Fast Location, or Deny.",
+                    },
+                    {
+                      name: "intro_scene_skipped",
+                      description:
+                        "Records when the introductory cinematic scene is skipped and the skip action is used.",
+                    },
+                    {
+                      name: "storage_purged",
+                      description: "Records that the user triggered the website's local storage purge action.",
+                    },
+                    {
+                      name: "terminal_triggered",
+                      description: "Records activation of the site's terminal/console command interaction.",
+                    },
+                    {
+                      name: "inquiry_failed",
+                      description: "Records that a contact or project inquiry submission failed.",
+                    },
+                    {
+                      name: "device_type",
+                      description: "Records a device category determined by the website, such as desktop or mobile.",
+                    },
+                  ].map((event) => (
+                    <div
+                      key={event.name}
+                      className={`border p-4 transition-all duration-500 ${currentTheme.borderCard} ${currentTheme.cardBg}`}>
+                      <span
+                        className={`text-[11px] font-bold font-mono wrap-break-word block mb-2 ${currentTheme.textPrimary}`}>
+                        {event.name}
+                      </span>
+
+                      <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
+                        {event.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <p
+                  className={`text-sm mt-4 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
+                  These analytics events are intended to contain technical, behavioral, or interaction-level information
+                  needed for measurement. The website does not intentionally place the contents of contact messages,
+                  passwords, payment information, or similarly sensitive form contents into these event parameters.
+                </p>
+
+                <p
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
+                  Google Analytics and Google Tag Manager are third-party services. Their processing of information is
+                  governed by their respective policies and terms.
+                </p>
+              </div>
+
+              <div>
+                <h3
+                  className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
+                  Google reCAPTCHA & Form Protection
+                </h3>
+
+                <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+                  The Say Hi and Build a Project forms may use Google reCAPTCHA as an invisible, score-based anti-abuse
+                  mechanism. reCAPTCHA evaluates signals associated with the interaction and returns a risk score to
+                  help determine whether the submission is likely to be generated by a legitimate user or automated
+                  activity.
+                </p>
+
+                <p
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
+                  Under the current implementation, a reCAPTCHA score above 0.5 is treated as acceptable and the request
+                  may proceed. A score of 0.5 or below is rejected as potentially automated or abusive. This threshold
+                  may be changed as the site&apos;s security configuration evolves.
+                </p>
+
+                <p
+                  className={`text-sm mt-3 transition-colors duration-500 ${
+                    styles.textMuted || currentTheme.textMuted
+                  }`}>
+                  Google may process technical and interaction-related information required to provide the reCAPTCHA
+                  service, including information associated with the browser, device, network, and interaction. This
+                  processing is performed by Google under its own privacy policy and terms.
                 </p>
               </div>
             </div>
@@ -352,7 +532,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>03. Processing, Notifications & Retention</span>
             </h2>
 
@@ -362,6 +544,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Backend Processing
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Contact and project inquiry submissions are sent to our backend API for processing and storage. The
                   information is used to review and respond to inquiries and potential project requests.
@@ -373,6 +556,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Discord Notifications
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   When a contact or project inquiry is successfully submitted, our backend may trigger a Discord webhook
                   to notify the website owner that a new inquiry has been received. Discord is used for notification
@@ -385,6 +569,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Data Retention
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Contact and project inquiry information is intended to be retained for approximately 90 days so that
                   inquiries can be reviewed and responded to. The data is then intended to be deleted through the
@@ -398,11 +583,13 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Use & Disclosure
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Information submitted through the website is used for portfolio functionality, responding to
-                  inquiries, communicating about potential projects, maintaining website performance, and operating the
-                  services described in this policy. Personal information is not intentionally sold or rented to third
-                  parties for advertising purposes.
+                  inquiries, communicating about potential projects, maintaining website performance, preventing
+                  automated abuse, measuring website usage where consent has been provided, and operating the services
+                  described in this policy. Personal information is not intentionally sold or rented to third parties
+                  for advertising purposes.
                 </p>
               </div>
             </div>
@@ -414,7 +601,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>04. Your Privacy Choices</span>
             </h2>
 
@@ -430,6 +619,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Access
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   You may request information about personal data submitted through the contact or project inquiry
                   forms.
@@ -442,6 +632,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Deletion
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   You may request deletion of personal information submitted through the website before the normal
                   retention period ends, subject to applicable requirements.
@@ -454,6 +645,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Location Choice
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   You can choose Accurate Location, Fast Location, or Deny when the website asks how location-based
                   weather information should be handled.
@@ -466,6 +658,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Browser Storage
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   You can clear locally stored preferences and cached data by using your browser&apos;s storage or
                   site-data controls.
@@ -475,7 +668,45 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
 
             <p className={`text-sm mt-4 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
               Where analytics or optional tracking consent is supported by the website, you may also change your consent
-              choice using the available privacy controls.
+              choice using the available privacy controls. Withdrawing consent is intended to stop future non-essential
+              analytics tracking; it does not retroactively remove information already received by third-party
+              providers.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+              <div
+                className={`border p-4 transition-all duration-500 ${currentTheme.borderCard} ${currentTheme.cardBg}`}>
+                <span
+                  className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
+                  Analytics Consent
+                </span>
+
+                <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
+                  You may accept or decline optional analytics/tracking through the website&apos;s cookie consent
+                  controls, subject to the consent configuration active on the site.
+                </p>
+              </div>
+
+              <div
+                className={`border p-4 transition-all duration-500 ${currentTheme.borderCard} ${currentTheme.cardBg}`}>
+                <span
+                  className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
+                  Purge Storage
+                </span>
+
+                <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
+                  The Info section&apos;s Purge Storage action can clear the website&apos;s local and session browser
+                  storage so locally retained preferences and cached application data are removed. Clearing browser
+                  storage does not by itself delete information that has already been received and stored by the
+                  backend, Google Analytics, Google Tag Manager, reCAPTCHA, or another third-party provider.
+                </p>
+              </div>
+            </div>
+
+            <p className={`text-sm mt-4 transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
+              You may also request deletion of information stored by the website&apos;s backend using the contact method
+              provided in this policy. Third-party services remain subject to their own retention and deletion
+              processes.
             </p>
           </motion.div>
 
@@ -485,7 +716,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>05. Security & Data Handling</span>
             </h2>
 
@@ -495,6 +728,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Security
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Reasonable technical measures are used to transmit and process contact submissions and maintain the
                   website&apos;s backend services. However, no internet transmission, application, or storage mechanism
@@ -507,10 +741,13 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm uppercase tracking-wider font-bold mb-2 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Limited Purpose
                 </h3>
+
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
                   Location information is used for weather and visual scene selection. Performance information is used
                   to select a suitable rendering tier. Portfolio API data is used to render portfolio content. Contact
-                  and project information is used to respond to inquiries and potential collaborations.
+                  and project information is used to respond to inquiries and potential collaborations. Analytics
+                  information is used for measurement where consent has been provided. reCAPTCHA risk scoring is used to
+                  help prevent automated or abusive form submissions.
                 </p>
               </div>
             </div>
@@ -522,7 +759,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>06. Third-Party Services</span>
             </h2>
 
@@ -533,6 +772,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Open-Meteo
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   Used to obtain weather information based on the selected location coordinates.
                 </p>
@@ -544,6 +784,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   ipapi.co
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   Used for approximate IP-based location when the Fast Location option is selected.
                 </p>
@@ -555,6 +796,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   GitHub
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   The Work section may retrieve portfolio-related GitHub data through the GitHub GraphQL API.
                 </p>
@@ -566,8 +808,10 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Google Analytics
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
-                  May be used to understand website usage, traffic, and interaction patterns.
+                  May be used to understand website usage, traffic, interactions, device or browser information, and
+                  other measurement data when analytics consent has been provided.
                 </p>
               </div>
 
@@ -577,8 +821,22 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Google Tag Manager
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
-                  May be used to manage website tags and measurement integrations.
+                  Used to manage website tags and measurement integrations, including Google Analytics-related tags.
+                </p>
+              </div>
+
+              <div
+                className={`border p-4 transition-all duration-500 ${currentTheme.borderCard} ${currentTheme.cardBg}`}>
+                <span
+                  className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
+                  Google reCAPTCHA
+                </span>
+
+                <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
+                  Used to assess contact and project inquiry submissions for automated or abusive activity through a
+                  background risk score.
                 </p>
               </div>
 
@@ -588,6 +846,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                   className={`text-sm font-bold uppercase tracking-wider block mb-1 transition-colors duration-500 ${currentTheme.textPrimary}`}>
                   Discord Webhook
                 </span>
+
                 <p className={`text-sm transition-colors duration-500 ${currentTheme.textMuted}`}>
                   Used by the backend to send notifications when contact or project inquiry submissions are received.
                 </p>
@@ -601,7 +860,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>07. Children & Unsolicited Data</span>
             </h2>
 
@@ -618,14 +879,16 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>08. Policy Updates</span>
             </h2>
 
             <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
               This Privacy Policy may be updated when the website&apos;s data practices, storage mechanisms, third-party
-              services, or legal requirements change. The &quot;Last updated&quot; date at the top of this page
-              indicates when the policy was most recently revised.
+              services, analytics implementation, security controls, or legal requirements change. The &quot;Last
+              updated&quot; date at the top of this page indicates when the policy was most recently revised.
             </p>
           </motion.div>
 
@@ -635,7 +898,9 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}>
             <h2
-              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`}`}>
+              className={`mb-6 text-sm font-bold uppercase tracking-wide border-b pb-2 flex justify-between items-baseline w-full transition-colors duration-500 ${
+                styles.dividerHeavy || `${currentTheme.borderHeavy} ${currentTheme.textPrimary}`
+              }`}>
               <span>09. Contact & Data Requests</span>
             </h2>
 

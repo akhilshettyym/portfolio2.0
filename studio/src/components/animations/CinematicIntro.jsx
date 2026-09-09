@@ -28,7 +28,7 @@ import {
   TOTAL_SCENES,
   DARK_START_SCENE,
 } from "@/utils/basic";
-import { pushToDataLayer } from "@/lib/gtm";
+import { useCookieConsent } from "@/context/CookieContext";
 
 const INTRO_TIMING = {
   openingLineMs: 3600,
@@ -75,6 +75,7 @@ export default function CinematicIntro({ onComplete }) {
   const [isMobile, setIsMobile] = useState(false);
 
   const completedRef = useRef(false);
+  const { setIsIntroActive } = useCookieConsent();
 
   const rowRefs = useRef({});
   const carouselRef = useRef(0);
@@ -244,9 +245,14 @@ export default function CinematicIntro({ onComplete }) {
     });
   };
 
+  useEffect(() => {
+    setIsIntroActive(true);
+  }, []);
+
   const completeIntro = useCallback(() => {
     if (completedRef.current) return;
     completedRef.current = true;
+    setIsIntroActive(false);
 
     setReady(false);
     onComplete?.();

@@ -18,14 +18,13 @@ const getServerMountedSnapshot = () => false;
 const emptySubscribe = () => () => {};
 
 export function CookieProvider({ children }) {
-  // Synchronize directly with localStorage without triggering setState in effects
   const storedConsent = useSyncExternalStore(subscribe, getConsentSnapshot, getServerConsentSnapshot);
-
   const isMounted = useSyncExternalStore(emptySubscribe, getMountedSnapshot, getServerMountedSnapshot);
 
   const [isCookieBannerReady, setIsCookieBannerReady] = useState(false);
 
-  // Derived state from external store snapshot
+  const [isIntroActive, setIsIntroActive] = useState(false);
+
   const hasConsent = storedConsent === "granted" || storedConsent === "denied";
 
   const updateConsentState = useCallback((status) => {
@@ -52,7 +51,6 @@ export function CookieProvider({ children }) {
     });
   }, []);
 
-  // Effect only interacts with the external system (GTag) - no React setState inside
   useEffect(() => {
     if (storedConsent === "granted" || storedConsent === "denied") {
       updateConsentState(storedConsent);
@@ -98,6 +96,7 @@ export function CookieProvider({ children }) {
         handleAccept,
         handleDecline,
         updateConsentState,
+        isIntroActive, setIsIntroActive
       }}>
       {children}
     </CookieContext.Provider>

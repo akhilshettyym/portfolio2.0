@@ -98,11 +98,11 @@ const TrackTrail = memo(function TrackTrail({ banners = DEFAULT_BANNERS, initial
       <div className="mb-3 flex items-center justify-between px-4 sm:px-6 md:px-10">
         <h2
           id="trailhead-title"
-          className={`text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tighter md:tracking-[-0.09em] transition-colors duration-500 ${styles.cardTitle}`}>
+          className={`text-xl mt-10 sm:text-2xl md:text-3xl font-black uppercase tracking-tighter md:tracking-[-0.09em] transition-colors duration-500 ${styles.cardTitle}`}>
           /Salesforce
         </h2>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex mt-10 items-center gap-1.5">
           <Link
             href="https://www.salesforce.com/trailblazer/akhilshettym"
             target="_blank"

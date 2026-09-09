@@ -1,4 +1,4 @@
-import DevTicker from "@/components/sections/DevTicker";
+import TickerWrapper from "@/components/wrappers/TickerWrapper";
 import SubjectProfile from "@/components/sections/SubjectProfile";
 import SocialsWrapper from "@/components/wrappers/SocialsWrapper";
 import BubbleSceneTiered from "@/components/Tiered/BubbleSceneTiered";
@@ -14,7 +14,7 @@ export default function InfoLayout({ content = {} }) {
           <SubjectProfile />
         </section>
 
-        <DevTicker />
+        <TickerWrapper />
 
         <section id="skills">
           <BubbleSceneTiered />

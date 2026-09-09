@@ -1,7 +1,6 @@
-import React from "react";
 import LazyLoad from "@/components/core/LazyLoad";
-import DevTicker from "@/components/sections/DevTicker";
 import TrackTrail from "@/components/sections/TrackTrail";
+import TickerWrapper from "@/components/wrappers/TickerWrapper";
 import SelectedWorks from "@/components/sections/SelectedWorks";
 import MyExperienceTiered from "@/components/Tiered/MyExperienceTiered";
 import GithubGraphQlTiered from "@/components/Tiered/GithubGraphQlTiered";
@@ -13,13 +12,7 @@ export default function WorkLayout({ content = {} }) {
         <SelectedWorks initialProjects={content.works} />
       </section>
 
-      <DevTicker />
-
-      <section id="experience">
-        <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
-          <MyExperienceTiered initialExperiences={content.experiences} initialEducations={content.educations} />
-        </LazyLoad>
-      </section>
+      <TickerWrapper />
 
       <section id="salesforce">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
@@ -30,6 +23,12 @@ export default function WorkLayout({ content = {} }) {
       <section id="github">
         <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
           <GithubGraphQlTiered />
+        </LazyLoad>
+      </section>
+
+      <section id="experience">
+        <LazyLoad threshold={0.1} rootMargin="200px" once={true}>
+          <MyExperienceTiered initialExperiences={content.experiences} initialEducations={content.educations} />
         </LazyLoad>
       </section>
     </article>

@@ -1,7 +1,7 @@
 const routes = ["", "/work", "/start"];
 
 export default function sitemap() {
-  const baseUrl = "https://akhilshettym.com";
+  const baseUrl = "https://shetty-portfolio-studio.vercel.app";
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,

@@ -3,6 +3,7 @@
 import "@/styles/cinematic_intro.css";
 import { pushToDataLayer } from "@/lib/gtm";
 import { AnimatePresence, motion } from "framer-motion";
+import { useCookieConsent } from "@/context/CookieContext";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -74,6 +75,7 @@ export default function CinematicIntro({ onComplete }) {
   const [isMobile, setIsMobile] = useState(false);
 
   const completedRef = useRef(false);
+  const { setIsIntroActive } = useCookieConsent();
 
   const rowRefs = useRef({});
   const carouselRef = useRef(0);
@@ -243,9 +245,14 @@ export default function CinematicIntro({ onComplete }) {
     });
   };
 
+  useEffect(() => {
+    setIsIntroActive(true);
+  }, []);
+
   const completeIntro = useCallback(() => {
     if (completedRef.current) return;
     completedRef.current = true;
+    setIsIntroActive(false);
     setReady(false);
     onComplete?.();
   }, [onComplete]);

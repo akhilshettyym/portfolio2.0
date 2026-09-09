@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { getScrollProStyles } from "@/utils/swatch";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCookieConsent } from "@/context/CookieContext";
 
 export default function ScrollProgress() {
   const { theme } = useTheme();
+  const { isIntroActive } = useCookieConsent();
 
   const [progress, setProgress] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -53,6 +55,8 @@ export default function ScrollProgress() {
       clearTimeout(scrollTimeout);
     };
   }, []);
+
+  if (isIntroActive) return null;
 
   const currentTheme = getScrollProStyles[theme] || getScrollProStyles.light;
   const formattedProgress = Math.round(progress).toString().padStart(3, "0");

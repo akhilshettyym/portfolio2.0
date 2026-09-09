@@ -26,7 +26,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
       className={`w-full transition-colors duration-500 text-justify ${currentTheme.bg} ${styles.section || ""} ${
-        isMobile ? "" : "py-10 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-20"
+        isMobile ? "" : "py-10 px-6 sm:px-8 lg:px-14 xl:px-14 2xl:px-20"
       }`}>
       <div className="w-full max-w-360 mx-auto">
         <motion.div
@@ -571,10 +571,7 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                 </h3>
 
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
-                  Contact and project inquiry information is intended to be retained for approximately 90 days so that
-                  inquiries can be reviewed and responded to. The data is then intended to be deleted through the
-                  website&apos;s retention process, which may include scheduled deletion or manual removal depending on
-                  the implemented backend workflow.
+                  Contact and project inquiry information is retained for approximately 90 days for review and response. Data is securely stored in a database and automatically purged exactly 90 days after submission. In addition to this automated process, authorized administrators can manually remove data earlier if required by operational workflows.
                 </p>
               </div>
 

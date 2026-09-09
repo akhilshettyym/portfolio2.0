@@ -571,7 +571,10 @@ const PrivacyPolicy = ({ isMobile = false, styles = {} }) => {
                 </h3>
 
                 <p className={`text-sm transition-colors duration-500 ${styles.textMuted || currentTheme.textMuted}`}>
-                  Contact and project inquiry information is retained for approximately 90 days for review and response. Data is securely stored in a database and automatically purged exactly 90 days after submission. In addition to this automated process, authorized administrators can manually remove data earlier if required by operational workflows.
+                  Contact and project inquiry information is retained for approximately 90 days for review and response.
+                  Data is securely stored in a database and automatically purged exactly 90 days after submission. In
+                  addition to this automated process, authorized administrators can manually remove data earlier if
+                  required by operational workflows.
                 </p>
               </div>
 

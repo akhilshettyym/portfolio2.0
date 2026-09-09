@@ -247,7 +247,7 @@ export default function CinematicIntro({ onComplete }) {
 
   useEffect(() => {
     setIsIntroActive(true);
-  }, []);
+  }, [setIsIntroActive]);
 
   const completeIntro = useCallback(() => {
     if (completedRef.current) return;
@@ -255,7 +255,7 @@ export default function CinematicIntro({ onComplete }) {
     setIsIntroActive(false);
     setReady(false);
     onComplete?.();
-  }, [onComplete]);
+  }, [onComplete, setIsIntroActive]);
 
   useEffect(() => {
     if (scene !== 3 || carouselProgress < 1) return;

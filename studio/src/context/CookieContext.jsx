@@ -95,7 +95,8 @@ export function CookieProvider({ children }) {
         handleAccept,
         handleDecline,
         updateConsentState,
-        isIntroActive, setIsIntroActive
+        isIntroActive,
+        setIsIntroActive,
       }}>
       {children}
     </CookieContext.Provider>

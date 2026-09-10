@@ -61,7 +61,10 @@ function getServerSnapshot() {
 
 function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, theme }) {
   const skipImage = isCompactDevice || isLargeDevice;
-  const hasContent = Boolean(project.image && project.description);
+
+  const isNewProject = !project.description || project.description.trim().toLowerCase() === "new project";
+  const hasDetails = !isNewProject;
+  const hasImage = Boolean(project.image) && !skipImage;
 
   const { modalBg, overlayBg, borderClass, textMuted, textBody, tagClass, closeBtn, ctaBtn } = getWorkMobile(theme);
 
@@ -100,9 +103,9 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, 
         </div>
 
         <div className={`flex-1 p-5 ${skipImage ? "" : "overflow-y-auto"}`}>
-          {hasContent ? (
+          {hasDetails ? (
             <div className="flex flex-col gap-5">
-              {project.image && !skipImage && (
+              {hasImage && (
                 <div className={`relative aspect-video w-full overflow-hidden rounded-xl border ${borderClass}`}>
                   <Image
                     src={project.image}
@@ -137,7 +140,7 @@ function MobileProjectModal({ project, onClose, isCompactDevice, isLargeDevice, 
           )}
         </div>
 
-        {hasContent && project.url && (
+        {hasDetails && project.url && (
           <div className={`border-t p-4 ${borderClass}`}>
             <Link
               href={project.url}
@@ -198,7 +201,9 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
-  const hasContent = Boolean(project.image && project.description);
+  const isNewProject = !project.description || project.description.trim().toLowerCase() === "new project";
+  const hasDetails = !isNewProject;
+  const hasImage = Boolean(project.image);
 
   const { cardBgClass, gradientOverlay, accentGlow, patternOverlay, textBody, tagClass, btnClass } =
     getWorkFloatStyles(theme);
@@ -223,7 +228,9 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
           className="relative">
           <div
             className="absolute -inset-6 rounded-[36px] blur-2xl"
-            style={{ backgroundImage: `radial-gradient(circle at center, ${accentGlow}, transparent 70%)` }}
+            style={{
+              backgroundImage: `radial-gradient(circle at center, ${accentGlow}, transparent 70%)`,
+            }}
           />
 
           <motion.div
@@ -231,19 +238,23 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
             animate={{ y: [0, -6, 0] }}
             transition={{ y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" } }}
             className={`relative h-130 w-212.5 overflow-hidden border shadow-[0_60px_140px_rgba(0,0,0,0.42)] ${cardBgClass}`}>
-            {hasContent ? (
+            {hasDetails ? (
               <>
-                <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 768px"
-                    className="object-cover"
-                  />
-                </motion.div>
-                <div className={`absolute inset-0 ${gradientOverlay}`} />
-                <div className={`absolute inset-0 ${patternOverlay}`} />
+                {hasImage && (
+                  <>
+                    <motion.div className="absolute inset-0" style={{ x: imageX, y: imageY, scale: 1.08 }}>
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 768px"
+                        className="object-cover"
+                      />
+                    </motion.div>
+                    <div className={`absolute inset-0 ${gradientOverlay}`} />
+                    <div className={`absolute inset-0 ${patternOverlay}`} />
+                  </>
+                )}
 
                 <div className="absolute inset-0 flex flex-col justify-between p-7 z-10">
                   <div className="flex items-center justify-between">
@@ -253,16 +264,18 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
 
                   <div>
                     <h3 className="text-3xl font-medium">{project.title}</h3>
-                    <p className={`mt-4 max-w-145 text-sm leading-relaxed ${textBody}`}> {project.description} </p>
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {project.stack.map((item) => (
-                        <span
-                          key={item}
-                          className={`rounded-full border px-3 py-1.5 text-xs backdrop-blur-md ${tagClass}`}>
-                          {item}
-                        </span>
-                      ))}
-                    </div>
+                    <p className={`mt-4 max-w-145 text-sm leading-relaxed ${textBody}`}>{project.description}</p>
+                    {project.stack && project.stack.length > 0 && (
+                      <div className="mt-6 flex flex-wrap gap-2">
+                        {project.stack.map((item) => (
+                          <span
+                            key={item}
+                            className={`rounded-full border px-3 py-1.5 text-xs backdrop-blur-md ${tagClass}`}>
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </>
@@ -279,7 +292,7 @@ function FloatingProjectPreview({ project, cardAnchor, buttonAnchor, onHold, onR
         </motion.div>
       </motion.div>
 
-      {hasContent && project.url && (
+      {hasDetails && project.url && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -453,6 +466,7 @@ export default function SelectedWorks({ initialProjects }) {
           ) : (
             projects.map((project, index) => {
               const isActive = activeProject === index;
+              const isNewProject = !project.description || project.description.trim().toLowerCase() === "new project";
 
               return (
                 <motion.div
@@ -490,7 +504,7 @@ export default function SelectedWorks({ initialProjects }) {
                           ) : (
                             <div className="flex h-full w-full items-center justify-center p-2 text-center">
                               <h1 className="text-sm font-normal uppercase tracking-wider text-neutral-400 md:text-xs">
-                                Coming Soon
+                                {isNewProject ? "Coming Soon" : "No Image"}
                               </h1>
                             </div>
                           )}

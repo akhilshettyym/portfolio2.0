@@ -110,14 +110,27 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: `
              window.dataLayer = window.dataLayer || [];
-             function gtag(){dataLayer.push(arguments);}
+
+             function gtag() {
+              dataLayer.push(arguments);
+             }
+              
+             window.gtag = gtag;
              
+             gtag('consent', 'default', {
+               'analytics_storage': 'granted',
+               'ad_storage': 'granted',
+               'ad_user_data': 'granted',
+               'ad_personalization': 'granted',
+             });
+
              gtag('consent', 'default', {
                'analytics_storage': 'denied',
                'ad_storage': 'denied',
                'ad_user_data': 'denied',
                'ad_personalization': 'denied',
-               'wait_for_update': 500
+               'wait_for_update': 500,
+               'region': ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'CH', 'IS', 'LI', 'NO']
              });
            `,
           }}

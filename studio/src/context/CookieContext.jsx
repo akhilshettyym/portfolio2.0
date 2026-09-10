@@ -27,21 +27,21 @@ export function CookieProvider({ children }) {
   const hasConsent = storedConsent === "granted" || storedConsent === "denied";
 
   const updateConsentState = useCallback((status) => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !window.gtag) return;
 
-    window.dataLayer = window.dataLayer || [];
+    // window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
+    // function gtag() {
+    //   window.dataLayer.push(arguments);
+    // }
 
     const consentStatus = status === "granted" ? "granted" : "denied";
 
-    gtag("consent", "update", {
+    window.gtag("consent", "update", {
       analytics_storage: consentStatus,
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
+      ad_storage: consentStatus,
+      ad_user_data: consentStatus,
+      ad_personalization: consentStatus,
     });
 
     window.dataLayer.push({

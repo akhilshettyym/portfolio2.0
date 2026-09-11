@@ -20,6 +20,7 @@ import { CookieProvider } from "@/context/CookieContext";
 import CookieBanner from "@/components/core/CookieBanner";
 import { GoogleTagManager } from "@next/third-parties/google";
 import ScrollProgress from "@/components/animations/ScrollProgress";
+import TierSwitcher from "@/components/core/TierSwitcher";
 
 const montserrat = Montserrat({
   variable: "--font-sans",
@@ -149,6 +150,7 @@ export default function RootLayout({ children }) {
           <CookieProvider>
             <ServerWarmer />
             <CookieBanner />
+            <TierSwitcher />
 
             <LenisProvider>
               <ThemeProvider>
